@@ -1,0 +1,21 @@
+body{
+    background-color: #151D28;
+    color:white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#loginLeft{
+    text-align: right;
+    display: inline-block;
+}
+
+
+#SignIn{
+    color:#0f73ff;
+    font-weight: bolder;
+    font-size: 36pt;
+}
+
+#Subtitle{
+    font-weight: bold;
+}
