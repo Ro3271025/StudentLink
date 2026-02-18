@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Profile | StudentLink</title>
+   <link rel="stylesheet" href="../styles/style.css">
+   <meta name="viewport" content="width=device-width, inital-scale=1">
+</head>
+<body>
+    <div class="sidebar"> <!-- Left Sidebar -->
+        <br><img id="sideProfileIcon" src="../styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p>Home</p>
+        <p>Explore</p>
+        <p>Notifications</p>
+        <p>Chat</p>
+        <p>Profile</p>
+        <p>Settings</p>
+        <button>New Post</button>
+    </div>
+
+    <!-- TODO: Fix scaling on elements -->
+
+    <div id="banner"><img src="../styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
+
+    <div id="profileInfo" class="content">
+        <!-- Maybe use an inner div to force content to scale without more custom code -->
+        <img id="profileImage" src="../styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+        <p id="displayName">Display Name</p> <!-- Swap with input for editing --> <!-- <input id="displayName"> -->
+        <p id="username">@Username <button id="userCollege">SUNY Farmingdale</button></p>
+        <!-- Replace the static numbers with actual data and then link to a page showing all the results of the proper query -->
+        <p id="userStats">Posts: <a href="">99.9k</a> Followers: <a href="">99.9k</a> Following: <a href="">99.9k</a></p> <!-- # of followers / friends, # of posts, etc... -->
+        <div id="userBio">
+            <!-- Use a textarea for "editing" mode, remove the disabled property when editing -->
+            <!-- Lorem ipsum for placeholder -->
+            <button id="edit">Edit Profile</button> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
+            <!-- <button id="save">Save</button> <button id="cancel">cancel</button> --> <!-- Swap in after clicking edit -->
+            <textarea id="bioText" maxlength="50" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor lobortis pharetra. Integer velit elit, tincidunt at purus nec, finibus interdum dui. Cras ac laoreet massa. Maecenas varius bibendum quam a suscipit. Mauris vestibulum, mauris nec euismod finibus, nunc ex lacinia nisi, eget ullamcorper lectus metus nec mi. Proin id neque dignissim, finibus velit tincidunt, dictum magna. Fusce rutrum risus ac viverra sagittis.</textarea>
+        </div>
+    </div>
+
+    <div id="userContent">
+        <table colspan="5" border="0" cellpadding="2" cellspacing="1" id="selectedContentList"> <!-- TODO: FIX SCALING -->
+            <th>Posts</th> <!-- TODO: Make these have buttons -->
+            <th>Comments</th>
+            <th>Listings</th>
+        </table>
+    </div>
+
+
+    <!-- SAMPLE POST -->
+    <div class="content"> <!-- sample post layout (used on the feed page as well)-->
+        <img class="profileImgMini" src="../styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
+        <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
+
+        <p disabled class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
+        <!-- Add Img or Video tag too if there's media present -->
+
+        <footer><a class="postLink postMetrics" href="">40 Likes</a><a class="postLink postMetrics" href="">6 Comments</a>
+        <a href="" class="postLink postMetrics" style="margin-left: 66.5%;">Report</a></footer><br>
+    </div>
+
+    <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
+        <br><input class="searchBar" placeholder="Search">
+    </div>
+
+
+
+</body>
+</html>
