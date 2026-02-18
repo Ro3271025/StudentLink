@@ -1,12 +1,22 @@
 :root{
+    /* define some vars */
     --bg-primary: #151D28;
     --theme-accent: #0f73ff;
+    --border-color: #586373;
 }
 
 body{
     background-color: var(--bg-primary);
     color:white;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+table, th, td{
+   text-align: center;
+}
+
+table{
+    border: 2px solid var(--border-color);
 }
 
 img{
@@ -24,12 +34,25 @@ button{
     color:white;
     font-weight: bold;
     font-size: 18pt;
+    vertical-align: middle;
 }
 
 button:hover{
     background-color: #113D7A;
     border-color: #113D7A;
 }
+
+a{
+    color: white;
+    font-weight: bold;
+    transition: .125s;
+}
+
+a:hover{
+    color: var(--theme-accent);
+}
+
+/* Login Page */
 
 #loginBody{
     overflow-y: hidden;
@@ -39,32 +62,180 @@ button:hover{
     text-align: right;
     display: inline-block;
     margin-left:10%;
-    margin-top: 20%;
+    margin-top: 15%;
 } 
 
 #loginRight{
     /* utterly rediculous way to align imo, but it works -PR */
-    margin-top: -18vh;
+    margin-top: -10%;
     margin-right: 0;
     margin-left: 50vw;
     position: fixed;
 }
 
 #verticalDivider{
-    border-left: 4px solid #586373;
+    border-left: 2px solid var(--border-color);
     padding-right: 10px;
-    height: 105vh;
-    margin-top: -60vh;
+    height: 200vh;
+    margin-top: -85vh;
     margin-left: 40vw;
 }
 
 #signIn{
     color: var(--theme-accent);
-    font-weight: bolder;
+    font-weight: bold;
     font-size: 48pt;
 }
 
 #subtitle{
     font-weight: bold;
     font-size: 24pt;
+}
+
+
+/* may want to consider splitting css files at some point 
+** to make it easier to manage and reduce load times if this
+** contiues to grow in size */
+
+/* User Profile Stuff */
+
+.sidebar{
+    text-align: center;
+    margin-right: 80vw;
+    font-size: 18pt;
+    position: static;
+}
+
+.searchBar{
+    border-radius: 10px;
+    background-color: var(--theme-accent);
+    border-color: var(--theme-accent);
+    font-size: 16pt;
+    color: white;
+    padding: 5%;
+    margin-left: 81vw;
+}
+
+#rightBar{
+    position: static;
+    margin-top: -85vh;
+}
+
+#username{
+    font-size: 14pt;
+    color: var(--border-color);
+}
+
+#displayName{
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+#banner{
+    border-left: 2px solid var(--border-color);
+    border-right: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    margin-left:18vw;
+    margin-right:21vw;
+    margin-top:-65vh;
+    height:25vh;
+    position: static;
+}
+
+#banner img{
+    height: 100%;
+    width: 100%;
+}
+
+.content{
+    border-left: 2px solid var(--border-color);
+    border-right: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    margin-left:18vw;
+    margin-right:21vw;
+}
+
+#profileInfo{
+    position: static;
+    height:37vh;
+}
+
+
+#profileImage{
+    max-height: 15vh;
+    min-height: 15vh;
+    margin-left: 3.5%;
+    margin-top: 3.5%;
+}
+
+#profileInfo #displayName, #profileInfo #username, #profileInfo #userStats{
+    margin-left: 3.5%;
+}
+
+#userBio{
+    margin-left: 45%;
+    margin-top: -25%;
+}
+
+#bioText{
+    border-radius: 10px;
+    resize:none;
+    width: 95%;
+    height: 15vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: var(--bg-primary);
+    color: white;
+}
+
+#bioText:disabled{
+    border: none;
+}
+
+#userCollege{
+    font-size: 10pt;
+}
+
+#edit{
+    margin-left: 70%;
+    margin-top: -10%;
+}
+
+#userContent{
+    position: static;
+}
+
+.profileImgMini{
+    margin-left: 3.5%;
+    margin-top: 3.5%;
+    min-height: 8vh;
+}
+
+.postLink{
+    text-decoration: none;
+}
+
+#postUsername{
+    color: var(--border-color);
+}
+
+.postContentText{
+    border-radius: 10px;
+    width: 95%;
+    height: fit-content;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: var(--bg-primary);
+    color: white;
+    margin-left: 3.5%;
+    margin-top: 2%;
+}
+
+.postMetrics{
+    margin-left: 3.5%;
+    text-decoration: none;
+    color: var(--border-color);
+}
+
+#selectedContentList{
+    width:60.5%;
+    margin-left: 18.25%;
 }
