@@ -59,37 +59,72 @@ a:hover{
     color: var(--theme-accent);
 }
 
-/* Login Page */
+/* LOGIN PAGE */
 
-#loginBody{
-    overflow: hidden;
+#loginBody {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
 }
 
-#loginLeft{
+/* Container structure */
+#loginContainer {
+    display: flex;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+}
+#loginLeft,
+#loginRight {
+    flex: 1;
+    padding: 5%;
+}
+
+/* Left side */
+#loginLeft {
     text-align: right;
-    display: inline-block;
-    margin-left:10%;
-    margin-top: 15%;
-} 
-
-#loginRight{
-    /* utterly rediculous way to align imo, but it works -PR */
-    /*margin-top: -10%;
-    margin-right: 0;
-    margin-left: 50vw;
-    position: fixed;*/
-    display: inline-block;
 }
 
-#verticalDivider{
-    border-left: 2px solid var(--border-color);
-    padding-right: 0.625rem;
-    padding-left: 2%;
-    height: 105vh;
-    margin-top: -5vh;
-    margin-left: 2%;
-    display: inline-block;
-    vertical-align: top;
+#signIn {
+    color: var(--theme-accent);
+    font-weight: bold;
+    font-size: 48pt;
+}
+
+#subtitle {
+    font-weight: bold;
+    font-size: 24pt;
+    color: var(--border-color);
+}
+
+/* Divider */
+#verticalDivider {
+    width: 2px;
+    background-color: var(--border-color);
+    height: 60%;
+}
+
+/* Right side */
+#loginRight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Login Buttons */
+#loginRight button {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16pt;
+}
+
+#loginRight button img {
+    height: 20px;
 }
 
 #signIn{
