@@ -5,6 +5,13 @@
     --border-color: #586373;
 }
 
+html {
+    min-width: 550px;
+    max-width: 1920px;
+    position: relative;
+    vertical-align: middle;
+    }
+
 body{
     background-color: var(--bg-primary);
     color:white;
@@ -55,7 +62,7 @@ a:hover{
 /* Login Page */
 
 #loginBody{
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 #loginLeft{
@@ -67,18 +74,22 @@ a:hover{
 
 #loginRight{
     /* utterly rediculous way to align imo, but it works -PR */
-    margin-top: -10%;
+    /*margin-top: -10%;
     margin-right: 0;
     margin-left: 50vw;
-    position: fixed;
+    position: fixed;*/
+    display: inline-block;
 }
 
 #verticalDivider{
     border-left: 2px solid var(--border-color);
-    padding-right: 10px;
-    height: 200vh;
-    margin-top: -85vh;
-    margin-left: 40vw;
+    padding-right: 0.625rem;
+    padding-left: 2%;
+    height: 105vh;
+    margin-top: -5vh;
+    margin-left: 2%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #signIn{
