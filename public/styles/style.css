@@ -224,6 +224,8 @@ a:hover{
     border-bottom: 2px solid var(--border-color);
     margin-left:18vw;
     margin-right:21vw;
+    align-items: center;
+    justify-content: center;
 }
 
 #profileInfo{
@@ -309,4 +311,36 @@ a:hover{
 #selectedContentList{
     width:60.5%;
     margin-left: 18.25%;
+}
+
+#header{
+    border: 2px solid var(--border-color);
+    margin-left:18vw;
+    margin-right:21vw;
+    height:5vh;
+    position: sticky;
+    align-items: center;
+    vertical-align: middle;
+    padding: 8px;
+}
+
+#header img{
+    position: relative;
+    margin-left: 25%;
+}
+
+#loadMore{
+    text-align: center;
+    margin-left: 41.5%;
+    /*margin-right: 50%;*/
+}
+
+.imageContainer{
+    text-align: center;
+    min-height: 50px;
+    max-height: 550px;
+}
+
+.imageContainer img{
+    height: inherit;
 }
