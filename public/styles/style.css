@@ -3,6 +3,7 @@
     --bg-primary: #151D28;
     --theme-accent: #0f73ff;
     --border-color: #586373;
+    --button-hover: #113D7A;;
 }
 
 html {
@@ -44,9 +45,9 @@ button, select{
     vertical-align: middle;
 }
 
-button:hover, select:hover{
-    background-color: #113D7A;
-    border-color: #113D7A;
+button:hover, select:hover, input:hover{
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
 }
 
 select{
@@ -169,6 +170,7 @@ a:hover{
     color: white;
     padding: 5%;
     margin-left: 81vw;
+    transition: 0.125s;
 }
 
 #profileContainer{

@@ -5,7 +5,7 @@
    <link rel="stylesheet" href="../public/styles/style.css">
    <meta name="viewport" content="width=device-width, inital-scale=1">
 </head>
-<body>
+<body id="documentBody">
     <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
         <br><img id="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
@@ -21,7 +21,13 @@
         <select id="themeSelector" class="themeObject" onchange="swapTheme()">
             <option value="#0f73ff">Blue</option>
             <option value="#004a41">Farmingdale Green</option>
+        </select><br><br>
+        <select id="bgSelector" class="themeObject" onchange="swapBg()">
+            <option value="#000000">Lights Out</option>
+            <option value="#F2F2EB">Light</option>
+            <option value="#151D28">Dark</option>
         </select>
+
     </div>
 
     <!-- TODO: Fix scaling on elements -->
@@ -41,7 +47,7 @@
                 <!-- Lorem ipsum for placeholder -->
                 <button id="edit" class="themeObject">Edit Profile</button> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
                 <!-- <button id="save">Save</button> <button id="cancel">cancel</button> --> <!-- Swap in after clicking edit -->
-                <textarea id="bioText" maxlength="50" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor lobortis pharetra. Integer velit elit, tincidunt at purus nec, finibus interdum dui. Cras ac laoreet massa. Maecenas varius bibendum quam a suscipit. Mauris vestibulum, mauris nec euismod finibus, nunc ex lacinia nisi, eget ullamcorper lectus metus nec mi. Proin id neque dignissim, finibus velit tincidunt, dictum magna. Fusce rutrum risus ac viverra sagittis.</textarea>
+                <p id="bioText" maxlength="50" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor lobortis pharetra. Integer velit elit, tincidunt at purus nec, finibus interdum dui. Cras ac laoreet massa. Maecenas varius bibendum quam a suscipit. Mauris vestibulum, mauris nec euismod finibus, nunc ex lacinia nisi, eget ullamcorper lectus metus nec mi. Proin id neque dignissim, finibus velit tincidunt, dictum magna. Fusce rutrum risus ac viverra sagittis.</p>
             </div>
         </div>
 
@@ -93,6 +99,6 @@
     </div>
 
 
-    <script src="../public/js/themeSwap.js"></script>
+    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
 </body>
 </html>
