@@ -31,7 +31,7 @@ img{
     vertical-align: middle;
 }
 
-button{
+button, select{
     line-height: 2vh;
     background-color: var(--theme-accent);
     border-color: var(--theme-accent);
@@ -44,9 +44,14 @@ button{
     vertical-align: middle;
 }
 
-button:hover{
+button:hover, select:hover{
     background-color: #113D7A;
     border-color: #113D7A;
+}
+
+select{
+    font-size: 12pt;
+    max-width: 95%;
 }
 
 a{
@@ -147,9 +152,13 @@ a:hover{
 
 .sidebar{
     text-align: center;
-    margin-right: 80vw;
+   /* margin-right: 80vw;*/
     font-size: 18pt;
     position: static;
+    position: -webkit-sticky;
+    position: fixed;
+    top:0;
+    max-width: 10%;
 }
 
 .searchBar{
@@ -162,10 +171,22 @@ a:hover{
     margin-left: 81vw;
 }
 
-#rightBar{
-    position: static;
-    margin-top: -85vh;
+#profileContainer{
+    align-items: center;
+    justify-content: center;
+    margin-top: 34%;
 }
+
+#leftBar{
+    margin-left: 3.5%;
+}
+
+/*#rightBar{
+    position: -webkit-sticky;
+    position: fixed;
+    top:0;
+    max-width: 10%;
+}*/
 
 #username{
     font-size: 14pt;
@@ -183,9 +204,11 @@ a:hover{
     border-bottom: 2px solid var(--border-color);
     margin-left:18vw;
     margin-right:21vw;
-    margin-top:-65vh;
-    height:25vh;
+    margin-top: -34%;
+    height:20vh;
     position: static;
+    align-items: center;
+    vertical-align: middle;
 }
 
 #banner img{
