@@ -1,3 +1,17 @@
+/* DO NOT MERGE THIS FILE ITS NOT DONE!!!!!! */
+
+function changeTheme(){ 
+    var rootCSS = document.querySelector(':root');
+    var rootComputed = getComputedStyle(rootCSS); // debug
+
+    var selBox = document.getElementById("themeSelector");
+    var selValue = selBox.options[selBox.selectedIndex].value;
+
+    console.log(rootComputed.getPropertyValue('--theme-accent')); //debug
+
+    rootCSS.style.setProperty('--theme-accent', selValue)
+}
+
 function swapTheme(){
     var selBox = document.getElementById("themeSelector");
     var selValue = selBox.options[selBox.selectedIndex].value;
@@ -11,7 +25,7 @@ function swapTheme(){
 
 }
 
-function swapBg(){ // super messy
+function swapBg(){ // super messy - TODO: fix
     var bgSelbBox = document.getElementById("bgSelector");
     var bgSelValue = bgSelbBox.options[bgSelbBox.selectedIndex].value;
     var body = document.getElementById("documentBody");
@@ -49,5 +63,5 @@ function swapBg(){ // super messy
     }
 }
 
-    
+
 

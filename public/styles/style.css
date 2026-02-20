@@ -1,9 +1,24 @@
 :root{
-    /* define some vars */
+    /* Base Theme */
     --bg-primary: #151D28;
     --theme-accent: #0f73ff;
     --border-color: #586373;
-    --button-hover: #113D7A;;
+    --button-hover: #113D7A;
+
+    /* Other Themes */
+    --theme-accent-orange: #E86C13;
+    --hover-color-orange: #964206;
+}
+
+.themeOrange button, input, select{
+    background-color: var(--theme-accent-orange);
+    border-color: var(--theme-accent-orange);
+}
+
+
+.themeOrange:hover{
+    background-color: var(--hover-color-orange);
+    border-color: var(--hover-color-orange);
 }
 
 html {
@@ -153,7 +168,6 @@ a:hover{
 
 .sidebar{
     text-align: center;
-   /* margin-right: 80vw;*/
     font-size: 18pt;
     position: static;
     position: -webkit-sticky;
@@ -313,6 +327,9 @@ a:hover{
     margin-left: 18.25%;
 }
 
+
+/* Home Page Values */
+
 #header{
     border: 2px solid var(--border-color);
     margin-left:18vw;
@@ -332,15 +349,22 @@ a:hover{
 #loadMore{
     text-align: center;
     margin-left: 41.5%;
-    /*margin-right: 50%;*/
 }
 
 .imageContainer{
     text-align: center;
-    min-height: 50px;
+    min-height: 250px;
     max-height: 550px;
 }
 
 .imageContainer img{
     height: inherit;
+}
+
+.recentSearchesTable{
+    border-radius: 10px;
+    border-color: var(--button-hover);
+    background-color: var(--button-hover);
+    margin-left: 81vw;
+    font-size: 12pt;
 }

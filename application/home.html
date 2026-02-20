@@ -85,25 +85,39 @@
             <p>Settings</p>
             <button class="themeObject">New Post</button><br><br>
             <p>Theme</p>
-            <select id="themeSelector" class="themeObject" onchange="swapTheme()">
-                <option value="#0f73ff">Blue</option>
+            <select id="themeSelector" class="themeObject" onchange="changeTheme()">
+                <option value="#0f73ff" selected>Blue</option>
                 <option value="#A11010">Red</option>
                 <option value="#E86C13">Orange</option>
                 <option value="#A947C9">Purple</option>
-                <option value="#004a41">Farmingdale Green</option>
+                <option value="#004a41">Green</option>
             </select><br><br>
             <select id="bgSelector" class="themeObject" onchange="swapBg()">
                 <option value="#000000">Lights Out</option>
                 <option value="#F2F2EB">Light</option>
-                <option value="#151D28">Dark</option>
+                <option value="#151D28" selected>Dark</option>
             </select>
         </div>
 
      
 
     <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
-        <br><input class="searchBar themeObject" placeholder="Search">
-
+        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+        
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr>
+                    <th>
+                        game club
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        textbooks
+                    </th>
+                </tr>
+            </table>
+        </div>
         <!-- Maybe want to add recent searches box? -->
     </div>
 
