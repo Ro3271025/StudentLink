@@ -1,2 +1,3 @@
 # Firebase web config (local only)
 public/js/firebaseConfig.js
+/test/*
