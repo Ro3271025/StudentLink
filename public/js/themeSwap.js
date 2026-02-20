@@ -4,8 +4,6 @@ function swapTheme(){
     var object = document.getElementsByClassName("themeObject");
 
     for(const element of object){
-        console.log(element);
-
         element.style.backgroundColor = selValue;
         element.style.borderColor = selValue;
     }
