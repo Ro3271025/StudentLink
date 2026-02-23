@@ -53,7 +53,6 @@ export function setupLogin() {
             });
         }
 
-        window.location.href = "dashboard.php";
-            window.location.href = "../application/home.html";
+        window.location.href = "../application/home.html";
     });
 }
