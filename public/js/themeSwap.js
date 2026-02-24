@@ -1,5 +1,3 @@
-/* DO NOT MERGE THIS FILE ITS NOT DONE!!!!!! */
-
 function changeTheme(){ 
     var rootCSS = document.querySelector(':root');
     var rootComputed = getComputedStyle(rootCSS); // debug
@@ -9,59 +7,50 @@ function changeTheme(){
 
     console.log(rootComputed.getPropertyValue('--theme-accent')); //debug
 
-    rootCSS.style.setProperty('--theme-accent', selValue)
+    rootCSS.style.setProperty('--theme-accent', selValue);
+
+    switch (selValue) { // theres a better way to do this I just don't have the time or patience right now - PR
+        case "#0f73ff": // blue
+            rootCSS.style.setProperty('--button-hover', "#113D7A");
+            break;
+        case "#A11010": // red
+            rootCSS.style.setProperty('--button-hover', "#4A0808");
+            break;
+        case "#E86C13": // orange
+            rootCSS.style.setProperty('--button-hover', "#99490F");
+            break;
+        case "#A947C9": // purple
+            rootCSS.style.setProperty('--button-hover', "#4D205C");
+            break;
+        case "#004a41": // green
+            rootCSS.style.setProperty('--button-hover', "#01241F");
+            break;
+    }
+
 }
 
-function swapTheme(){
-    var selBox = document.getElementById("themeSelector");
+function changeBG(){
+    var rootCSS = document.querySelector(':root');
+
+    var selBox = document.getElementById("bgSelector");
     var selValue = selBox.options[selBox.selectedIndex].value;
-    var object = document.getElementsByClassName("themeObject");
 
-    for(const element of object){ // breaks the hover colors
-        element.style.backgroundColor = selValue;
-        element.style.borderColor = selValue;
-    }
+    rootCSS.style.setProperty('--bg-primary', selValue);
 
-
-}
-
-function swapBg(){ // super messy - TODO: fix
-    var bgSelbBox = document.getElementById("bgSelector");
-    var bgSelValue = bgSelbBox.options[bgSelbBox.selectedIndex].value;
-    var body = document.getElementById("documentBody");
-    var otherText = document.getElementsByTagName("textarea");
-    var paragraph = document.getElementsByTagName("p");
-
-
-
-    if(bgSelValue === "#F2F2EB"){ // Light Themes
-        body.style.backgroundColor = bgSelValue;
-        body.style.color = "black";
-
-        for(const element of otherText){
-            element.style.color = "black";
-            element.style.backgroundColor = bgSelValue;
-
-        }
-        for(const element of paragraph){
-            element.style.color = "black";
-            element.style.backgroundColor = bgSelValue;
-        }
-    }
-    else{ // Dark Themes
-        body.style.backgroundColor = bgSelValue;
-        body.style.color = "white";
-
-        for(const element of otherText){
-            element.style.color = "white";
-            element.style.backgroundColor = bgSelValue;
-        }
-        for(const element of paragraph){
-            element.style.color = "white";
-            element.style.backgroundColor = bgSelValue;
-        }
+    switch (selValue){
+        case "#151D28": // Dark
+            rootCSS.style.setProperty('--text-fill', "#ffffff");
+            break;
+        case "#000000": // Lights out
+            rootCSS.style.setProperty('--text-fill', "#ffffff");
+            break;
+        case "#F2F2EB": // Light
+            rootCSS.style.setProperty('--text-fill', "#000000");
+            break;
     }
 }
+
+
 
 
 

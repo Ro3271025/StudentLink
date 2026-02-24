@@ -4,22 +4,9 @@
     --theme-accent: #0f73ff;
     --border-color: #586373;
     --button-hover: #113D7A;
-
-    /* Other Themes */
-    --theme-accent-orange: #E86C13;
-    --hover-color-orange: #964206;
+    --text-fill: #ffffff;
 }
 
-.themeOrange button, input, select{
-    background-color: var(--theme-accent-orange);
-    border-color: var(--theme-accent-orange);
-}
-
-
-.themeOrange:hover{
-    background-color: var(--hover-color-orange);
-    border-color: var(--hover-color-orange);
-}
 
 html {
     min-width: 550px;
@@ -30,12 +17,13 @@ html {
 
 body{
     background-color: var(--bg-primary);
-    color:white;
+    color: var(--text-fill);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 table, th, td{
    text-align: center;
+   color: var(--text-fill);
 }
 
 table{
@@ -54,7 +42,7 @@ button, select{
     border-radius: 0.625rem;
     padding: 0.625rem;
     transition: 0.125s;
-    color:white;
+    color: var(--text-fill);
     font-weight: bold;
     font-size: 18pt;
     vertical-align: middle;
@@ -71,7 +59,7 @@ select{
 }
 
 a{
-    color: white;
+    color: var(--text-fill);
     font-weight: bold;
     transition: .125s;
 }
@@ -165,6 +153,10 @@ a:hover{
 ** contiues to grow in size */
 
 /* User Profile Stuff */
+
+.postDisplayName{
+    color:var(--text-fill)
+}
 
 .sidebar{
     text-align: center;
@@ -271,7 +263,7 @@ a:hover{
     height: 15vh;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color: var(--bg-primary);
-    color: white;
+    color: var(--text-fill);
 }
 
 #bioText:disabled{
@@ -311,7 +303,7 @@ a:hover{
     height: fit-content;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     background-color: var(--bg-primary);
-    color: white;
+    color: var(--text-fill);
     margin-left: 3.5%;
     margin-top: 2%;
 }
