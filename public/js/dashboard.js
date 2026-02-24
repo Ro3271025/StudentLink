@@ -22,4 +22,5 @@ export function setupDashboard() {
             window.location.href = "login.php";
         });
     }
+
 }
