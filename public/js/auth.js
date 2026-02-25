@@ -45,14 +45,26 @@ export function setupLogin() {
 
         if (!userSnap.exists()) {
             await setDoc(userRef, {
-                name: user.displayName,
+                name: user.displayName || "",
                 email: user.email,
+                campus: "",
+                major: "",
+                gradYear: "",
+                bio: "",
+                courses: "",
+                profilePicURL: "",
                 role: "student",
                 provider: "google",
+                profileCompleted: false,
                 createdAt: new Date()
             });
         }
 
-        window.location.href = "dashboard.php";
+        const userData = userSnap.exists() ? userSnap.data() : null;
+        if (!userData || !userData.profileCompleted) {
+            window.location.href = "profilecomp.php";
+        } else {
+            window.location.href = "dashboard.php";
+        }
     });
 }
