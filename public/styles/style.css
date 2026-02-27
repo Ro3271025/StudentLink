@@ -20,6 +20,7 @@ body{
     background-color: var(--bg-primary);
     color: var(--text-fill);
     font-family: var(--font-family);
+    text-align: center;
 }
 
 table, th, td{
@@ -27,9 +28,6 @@ table, th, td{
    color: var(--text-fill);
 }
 
-table{
-    border: 2px solid var(--border-color);
-}
 
 img{
     max-width: 100%;
@@ -178,7 +176,8 @@ a:hover{
 
 #rightBar{
     /*border: 2px white solid;*/ /* debug for positioning */
-    margin-left: 81vw;
+    margin-left: 80%;
+    margin-right: 3.5%; /* prevent it from hitting the wall  */
 }
 
 .searchBar{
@@ -195,11 +194,10 @@ a:hover{
 #profileContainer{
     align-items: center;
     justify-content: center;
-    margin-top: 34%;
 }
 
 #leftBar{
-    margin-left: 3.5%;
+    margin-left: 6%;
 }
 
 
@@ -214,16 +212,14 @@ a:hover{
 }
 
 #banner{
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    margin-left:18vw;
-    margin-right:21vw;
-    margin-top: -34%;
+    border: 1px solid var(--border-color);
+    margin: 0 auto;
+    width: 55%;
     height:20vh;
-    position: static;
+    position: sticky;
     align-items: center;
     vertical-align: middle;
+    text-align: center;
 }
 
 #banner img{
@@ -235,10 +231,11 @@ a:hover{
     border-left: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
-    margin-left:18vw;
-    margin-right:21vw;
     align-items: center;
     justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 55%;
 }
 
 #profileInfo{
@@ -282,12 +279,16 @@ a:hover{
 }
 
 #edit{
-    margin-left: 70%;
-    margin-top: -10%;
+    margin-left: 65%;
+    margin-top: -20%;
 }
 
 #userContent{
-    position: static;
+    width: 55%;
+    margin: 0 auto;
+    border-left: 1px var(--border-color) solid;
+    border-right: 1px var(--border-color) solid;
+    border-bottom: 1px var(--border-color) solid;
 }
 
 .profileImgMini{
@@ -338,14 +339,14 @@ a:hover{
 
 #header{
     border: 1px solid var(--border-color);
-    margin-left:18vw;
-    margin-right:21vw;
+    margin: 0 auto;
+    width: 55%;
     height:5vh;
     position: sticky;
     align-items: center;
     vertical-align: middle;
     text-align: center;
-    padding: 10px;
+    /*Can't have padding because it screws with the div alignment*/
 }
 
 #header img{
@@ -354,11 +355,11 @@ a:hover{
     max-height: 75%;
     width: 75%;
     height: 75%;
+    
 }
 
 #loadMore{
     text-align: center;
-    margin-left: 41.5%;
 }
 
 .imageContainer{
@@ -381,4 +382,15 @@ a:hover{
 
 .sidebarText{
     font-size: 100%;
+}
+
+#newPostContainer{
+    text-align: center;
+    width: auto;
+    max-width: 50%;
+    background-color: var(--bg-primary); 
+    border-color: var(--border-color);
+    border: 1px solid;
+    position: absolute;
+    visibility: hidden;
 }
