@@ -6,32 +6,7 @@
    <meta name="viewport" content="width=device-width, inital-scale=1">
 </head>
 <body id="documentBody">
-    <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText">Explore</p>
-        <p class="sidebarText">Notifications</p>
-        <p class="sidebarText">Chat</p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText">Settings</p>
-        <button class="themeObject">New Post</button><br><br>
-        <p>Theme</p>
-        <select id="themeSelector" class="themeObject" onchange="changeTheme()">
-            <option value="#0f73ff" selected>Blue</option>
-                <option value="#A11010">Red</option>
-                <option value="#E86C13">Orange</option>
-                <option value="#A947C9">Purple</option>
-                <option value="#004a41">Green</option>
-        </select><br><br>
-        <select id="bgSelector" class="themeObject" onchange="changeBG()">
-            <option value="#000000">Lights Out</option>
-            <option value="#F2F2EB">Light</option>
-            <option value="#151D28" selected>Dark</option>
-        </select>
-
-    </div>
+    
 
     <!-- TODO: Fix scaling on elements -->
 
@@ -50,7 +25,7 @@
                 <!-- Lorem ipsum for placeholder -->
                 <button id="edit" class="themeObject">Edit Profile</button> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
                 <!-- <button id="save">Save</button> <button id="cancel">cancel</button> --> <!-- Swap in after clicking edit -->
-                <textarea id="bioText" maxlength="50" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor lobortis pharetra. Integer velit elit, tincidunt at purus nec, finibus interdum dui. Cras ac laoreet massa. Maecenas varius bibendum quam a suscipit. Mauris vestibulum, mauris nec euismod finibus, nunc ex lacinia nisi, eget ullamcorper lectus metus nec mi. Proin id neque dignissim, finibus velit tincidunt, dictum magna. Fusce rutrum risus ac viverra sagittis.</textarea>
+                <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut auctor lobortis pharetra. Integer velit elit, tincidunt at purus nec, finibus interdum dui. Cras ac laoreet massa. Maecenas varius bibendum quam a suscipit. Mauris vestibulum, mauris nec euismod finibus, nunc ex lacinia nisi, eget ullamcorper lectus metus nec mi. Proin id neque dignissim, finibus velit tincidunt, dictum magna. Fusce rutrum risus ac viverra sagittis.</textarea>
             </div>
         </div>
 
@@ -96,6 +71,32 @@
         </div>
     </div>
     
+    <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
+        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText">Explore</p>
+        <p class="sidebarText">Notifications</p>
+        <p class="sidebarText">Chat</p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText">Settings</p>
+        <button class="themeObject">New Post</button><br><br>
+        <p>Theme</p>
+        <select id="themeSelector" class="themeObject" onchange="changeTheme()">
+            <option value="#0f73ff" selected>Blue</option>
+                <option value="#A11010">Red</option>
+                <option value="#E86C13">Orange</option>
+                <option value="#A947C9">Purple</option>
+                <option value="#004a41">Green</option>
+        </select><br><br>
+        <select id="bgSelector" class="themeObject" onchange="changeBG()">
+            <option value="#000000">Lights Out</option>
+            <option value="#F2F2EB">Light</option>
+            <option value="#151D28" selected>Dark</option>
+        </select>
+
+    </div>
 
     <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
         <br><br><input class="searchBar themeObject" placeholder="Search">
