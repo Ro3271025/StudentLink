@@ -83,7 +83,7 @@
             <p class="sidebarText">Chat</p>
             <p class="sidebarText"><a href="profile.html">Profile</a></p>
             <p class="sidebarText">Settings</p>
-            <button class="themeObject">New Post</button><br><br>
+            <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
             <p>Theme</p>
             <select id="themeSelector" class="themeObject" onchange="changeTheme()">
                 <option value="#0f73ff" selected>Blue</option>
@@ -104,23 +104,38 @@
     <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
         <br><input class="searchBar themeObject" placeholder="Search"><br><br>
         
-        <!--<div id="recentSearches"> 
+        <div id="recentSearches"> <!-- track the last 5 searches -->
             <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
                 <tr>
-                    <th>
-                        game club
-                    </th>
+                    <th class="recentSearchData"><a href="">game club</a></th>
                 </tr>
                 <tr>
-                    <th>
-                        textbooks
-                    </th>
+                    <th class="recentSearchData"><a href="">textbooks</a></th>
+                </tr>
+                <tr>
+                    <th class="recentSearchData"><a href="">class canceled</a></th>
+                </tr>
+                <tr>
+                    <th class="recentSearchData"><a href="">senior project</a></th>
+                </tr>
+                <tr>
+                    <th class="recentSearchData"><a href="">used calculator</a></th>
                 </tr>
             </table>
-        </div> -->
-        <!-- TODO: RECENT SEARCHES -->
+        </div>
     </div>
 
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+        </div>
+    </div>
+    
+
     <script src="../public/js/themeSwap.js" type="text/javascript"></script>
+    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
     </body>
 </html>

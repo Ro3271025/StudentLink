@@ -14,6 +14,7 @@ html {
     max-width: 1920px;
     position: relative;
     vertical-align: middle;
+    z-index: 1;
     }
 
 body{
@@ -27,6 +28,7 @@ table, th, td{
    text-align: center;
    color: var(--text-fill);
 }
+
 
 
 img{
@@ -216,7 +218,7 @@ a:hover{
     margin: 0 auto;
     width: 55%;
     height:20vh;
-    position: sticky;
+    position: -webkit-sticky;
     align-items: center;
     vertical-align: middle;
     text-align: center;
@@ -342,7 +344,7 @@ a:hover{
     margin: 0 auto;
     width: 55%;
     height:5vh;
-    position: sticky;
+    position: -webkit-sticky;
     align-items: center;
     vertical-align: middle;
     text-align: center;
@@ -376,8 +378,19 @@ a:hover{
     border-radius: 10px;
     border-color: var(--button-hover);
     background-color: var(--button-hover);
-    margin-left: 81vw;
     font-size: 12pt;
+    width: 150%;
+    font-size: 16pt;
+}
+
+.recentSearchData {
+    text-align: left;
+    padding-left: 10px;
+}
+
+#recentHeader{
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
 }
 
 .sidebarText{
@@ -385,12 +398,55 @@ a:hover{
 }
 
 #newPostContainer{
-    text-align: center;
-    width: auto;
+    text-align: left;
+    width: 50%;
+    height: 35%;
     max-width: 50%;
     background-color: var(--bg-primary); 
     border-color: var(--border-color);
     border: 1px solid;
-    position: absolute;
+    position: -webkit-sticky;
+    position: fixed;
     visibility: hidden;
+    vertical-align: middle;
+    z-index: 2;
+    margin-top: -55%; /* TODO: Fix this */
+    padding: 5px;
+    border-radius: 10px;
+    font-family: var(--font-family);
+    font-size: 18pt;
+    margin-left: 24.25%;
+    
+}
+
+#newPostHeader{
+    margin-left: 2%;
+}
+
+#newPostTXT{
+    height: 95%;
+    text-align: center;
+}
+
+#newPostTXT textarea{
+    resize: none;
+    width: 95%;
+    height: 70%;
+    background-color: var(--bg-primary);
+    font-family: var(--font-family);
+    font-size: 16pt;
+    color: var(--text-fill);
+    border-style: none;
+    border-color: transparent;
+    outline: transparent;
+}
+
+#createPostBtn{
+    margin-left: 63%;
+}
+
+.overlayDiv{
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
 }
