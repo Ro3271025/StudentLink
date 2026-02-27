@@ -1,10 +1,13 @@
 :root{
-    /* define some vars */
+    /* Base Theme */
     --bg-primary: #151D28;
     --theme-accent: #0f73ff;
     --border-color: #586373;
-    --button-hover: #113D7A;;
+    --button-hover: #113D7A;
+    --text-fill: #ffffff;
+    --font-family: Helvetica, sans-serif;
 }
+
 
 html {
     min-width: 550px;
@@ -15,12 +18,13 @@ html {
 
 body{
     background-color: var(--bg-primary);
-    color:white;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: var(--text-fill);
+    font-family: var(--font-family);
 }
 
 table, th, td{
    text-align: center;
+   color: var(--text-fill);
 }
 
 table{
@@ -28,7 +32,8 @@ table{
 }
 
 img{
-    height: 5vh;
+    max-width: 100%;
+    height: auto;
     vertical-align: middle;
 }
 
@@ -39,7 +44,7 @@ button, select{
     border-radius: 0.625rem;
     padding: 0.625rem;
     transition: 0.125s;
-    color:white;
+    color: white;
     font-weight: bold;
     font-size: 18pt;
     vertical-align: middle;
@@ -56,7 +61,7 @@ select{
 }
 
 a{
-    color: white;
+    color: var(--text-fill);
     font-weight: bold;
     transition: .125s;
 }
@@ -151,15 +156,29 @@ a:hover{
 
 /* User Profile Stuff */
 
+.postDisplayName{
+    color:var(--text-fill)
+}
+
 .sidebar{
     text-align: center;
-   /* margin-right: 80vw;*/
     font-size: 18pt;
-    position: static;
     position: -webkit-sticky;
     position: fixed;
     top:0;
     max-width: 10%;
+    min-width: 10%;
+    word-wrap: break-word; /* squish text on resize */
+    
+}
+
+.sidebar a{
+    text-decoration: none;
+}
+
+#rightBar{
+    /*border: 2px white solid;*/ /* debug for positioning */
+    margin-left: 81vw;
 }
 
 .searchBar{
@@ -169,8 +188,8 @@ a:hover{
     font-size: 16pt;
     color: white;
     padding: 5%;
-    margin-left: 81vw;
     transition: 0.125s;
+    font-family: var(--font-family);
 }
 
 #profileContainer{
@@ -183,16 +202,10 @@ a:hover{
     margin-left: 3.5%;
 }
 
-/*#rightBar{
-    position: -webkit-sticky;
-    position: fixed;
-    top:0;
-    max-width: 10%;
-}*/
 
 #username{
     font-size: 14pt;
-    color: var(--border-color);
+    color: #586373;
 }
 
 #displayName{
@@ -201,9 +214,9 @@ a:hover{
 }
 
 #banner{
-    border-left: 2px solid var(--border-color);
-    border-right: 2px solid var(--border-color);
-    border-bottom: 2px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
     margin-left:18vw;
     margin-right:21vw;
     margin-top: -34%;
@@ -219,9 +232,9 @@ a:hover{
 }
 
 .content{
-    border-left: 2px solid var(--border-color);
-    border-right: 2px solid var(--border-color);
-    border-bottom: 2px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
     margin-left:18vw;
     margin-right:21vw;
     align-items: center;
@@ -255,9 +268,9 @@ a:hover{
     resize:none;
     width: 95%;
     height: 15vh;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: var(--font-family);
     background-color: var(--bg-primary);
-    color: white;
+    color: var(--text-fill);
 }
 
 #bioText:disabled{
@@ -280,7 +293,13 @@ a:hover{
 .profileImgMini{
     margin-left: 3.5%;
     margin-top: 3.5%;
-    min-height: 8vh;
+    min-height: 5vh;
+    height:5vh;
+}
+
+.sideProfileIcon{
+    height:50%;
+    width: 50%;
 }
 
 .postLink{
@@ -295,11 +314,12 @@ a:hover{
     border-radius: 10px;
     width: 95%;
     height: fit-content;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: var(--font-family);
     background-color: var(--bg-primary);
-    color: white;
+    color: var(--text-fill);
     margin-left: 3.5%;
     margin-top: 2%;
+    font-size: 14pt
 }
 
 .postMetrics{
@@ -313,34 +333,52 @@ a:hover{
     margin-left: 18.25%;
 }
 
+
+/* Home Page Values */
+
 #header{
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     margin-left:18vw;
     margin-right:21vw;
     height:5vh;
     position: sticky;
     align-items: center;
     vertical-align: middle;
-    padding: 8px;
+    text-align: center;
+    padding: 10px;
 }
 
 #header img{
-    position: relative;
-    margin-left: 25%;
+    margin-top: .75%;
+    max-width: 75%;
+    max-height: 75%;
+    width: 75%;
+    height: 75%;
 }
 
 #loadMore{
     text-align: center;
     margin-left: 41.5%;
-    /*margin-right: 50%;*/
 }
 
 .imageContainer{
     text-align: center;
-    min-height: 50px;
+    min-height: 250px;
     max-height: 550px;
 }
 
 .imageContainer img{
     height: inherit;
+}
+
+.recentSearchesTable{
+    border-radius: 10px;
+    border-color: var(--button-hover);
+    background-color: var(--button-hover);
+    margin-left: 81vw;
+    font-size: 12pt;
+}
+
+.sidebarText{
+    font-size: 100%;
 }

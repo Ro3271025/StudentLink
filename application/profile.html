@@ -7,25 +7,28 @@
 </head>
 <body id="documentBody">
     <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img id="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>
-        <p><a href="home.html">Home</a></p>
-        <p>Explore</p>
-        <p>Notifications</p>
-        <p>Chat</p>
-        <p>Profile</p>
-        <p>Settings</p>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText">Explore</p>
+        <p class="sidebarText">Notifications</p>
+        <p class="sidebarText">Chat</p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText">Settings</p>
         <button class="themeObject">New Post</button><br><br>
         <p>Theme</p>
-        <select id="themeSelector" class="themeObject" onchange="swapTheme()">
-            <option value="#0f73ff">Blue</option>
-            <option value="#004a41">Farmingdale Green</option>
+        <select id="themeSelector" class="themeObject" onchange="changeTheme()">
+            <option value="#0f73ff" selected>Blue</option>
+                <option value="#A11010">Red</option>
+                <option value="#E86C13">Orange</option>
+                <option value="#A947C9">Purple</option>
+                <option value="#004a41">Green</option>
         </select><br><br>
-        <select id="bgSelector" class="themeObject" onchange="swapBg()">
+        <select id="bgSelector" class="themeObject" onchange="changeBG()">
             <option value="#000000">Lights Out</option>
             <option value="#F2F2EB">Light</option>
-            <option value="#151D28">Dark</option>
+            <option value="#151D28" selected>Dark</option>
         </select>
 
     </div>
