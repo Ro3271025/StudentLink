@@ -172,6 +172,10 @@ a:hover{
     
 }
 
+.sidebar a{
+    text-decoration: none;
+}
+
 #rightBar{
     /*border: 2px white solid;*/ /* debug for positioning */
     margin-left: 81vw;
