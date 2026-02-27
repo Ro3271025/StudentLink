@@ -410,13 +410,11 @@ a:hover{
     visibility: hidden;
     vertical-align: middle;
     z-index: 2;
-    margin-top: -55%; /* TODO: Fix this */
     padding: 5px;
     border-radius: 10px;
     font-family: var(--font-family);
     font-size: 18pt;
     margin-left: 24.25%;
-    
 }
 
 #newPostHeader{
@@ -449,4 +447,8 @@ a:hover{
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
+    display:flex;
+    align-items: center;
+    margin: 0 auto;
+    margin-top:-50%;
 }
