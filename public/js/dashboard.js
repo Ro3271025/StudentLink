@@ -18,8 +18,11 @@ export function setupDashboard() {
             return;
         }
 
-        document.getElementById("userInfo").innerText =
-            "Logged in as: " + user.displayName;
+        const infoEl = document.getElementById("userInfo");
+        if (infoEl) {
+            // show both displayName and @username
+            infoEl.innerText = `Logged in as: ${user.displayName || ""} (@${data.username})`;
+        }
     });
 
     const logoutBtn = document.getElementById("logoutBtn");

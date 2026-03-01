@@ -23,6 +23,7 @@ import {
  * @param {Object} params
  * @param {string} params.authorId
  * @param {string} params.authorName
+ * @param {string} params.authorUsername  // the user's chosen handle (without @)
  * @param {string} params.title
  * @param {string} params.body
  * @param {"support"|"marketplace"} [params.type="support"]
@@ -43,6 +44,7 @@ export async function createPost(params) {
   const {
     authorId,
     authorName,
+    authorUsername,
     title,
     body,
     type = "support",
@@ -59,6 +61,8 @@ export async function createPost(params) {
   } = params || {};
 
   if (!authorId) throw new Error("createPost: authorId is required");
+  if (!authorName) throw new Error("createPost: authorName is required");
+  if (!authorUsername) throw new Error("createPost: authorUsername is required");
   if (!title || !title.trim()) throw new Error("createPost: title is required");
   if (!body || !body.trim()) throw new Error("createPost: body is required");
 
@@ -78,6 +82,7 @@ export async function createPost(params) {
   const payload = {
     authorId,
     authorName: authorName || "",
+    authorUsername: authorUsername || "",
     title: title.trim(),
     body: body.trim(),
     type,
