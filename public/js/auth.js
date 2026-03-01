@@ -33,13 +33,12 @@ export function setupLogin() {
                 await signInWithPopup(auth, googleProvider);
                 console.log(" signInWithPopup triggered");
             } catch (error) {
-                console.error(" Google login error:", error);
+                console.error("Google login error:", error);
             }
         });
     } else {
         console.log(" loginBtn NOT FOUND in DOM");
     }
-
     // Central auth listener
     onAuthStateChanged(auth, async (user) => {
         console.log(" onAuthStateChanged fired. User:", user);
