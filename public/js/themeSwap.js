@@ -45,29 +45,35 @@ function changeBG(){
         case "#151D28": // Dark
             rootCSS.style.setProperty('--text-fill', "#ffffff");
             localStorage.setItem("storedBG", "#151D28");
+            localStorage.setItem("storedTXT", "#ffffff");
             break;
         case "#000000": // Lights out
             rootCSS.style.setProperty('--text-fill', "#ffffff");
             localStorage.setItem("storedBG", "#000000");
+            localStorage.setItem("storedTXT", "#ffffff");
             break;
         case "#F2F2EB": // Light
             rootCSS.style.setProperty('--text-fill', "#000000");
             localStorage.setItem("storedBG", "#F2F2EB");
+            localStorage.setItem("storedTXT", "#000000");
             break;
     }
 }
 
-function reloadTheme(accent, hoverAccent, BG){
+function reloadTheme(accent, hoverAccent, BG, txtFill){
     var rootCSS = document.querySelector(':root');
 
     rootCSS.style.setProperty('--bg-primary', BG); // background
     rootCSS.style.setProperty('--theme-accent', accent); // primary accent
     rootCSS.style.setProperty('--button-hover', hoverAccent); // on hover accent
+    rootCSS.style.setProperty('--text-fill', txtFill); // text color
 
 }
 
 // retain the user's theme across refresh
-document.addEventListener('DOMContentLoaded', reloadTheme(localStorage.getItem("storedAccent"), localStorage.getItem("storedHover"), localStorage.getItem("storedBG")));
+document.addEventListener('DOMContentLoaded', 
+    reloadTheme(localStorage.getItem("storedAccent"), localStorage.getItem("storedHover"), 
+    localStorage.getItem("storedBG"), localStorage.getItem("storedTXT")));
 
 
 

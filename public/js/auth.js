@@ -18,7 +18,7 @@ googleProvider.setCustomParameters({
 
 export function setupLogin() {
 
-    const googleBtn = document.getElementById("loginBtn");
+    const googleBtn = document.getElementById("gLoginBtn");
 
     if (googleBtn) {
         googleBtn.addEventListener("click", async () => {
