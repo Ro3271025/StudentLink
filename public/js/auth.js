@@ -51,8 +51,19 @@ export function setupLogin() {
                 provider: "google",
                 createdAt: new Date()
             });
+            // re‑read the document so we have a data object below
+            userSnap = await getDoc(userRef);
         }
 
-        window.location.href = "../application/home.html";
+        // at this point we have a document (new or existing)
+        const data = userSnap.data() || {};
+        if (!data.username) {
+            // new user or hasn't picked a username yet
+            window.location.href = "./chooseUsername.php";
+        } else {
+            // already has a username; send to the main application
+            window.location.href = "../application/home.html";
+        }
     });
 }
+
