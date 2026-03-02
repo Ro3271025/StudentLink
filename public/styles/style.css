@@ -160,18 +160,15 @@ a:hover{
     color:var(--text-fill)
 }
 
-.sidebar{
-    text-align: center;
-    font-size: 18pt;
-    position: -webkit-sticky;
-    position: fixed;
-    top:0;
-    max-width: 10%;
-    min-width: 10%;
-    word-wrap: break-word; /* squish text on resize */
-    
+.sidebar{ 
+    text-align: center; 
+    font-size: 15pt; 
+    position: -webkit-sticky; 
+    position: fixed; top:0; 
+    max-width: 10%; 
+    min-width: 10%; 
+    word-wrap: break-word; /* squish text on resize */ 
 }
-
 .sidebar a{
     text-decoration: none;
 }
