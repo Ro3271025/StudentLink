@@ -26,7 +26,7 @@ body{
 
 table, th, td{
    text-align: center;
-   color: var(--text-fill);
+   
 }
 
 
@@ -381,16 +381,22 @@ a:hover{
     font-size: 12pt;
     width: 150%;
     font-size: 16pt;
+    color: white;
 }
 
 .recentSearchData {
     text-align: left;
     padding-left: 10px;
+    color: white; 
 }
 
 #recentHeader{
     border-bottom: 1px solid var(--border-color);
     text-align: center;
+}
+
+.tableAnchorLink{
+    color: white; /* this should ALWAYS be white for the right sidebar */
 }
 
 .sidebarText{
