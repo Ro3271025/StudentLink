@@ -5,7 +5,7 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase
 export function setupProfile() {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
-            window.location.href = "../public/login.php";
+            window.location.href = "login.php";
             return;
         }
 

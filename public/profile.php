@@ -11,7 +11,7 @@
     <p><strong>Campus:</strong> <span id="campus"></span></p>
     <p><strong>Bio:</strong> <span id="bio"></span></p>
 
-    <script type="module" src="./js/profile.js"></script>
+    <script type="module" src="js/profile.js"></script>
 
 </body>
 </html>

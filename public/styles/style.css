@@ -382,3 +382,8 @@ a:hover{
 .sidebarText{
     font-size: 100%;
 }
+.mainContent {
+    margin-left: 260px;   /* width of left sidebar */
+    margin-right: 260px;  /* if you use right sidebar */
+    padding: 30px;
+}
