@@ -129,9 +129,14 @@ error_reporting(E_ALL);
           const user = requireUser();
           if (!user) return;
 
+          // look up the username from the user document so posts contain it
+          const userSnapDoc = await getDoc(doc(db, "users", user.uid));
+          const uname = userSnapDoc.exists() ? userSnapDoc.data().username : "";
+
           const postId = await postsSvc.createPost({
             authorId: user.uid,
             authorName: user.displayName || "Student",
+            authorUsername: uname || "",
             title: document.getElementById("supportTitle").value,
             body: document.getElementById("supportBody").value,
             type: "support",
@@ -152,9 +157,13 @@ error_reporting(E_ALL);
           const user = requireUser();
           if (!user) return;
 
+          const userSnapDoc = await getDoc(doc(db, "users", user.uid));
+          const uname = userSnapDoc.exists() ? userSnapDoc.data().username : "";
+
           const postId = await postsSvc.createPost({
             authorId: user.uid,
             authorName: user.displayName || "Student",
+            authorUsername: uname || "",
             title: document.getElementById("marketTitle").value,
             body: document.getElementById("marketBody").value,
             type: "marketplace",
