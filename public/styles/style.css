@@ -309,8 +309,8 @@ a:hover{
     text-decoration: none;
 }
 
-#postUsername{
-    color: var(--border-color);
+.postUsername{
+    color: var(--border-color) !important;
 }
 
 .postContentText{
@@ -329,6 +329,25 @@ a:hover{
     margin-left: 3.5%;
     text-decoration: none;
     color: var(--border-color);
+}
+
+.openPostBtn{
+    width: 100%;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    border-radius: 0;
+    text-align: left;  /* overrides */
+    font-size: 14pt;
+    font-family: var(--font-family);
+    font-weight: normal;
+}
+
+.openPostBtn:hover{ /* inital hover */
+    background-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+.openPostBtn:hover p{ /* tell the p tag to behave manually */
+    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 #selectedContentList{
@@ -457,4 +476,17 @@ a:hover{
     align-items: center;
     margin: 0 auto;
     margin-top:-50%;
+}
+
+/* viewing post */
+
+.postCommentText{
+    resize: none !important;
+    width: 92%;
+    height: 150px;
+}
+
+#commentBtn{
+    font-size: 14pt;
+    margin-left: 3.5%;
 }
