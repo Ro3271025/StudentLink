@@ -93,8 +93,9 @@ error_reporting(E_ALL);
 
     try {
       // Import Firebase + services (paths assume this file is /public/testPosts.php)
-      const { auth } = await import("./js/firebaseInitialization.js");
+      const { auth, db } = await import("./js/firebaseInitialization.js");
       const { onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
       const postsSvc = await import("./js/postsService.js");
       const commentsSvc = await import("./js/commentsService.js");
