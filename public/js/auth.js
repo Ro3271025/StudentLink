@@ -83,7 +83,7 @@ export function setupLogin() {
             window.location.href = "./chooseUsername.php";
         } else {
             // already has a username; send to the main application
-            window.location.href = "../application/home.html";
+            window.location.href = "home.html";
         }
     });
 }
