@@ -22,8 +22,7 @@ export function setupLogin() {
 
     console.log(" setupLogin() running");
 
-    const googleBtn = document.getElementById("loginBtn");
-    console.log(" Google button element:", googleBtn);
+    const googleBtn = document.getElementById("gLoginBtn");
 
     if (googleBtn) {
         googleBtn.addEventListener("click", async () => {
