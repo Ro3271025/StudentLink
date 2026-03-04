@@ -14,7 +14,7 @@
            <!-- SAMPLE POST 1-->
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -26,7 +26,7 @@
         <!-- Comment Section -->
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <textarea class="postContentText postCommentText" maxlength="200" placeholder="Have something to say?"></textarea><br>
             <!-- Add Img or Video tag too if there's media present --><br>
@@ -37,12 +37,12 @@
         <!-- Comments essentially look the same as posts on most platforms like Twitter/Bluesky/etc -->
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">Barely passed with a C</p><br>
             <!-- Add Img or Video tag too if there's media present -->
 
-            <footer><a class="postLink postMetrics" href="">2 Likes</a><a class="postLink postMetrics" href="">0 Comments</a>
+            <footer><a class="postLink postMetrics" href="">2 Likes</a> <!-- Don't track comments on comments, just attach them to the parent post -->
             <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
         </div>
 
@@ -55,7 +55,7 @@
             <p class="sidebarText">Notifications</p>
             <p class="sidebarText">Chat</p>
             <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText">Settings</p>
+            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
             <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
             <p>Theme</p>
             <select id="themeSelector" class="themeObject" onchange="changeTheme()">
@@ -70,6 +70,15 @@
                 <option value="#F2F2EB">Light</option>
                 <option value="#151D28" selected>Dark</option>
             </select>
+
+            <div class="overlayDiv">
+                <div id="newPostContainer">
+                    <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                    <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                    <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+                </div>
+            </div>
+
         </div>
 
      
@@ -96,14 +105,6 @@
                     <th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th>
                 </tr>
             </table>
-        </div>
-    </div>
-
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
-            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
         </div>
     </div>
     

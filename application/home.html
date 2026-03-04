@@ -13,9 +13,9 @@
         </div> <!-- Small header with our logo -->
            <!-- SAMPLE POST 1-->
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openPostBtn">
+            <button class="openBtn">
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -25,9 +25,9 @@
         </div>
 
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openPostBtn">
+            <button class="openBtn">
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">Motorsports club is meeting at 4:30pm on Thursday.</p><br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -37,9 +37,9 @@
         </div>
 
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openPostBtn">
+            <button class="openBtn">
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">Game Club is hosting a competition with a $100 cash prize! Reply to sign up!</p><br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -49,9 +49,9 @@
         </div>
 
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openPostBtn">
+            <button class="openBtn">
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">Looking to sell some old textbooks. DM to see if I have anything you need.</p>
                 <div class="imageContainer">
@@ -65,9 +65,9 @@
         </div>
 
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openPostBtn">
+            <button class="openBtn">
             <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="postUsername">@Username</small><br>
+            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
 
             <p class="postContentText" maxlength="200">Is Brightspace down? Nothing will load for me...</p><br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -87,7 +87,7 @@
             <p class="sidebarText">Notifications</p>
             <p class="sidebarText">Chat</p>
             <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText">Settings</p>
+            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
             <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
             <p>Theme</p>
             <select id="themeSelector" class="themeObject" onchange="changeTheme()">
@@ -102,6 +102,17 @@
                 <option value="#F2F2EB">Light</option>
                 <option value="#151D28" selected>Dark</option>
             </select>
+
+
+            <div class="overlayDiv">
+                <div id="newPostContainer">
+                    <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                    <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                    <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+                </div>
+            </div>
+
+
         </div>
 
      
@@ -130,15 +141,6 @@
             </table>
         </div>
     </div>
-
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
-            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
-        </div>
-    </div>
-    
 
     <script src="../public/js/themeSwap.js" type="text/javascript"></script>
     <script src="../public/js/toggleVis.js" type="text/javascript"></script>
