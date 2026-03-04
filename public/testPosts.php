@@ -93,8 +93,9 @@ error_reporting(E_ALL);
 
     try {
       // Import Firebase + services (paths assume this file is /public/testPosts.php)
-      const { auth } = await import("./js/firebaseInitialization.js");
+      const { auth, db } = await import("./js/firebaseInitialization.js");
       const { onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
       const postsSvc = await import("./js/postsService.js");
       const commentsSvc = await import("./js/commentsService.js");
@@ -129,9 +130,14 @@ error_reporting(E_ALL);
           const user = requireUser();
           if (!user) return;
 
+          // look up the username from the user document so posts contain it
+          const userSnapDoc = await getDoc(doc(db, "users", user.uid));
+          const uname = userSnapDoc.exists() ? userSnapDoc.data().username : "";
+
           const postId = await postsSvc.createPost({
             authorId: user.uid,
             authorName: user.displayName || "Student",
+            authorUsername: uname || "",
             title: document.getElementById("supportTitle").value,
             body: document.getElementById("supportBody").value,
             type: "support",
@@ -152,9 +158,13 @@ error_reporting(E_ALL);
           const user = requireUser();
           if (!user) return;
 
+          const userSnapDoc = await getDoc(doc(db, "users", user.uid));
+          const uname = userSnapDoc.exists() ? userSnapDoc.data().username : "";
+
           const postId = await postsSvc.createPost({
             authorId: user.uid,
             authorName: user.displayName || "Student",
+            authorUsername: uname || "",
             title: document.getElementById("marketTitle").value,
             body: document.getElementById("marketBody").value,
             type: "marketplace",

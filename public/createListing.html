@@ -1,0 +1,41 @@
+<form id="listingForm">
+
+    <input type="text" id="title" placeholder="Title" required>
+
+    <textarea id="description" placeholder="Description" required></textarea>
+
+    <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Textbook">Textbook</option>
+        <option value="Calculator">Calculator</option>
+        <option value="Tech">Tech</option>
+        <option value="Dorm">Dorm</option>
+        <option value="Misc">Misc</option>
+    </select>
+
+    <!-- CONDITIONAL FIELDS (HIDDEN INITIALLY) -->
+    <div id="supplyOptions" style="display:none;">
+
+        <select id="condition">
+            <option value="">Select Condition</option>
+            <option value="New">New</option>
+            <option value="Like New">Like New</option>
+            <option value="Good">Good</option>
+            <option value="Fair">Fair</option>
+        </select>
+
+        <select id="listingType">
+            <option value="">Sell or Rent?</option>
+            <option value="sell">Sell</option>
+            <option value="rent">Rent</option>
+        </select>
+
+    </div>
+
+    <input type="number" id="price" placeholder="Price ($)" min="1" required>
+
+    <button type="submit">Create Listing</button>
+
+</form>
+
+<script type="module" src="js/createListings.js"></script>

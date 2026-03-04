@@ -2,30 +2,34 @@
 <html lang="en">
 <head>
    <title>Profile | StudentLink</title>
-   <link rel="stylesheet" href="../public/styles/style.css">
+   <link rel="stylesheet" href="styles/style.css">
    <meta name="viewport" content="width=device-width, inital-scale=1">
 </head>
 <body id="documentBody">
     <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img id="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>
-        <p><a href="home.html">Home</a></p>
-        <p>Explore</p>
-        <p>Notifications</p>
-        <p>Chat</p>
-        <p>Profile</p>
-        <p>Settings</p>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText">Explore</p>
+        <p class="sidebarText">Notifications</p>
+        <p class="sidebarText">Chat</p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText">Settings</p>
         <button class="themeObject">New Post</button><br><br>
         <p>Theme</p>
-        <select id="themeSelector" class="themeObject" onchange="swapTheme()">
-            <option value="#0f73ff">Blue</option>
-            <option value="#004a41">Farmingdale Green</option>
+        <select id="themeSelector" class="themeObject" onchange="changeTheme()">
+            <option value="#0f73ff" selected>Blue</option>
+                <option value="#A11010">Red</option>
+                <option value="#E86C13">Orange</option>
+                <option value="#A947C9">Purple</option>
+                <option value="#004a41">Green</option>
         </select><br><br>
-        <select id="bgSelector" class="themeObject" onchange="swapBg()">
+        <select id="bgSelector" class="themeObject" onchange="changeBG()">
             <option value="#000000">Lights Out</option>
             <option value="#F2F2EB">Light</option>
-            <option value="#151D28">Dark</option>
+            <option value="#151D28" selected>Dark</option>
         </select>
 
     </div>
@@ -33,11 +37,11 @@
     <!-- TODO: Fix scaling on elements -->
 
     <div id="profileContainer">
-        <div id="banner"><img src="../public/styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
+        <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
 
         <div id="profileInfo" class="content">
             <!-- Maybe use an inner div to force content to scale without more custom code -->
-            <img id="profileImage" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+            <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
             <p id="displayName">Display Name</p> <!-- Swap with input for editing --> <!-- <input id="displayName"> -->
             <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p>
             <!-- Replace the static numbers with actual data and then link to a page showing all the results of the proper query -->
@@ -62,7 +66,7 @@
 
         <!-- SAMPLE POST -->
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
             <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
 
             <p disabled class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
@@ -72,7 +76,7 @@
             <a href="" class="postLink postMetrics" style="margin-left: 66.5%;">Report</a></footer><br>
         </div>
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
             <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
 
             <p disabled class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
@@ -82,7 +86,7 @@
             <a href="" class="postLink postMetrics" style="margin-left: 66.5%;">Report</a></footer><br>
         </div>
         <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
             <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
 
             <p disabled class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
@@ -98,7 +102,10 @@
         <br><br><input class="searchBar themeObject" placeholder="Search">
     </div>
 
-
-    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
+    <script type="module">
+        import { setupProfile } from "./js/profile.js";
+        setupProfile();
+    </script>
+    <script src="js/themeSwap.js" type="text/javascript"></script>
 </body>
 </html>
