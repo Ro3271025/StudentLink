@@ -19,11 +19,7 @@ googleProvider.setCustomParameters({
 });
 
 export function setupLogin() {
-
-    console.log(" setupLogin() running");
-
-    const googleBtn = document.getElementById("loginBtn");
-    console.log(" Google button element:", googleBtn);
+    const googleBtn = document.getElementById("gLoginBtn");
 
     if (googleBtn) {
         googleBtn.addEventListener("click", async () => {
@@ -37,7 +33,7 @@ export function setupLogin() {
             }
         });
     } else {
-        console.log(" loginBtn NOT FOUND in DOM");
+        console.log(" gLoginBtn NOT FOUND in DOM");
     }
     // Central auth listener
     onAuthStateChanged(auth, async (user) => {
@@ -51,7 +47,7 @@ export function setupLogin() {
         }
 
         const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+        let userSnap = await getDoc(userRef);
 
         console.log(" Checking if user exists:", userSnap.exists());
 
