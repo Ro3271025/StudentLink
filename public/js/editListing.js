@@ -6,6 +6,15 @@ getDoc,
 updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const storage = getStorage();
+
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
@@ -37,19 +46,56 @@ document.getElementById("title").value = listing.title;
 document.getElementById("description").value = listing.description;
 document.getElementById("price").value = listing.price;
 
+/* SHOW IMAGE */
+
+if(listing.imageURL){
+const img = document.getElementById("currentImage");
+img.src = listing.imageURL;
+img.style.display = "block";
+}
+
 }
 
 form.addEventListener("submit", async(e)=>{
 
 e.preventDefault();
 
-await updateDoc(doc(db,"listings",id),{
+const title = document.getElementById("title").value;
+const description = document.getElementById("description").value;
+const price = Number(document.getElementById("price").value);
 
-title: document.getElementById("title").value,
-description: document.getElementById("description").value,
-price: Number(document.getElementById("price").value)
+const imageFile = document.getElementById("listingImage").files[0];
 
-});
+let imageURL = null;
+
+/* upload new image if selected */
+
+if(imageFile){
+
+const storageRef = ref(storage,
+`listings/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`);
+
+await uploadBytes(storageRef,imageFile);
+
+imageURL = await getDownloadURL(storageRef);
+
+}
+
+/* build update object */
+
+const updateData = {
+title,
+description,
+price
+};
+
+if(imageURL){
+updateData.imageURL = imageURL;
+}
+
+/* update listing */
+
+await updateDoc(doc(db,"listings",id),updateData);
 
 window.location.href = `listingDetail.html?id=${id}`;
 

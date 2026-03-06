@@ -523,3 +523,76 @@ margin-right:10px;
 #deleteListingBtn{
 padding:8px 16px;
 }
+#currentImage{
+border-radius:8px;
+margin-top:10px;
+margin-bottom:10px;
+}
+/* MARKETPLACE GRID */
+
+.listingsGrid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+
+    max-width: 1100px;
+    margin: 0 auto;  /* centers the cards */
+}
+
+/* LISTING CARD */
+
+.listingCard{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.listingCard:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* IMAGE */
+
+.listingThumb{
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* TEXT */
+
+.listingTitle{
+
+font-size:16px;
+
+margin-bottom:5px;
+
+}
+
+.listingPrice{
+
+font-weight:bold;
+
+color:#2a7cff;
+
+}
+
+.listingUser{
+
+font-size:13px;
+
+color:#777;
+
+}
+.mainContent{
+    margin-left: 240px;   /* space for left sidebar */
+    margin-right: 240px;  /* space for right sidebar */
+    padding: 20px;
+}

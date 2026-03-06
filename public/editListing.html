@@ -2,7 +2,7 @@
 <html>
 
 <head>
-<title>Edit Listing</title>
+<title>Edit Listing | StudentLink</title>
 <link rel="stylesheet" href="styles/style.css">
 </head>
 
@@ -12,11 +12,24 @@
 
 <form id="editListingForm">
 
-<input type="text" id="title">
+<input type="text" id="title" placeholder="Title" required>
 
-<textarea id="description"></textarea>
+<textarea id="description" placeholder="Description" required></textarea>
 
-<input type="number" id="price">
+<input type="number" id="price" placeholder="Price" required>
+
+<br><br>
+
+<label>Current Image</label>
+<br>
+<img id="currentImage" style="max-width:300px; display:none;">
+
+<br><br>
+
+<label>Replace Image (optional)</label>
+<input type="file" id="listingImage" accept="image/*">
+
+<br><br>
 
 <button type="submit">Save Changes</button>
 

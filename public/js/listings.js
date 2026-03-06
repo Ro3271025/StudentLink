@@ -11,20 +11,22 @@ onAuthStateChanged
 
 const container = document.getElementById("listingsContainer");
 
-function renderListing(listing){
+function renderListing(listing) {
 
-return`
+return `
 
-<div class="listing-card"
-onclick="openListing('${listing.id}')">
+<div class="listingCard" onclick="openListing('${listing.id}')">
 
-<h3>${listing.title}</h3>
+${listing.imageURL
+? `<img class="listingThumb" src="${listing.imageURL}">`
+: `<img class="listingThumb" src="styles/images/placeholder/textbooks.png">`
+}
 
-<p class="listing-price">$${listing.price}</p>
+<h3 class="listingTitle">${listing.title}</h3>
 
-<p class="listing-user">
-Posted by: @${listing.username || "user"}
-</p>
+<p class="listingPrice">$${listing.price}</p>
+
+<p class="listingUser">@${listing.username || "user"}</p>
 
 </div>
 
