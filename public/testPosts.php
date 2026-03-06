@@ -23,7 +23,7 @@ error_reporting(E_ALL);
 </head>
 
 <body>
-  <h1> StudentLink Test Harness</h1>
+  <h1> StudentLink Test </h1>
   <p class="muted">This page is for testing Firestore posts and comments functionality.</p>
 
   <p>

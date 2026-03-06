@@ -596,3 +596,25 @@ color:#777;
     margin-right: 240px;  /* space for right sidebar */
     padding: 20px;
 }
+/* Chat/Messages Sections Style */
+
+.message{
+padding:10px;
+margin:8px;
+max-width:60%;
+border-radius:10px;
+}
+
+.myMessage{
+margin-left:auto;
+background:#0f73ff;
+color:white;
+text-align:right;
+}
+
+.otherMessage{
+margin-right:auto;
+background:#2a2a2a;
+color:white;
+text-align:left;
+}
