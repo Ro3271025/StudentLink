@@ -1,105 +1,126 @@
 import { auth, db } from "./firebaseInitialization.js";
+
 import { 
-    collection, 
-    addDoc, 
-    serverTimestamp 
+collection, 
+addDoc, 
+serverTimestamp,
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { onAuthStateChanged } from 
 "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const storage = getStorage();
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("CreateListing JS Loaded");
+const form = document.getElementById("listingForm");
+const categorySelect = document.getElementById("category");
+const supplyOptions = document.getElementById("supplyOptions");
 
-    const form = document.getElementById("listingForm");
-    const categorySelect = document.getElementById("category");
-    const supplyOptions = document.getElementById("supplyOptions");
+categorySelect.addEventListener("change", () => {
 
-    if (!form || !categorySelect || !supplyOptions) {
-        console.error("One or more required elements not found.");
-        return;
-    }
+const value = categorySelect.value;
 
-    // Show condition + sell/rent only for supply categories
-    categorySelect.addEventListener("change", () => {
-        const value = categorySelect.value;
+if (["Textbook","Calculator","Tech"].includes(value)) {
+supplyOptions.style.display = "block";
+}
+else{
+supplyOptions.style.display = "none";
+}
 
-        if (["Textbook", "Calculator", "Tech"].includes(value)) {
-            supplyOptions.style.display = "block";
-        } else {
-            supplyOptions.style.display = "none";
-        }
-    });
+});
 
-    // Protect route
-    onAuthStateChanged(auth, (user) => {
-        if (!user) {
-            window.location.href = "login.php";
-        }
-    });
+onAuthStateChanged(auth,(user)=>{
+if(!user){
+window.location.href="login.php";
+}
+});
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+form.addEventListener("submit", async(e)=>{
 
-        console.log("Submit triggered");
+e.preventDefault();
 
-        const user = auth.currentUser;
-        if (!user) {
-            alert("Not logged in.");
-            return;
-        }
+const user = auth.currentUser;
 
-        const title = document.getElementById("title").value.trim();
-        const description = document.getElementById("description").value.trim();
-        const category = categorySelect.value;
-        const price = Number(document.getElementById("price").value);
+const title = document.getElementById("title").value.trim();
+const description = document.getElementById("description").value.trim();
+const category = categorySelect.value;
+const price = Number(document.getElementById("price").value);
 
-        let condition = null;
-        let listingType = null;
+const imageFile = document.getElementById("listingImage").files[0];
 
-        if (["Textbook", "Calculator", "Tech"].includes(category)) {
+let condition=null;
+let listingType=null;
 
-            condition = document.getElementById("condition").value;
-            listingType = document.getElementById("listingType").value;
+if(["Textbook","Calculator","Tech"].includes(category)){
 
-            if (!condition || !listingType) {
-                alert("Please select condition and sell/rent option.");
-                return;
-            }
-        }
+condition=document.getElementById("condition").value;
+listingType=document.getElementById("listingType").value;
 
-        const expiresAt = new Date();
-        expiresAt.setDate(expiresAt.getDate() + 30);
+if(!condition||!listingType){
+alert("Please select condition and sell/rent option.");
+return;
+}
 
-        try {
-            await addDoc(collection(db, "listings"), {
-                userID: user.uid,
-                username: user.displayName || "User",
-                campusID: "farmingdale",
+}
 
-                title,
-                description,
-                category,
-                price,
+let imageURL=null;
 
-                listingType,
-                condition,
+if(imageFile){
 
-                imageURL: null,
+const storageRef = ref(storage,
+`listings/${user.uid}/${Date.now()}_${imageFile.name}`);
 
-                status: "active",
-                created_at: serverTimestamp(),
-                expires_at: expiresAt
-            });
+await uploadBytes(storageRef,imageFile);
 
-            console.log("Listing created successfully");
-            window.location.href = "listings.html";
+imageURL = await getDownloadURL(storageRef);
 
-        } catch (error) {
-            console.error("Error creating listing:", error);
-            alert("Failed to create listing.");
-        }
-    });
+}
+
+const userRef = doc(db,"users",user.uid);
+const userSnap = await getDoc(userRef);
+const userData = userSnap.data() || {};
+
+const username = userData.username || "User";
+
+const expiresAt = new Date();
+expiresAt.setDate(expiresAt.getDate()+30);
+
+await addDoc(collection(db,"listings"),{
+
+userID:user.uid,
+username:username,
+
+campusID:"farmingdale",
+
+title,
+description,
+category,
+price,
+
+listingType,
+condition,
+
+imageURL,
+
+status:"active",
+
+created_at:serverTimestamp(),
+expires_at:expiresAt
+
+});
+
+window.location.href="listings.html";
+
+});
 
 });

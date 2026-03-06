@@ -1,53 +1,109 @@
-import { db } from "./firebaseInitialization.js";
+import { auth, db } from "./firebaseInitialization.js";
 
 import {
 doc,
-getDoc
+getDoc,
+deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 
 const container = document.getElementById("listingDetails");
 
 const params = new URLSearchParams(window.location.search);
-
 const id = params.get("id");
-
-import { auth } from "./firebaseInitialization.js";
-
-if(auth.currentUser && auth.currentUser.uid === listing.userID){
-    container.innerHTML += `
-        <button onclick="editListing()">Edit Listing</button>
-    `;
-}
 
 async function loadListing(){
 
-    const ref = doc(db,"listings",id);
+const ref = doc(db,"listings",id);
+const snap = await getDoc(ref);
 
-    const snap = await getDoc(ref);
+if(!snap.exists()){
 
-    if(!snap.exists()){
-        container.innerHTML = "Listing not found.";
-        return;
-    }
+container.innerHTML="Listing not found.";
+return;
 
-    const listing = snap.data();
+}
 
-    container.innerHTML = `
-    
-        <h1>${listing.title}</h1>
+const listing = snap.data();
 
-        ${listing.imageURL ? `<img class="listing-image" src="${listing.imageURL}">` : ""}
+container.innerHTML=`
 
-        <p>${listing.description}</p>
+<h1>${listing.title}</h1>
 
-        <p><strong>Price:</strong> $${listing.price}</p>
+${listing.imageURL ?
+`<img class="listing-image" src="${listing.imageURL}">`
+:""}
 
-        <p><strong>Category:</strong> ${listing.category}</p>
+<p>${listing.description}</p>
 
-        <p><strong>Posted by:</strong> ${listing.username}</p>
+<p><strong>Price:</strong> $${listing.price}</p>
 
-    `;
+<p><strong>Category:</strong> ${listing.category}</p>
+
+<p><strong>Posted by:</strong> @${listing.username}</p>
+
+${listing.condition ?
+`<p><strong>Condition:</strong> ${listing.condition}</p>`
+:""}
+
+${listing.listingType ?
+`<p><strong>Type:</strong> ${listing.listingType}</p>`
+:""}
+
+`;
+
+/* OWNER CONTROLS */
+
+if(auth.currentUser && auth.currentUser.uid===listing.userID){
+
+container.innerHTML+=`
+
+<div style="margin-top:20px">
+
+<button id="editListingBtn">
+Edit Listing
+</button>
+
+<button id="deleteListingBtn"
+style="background:#cc0000;color:white;margin-left:10px;">
+Delete Listing
+</button>
+
+</div>
+
+`;
+
+document.getElementById("editListingBtn").onclick = () => {
+window.location.href = `editListing.html?id=${id}`;
+};
+
+document.getElementById("deleteListingBtn").onclick = deleteListing;
+
+}
+
+}
+
+async function deleteListing(){
+
+const confirmDelete = confirm("Are you sure you want to delete this listing?");
+
+if(!confirmDelete) return;
+
+try{
+
+await deleteDoc(doc(db,"listings",id));
+
+alert("Listing deleted.");
+
+window.location.href="listings.html";
+
+}catch(error){
+
+console.error("Delete failed:",error);
+
+alert("Failed to delete listing.");
+
+}
+
 }
 
 loadListing();
