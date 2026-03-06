@@ -12,15 +12,29 @@ const container = document.getElementById("listingsContainer");
 
 function renderListing(listing) {
     return `
-        <div class="listing-card">
+        <div class="listing-card" onclick="openListing('${listing.id}')">
+
+            ${listing.imageURL ? `<img class="listing-thumb" src="${listing.imageURL}">` : ""}
+
             <h3>${listing.title}</h3>
+
             <p>${listing.description}</p>
+
             <p><strong>Price:</strong> $${listing.price}</p>
+
             <p><strong>Category:</strong> ${listing.category}</p>
+
+            <p class="listing-user">Posted by: ${listing.username || "User"}</p>
+
             ${listing.condition ? `<p><strong>Condition:</strong> ${listing.condition}</p>` : ""}
+
             ${listing.listingType ? `<p><strong>Type:</strong> ${listing.listingType}</p>` : ""}
+
         </div>
     `;
+}
+window.openListing = function(id){
+    window.location.href = `listing.html?id=${id}`;
 }
 
 async function loadListings() {

@@ -75,13 +75,19 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             await addDoc(collection(db, "listings"), {
                 userID: user.uid,
+                username: user.displayName || "User",
                 campusID: "farmingdale",
+
                 title,
                 description,
                 category,
                 price,
+
                 listingType,
                 condition,
+
+                imageURL: null,
+
                 status: "active",
                 created_at: serverTimestamp(),
                 expires_at: expiresAt

@@ -274,7 +274,8 @@ a:hover{
 }
 
 #userCollege{
-    font-size: 10pt;
+    font-size:12px;
+    padding:3px 8px;
 }
 
 #edit{
@@ -486,4 +487,24 @@ a:hover{
 #commentBtn{
     font-size: 14pt;
     margin-left: 3.5%;
+}
+/* Listing styles*/
+.listing-card{
+    border:1px solid #ccc;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.listing-card:hover{
+    transform:scale(1.02);
+}
+
+.listing-thumb{
+    width:100%;
+    max-height:200px;
+    object-fit:cover;
+    border-radius:6px;
 }
