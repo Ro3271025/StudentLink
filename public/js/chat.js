@@ -8,168 +8,220 @@ query,
 orderBy,
 onSnapshot,
 getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* CHAT STATE */
+
+/* CURRENT CHAT STATE */
+
 let currentConversationID = null;
 let unsubscribeMessages = null;
-let currentUser = null;
+
 
 /* ELEMENTS */
+
 const usersContainer = document.getElementById("usersContainer");
 const sendBtn = document.getElementById("sendMessageBtn");
 const messageInput = document.getElementById("messageInput");
 const messagesContainer = document.getElementById("messagesContainer");
 
+
 /* CREATE SHARED CONVERSATION ID */
+
 function getConversationID(user1, user2){
-    return [user1, user2].sort().join("_");
+return [user1, user2].sort().join("_");
 }
+
 
 /* LOAD USERS FROM FIREBASE */
+
 async function loadUsers(){
 
-    if(!usersContainer) return;
+try{
 
-    usersContainer.innerHTML = "";
+usersContainer.innerHTML = "";
 
-    try{
+const snapshot = await getDocs(collection(db,"users"));
 
-        const snapshot = await getDocs(collection(db,"users"));
+snapshot.forEach(doc=>{
 
-        snapshot.forEach(doc=>{
+const user = doc.data();
 
-            const user = doc.data();
+/* skip yourself */
 
-            /* skip yourself */
-            if(doc.id === currentUser.uid) return;
+if(doc.id === auth.currentUser.uid) return;
 
-            const userDiv = document.createElement("div");
+const userDiv = document.createElement("div");
 
-            userDiv.classList.add("chatUser");
+userDiv.classList.add("chatUser");
 
-            userDiv.innerHTML = `
-                <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-                <span>${user.displayName || user.username || "User"}</span>
-            `;
+userDiv.innerHTML = `
+<img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+<span>${user.displayName || "User"}</span>
+`;
 
-            userDiv.addEventListener("click",()=>{
-                openConversation(doc.id);
-            });
 
-            usersContainer.appendChild(userDiv);
+/* CLICK USER TO OPEN CHAT */
 
-        });
+userDiv.addEventListener("click",()=>{
 
-    }catch(error){
-        console.error("Error loading users:", error);
-    }
+console.log("Opening chat with:", doc.id);
+
+/* highlight selected user */
+
+document.querySelectorAll(".chatUser").forEach(el=>{
+el.classList.remove("activeChat");
+});
+
+userDiv.classList.add("activeChat");
+
+openConversation(doc.id);
+
+});
+
+usersContainer.appendChild(userDiv);
+
+});
+
+}catch(error){
+
+console.error("Error loading users:", error);
+
 }
+
+}
+
 
 /* OPEN CONVERSATION */
+
 function openConversation(otherUserID){
 
-    if(!currentUser) return;
+console.log("Starting conversation with:", otherUserID);
 
-    messagesContainer.innerHTML="";
+messagesContainer.innerHTML = "";
 
-    currentConversationID = getConversationID(currentUser.uid, otherUserID);
+messageInput.value = "";
 
+/* generate shared conversation id */
 
-    /* STOP PREVIOUS LISTENER */
-    if(unsubscribeMessages){
-        unsubscribeMessages();
-    }
+currentConversationID = getConversationID(auth.currentUser.uid, otherUserID);
 
-
-    const q = query(
-        collection(db,"conversations",currentConversationID,"messages"),
-        orderBy("timestamp")
-    );
+console.log("Conversation ID:", currentConversationID);
 
 
-    unsubscribeMessages = onSnapshot(q,(snapshot)=>{
+/* stop previous message listener */
 
-        messagesContainer.innerHTML="";
-
-        snapshot.forEach(doc=>{
-
-            const message = doc.data();
-
-            const messageDiv = document.createElement("div");
-
-            messageDiv.classList.add("message");
+if(unsubscribeMessages){
+unsubscribeMessages();
+}
 
 
-            /* MESSAGE ALIGNMENT */
-            if(message.senderID === currentUser.uid){
-                messageDiv.classList.add("myMessage");
-            }else{
-                messageDiv.classList.add("otherMessage");
-            }
+/* FIRESTORE MESSAGE QUERY */
+
+const q = query(
+collection(db,"conversations",currentConversationID,"messages"),
+orderBy("timestamp")
+);
 
 
-            messageDiv.innerText = message.text;
+/* REALTIME MESSAGE LISTENER */
 
-            messagesContainer.appendChild(messageDiv);
+unsubscribeMessages = onSnapshot(
+q,
+(snapshot)=>{
 
-        });
+messagesContainer.innerHTML="";
 
-        /* AUTO SCROLL */
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+snapshot.forEach(doc=>{
 
-    });
+const message = doc.data();
+
+const messageDiv = document.createElement("div");
+
+messageDiv.classList.add("message");
+
+/* message alignment */
+
+if(message.senderID === auth.currentUser.uid){
+messageDiv.classList.add("myMessage");
+}else{
+messageDiv.classList.add("otherMessage");
+}
+
+messageDiv.innerText = message.text;
+
+messagesContainer.appendChild(messageDiv);
+
+});
+
+/* auto scroll */
+
+messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+},
+(error)=>{
+console.error("Error loading messages:", error);
+}
+);
 
 }
+
 
 /* SEND MESSAGE */
+
+sendBtn.addEventListener("click", sendMessage);
+
 async function sendMessage(){
 
-    if(!currentConversationID) return;
+if(!currentConversationID){
+alert("Select a user to start chatting.");
+return;
+}
 
-    const text = messageInput.value.trim();
+const text = messageInput.value.trim();
 
-    if(text === "") return;
+if(text === "") return;
 
-    try{
+try{
 
-        await addDoc(
-            collection(db,"conversations",currentConversationID,"messages"),
-            {
-                senderID: currentUser.uid,
-                text: text,
-                timestamp: serverTimestamp()
-            }
-        );
+await addDoc(
+collection(db,"conversations",currentConversationID,"messages"),
+{
+senderID: auth.currentUser.uid,
+text: text,
+timestamp: serverTimestamp()
+}
+);
 
-        messageInput.value="";
+messageInput.value="";
 
-    }catch(error){
-        console.error("Error sending message:", error);
-    }
+}catch(error){
+
+console.error("Error sending message:", error);
+
+}
+
 }
 
 
-if(sendBtn){
-    sendBtn.addEventListener("click", sendMessage);
+/* SEND MESSAGE WITH ENTER KEY */
+
+messageInput.addEventListener("keypress",(e)=>{
+
+if(e.key === "Enter"){
+sendMessage();
 }
 
-/* SEND MESSAGE WITH ENTER */
-if(messageInput){
-    messageInput.addEventListener("keypress",(e)=>{
-        if(e.key === "Enter"){
-            sendMessage();
-        }
-    });
-}
+});
 
-/* WAIT FOR USER AUTH */
+
+/* WAIT FOR AUTH */
+
 auth.onAuthStateChanged((user)=>{
 
-    if(!user) return;
-
-    currentUser = user;
-
-    loadUsers();
+if(user){
+loadUsers();
+}else{
+console.log("User not logged in");
+}
 
 });
