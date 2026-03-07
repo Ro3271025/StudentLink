@@ -22,24 +22,20 @@ auth.onAuthStateChanged(async user => {
 
 if(!user) return;
 
-
 const q = query(
 collection(db,"conversations"),
 where("participants","array-contains",user.uid),
 orderBy("lastTimestamp","desc")
 );
 
-
 onSnapshot(q, async snapshot => {
 
 container.innerHTML="";
 
+for(const docSnap of snapshot.docs){
 
-for(const document of snapshot.docs){
-
-const convo = document.data();
-
-const conversationID = document.id;
+const convo = docSnap.data();
+const conversationID = docSnap.id;
 
 
 /* determine other user */
@@ -100,7 +96,6 @@ window.location.href =
 
 });
 
-
 container.appendChild(div);
 
 }
@@ -108,7 +103,6 @@ container.appendChild(div);
 });
 
 });
-
 
 
 /* SEARCH */

@@ -76,11 +76,12 @@ sendBtn.addEventListener("click",sendMessage);
 
 async function sendMessage(){
 
-const text =
-messageInput.value.trim();
+const text = messageInput.value.trim();
 
 if(!text) return;
 
+
+/* add message */
 
 await addDoc(
 collection(db,"conversations",conversationID,"messages"),
@@ -92,14 +93,21 @@ timestamp:serverTimestamp()
 );
 
 
-/* update conversation metadata */
+/* extract participants from conversationID */
 
-await updateDoc(
+const ids = conversationID.split("_");
+
+
+/* update metadata */
+
+await setDoc(
 doc(db,"conversations",conversationID),
 {
+participants:ids,
 lastMessage:text,
 lastTimestamp:serverTimestamp()
-}
+},
+{merge:true}
 );
 
 

@@ -597,12 +597,12 @@ color:#777;
     padding: 20px;
 }
 /* CHAT / MESSAGES UI */
-
 .chatPage{
-margin-left:220px;
-padding:30px;
-max-width:700px;
+margin-left:240px;
+padding:40px;
+max-width:800px;
 }
+
 
 .searchBar{
 width:100%;
@@ -610,8 +610,9 @@ padding:12px;
 border-radius:8px;
 border:none;
 margin-bottom:20px;
-background:#0f73ff;
+background:#1e2a38;
 color:white;
+outline:none;
 }
 
 .conversationItem{
