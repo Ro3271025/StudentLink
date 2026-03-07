@@ -2,65 +2,36 @@
 <html lang="en">
 
 <head>
-<title>Chat | StudentLink</title>
+
+<title>Chats</title>
+
 <link rel="stylesheet" href="styles/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 
-<body id="documentBody">
+<body>
 
-<!-- LEFT SIDEBAR -->
-<div class="sidebar" id="leftBar">
+<div class="sidebar">
 
-<p class="sidebarText"><a href="home.html">Home</a></p>
-<p class="sidebarText"><a href="listings.html">Listings</a></p>
-<p class="sidebarText"><a href="#">Explore</a></p>
-<p class="sidebarText"><a href="#">Notifications</a></p>
-<p class="sidebarText"><a href="chat.html"><strong>Chat</strong></a></p>
-<p class="sidebarText"><a href="profile.html">Profile</a></p>
-<p class="sidebarText"><a href="#">Settings</a></p>
+<p><a href="home.html">Home</a></p>
+<p><a href="listings.html">Listings</a></p>
+<p><strong>Chat</strong></p>
+<p><a href="profile.html">Profile</a></p>
 
 </div>
 
 
-<!-- CHAT LAYOUT -->
-<div id="chatContainer">
+<div class="chatPage">
 
-<!-- CONVERSATIONS -->
-<div id="chatList">
+<h2>Chats</h2>
 
-<h3>Messages</h3>
+<input
+id="searchMessages"
+placeholder="Search conversations"
+class="searchBar"
+/>
 
-<div id="usersContainer">
-<!-- users from firebase will appear here -->
-</div>
-
-</div>
-<!-- users from firebase will appear here -->
-</div>
-
-</div>
-</div>
-
-
-<!-- CHAT WINDOW -->
-<div id="chatWindow">
-
-<div id="messagesContainer">
-
-<!-- Messages appear here -->
-
-</div>
-
-<div id="chatInputArea">
-
-<input id="messageInput" placeholder="Type a message...">
-
-<button id="sendMessageBtn">Send</button>
-
-</div>
-
-</div>
+<div id="conversationsContainer"></div>
 
 </div>
 
@@ -68,4 +39,5 @@
 <script type="module" src="js/chat.js"></script>
 
 </body>
+
 </html>

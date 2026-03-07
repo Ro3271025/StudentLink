@@ -2,226 +2,134 @@ import { db, auth } from "./firebaseInitialization.js";
 
 import {
 collection,
-addDoc,
-serverTimestamp,
 query,
+where,
 orderBy,
 onSnapshot,
-getDocs
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* CURRENT CHAT STATE */
+const container =
+document.getElementById("conversationsContainer");
 
-let currentConversationID = null;
-let unsubscribeMessages = null;
-
-
-/* ELEMENTS */
-
-const usersContainer = document.getElementById("usersContainer");
-const sendBtn = document.getElementById("sendMessageBtn");
-const messageInput = document.getElementById("messageInput");
-const messagesContainer = document.getElementById("messagesContainer");
+const searchInput =
+document.getElementById("searchMessages");
 
 
-/* CREATE SHARED CONVERSATION ID */
+auth.onAuthStateChanged(async user => {
 
-function getConversationID(user1, user2){
-return [user1, user2].sort().join("_");
-}
+if(!user) return;
 
 
-/* LOAD USERS FROM FIREBASE */
+const q = query(
+collection(db,"conversations"),
+where("participants","array-contains",user.uid),
+orderBy("lastTimestamp","desc")
+);
 
-async function loadUsers(){
+
+onSnapshot(q, async snapshot => {
+
+container.innerHTML="";
+
+
+for(const document of snapshot.docs){
+
+const convo = document.data();
+
+const conversationID = document.id;
+
+
+/* determine other user */
+
+const otherUserID =
+convo.participants.find(
+id => id !== user.uid
+);
+
+
+/* get username */
+
+let username = "User";
 
 try{
 
-usersContainer.innerHTML = "";
+const userDoc =
+await getDoc(doc(db,"users",otherUserID));
 
-const snapshot = await getDocs(collection(db,"users"));
+if(userDoc.exists()){
 
-snapshot.forEach(doc=>{
+username =
+userDoc.data().displayName || "User";
 
-const user = doc.data();
+}
 
-/* skip yourself */
+}catch(error){
 
-if(doc.id === auth.currentUser.uid) return;
+console.log(error);
 
-const userDiv = document.createElement("div");
+}
 
-userDiv.classList.add("chatUser");
 
-userDiv.innerHTML = `
-<img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-<span>${user.displayName || "User"}</span>
+/* build UI */
+
+const div =
+document.createElement("div");
+
+div.classList.add("conversationItem");
+
+div.innerHTML = `
+<div class="conversationName">
+${username}
+</div>
+
+<div class="lastMessage">
+${convo.lastMessage || ""}
+</div>
 `;
 
 
-/* CLICK USER TO OPEN CHAT */
+/* open chat */
 
-userDiv.addEventListener("click",()=>{
+div.addEventListener("click",()=>{
 
-console.log("Opening chat with:", doc.id);
-
-/* highlight selected user */
-
-document.querySelectorAll(".chatUser").forEach(el=>{
-el.classList.remove("activeChat");
-});
-
-userDiv.classList.add("activeChat");
-
-openConversation(doc.id);
-
-});
-
-usersContainer.appendChild(userDiv);
-
-});
-
-}catch(error){
-
-console.error("Error loading users:", error);
-
-}
-
-}
-
-
-/* OPEN CONVERSATION */
-
-function openConversation(otherUserID){
-
-console.log("Starting conversation with:", otherUserID);
-
-messagesContainer.innerHTML = "";
-
-messageInput.value = "";
-
-/* generate shared conversation id */
-
-currentConversationID = getConversationID(auth.currentUser.uid, otherUserID);
-
-console.log("Conversation ID:", currentConversationID);
-
-
-/* stop previous message listener */
-
-if(unsubscribeMessages){
-unsubscribeMessages();
-}
-
-
-/* FIRESTORE MESSAGE QUERY */
-
-const q = query(
-collection(db,"conversations",currentConversationID,"messages"),
-orderBy("timestamp")
-);
-
-
-/* REALTIME MESSAGE LISTENER */
-
-unsubscribeMessages = onSnapshot(
-q,
-(snapshot)=>{
-
-messagesContainer.innerHTML="";
-
-snapshot.forEach(doc=>{
-
-const message = doc.data();
-
-const messageDiv = document.createElement("div");
-
-messageDiv.classList.add("message");
-
-/* message alignment */
-
-if(message.senderID === auth.currentUser.uid){
-messageDiv.classList.add("myMessage");
-}else{
-messageDiv.classList.add("otherMessage");
-}
-
-messageDiv.innerText = message.text;
-
-messagesContainer.appendChild(messageDiv);
-
-});
-
-/* auto scroll */
-
-messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-},
-(error)=>{
-console.error("Error loading messages:", error);
-}
-);
-
-}
-
-
-/* SEND MESSAGE */
-
-sendBtn.addEventListener("click", sendMessage);
-
-async function sendMessage(){
-
-if(!currentConversationID){
-alert("Select a user to start chatting.");
-return;
-}
-
-const text = messageInput.value.trim();
-
-if(text === "") return;
-
-try{
-
-await addDoc(
-collection(db,"conversations",currentConversationID,"messages"),
-{
-senderID: auth.currentUser.uid,
-text: text,
-timestamp: serverTimestamp()
-}
-);
-
-messageInput.value="";
-
-}catch(error){
-
-console.error("Error sending message:", error);
-
-}
-
-}
-
-
-/* SEND MESSAGE WITH ENTER KEY */
-
-messageInput.addEventListener("keypress",(e)=>{
-
-if(e.key === "Enter"){
-sendMessage();
-}
+window.location.href =
+`chatDetails.html?conversation=${conversationID}`;
 
 });
 
 
-/* WAIT FOR AUTH */
+container.appendChild(div);
 
-auth.onAuthStateChanged((user)=>{
-
-if(user){
-loadUsers();
-}else{
-console.log("User not logged in");
 }
+
+});
+
+});
+
+
+
+/* SEARCH */
+
+searchInput.addEventListener("input", e => {
+
+const value =
+e.target.value.toLowerCase();
+
+document
+.querySelectorAll(".conversationItem")
+.forEach(item => {
+
+const text =
+item.innerText.toLowerCase();
+
+item.style.display =
+text.includes(value)
+? "block"
+: "none";
+
+});
 
 });
