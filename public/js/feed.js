@@ -1,21 +1,11 @@
-import { db } from './firebaseInitialization.js';
-import { collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getRecentPosts } from './postsService.js';
 
 async function loadAndRenderFeed() {
     const posts = await getRecentPosts(); 
     renderPosts(posts);
 }
 
-async function getRecentPosts() {
-    const postsCol = collection(db, "listings"); 
-    const q = query(postsCol, orderBy("created_at", "desc"));
-    const querySnapshot = await getDocs(q);
-    
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }));
-}
+
 
 function renderPosts(posts) {
     const container = document.getElementById('feedContainer');
