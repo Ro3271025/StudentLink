@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Edit Listing | StudentLink</title>
+<link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+
+<h1>Edit Listing</h1>
+
+<form id="editListingForm">
+
+<input type="text" id="title" placeholder="Title" required>
+
+<textarea id="description" placeholder="Description" required></textarea>
+
+<input type="number" id="price" placeholder="Price" required>
+
+<br><br>
+
+<label>Current Image</label>
+<br>
+<img id="currentImage" style="max-width:300px; display:none;">
+
+<br><br>
+
+<label>Replace Image (optional)</label>
+<input type="file" id="listingImage" accept="image/*">
+
+<br><br>
+
+<button type="submit">Save Changes</button>
+
+</form>
+
+<script type="module" src="js/editListing.js"></script>
+
+</body>
+
+</html>
