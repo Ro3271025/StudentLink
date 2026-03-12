@@ -164,7 +164,7 @@ a:hover{
 }
 
 .sidebar{ 
-    text-align: center; 
+    text-align: left; 
     font-size: 15pt; 
     position: -webkit-sticky; 
     position: fixed; top:0; 
@@ -329,7 +329,7 @@ a:hover{
     width: 95%;
     height: fit-content;
     font-family: var(--font-family);
-    background-color: var(--bg-primary);
+    background-color: transparent !important;
     color: var(--text-fill);
     margin-left: 3.5%;
     margin-top: 2%;
