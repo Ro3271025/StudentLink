@@ -26,7 +26,7 @@
         <p class="sidebarText">Notifications</p>
         <p class="sidebarText">Chat</p>
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText">Settings</p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
         <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666;">Backfill Usernames (Dev)</button><br><br>
         <p>Theme</p>
@@ -42,7 +42,17 @@
             <option value="#F2F2EB">Light</option>
             <option value="#151D28" selected>Dark</option>
         </select>
+
+        <div class="overlayDiv">
+            <div id="newPostContainer">
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
     </div>
+
 
     <div class="sidebar" id="rightBar">
         <br><input class="searchBar themeObject" placeholder="Search"><br><br>
@@ -58,13 +68,7 @@
         </div>
     </div>
 
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
-            <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
-        </div>
-    </div>
+    
 
     <script type="module">
         import { setupHome } from "./js/home.js";
