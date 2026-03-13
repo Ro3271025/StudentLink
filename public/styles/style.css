@@ -525,3 +525,26 @@ a:hover{
 .optionTxt{
     color: var(--text-fill) !important;
 }
+
+.settingsInput{
+    border: 1px solid var(--theme-accent);
+    border-radius: 4px;
+    background-color: transparent !important;
+    padding:4px;
+    color: var(--text-fill);
+}
+
+.delBtn{
+    font-size:12pt; 
+    padding:5px; 
+    background-color: #A11010;
+    border-color:transparent;
+}
+
+.separator{
+    border-bottom:1px solid var(--border-color);
+}
+
+.settingsOpt{
+    margin-left:3.5%;
+}
