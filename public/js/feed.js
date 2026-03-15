@@ -40,6 +40,7 @@ function renderPosts(posts) {
         }
 
         card.innerHTML = `
+            <button class="openBtn">
             <img class="profileImgMini" src="${profileImg}">
             <span class="postHeader">
                 <a class="postLink postDisplayName" href="#">${displayName}</a>
@@ -50,9 +51,9 @@ function renderPosts(posts) {
             <br>
             <footer>
                 <a class="postLink postMetrics" href="#">${likes} Likes</a>
-                <a class="postLink postMetrics" href="#">${comments} Comments</a>
+                <a class="postLink postMetrics" href="post.php?id=${post.id}">${comments} Comments</a>
                 <a href="#" class="postLink postMetrics" style="text-align: right;">Report</a>
-            </footer><br>
+            </footer><br></button>
         `;
 
         card.onclick = (e) => {

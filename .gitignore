@@ -2,4 +2,6 @@
 public/js/firebaseConfig.js
 public/js/auth.js
 config/firebaseConfig.js
+
+# Any local test files
 /test/*
