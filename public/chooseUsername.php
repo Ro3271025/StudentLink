@@ -33,7 +33,7 @@
       const userSnap = await getDoc(doc(db, "users", user.uid));
       if (userSnap.exists() && userSnap.data()?.username) {
         // already picked a username; send to main app
-        window.location.href = "home.html";
+        window.location.href = "./home.html";
       }
     });
 
@@ -53,7 +53,7 @@
 
         msg.textContent = `Saved! You are now @${uname}`;
         // after choosing a username go to the main home page
-        window.location.href = "home.html";
+        window.location.href = "./home.html";
       } catch (e) {
         msg.textContent = e.message || "Error saving username.";
       } finally {
