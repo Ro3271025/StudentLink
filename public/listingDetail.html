@@ -8,12 +8,35 @@
 
 <body>
 
-<div id="listingDetails">
-Loading...
+<div class="listingDetailContainer">
+
+    <!-- Image -->
+    <div class="listingImageSection">
+        <img id="listingImage" class="listingDetailImage" src="" alt="Listing Image">
+    </div>
+
+    <!-- Listing Info -->
+    <div class="listingInfoSection">
+
+        <h1 id="listingTitle"></h1>
+
+        <div class="listingPrice" id="listingPrice"></div>
+
+        <div class="listingSeller">
+            Seller: <span id="listingUser"></span>
+        </div>
+
+        <div class="listingDescription" id="listingDescription"></div>
+
+        <button id="messageSellerBtn">
+            Message Seller
+        </button>
+
+    </div>
+
 </div>
 
 <script type="module" src="js/listingDetails.js"></script>
 
 </body>
-
 </html>

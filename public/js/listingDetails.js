@@ -3,105 +3,131 @@ import { auth, db } from "./firebaseInitialization.js";
 import {
 doc,
 getDoc,
-deleteDoc
+deleteDoc,
+setDoc,
+serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
-const container =
-document.getElementById("listingDetails");
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
 
-const params =
-new URLSearchParams(window.location.search);
 
-const id =
-params.get("id");
+/* HTML ELEMENTS */
+
+const imageEl = document.getElementById("listingImage");
+const titleEl = document.getElementById("listingTitle");
+const priceEl = document.getElementById("listingPrice");
+const userEl = document.getElementById("listingUser");
+const descriptionEl = document.getElementById("listingDescription");
+const messageBtn = document.getElementById("messageSellerBtn");
 
 
 async function loadListing(){
 
-const ref =
-doc(db,"listings",id);
-
-const snap =
-await getDoc(ref);
+const ref = doc(db,"listings",id);
+const snap = await getDoc(ref);
 
 if(!snap.exists()){
-
-container.innerHTML =
-"Listing not found.";
-
+titleEl.textContent = "Listing not found.";
 return;
-
 }
 
-const listing =
-snap.data();
+const listing = snap.data();
 
-container.innerHTML = `
+/* Populate page */
 
-<h1>${listing.title}</h1>
+titleEl.textContent = listing.title;
+priceEl.textContent = `$${listing.price}`;
+userEl.textContent = `@${listing.username}`;
+descriptionEl.textContent = listing.description || "";
 
-${listing.imageURL ?
-`<img class="listing-image" src="${listing.imageURL}">`
-: ""}
+/* Image */
 
-<p>${listing.description}</p>
-
-<p><strong>Price:</strong> $${listing.price}</p>
-
-<p><strong>Category:</strong> ${listing.category}</p>
-
-<p><strong>Posted by:</strong> @${listing.username}</p>
-
-${listing.condition ?
-`<p><strong>Condition:</strong> ${listing.condition}</p>`
-: ""}
-
-${listing.listingType ?
-`<p><strong>Type:</strong> ${listing.listingType}</p>`
-: ""}
-
-<div style="margin-top:20px">
-
-<button id="messageSellerBtn">
-Message Seller
-</button>
-
-</div>
-
-`;
+if(listing.imageURL){
+imageEl.src = listing.imageURL;
+}else{
+imageEl.style.display = "none";
+}
 
 
-/* OWNER CONTROLS */
+/* AUTH + BUTTONS */
 
 auth.onAuthStateChanged(user=>{
 
+/* ========================= */
+/* MESSAGE SELLER (FIX HERE) */
+/* ========================= */
+
+messageBtn.onclick = async () => {
+
+if(!user){
+alert("You must be logged in to message sellers.");
+return;
+}
+
+if(user.uid === listing.userID){
+alert("You cannot message yourself.");
+return;
+}
+
+const conversationID =
+[user.uid, listing.userID]
+.sort()
+.join("_");
+
+/* 🔥 CREATE CONVERSATION DOCUMENT */
+
+try{
+
+await setDoc(
+doc(db,"conversations",conversationID),
+{
+participants:[user.uid, listing.userID],
+lastMessage:"",
+lastTimestamp:serverTimestamp()
+},
+{merge:true}
+);
+
+}catch(error){
+console.error("Error creating conversation:", error);
+}
+
+/* REDIRECT TO CHAT */
+
+window.location.href =
+`chatDetails.html?conversation=${conversationID}`;
+
+};
+
+
+/* ========================= */
+/* OWNER CONTROLS */
+/* ========================= */
+
 if(user && user.uid === listing.userID){
 
-container.innerHTML += `
+const controls = document.createElement("div");
 
-<div style="margin-top:20px">
+controls.style.marginTop = "20px";
 
-<button id="editListingBtn">
-Edit Listing
-</button>
-
-<button id="deleteListingBtn"
-style="background:#cc0000;color:white;margin-left:10px;">
+controls.innerHTML = `
+<button id="editListingBtn">Edit Listing</button>
+<button id="deleteListingBtn" class="delBtn" style="margin-left:10px;">
 Delete Listing
 </button>
-
-</div>
-
 `;
+
+document
+.querySelector(".listingInfoSection")
+.appendChild(controls);
+
 
 document
 .getElementById("editListingBtn")
 .onclick = () => {
-
-window.location.href =
-`editListing.html?id=${id}`;
-
+window.location.href = `editListing.html?id=${id}`;
 };
 
 document
@@ -110,46 +136,14 @@ document
 
 }
 
-
-/* MESSAGE SELLER BUTTON */
-
-const messageBtn =
-document.getElementById("messageSellerBtn");
-
-if(messageBtn){
-
-messageBtn.onclick = () => {
-
-if(!user){
-
-alert("You must be logged in to message sellers.");
-return;
-
-}
-
-if(user.uid === listing.userID){
-
-alert("You cannot message yourself.");
-return;
-
-}
-
-const conversationID =
-[user.uid, listing.userID]
-.sort()
-.join("_");
-
-window.location.href =
-`chatDetails.html?conversation=${conversationID}`;
-
-};
-
-}
-
 });
 
 }
 
+
+/* ========================= */
+/* DELETE LISTING */
+/* ========================= */
 
 async function deleteListing(){
 
@@ -160,21 +154,15 @@ if(!confirmDelete) return;
 
 try{
 
-await deleteDoc(
-doc(db,"listings",id)
-);
+await deleteDoc(doc(db,"listings",id));
 
 alert("Listing deleted.");
 
-window.location.href =
-"listings.html";
+window.location.href = "listings.html";
 
 }catch(error){
 
-console.error(
-"Delete failed:",
-error
-);
+console.error("Delete failed:",error);
 
 alert("Failed to delete listing.");
 

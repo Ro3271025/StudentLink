@@ -9,7 +9,8 @@ orderBy,
 onSnapshot,
 doc,
 setDoc,
-updateDoc
+updateDoc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
@@ -30,7 +31,38 @@ const messageInput =
 document.getElementById("messageInput");
 
 
-const q = query(
+/* ENSURE CONVERSATION DOCUMENT EXISTS */
+
+async function ensureConversation(){
+
+const convoRef =
+doc(db,"conversations",conversationID);
+
+const snap =
+await getDoc(convoRef);
+
+if(!snap.exists()){
+
+const ids =
+conversationID.split("_");
+
+await setDoc(convoRef,{
+participants:ids,
+lastMessage:"",
+lastTimestamp:serverTimestamp()
+});
+
+}
+
+}
+
+await ensureConversation();
+
+
+/* LOAD MESSAGES */
+
+const q =
+query(
 collection(db,"conversations",conversationID,"messages"),
 orderBy("timestamp")
 );
@@ -40,16 +72,18 @@ onSnapshot(q,snapshot => {
 
 messagesContainer.innerHTML="";
 
-snapshot.forEach(doc => {
+snapshot.forEach(docSnap => {
 
-const msg = doc.data();
+const msg = docSnap.data();
 
 const div =
 document.createElement("div");
 
 div.classList.add("message");
 
-if(msg.senderID === auth.currentUser.uid){
+
+if(auth.currentUser &&
+msg.senderID === auth.currentUser.uid){
 
 div.classList.add("myMessage");
 
@@ -65,6 +99,7 @@ messagesContainer.appendChild(div);
 
 });
 
+
 messagesContainer.scrollTop =
 messagesContainer.scrollHeight;
 
@@ -74,14 +109,16 @@ messagesContainer.scrollHeight;
 sendBtn.addEventListener("click",sendMessage);
 
 
+
+/* SEND MESSAGE */
+
 async function sendMessage(){
 
-const text = messageInput.value.trim();
+const text =
+messageInput.value.trim();
 
 if(!text) return;
 
-
-/* add message */
 
 await addDoc(
 collection(db,"conversations",conversationID,"messages"),
@@ -93,17 +130,11 @@ timestamp:serverTimestamp()
 );
 
 
-/* extract participants from conversationID */
-
-const ids = conversationID.split("_");
-
-
-/* update metadata */
+/* UPDATE CONVERSATION METADATA */
 
 await setDoc(
 doc(db,"conversations",conversationID),
 {
-participants:ids,
 lastMessage:text,
 lastTimestamp:serverTimestamp()
 },
