@@ -54,7 +54,6 @@ button, select{
 
 button:hover, select:hover, input:hover{
     background-color: var(--button-hover);
-    border-color: var(--button-hover);
 }
 
 select{
