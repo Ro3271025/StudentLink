@@ -509,7 +509,7 @@ a:hover{
 }
 /* Listing styles*/
 .listing-card{
-    border:1px solid #ccc;
+    border:1px solid var(--border-color);
     padding:15px;
     margin-bottom:15px;
     border-radius:10px;
@@ -527,6 +527,7 @@ a:hover{
     object-fit:cover;
     border-radius:6px;
 }
+
 .listing-image{
 width:100%;
 max-width:500px;
@@ -561,9 +562,9 @@ margin-bottom:10px;
 /* LISTING CARD */
 
 .listingCard{
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: white;
+    background: transparent !important;
     padding: 12px;
     cursor: pointer;
     transition: 0.2s;
@@ -599,7 +600,7 @@ margin-bottom:5px;
 
 font-weight:bold;
 
-color:#2a7cff;
+color:var(--theme-accent);
 
 }
 
@@ -617,9 +618,11 @@ color:#777;
 }
 /* CHAT / MESSAGES UI */
 .chatPage{
-margin-left:240px;
-padding:40px;
-max-width:800px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
 }
 
 
@@ -661,9 +664,14 @@ color:#cfcfcf;
 }
 
 .chatDetailsPage{
-margin-left:220px;
-padding:30px;
-max-width:700px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 5px;
 }
 
 #messagesContainer{
@@ -703,7 +711,7 @@ flex:1;
 padding:10px;
 border-radius:6px;
 border:none;
-
+}
 /* Settings Page */
 
 .settingsHeader{
@@ -739,4 +747,8 @@ border:none;
 
 .settingsOpt{
     margin-left:3.5%;
+}
+
+.settingsOpt input{
+    transition: 0.125s;
 }
