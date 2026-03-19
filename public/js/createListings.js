@@ -1,20 +1,22 @@
 import { auth, db } from "./firebaseInitialization.js";
 
 import { 
-collection, 
-addDoc, 
-serverTimestamp 
+  collection, 
+  addDoc, 
+  serverTimestamp,
+  doc,
+  getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { 
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 import { 
-onAuthStateChanged 
+  onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 
@@ -23,192 +25,180 @@ const storage = getStorage();
 
 document.addEventListener("DOMContentLoaded", () => {
 
-const imageInput = document.getElementById("listingImage");
-const preview = document.getElementById("imagePreview");
+  const imageInput = document.getElementById("listingImage");
+  const preview = document.getElementById("imagePreview");
 
-if(imageInput){
+  if (imageInput) {
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
 
-imageInput.addEventListener("change", () => {
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+      }
+    });
+  }
 
-const file = imageInput.files[0];
+  console.log("CreateListing JS Loaded");
 
-if(file){
+  const form = document.getElementById("listingForm");
+  const categorySelect = document.getElementById("category");
+  const supplyOptions = document.getElementById("supplyOptions");
 
-preview.src = URL.createObjectURL(file);
-preview.style.display = "block";
-
-}
-
-});
-
-}
-
-console.log("CreateListing JS Loaded");
-
-const form = document.getElementById("listingForm");
-const categorySelect = document.getElementById("category");
-const supplyOptions = document.getElementById("supplyOptions");
-
-if (!form || !categorySelect || !supplyOptions) {
+  if (!form || !categorySelect || !supplyOptions) {
     console.error("One or more required elements not found.");
     return;
-}
+  }
 
 
-// SHOW CONDITION + SELL/RENT ONLY FOR SUPPLY CATEGORIES
+  // SHOW CONDITION + SELL/RENT ONLY FOR SUPPLY CATEGORIES
+  categorySelect.addEventListener("change", () => {
 
-categorySelect.addEventListener("change", () => {
+    const value = categorySelect.value;
 
-const value = categorySelect.value;
+    if (["Textbook", "Calculator", "Tech"].includes(value)) {
+      supplyOptions.style.display = "block";
+    } else {
+      supplyOptions.style.display = "none";
+    }
 
-if (["Textbook", "Calculator", "Tech"].includes(value)) {
+  });
 
-supplyOptions.style.display = "block";
 
-} else {
+  // PROTECT ROUTE
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "login.php";
+    }
+  });
 
-supplyOptions.style.display = "none";
 
-}
+  // SUBMIT LISTING
+  form.addEventListener("submit", async (e) => {
 
-});
+    e.preventDefault();
+    console.log("Submit triggered");
 
+    const user = auth.currentUser;
 
-// PROTECT ROUTE
+    if (!user) {
+      alert("Not logged in.");
+      return;
+    }
 
-onAuthStateChanged(auth, (user) => {
 
-if (!user) {
+    // FORM VALUES
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const category = categorySelect.value;
+    const price = Number(document.getElementById("price").value);
 
-window.location.href = "login.php";
+    let condition = null;
+    let listingType = null;
 
-}
 
-});
+    // CONDITIONAL FIELDS
+    if (["Textbook", "Calculator", "Tech"].includes(category)) {
 
+      condition = document.getElementById("condition").value;
+      listingType = document.getElementById("listingType").value;
 
-// SUBMIT LISTING
+      if (!condition || !listingType) {
+        alert("Please select condition and sell/rent option.");
+        return;
+      }
 
-form.addEventListener("submit", async (e) => {
+    }
 
-e.preventDefault();
 
-console.log("Submit triggered");
+    // IMAGE UPLOAD
+    const imageFile = document.getElementById("listingImage")?.files[0];
+    let imageURL = null;
 
-const user = auth.currentUser;
+    if (imageFile) {
 
-if (!user) {
+      try {
 
-alert("Not logged in.");
-return;
+        const storageRef = ref(
+          storage,
+          `listings/${user.uid}/${Date.now()}_${imageFile.name}`
+        );
 
-}
+        await uploadBytes(storageRef, imageFile);
+        imageURL = await getDownloadURL(storageRef);
 
+        console.log("Image uploaded:", imageURL);
 
-// FORM VALUES
+      } catch (error) {
 
-const title = document.getElementById("title").value.trim();
-const description = document.getElementById("description").value.trim();
-const category = categorySelect.value;
-const price = Number(document.getElementById("price").value);
+        console.error("Image upload failed:", error);
+        alert("Image upload failed. Check console.");
 
-let condition = null;
-let listingType = null;
+      }
 
+    }
 
-// CONDITIONAL FIELDS
 
-if (["Textbook", "Calculator", "Tech"].includes(category)) {
+    // EXPIRATION DATE
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 30);
 
-condition = document.getElementById("condition").value;
-listingType = document.getElementById("listingType").value;
 
-if (!condition || !listingType) {
+    let username = "user";
 
-alert("Please select condition and sell/rent option.");
-return;
+    try {
 
-}
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-}
+      if (userSnap.exists()) {
+        username = userSnap.data().username;
+      }
 
+    } catch (err) {
 
-// IMAGE UPLOAD
+      console.error("Failed to fetch username:", err);
 
-const imageFile = document.getElementById("listingImage")?.files[0];
+    }
 
-let imageURL = null;
 
-if (imageFile) {
+    // CREATE LISTING
+    try {
 
-try {
+      await addDoc(collection(db, "listings"), {
 
-const storageRef = ref(
-storage,
-`listings/${user.uid}/${Date.now()}_${imageFile.name}`
-);
+        userID: user.uid,
+        username: username,
 
-await uploadBytes(storageRef, imageFile);
+        campusID: "farmingdale",
 
-imageURL = await getDownloadURL(storageRef);
+        title,
+        description,
+        category,
+        price,
+        listingType,
+        condition,
 
-console.log("Image uploaded:", imageURL);
+        imageURL,
 
-} catch (error) {
+        status: "active",
 
-console.error("Image upload failed:", error);
-alert("Image upload failed. Check console.");
+        created_at: serverTimestamp(),
+        expires_at: expiresAt
 
-}
+      });
 
-}
+      console.log("Listing created successfully");
 
+      window.location.href = "listings.html";
 
-// EXPIRATION DATE
+    } catch (error) {
 
-const expiresAt = new Date();
-expiresAt.setDate(expiresAt.getDate() + 30);
+      console.error("Error creating listing:", error);
+      alert("Failed to create listing.");
 
+    }
 
-// CREATE LISTING
-
-try {
-
-await addDoc(collection(db, "listings"), {
-
-userID: user.uid,
-username: user.displayName || "user",
-
-campusID: "farmingdale",
-
-title,
-description,
-category,
-price,
-listingType,
-condition,
-
-imageURL,
-
-status: "active",
-
-created_at: serverTimestamp(),
-expires_at: expiresAt
-
-});
-
-console.log("Listing created successfully");
-
-window.location.href = "listings.html";
-
-} catch (error) {
-
-console.error("Error creating listing:", error);
-
-alert("Failed to create listing.");
-
-}
-
-});
+  });
 
 });

@@ -2,17 +2,20 @@
 <html lang="en">
 
 <head>
-
 <title>Chats | StudentLink</title>
-
 <link rel="stylesheet" href="styles/style.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body>
+<body id="documentBody">
+
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
+</div>
 
 <!-- LEFT SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar" id="leftBar">
 
 <p class="sidebarText"><a href="home.html">Home</a></p>
 <p class="sidebarText"><a href="listings.html">Listings</a></p>
@@ -20,13 +23,11 @@
 <p class="sidebarText"><a href="#">Notifications</a></p>
 <p class="sidebarText"><a href="chat.html"><strong>Chat</strong></a></p>
 <p class="sidebarText"><a href="profile.html">Profile</a></p>
-<p class="sidebarText"><a href="#">Settings</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
 
-
 <!-- CHAT CONTENT -->
-
 <div class="chatPage">
 
 <h2 class="chatTitle">Chats</h2>
@@ -41,9 +42,15 @@ class="searchBar"
 
 </div>
 
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+<br>
+<input class="searchBar themeObject" placeholder="Search"><br><br>
+</div>
 
+<!-- SCRIPTS -->
 <script type="module" src="js/chat.js"></script>
+<script src="js/themeSwap.js"></script>
 
 </body>
-
 </html>
