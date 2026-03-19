@@ -49,7 +49,7 @@
             <p class="sidebarText"><a href="listings.html">Listings</a></p>
             <p class="sidebarText">Explore</p>
             <p class="sidebarText">Notifications</p>
-            <p class="sidebarText">Chat</p>
+            <p class="sidebarText"><a href="chat.html">Chat</a></p>
             <p class="sidebarText"><a href="profile.html">Profile</a></p>
             <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
             <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
@@ -57,7 +57,7 @@
             <div class="overlayDiv">
                 <div id="newPostContainer">
                     <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-                    <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                    <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
                     <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
                 </div>
             </div>
