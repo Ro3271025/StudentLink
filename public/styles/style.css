@@ -41,7 +41,7 @@ img{
 button, select{
     line-height: 2vh;
     background-color: var(--theme-accent);
-    border-color: var(--theme-accent);
+    border-color: transparent;
     border-radius: 0.625rem;
     padding: 0.625rem;
     transition: 0.125s;
