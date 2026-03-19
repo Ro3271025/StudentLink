@@ -9,7 +9,7 @@
 <body id="documentBody">
 
     <!-- HEADER -->
-    <div id="header">
+    <div id="header" style="border:none;">
         <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
     </div>
 
@@ -22,20 +22,37 @@
     </div>
 
     <!-- LEFT SIDEBAR -->
-    <div class="sidebar" id="leftBar">
-        <br>
 
+    <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
+        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
         <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html"><strong>Listings</strong></a></p>
-        <p class="sidebarText"><a href="#">Explore</a></p>
-        <p class="sidebarText"><a href="#">Notifications</a></p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText">Explore</p>
+        <p class="sidebarText">Notifications</p>
+        <p class="sidebarText">Chat</p>
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
 
         <button class="themeObject" onclick="window.location.href='createListing.html'">
             New Listing
         </button>
+
+        <div class="overlayDiv">
+            <div id="newPostContainer">
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
+    </div>
+
+    
+
+        
 
         <br><br>
 
@@ -47,6 +64,7 @@
 
     <!-- Scripts -->
     <script type="module" src="js/listings.js"></script>
+    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
     <script src="js/themeSwap.js"></script>
 
 </body>

@@ -12,6 +12,46 @@
 Loading...
 </div>
 
+
+<div class="sidebar" id="leftBar">
+    <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText">Explore</p>
+    <p class="sidebarText">Notifications</p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p>
+    <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    
+
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="sidebar" id="rightBar">
+    <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+    <div id="recentSearches">
+        <table class="recentSearchesTable">
+            <tr><th id="recentHeader">Recent Searches</th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+        </table>
+    </div>
+</div>
+
 <script type="module" src="js/listingDetails.js"></script>
 
 </body>
