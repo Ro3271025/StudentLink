@@ -30,7 +30,7 @@ Loading...
     <div class="overlayDiv">
         <div id="newPostContainer">
             <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+            <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
             <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
         </div>
     </div>
@@ -53,6 +53,8 @@ Loading...
 </div>
 
 <script type="module" src="js/listingDetails.js"></script>
+<script src="js/themeSwap.js" type="text/javascript"></script>
+<script src="js/toggleVis.js" type="text/javascript"></script>
 
 </body>
 
