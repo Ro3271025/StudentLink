@@ -15,12 +15,18 @@ export function setupHome() {
 
         const displayEl = document.getElementById("displayName");
         const usernameEl = document.getElementById("username");
+        const backfillBtn = document.getElementById("backfillBtn");
 
         if (displayEl) {
-            displayEl.innerText = data.name || user.displayName || "";
+            displayEl.innerText = data.displayName || user.displayName || "";
         }
         if (usernameEl) {
             usernameEl.innerText = data.username ? "@" + data.username : "";
+        }
+        
+        // Show backfill button only for admins
+        if (backfillBtn) {
+            backfillBtn.style.display = data.role === "admin" ? "block" : "none";
         }
     });
 }
