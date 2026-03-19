@@ -23,8 +23,8 @@ searchInputs.forEach(input => {
         // SEARCH USERNAME
         const usernameQuery = query(
           collection(db, "users"),
-          where("searchUsername", ">=", value),
-          where("searchUsername", "<=", value + "\uf8ff")
+          where("username", ">=", value),
+          where("username", "<=", value + "\uf8ff")
         );
 
         const usernameSnap = await getDocs(usernameQuery);
@@ -32,8 +32,8 @@ searchInputs.forEach(input => {
         // SEARCH DISPLAY NAME
         const nameQuery = query(
           collection(db, "users"),
-          where("searchName", ">=", value),
-          where("searchName", "<=", value + "\uf8ff")
+          where("name", ">=", value),
+          where("name", "<=", value + "\uf8ff")
         );
 
         const nameSnap = await getDocs(nameQuery);
@@ -48,7 +48,7 @@ searchInputs.forEach(input => {
           return;
         }
 
-        // 👉 for now: go to first result
+        // for now: go to first result
         window.location.href = `profile.html?id=${results[0].id}`;
 
       } catch (error) {
