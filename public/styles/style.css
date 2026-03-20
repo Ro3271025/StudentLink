@@ -721,6 +721,10 @@ color:#cfcfcf;
     border-radius: 100px;
 }
 
+#backArrowImg{
+    filter: invert(.5);
+}
+
 #chatTargetUser{
     font-size: 16pt;
 }
