@@ -730,7 +730,7 @@ color:#cfcfcf;
 }
 
 #messagesContainer{
-height:800px;
+height:80vh;
 overflow-y:auto;
 margin-bottom:15px;
 }
