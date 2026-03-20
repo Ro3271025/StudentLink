@@ -29,6 +29,7 @@
 <input
 id="messageInput"
 placeholder="Type message..."
+maxlength="450"
 >
 
 <button id="sendBtn">
@@ -89,7 +90,11 @@ Send
 </div>
 </div>
 
+<script type="module">
+    import { setupSidebar } from "../public/js/showUser.js";
 
+    setupSidebar();
+</script>
 <script type="module" src="js/chatDetails.js"></script>
 <script src="js/themeSwap.js" type="text/javascript"></script>
 <script src="js/toggleVis.js" type="text/javascript"></script>

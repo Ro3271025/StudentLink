@@ -25,7 +25,6 @@
     <p class="sidebarText"><a href="profile.html">Profile</a></p>
     <p class="sidebarText"><a href="settings.html">Settings</a></p>
     <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-    <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666;">Backfill Usernames (Dev)</button><br><br>
     
 
     <div class="overlayDiv">
@@ -70,7 +69,11 @@ class="searchBar"
 
 </div>
 
+<script type="module">
+    import { setupSidebar } from "../public/js/showUser.js";
 
+    setupSidebar();
+</script>
 <script type="module" src="js/chat.js"></script>
 <script src="js/themeSwap.js" type="text/javascript"></script>
 <script src="js/toggleVis.js" type="text/javascript"></script>
