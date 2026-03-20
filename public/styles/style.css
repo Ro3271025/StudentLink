@@ -710,6 +710,21 @@ color:#cfcfcf;
     padding: 5px;
 }
 
+#backArrow{
+    height:auto;
+    width:6.5%;
+    background-color: transparent;
+}
+
+#backArrow:hover{
+    background-color: var(--button-hover);
+    border-radius: 100px;
+}
+
+#chatTargetUser{
+    font-size: 16pt;
+}
+
 #messagesContainer{
 height:500px;
 overflow-y:auto;
@@ -725,7 +740,7 @@ border-radius:10px;
 
 .myMessage{
 margin-left:auto;
-background:#0f73ff;
+background:var(--theme-accent);
 color:white;
 text-align:right;
 }
@@ -747,6 +762,8 @@ flex:1;
 padding:10px;
 border-radius:6px;
 border:none;
+color: var(--text-fill);
+background-color: transparent !important;
 }
 /* Settings Page */
 
