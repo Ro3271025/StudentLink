@@ -1,19 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-<title>Listing | StudentLink</title>
-<link rel="stylesheet" href="styles/style.css">
+    <title>Listing | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-<div id="listingDetails">
-Loading...
+<div class="listingDetailContainer">
+
+    <!-- LEFT: IMAGE -->
+    <div class="listingImageSection">
+        <img id="listingImage" class="listingDetailImage" src="" alt="Listing Image">
+    </div>
+
+    <!-- MIDDLE: LISTING INFO -->
+    <div class="listingMiddleSection">
+
+        <!-- TITLE -->
+        <h1 id="listingTitle">Listing Title</h1>
+
+        <!-- SELLER -->
+        <div class="listingSeller">
+            Seller: <a id="listingUser" href="#">@username</a>
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="listingDescription" id="listingDescription">
+            Listing description goes here...
+        </div>
+
+    </div>
+
+    <!-- RIGHT: ACTION / BUY BOX -->
+    <div class="listingRightSection">
+
+        <div class="priceBox">
+
+            <!-- PRICE -->
+            <div id="listingPrice" class="priceText">$0</div>
+
+            <!-- BUTTON -->
+            <button id="messageSellerBtn">
+                Message Seller
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
+
+<!-- JS -->
 <script type="module" src="js/listingDetails.js"></script>
 
 </body>
-
 </html>
