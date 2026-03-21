@@ -30,8 +30,6 @@ table, th, td{
    
 }
 
-
-
 img{
     max-width: 100%;
     height: auto;
@@ -41,7 +39,7 @@ img{
 button, select{
     line-height: 2vh;
     background-color: var(--theme-accent);
-    border-color: var(--theme-accent);
+    border-color: transparent;
     border-radius: 0.625rem;
     padding: 0.625rem;
     transition: 0.125s;
@@ -54,7 +52,6 @@ button, select{
 
 button:hover, select:hover, input:hover{
     background-color: var(--button-hover);
-    border-color: var(--button-hover);
 }
 
 select{
@@ -276,33 +273,38 @@ a:hover{
     display: inline;
     position: relative;
     word-wrap: break-word;
+    padding: 5px;
+    border: 1px solid var(--theme-accent);
+}
+
+#bioText:hover{
+    background-color: var(--button-hover) !important;
+    transition: 0.125s;
 }
 
 #bioText:disabled{
     border: none;
 }
 
-/* ALIGN USERNAME + BUTTONS IN ONE ROW */
-.userMetaRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 5px;
+#userCollege{
+    font-size:12px;
+    padding:3px 8px;
 }
 
-/* MATCH BUTTON SIZES */
-#userCollege,
-#messageStudentBtn {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-#edit{
+#edit, #save{
     margin-left: 65%;
     margin-top: -15%;
     margin-right: auto;
     word-wrap: break-word !important; 
+    display: inline;
+    position: relative;
+}
 
+#cancel {
+    margin-left: 45%;
+    margin-top: -21.5%;
+    margin-right: auto;
+    word-wrap: break-word !important; 
     display: inline;
     position: relative;
 }
@@ -505,6 +507,24 @@ a:hover{
     z-index: 3;
 }
 
+/* Editing Profile */
+
+#displayName input{
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background:#1e2a38;
+    color:white;
+    outline:none;
+}
+
+#displayName input:hover{
+    background-color: var(--button-hover) !important;
+    transition: 0.125s;
+}
+
+
 /* viewing post */
 
 .postCommentText{
@@ -519,7 +539,7 @@ a:hover{
 }
 /* Listing styles*/
 .listing-card{
-    border:1px solid #ccc;
+    border:1px solid var(--border-color);
     padding:15px;
     margin-bottom:15px;
     border-radius:10px;
@@ -537,6 +557,7 @@ a:hover{
     object-fit:cover;
     border-radius:6px;
 }
+
 .listing-image{
 width:100%;
 max-width:500px;
@@ -571,9 +592,9 @@ margin-bottom:10px;
 /* LISTING CARD */
 
 .listingCard{
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: white;
+    background: transparent !important;
     padding: 12px;
     cursor: pointer;
     transition: 0.2s;
@@ -609,7 +630,7 @@ margin-bottom:5px;
 
 font-weight:bold;
 
-color:#2a7cff;
+color:var(--theme-accent);
 
 }
 
@@ -625,96 +646,21 @@ color:#777;
     margin-right: 240px;  /* space for right sidebar */
     padding: 20px;
 }
-/* Listing Detail Page*/
-.listingDetailContainer {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  gap: 40px;
-  margin: 40px auto;
-  max-width: 1200px;
-  padding: 20px;
-}
-/* LEFT IMAGE */
-.listingImageSection {
-  display: flex;
-  justify-content: center;
-}
-.listingDetailImage {
-  width: 100%;
-  max-width: 350px;
-  border-radius: 10px;
-}
-/* MIDDLE CONTENT */
-.listingMiddleSection {
-  color: white;
-}
-#listingTitle {
-  font-size: 26px;
-  margin-bottom: 10px;
-}
-.listingSeller {
-  margin-bottom: 15px;
-  font-size: 14px;
-}
-#listingUser {
-  color: #4da6ff;
-  text-decoration: none;
-  font-weight: bold;
-}
-#listingUser:hover {
-  text-decoration: underline;
-}
-.listingDescription {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #ddd;
-}
-/* RIGHT BOX */
-.listingRightSection {
-  display: flex;
-  justify-content: center;
-}
-/* PRICE BOX (like Amazon buy box) */
-.priceBox {
-  background-color: #1a2634;
-  padding: 20px;
-  border-radius: 10px;
-  width: 100%;
-  max-width: 250px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-/* PRICE */
-.priceText {
-  font-size: 24px;
-  color: #4da6ff;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-/* BUTTON */
-#messageSellerBtn {
-  width: 100%;
-  padding: 12px;
-  background-color: #2d8cff;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-#messageSellerBtn:hover {
-  background-color: #1f6ed4;
-}
 /* CHAT / MESSAGES UI */
 .chatPage{
-margin-left:240px;
-padding:40px;
-max-width:800px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
+}
+
+#searchMessages{
+    width: 100%;
 }
 
 
 .searchBar{
-width:100%;
 padding:12px;
 border-radius:8px;
 border:none;
@@ -724,6 +670,8 @@ color:white;
 outline:none;
 }
 
+
+
 .conversationItem{
 padding:16px;
 border-radius:10px;
@@ -731,6 +679,7 @@ margin-bottom:10px;
 background:#1e2a38;
 cursor:pointer;
 transition:0.2s;
+width: 99%;
 }
 
 .conversationItem:hover{
@@ -751,13 +700,37 @@ color:#cfcfcf;
 }
 
 .chatDetailsPage{
-margin-left:220px;
-padding:30px;
-max-width:700px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#backArrow{
+    height:auto;
+    width:6.5%;
+    background-color: transparent;
+}
+
+#backArrow:hover{
+    background-color: var(--button-hover);
+    border-radius: 100px;
+}
+
+#backArrowImg{
+    filter: invert(.5);
+}
+
+#chatTargetUser{
+    font-size: 16pt;
 }
 
 #messagesContainer{
-height:500px;
+height:80vh;
 overflow-y:auto;
 margin-bottom:15px;
 }
@@ -771,7 +744,7 @@ border-radius:10px;
 
 .myMessage{
 margin-left:auto;
-background:#0f73ff;
+background:var(--theme-accent);
 color:white;
 text-align:right;
 }
@@ -793,8 +766,9 @@ flex:1;
 padding:10px;
 border-radius:6px;
 border:none;
+color: var(--text-fill);
+background-color: transparent !important;
 }
-
 /* Settings Page */
 
 .settingsHeader{
@@ -830,4 +804,8 @@ border:none;
 
 .settingsOpt{
     margin-left:3.5%;
+}
+
+.settingsOpt input{
+    transition: 0.125s;
 }

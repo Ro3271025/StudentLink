@@ -3,28 +3,29 @@
 
 <head>
 <title>Profile | StudentLink</title>
-<link rel="stylesheet" href="styles/style.css">
+<link rel="stylesheet" href="../public/styles/style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body id="documentBody">
-    <!-- TODO: Fix scaling on elements -->
+    <!-- Rename this file when it is ready for use -->
 
     <div id="profileContainer">
-        <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
+        <div id="banner"><img src="../public/styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
 
         <div id="profileInfo" class="content">
             <!-- Maybe use an inner div to force content to scale without more custom code -->
-            <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <p id="displayName">Display Name</p> <!-- Swap with input for editing --> <!-- <input id="displayName"> -->
+            <img id="profileImage" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+            <!-- <p id="displayName">Display Name</p> --> <!-- Swap with input for editing --> 
+            <br><br><input class="themeObject settingsInput" id="displayName" placeholder="Enter Name" value="Display Name"> <!-- double break is required -->
             <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p> <!-- Remove the uni "button?" -->
             <!-- Replace the static numbers with actual data and then link to a page showing all the results of the proper query -->
             <p id="userStats">Posts: <a href="">99.9k</a> Followers: <a href="">99.9k</a> Following: <a href="">99.9k</a></p> <!-- # of followers / friends, # of posts, etc... -->
             <div id="userBio">
                 <!-- Use a textarea for "editing" mode, remove the disabled property when editing -->
-                <button id="edit" class="themeObject">Edit Profile</button> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
-                <!-- <button id="save">Save</button> <button id="cancel">cancel</button> --> <!-- Swap in after clicking edit -->
-                <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name! I'm a student at FSC majoring in [UNDEFINED]. #motorsports #esports #sunyfsc</textarea>
+                <!-- <button id="edit" class="themeObject">Edit Profile</button> --> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
+                <button id="save" class="themeObject">Save Profile</button> <button id="cancel">Cancel</button> <!-- Swap in after clicking edit -->
+                <textarea id="bioText" maxlength="500" rows="5" cols="50">Hi my name is Display Name! I'm a student at FSC majoring in [UNDEFINED]. #motorsports #esports #sunyfsc</textarea>
                 </div>
         </div>
 
@@ -81,7 +82,7 @@
 
             <p class="postContentText" maxlength="200">Looking to sell some old textbooks. DM to see if I have anything you need.</p>
                 <div class="imageContainer">
-                    <img src="styles/images/placeholder/textbooks.png">
+                    <img src="../public/styles/images/placeholder/textbooks.png">
                 </div>
             <br>
             <!-- Add Img or Video tag too if there's media present -->
@@ -105,7 +106,7 @@
     <button id="loadMore" class="themeObject">Load More Posts</button> <!-- dynamically show when the user gets roughly 66% down the page of posts -->
     
     <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>
         <p class="sidebarText"><a href="home.html">Home</a></p>
@@ -127,31 +128,6 @@
 
     </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<textarea id="bioText" maxlength="50" disabled>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-</textarea>
-
-</div>
-</div>
- 
-=======
-
-</div>
-
->>>>>>> chris
-
-<!-- JS -->
-<script type="module">
-    import { setupProfile } from "./js/profile.js";
-    setupProfile();
-</script>
-<script type="module" src="js/userSearch.js"></script>
-
-<script src="js/themeSwap.js"></script>
-<script src="js/toggleVis.js"></script>
-=======
     <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
         <br><input class="searchBar themeObject" placeholder="Search"><br><br>
         
@@ -178,14 +154,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     </div>
 
     
->>>>>>> Dev-Peyton
 
     <script type="module">
-        import { setupProfile } from "./js/profile.js";
+        import { setupProfile } from "../public/js/profile.js";
         setupProfile();
     </script>
-    <script type="module" src="js/userSearch.js"></script>
-    <script src="js/themeSwap.js" type="text/javascript"></script>
-    <script src="js/toggleVis.js" type="text/javascript"></script>
+    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
+    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
 </body>
 </html>

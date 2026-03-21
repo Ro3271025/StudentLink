@@ -1,157 +1,184 @@
 import { auth, db } from "./firebaseInitialization.js";
 
 import {
-  doc,
-  getDoc,
-  deleteDoc,
-  setDoc,
-  serverTimestamp
+doc,
+getDoc,
+deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const container =
+document.getElementById("listingDetails");
 
+const params =
+new URLSearchParams(window.location.search);
 
-/* HTML ELEMENTS */
-const imageEl = document.getElementById("listingImage");
-const titleEl = document.getElementById("listingTitle");
-const priceEl = document.getElementById("listingPrice");
-const userEl = document.getElementById("listingUser");
-const descriptionEl = document.getElementById("listingDescription");
-const messageBtn = document.getElementById("messageSellerBtn");
+const id =
+params.get("id");
 
 
 async function loadListing(){
 
-  const ref = doc(db,"listings",id);
-  const snap = await getDoc(ref);
+const ref =
+doc(db,"listings",id);
 
-  if(!snap.exists()){
-    titleEl.textContent = "Listing not found.";
-    return;
-  }
+const snap =
+await getDoc(ref);
 
-  const listing = snap.data();
+if(!snap.exists()){
 
-  /* ✅ USER LINK (FIXED) */
-  userEl.textContent = `@${listing.username || "Unknown User"}`;
-  userEl.href = `profile.html?id=${listing.userID}`;
+container.innerHTML =
+"Listing not found.";
 
+return;
 
-  /* POPULATE PAGE */
-  titleEl.textContent = listing.title;
-  priceEl.textContent = `$${listing.price}`;
-  descriptionEl.textContent = listing.description || "";
+}
 
+const listing =
+snap.data();
 
-  /* IMAGE */
-  if(listing.imageURL){
-    imageEl.src = listing.imageURL;
-  } else {
-    imageEl.style.display = "none";
-  }
+container.innerHTML = `
 
+<h1>${listing.title}</h1>
 
-  /* AUTH + MESSAGE BUTTON */
-  auth.onAuthStateChanged(user => {
+${listing.imageURL ?
+`<img class="listing-image" src="${listing.imageURL}">`
+: ""}
 
-    if (!messageBtn) return;
+<p>${listing.description}</p>
 
-    messageBtn.onclick = async () => {
+<p><strong>Price:</strong> $${listing.price}</p>
 
-      if(!user){
-        alert("You must be logged in to message sellers.");
-        return;
-      }
+<p><strong>Category:</strong> ${listing.category}</p>
 
-      if(user.uid === listing.userID){
-        alert("You cannot message yourself.");
-        return;
-      }
+<p><strong>Posted by:</strong> @${listing.username}</p>
 
-      // ✅ MATCH PROFILE.JS STRUCTURE
-      const conversationID =
-        [user.uid, listing.userID]
-        .sort()
-        .join("_");
+${listing.condition ?
+`<p><strong>Condition:</strong> ${listing.condition}</p>`
+: ""}
 
-      try {
+${listing.listingType ?
+`<p><strong>Type:</strong> ${listing.listingType}</p>`
+: ""}
 
-        await setDoc(
-          doc(db,"conversations",conversationID),
-          {
-            users: [user.uid, listing.userID], // ✅ consistent field
-            createdAt: serverTimestamp()
-          },
-          { merge:true }
-        );
+<div style="margin-top:20px">
 
-      } catch(error){
-        console.error("Error creating conversation:", error);
-      }
+<button id="messageSellerBtn">
+Message Seller
+</button>
 
-      // ✅ FIXED REDIRECT PARAM
-      window.location.href =
-        `chatDetails.html?id=${conversationID}`;
+</div>
 
-    };
+`;
 
 
-    /* OWNER CONTROLS */
-    if(user && user.uid === listing.userID){
+/* OWNER CONTROLS */
 
-      const controls = document.createElement("div");
-      controls.style.marginTop = "20px";
+auth.onAuthStateChanged(user=>{
 
-      controls.innerHTML = `
-        <button id="editListingBtn">Edit Listing</button>
-        <button id="deleteListingBtn" class="delBtn" style="margin-left:10px;">
-          Delete Listing
-        </button>
-      `;
+if(user && user.uid === listing.userID){
 
-      document
-        .querySelector(".listingInfoSection")
-        ?.appendChild(controls);
+container.innerHTML += `
 
-      document
-        .getElementById("editListingBtn")
-        .onclick = () => {
-          window.location.href = `editListing.html?id=${id}`;
-        };
+<div style="margin-top:20px">
 
-      document
-        .getElementById("deleteListingBtn")
-        .onclick = deleteListing;
-    }
+<button id="editListingBtn">
+Edit Listing
+</button>
 
-  });
+<button id="deleteListingBtn"
+style="background:#cc0000;color:white;margin-left:10px;">
+Delete Listing
+</button>
+
+</div>
+
+`;
+
+document
+.getElementById("editListingBtn")
+.onclick = () => {
+
+window.location.href =
+`editListing.html?id=${id}`;
+
+};
+
+document
+.getElementById("deleteListingBtn")
+.onclick = deleteListing;
 
 }
 
 
-/* DELETE LISTING */
+/* MESSAGE SELLER BUTTON */
+
+const messageBtn =
+document.getElementById("messageSellerBtn");
+
+if(messageBtn){
+
+messageBtn.onclick = () => {
+
+if(!user){
+
+alert("You must be logged in to message sellers.");
+return;
+
+}
+
+if(user.uid === listing.userID){
+
+alert("You cannot message yourself.");
+return;
+
+}
+
+const conversationID =
+[user.uid, listing.userID]
+.sort()
+.join("_");
+
+window.location.href =
+`chatDetails.html?conversation=${conversationID}`;
+
+};
+
+}
+
+});
+
+}
+
+
 async function deleteListing(){
 
-  const confirmDelete =
-    confirm("Are you sure you want to delete this listing?");
+const confirmDelete =
+confirm("Are you sure you want to delete this listing?");
 
-  if(!confirmDelete) return;
+if(!confirmDelete) return;
 
-  try {
+try{
 
-    await deleteDoc(doc(db,"listings",id));
+await deleteDoc(
+doc(db,"listings",id)
+);
 
-    alert("Listing deleted.");
-    window.location.href = "listings.html";
+alert("Listing deleted.");
 
-  } catch(error){
+window.location.href =
+"listings.html";
 
-    console.error("Delete failed:",error);
-    alert("Failed to delete listing.");
+}catch(error){
 
-  }
+console.error(
+"Delete failed:",
+error
+);
+
+alert("Failed to delete listing.");
+
+}
 
 }
 

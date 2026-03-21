@@ -1,6 +1,6 @@
 // Account Options
 
-const expandAcc = () => {
+function expandAcc() {
     const accOpt = document.getElementById('accOption');
 
     /* Im sure theres a better comparison but this is the easiest imo */
@@ -52,7 +52,7 @@ function confDelete(){
 
 // Theme Options
 
-const expandTheme = () => {
+function expandTheme() {
     const themeOpt = document.getElementById('themeOption');
 
     if(themeOpt.innerHTML.length > 158){
@@ -77,5 +77,22 @@ const expandTheme = () => {
         "</select><br><br>"+
     "</div>"+
     "<div class='separator'></div>";
+    }
+}
+
+
+// "About the app" info - I'm only putting build versions here honestly
+function expandAbout(){
+    const aboutOpt = document.getElementById('aboutOption');
+
+    if(aboutOpt.innerHTML.length > 154){
+        aboutOpt.innerHTML = "<p><button class='openBtn optionTxt' onclick='expandAbout()'>About<br>"+
+        "<small class='smallTxt'>View application information</small></button></p>"
+    } else {
+        aboutOpt.innerHTML = "<p><button class='openBtn optionTxt' onclick='expandAbout()'>About<br>"+
+        "<small class='smallTxt'>View application information</small></button></p>" +
+        "<div class='settingsOpt'>" +
+        "<p style='font-weight:bold'>Application Info</p>"+
+        "<p>App Version: 0.4a</p>"
     }
 }
