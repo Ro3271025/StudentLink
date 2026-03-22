@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Profile</title>
+    <title>Profile | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
 
-    <h2 id="name"></h2>
+    <h2 id="displayName">Loading Name...</h2>
+    <p><strong>Username:</strong> <span id="username"></span></p>
     <p><strong>Major:</strong> <span id="major"></span></p>
     <p><strong>Campus:</strong> <span id="campus"></span></p>
-    <p><strong>Bio:</strong> <span id="bio"></span></p>
 
-    <script type="module" src="js/profile.js"></script>
+    <div id="userBio">
+        <p><strong>Bio:</strong></p>
+        <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled style="width: 100%; max-width: 500px; display: block; margin-bottom: 10px;"></textarea>
+        
+        <button id="edit" class="themeObject">Edit Profile</button>
+    </div>
+
+    <script type="module">
+        import { setupProfile } from "./js/profile.js";
+        setupProfile();
+    </script>
 
 </body>
 </html>
