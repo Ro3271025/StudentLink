@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>Choose Username | StudentLink</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../public/styles/style.css">
 </head>
 <body>
   <h1>Choose your username</h1>

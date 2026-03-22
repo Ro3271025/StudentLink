@@ -127,115 +127,37 @@ Is Brightspace down? Nothing will load for me...
         <p class="sidebarText">Notifications</p>
         <p class="sidebarText"><a href="chat.html">Chat</a></p>
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText">Settings</p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
         <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666;">Backfill Usernames (Dev)</button><br><br>
-        <p>Theme</p>
-        <select id="themeSelector" class="themeObject" onchange="changeTheme()">
-            <option value="#0f73ff" selected>Blue</option>
-            <option value="#A11010">Red</option>
-            <option value="#E86C13">Orange</option>
-            <option value="#A947C9">Purple</option>
-            <option value="#004a41">Green</option>
-        </select><br><br>
-        <select id="bgSelector" class="themeObject" onchange="changeBG()">
-            <option value="#000000">Lights Out</option>
-            <option value="#F2F2EB">Light</option>
-            <option value="#151D28" selected>Dark</option>
-        </select>
+        
+
+        <div class="overlayDiv">
+            <div id="newPostContainer">
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
+                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
     </div>
 
 
-
-<!-- RIGHT SIDEBAR -->
-
-<div class="sidebar" id="rightBar">
-
-<br>
-<input class="searchBar themeObject" placeholder="Search"><br><br>
-
-<div id="recentSearches">
-
-<table class="recentSearchesTable">
-
-<tr>
-<th id="recentHeader">Recent Searches</th>
-</tr>
-
-<tr>
-<th class="recentSearchData">
-<a class="tableAnchorLink" href="">game club</a>
-</th>
-</tr>
-
-<tr>
-<th class="recentSearchData">
-<a class="tableAnchorLink" href="">textbooks</a>
-</th>
-</tr>
-
-<tr>
-<th class="recentSearchData">
-<a class="tableAnchorLink" href="">class canceled</a>
-</th>
-</tr>
-
-<tr>
-<th class="recentSearchData">
-<a class="tableAnchorLink" href="">senior project</a>
-</th>
-</tr>
-
-<tr>
-<th class="recentSearchData">
-<a class="tableAnchorLink" href="">used calculator</a>
-</th>
-</tr>
-
-</table>
-
-</div>
-
-</div>
-
-
-
-<!-- NEW POST OVERLAY -->
-
-<div class="overlayDiv">
-
-<div id="newPostContainer">
-
-<p id="newPostHeader">
-
-<button class="themeObject" id="closeNewPostBtn"
-onclick="toggleOverlay('newPostContainer')">
-X
-</button>
-
-<b>Create New Post</b>
-
-<button class="themeObject" id="createPostBtn">
-Post
-</button>
-
-</p>
-
-<div id="newPostTXT">
-<textarea maxlength="300" placeholder="What's happening?"></textarea>
-</div>
-
-</div>
-
-</div>
-
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-            <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
-            <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
+    <div class="sidebar" id="rightBar">
+        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+            </table>
         </div>
     </div>
+
+    
 
     <script type="module">
         import { setupHome } from "./js/home.js";

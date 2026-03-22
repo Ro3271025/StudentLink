@@ -6,7 +6,7 @@ export function setupHome() {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
             // not logged in, send back to login page
-            window.location.href = "../public/login.php";
+            window.location.href = "../public/userlogin.html";
             return;
         }
 

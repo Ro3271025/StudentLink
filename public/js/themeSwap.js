@@ -71,9 +71,8 @@ function reloadTheme(accent, hoverAccent, BG, txtFill){
 }
 
 // retain the user's theme across refresh
-document.addEventListener('DOMContentLoaded', 
-    reloadTheme(localStorage.getItem("storedAccent"), localStorage.getItem("storedHover"), 
-    localStorage.getItem("storedBG"), localStorage.getItem("storedTXT")));
+reloadTheme(localStorage.getItem("storedAccent"), localStorage.getItem("storedHover"), 
+localStorage.getItem("storedBG"), localStorage.getItem("storedTXT"));
 
 
 
