@@ -13,32 +13,13 @@ import {
   where,
   serverTimestamp,
   updateDoc,
-  increment
+  increment,
+  arrayUnion,
+  arrayRemove
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /**
  * Create a new post in /posts.
- * Supports both support posts and marketplace listings via `type`.
- *
- * @param {Object} params
- * @param {string} params.authorId
- * @param {string} params.authorName
- * @param {string} params.authorUsername  // the user's chosen handle (without @)
- * @param {string} params.title
- * @param {string} params.body
- * @param {"support"|"marketplace"} [params.type="support"]
- * @param {string} [params.category="General"]   // for support posts
- * @param {string} [params.campus="Farmingdale"]
- * @param {string} [params.status="open"]        // open/solved/locked
- * @param {string[]} [params.tags=[]]
- *
- * // marketplace-only fields:
- * @param {number} [params.price]
- * @param {string} [params.condition]            // New/Like New/Good/Fair
- * @param {string} [params.itemCategory]         // Textbook/Calculator/Lab Kit/Supplies/Dorm
- * @param {boolean} [params.isAvailable=true]
- *
- * @returns {Promise<string>} created postId
  */
 export async function createPost(params) {
   const {
@@ -52,8 +33,6 @@ export async function createPost(params) {
     campus = "Farmingdale",
     status = "open",
     tags = [],
-
-    // marketplace fields
     price,
     condition,
     itemCategory,
@@ -70,7 +49,6 @@ export async function createPost(params) {
     throw new Error('createPost: type must be "support" or "marketplace"');
   }
 
-  // Basic validation for marketplace posts
   if (type === "marketplace") {
     if (price == null || Number.isNaN(Number(price))) {
       throw new Error("createPost: price is required for marketplace posts");
@@ -90,16 +68,16 @@ export async function createPost(params) {
     status,
     tags,
     commentCount: 0,
+    likes: 0,
+    likedBy: [],
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   };
 
-  // Support-only fields
   if (type === "support") {
     payload.category = category;
   }
 
-  // Marketplace-only fields
   if (type === "marketplace") {
     payload.price = Number(price);
     payload.condition = condition;
@@ -109,17 +87,14 @@ export async function createPost(params) {
 
   const postsRef = collection(db, "posts");
   const newDoc = await addDoc(postsRef, payload);
-
   return newDoc.id;
 }
 
 /** Fetch a single post by ID. */
 export async function getPostById(postId) {
   if (!postId) throw new Error("getPostById: postId is required");
-
   const ref = doc(db, "posts", postId);
   const snap = await getDoc(ref);
-
   if (!snap.exists()) return null;
   return { id: snap.id, ...snap.data() };
 }
@@ -127,13 +102,11 @@ export async function getPostById(postId) {
 /** Fetch recent posts sorted by createdAt desc. */
 export async function getRecentPosts(options = {}) {
   const pageSize = Number(options.pageSize || 20);
-
   const q = query(
     collection(db, "posts"),
     orderBy("createdAt", "desc"),
     limit(pageSize)
   );
-
   const snaps = await getDocs(q);
   return snaps.docs.map(d => ({ id: d.id, ...d.data() }));
 }
@@ -141,14 +114,12 @@ export async function getRecentPosts(options = {}) {
 /** Fetch only marketplace listings. */
 export async function getMarketplacePosts(options = {}) {
   const pageSize = Number(options.pageSize || 20);
-
   const q = query(
     collection(db, "posts"),
     where("type", "==", "marketplace"),
     orderBy("createdAt", "desc"),
     limit(pageSize)
   );
-
   const snaps = await getDocs(q);
   return snaps.docs.map(d => ({ id: d.id, ...d.data() }));
 }
@@ -156,14 +127,12 @@ export async function getMarketplacePosts(options = {}) {
 /** Fetch only support posts. */
 export async function getSupportPosts(options = {}) {
   const pageSize = Number(options.pageSize || 20);
-
   const q = query(
     collection(db, "posts"),
     where("type", "==", "support"),
     orderBy("createdAt", "desc"),
     limit(pageSize)
   );
-
   const snaps = await getDocs(q);
   return snaps.docs.map(d => ({ id: d.id, ...d.data() }));
 }
@@ -171,10 +140,40 @@ export async function getSupportPosts(options = {}) {
 /** Increment/decrement commentCount on a post. */
 export async function bumpCommentCount(postId, delta = 1) {
   if (!postId) throw new Error("bumpCommentCount: postId is required");
-
   const ref = doc(db, "posts", postId);
   await updateDoc(ref, {
     commentCount: increment(delta),
     updatedAt: serverTimestamp()
   });
+}
+
+/**
+ * Toggle like on a post for a given user.
+ * Adds userId to likedBy array and increments likes count,
+ * or removes and decrements if already liked.
+ *
+ * @param {string} postId
+ * @param {string} userId
+ * @returns {Promise<{ liked: boolean, newCount: number }>}
+ */
+export async function toggleLike(postId, userId) {
+  if (!postId) throw new Error("toggleLike: postId is required");
+  if (!userId) throw new Error("toggleLike: userId is required");
+
+  const ref = doc(db, "posts", postId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error("toggleLike: post not found");
+
+  const data = snap.data();
+  const likedBy = data.likedBy || [];
+  const alreadyLiked = likedBy.includes(userId);
+
+  await updateDoc(ref, {
+    likes: increment(alreadyLiked ? -1 : 1),
+    likedBy: alreadyLiked ? arrayRemove(userId) : arrayUnion(userId),
+    updatedAt: serverTimestamp()
+  });
+
+  const newCount = (data.likes || 0) + (alreadyLiked ? -1 : 1);
+  return { liked: !alreadyLiked, newCount };
 }
