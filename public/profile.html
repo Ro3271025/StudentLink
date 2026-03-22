@@ -8,153 +8,129 @@
 </head>
 
 <body id="documentBody">
-    <!-- TODO: Fix scaling on elements -->
 
     <div id="profileContainer">
-        <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div> <!-- Just for the banner, that's it -->
+        <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div>
 
         <div id="profileInfo" class="content">
-            <!-- Maybe use an inner div to force content to scale without more custom code -->
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <p id="displayName">Display Name</p> <!-- Swap with input for editing --> <!-- <input id="displayName"> -->
-            <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p> <!-- Remove the uni "button?" -->
-            <!-- Replace the static numbers with actual data and then link to a page showing all the results of the proper query -->
-            <p id="userStats">Posts: <a href="">99.9k</a> Followers: <a href="">99.9k</a> Following: <a href="">99.9k</a></p> <!-- # of followers / friends, # of posts, etc... -->
+            <p id="displayName">Display Name</p>
+            <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p>
+            <p id="userStats">Posts: <a href="">0</a></p>
             <div id="userBio">
-                <!-- Use a textarea for "editing" mode, remove the disabled property when editing -->
-                <button id="edit" class="themeObject">Edit Profile</button> <!-- <button id="userActions">...</button>--> <!-- Use this other button for other user's viewing -->
-                <!-- <button id="save">Save</button> <button id="cancel">cancel</button> --> <!-- Swap in after clicking edit -->
-                <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name! I'm a student at FSC majoring in [UNDEFINED]. #motorsports #esports #sunyfsc</textarea>
-                </div>
+                <button id="edit" class="themeObject">Edit Profile</button>
+                <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name!</textarea>
+            </div>
         </div>
 
+        <!-- TAB NAVIGATION -->
         <div id="userContent">
-            <table colspan="5" border="0" cellpadding="2" cellspacing="1" id="selectedContentList"> <!-- TODO: FIX SCALING -->
-                <th>Posts</th> <!-- TODO: Make these have buttons -->
-                <th>Comments</th>
-                <th>Listings</th>
+            <table colspan="5" border="0" cellpadding="2" cellspacing="1" id="selectedContentList">
+                <tr>
+                    <th><a href="#" class="profileTab activeTab" data-tab="posts">Posts</a></th>
+                    <th><a href="#" class="profileTab" data-tab="comments">Comments</a></th>
+                    <th><a href="#" class="profileTab" data-tab="listings">Listings</a></th>
+                </tr>
             </table>
         </div>
 
-
-           <!-- SAMPLE POST 1-->
-           <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openBtn">
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
-
-            <p class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">40 Likes</a><a class="postLink postMetrics" href="">6 Comments</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
+        <!-- POSTS TAB -->
+        <div id="tab-posts">
+            <p style="text-align:center; color:#aaa; padding:20px;" id="postsEmpty" style="display:none;">No posts yet.</p>
         </div>
 
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openBtn">
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
-
-            <p class="postContentText" maxlength="200">Motorsports club is meeting at 4:30pm on Thursday.</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">12 Likes</a><a class="postLink postMetrics" href="">4 Comments</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
+        <!-- COMMENTS TAB -->
+        <div id="tab-comments" style="display:none;">
+            <p style="text-align:center; color:#aaa; padding:20px;" id="commentsEmpty" style="display:none;">No comments yet.</p>
         </div>
 
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openBtn">
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
-
-            <p class="postContentText" maxlength="200">Game Club is hosting a competition with a $100 cash prize! Reply to sign up!</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">17 Likes</a><a class="postLink postMetrics" href="">12 Comments</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
+        <!-- LISTINGS TAB -->
+        <div id="tab-listings" style="display:none;">
+            <p style="text-align:center; color:#aaa; padding:20px;" id="listingsEmpty" style="display:none;">No listings yet.</p>
         </div>
 
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openBtn">
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
+        <br>
+        <button id="loadMore" class="themeObject" style="display:none;">Load More</button>
 
-            <p class="postContentText" maxlength="200">Looking to sell some old textbooks. DM to see if I have anything you need.</p>
-                <div class="imageContainer">
-                    <img src="styles/images/placeholder/textbooks.png">
-                </div>
-            <br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">2 Likes</a><a class="postLink postMetrics" href="">1 Comment</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
+        <!-- LEFT SIDEBAR -->
+        <div class="sidebar" id="leftBar">
+            <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+            <p id="sideDisplayName">Display Name</p>
+            <p id="sideUsername">@Username</p><br>
+            <p class="sidebarText"><a href="home.html">Home</a></p>
+            <p class="sidebarText"><a href="listings.html">Listings</a></p>
+            <p class="sidebarText">Explore</p>
+            <p class="sidebarText">Notifications</p>
+            <p class="sidebarText"><a href="chat.html">Chat</a></p>
+            <p class="sidebarText"><a href="profile.html">Profile</a></p>
+            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+            <button class="themeObject" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
         </div>
 
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <button class="openBtn">
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
-
-            <p class="postContentText" maxlength="200">Is Brightspace down? Nothing will load for me...</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">19 Likes</a><a class="postLink postMetrics" href="">25 Comments</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
-        </div><br>
-
-    <button id="loadMore" class="themeObject">Load More Posts</button> <!-- dynamically show when the user gets roughly 66% down the page of posts -->
-    
-    <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html">Listings</a></p>
-        <p class="sidebarText">Explore</p>
-        <p class="sidebarText">Notifications</p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-        <button class="themeObject" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-
+        <!-- NEW POST OVERLAY -->
         <div class="overlayDiv">
             <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+                <p id="newPostHeader">
+                    <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                    <b>Create New Post</b>
+                    <button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button>
+                </p>
+                <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="sidebar" id="rightBar">
+            <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+            <div id="recentSearches">
+                <table class="recentSearchesTable">
+                    <tr><th id="recentHeader">Recent Searches</th></tr>
+                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+                </table>
             </div>
         </div>
 
     </div>
 
-    <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
-        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-        
-        <div id="recentSearches"> <!-- track the last 5 searches -->
-            <table class="recentSearchesTable">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-
-</div>
-
+    <style>
+        .profileTab {
+            text-decoration: none;
+            color: #586373;
+            font-weight: normal;
+            padding: 6px 12px;
+            display: inline-block;
+        }
+        .profileTab.activeTab {
+            color: var(--theme-accent);
+            font-weight: bold;
+            border-bottom: 2px solid var(--theme-accent);
+        }
+        .profileTab:hover {
+            color: var(--theme-accent);
+        }
+        .commentCard {
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            margin: 0 auto;
+            width: 55%;
+            padding: 12px 3.5%;
+        }
+        .commentCard .postTitle {
+            font-size: 12pt;
+            color: #586373;
+            margin-bottom: 4px;
+        }
+        .commentCard .commentText {
+            font-size: 14pt;
+            color: var(--text-fill);
+        }
+    </style>
 
     <script type="module">
         import { setupProfile } from "./js/profile.js";
