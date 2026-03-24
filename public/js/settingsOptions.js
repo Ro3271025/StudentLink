@@ -64,16 +64,18 @@ function expandTheme() {
         "<div class='settingsOpt'>" +
         "<p style='font-weight:bold'>Theme</p>" +
         "<select id='themeSelector' class='themeObject' onchange='changeTheme()'>"+
-            "<option value='#0f73ff' selected>Blue</option>"+
+            "<option disabled hidden selected>Color</option>"+
+            "<option value='#0f73ff'>Blue</option>"+
             "<option value='#A11010'>Red</option>"+
             "<option value='#E86C13'>Orange</option>"+
             "<option value='#A947C9'>Purple</option>"+
             "<option value='#004a41'>Green</option>"+
         "</select> "+      
         "<select id='bgSelector' class='themeObject' onchange='changeBG()'>"+
+            "<option selected disabled hidden>Background</option>"+
             "<option value='#000000'>Lights Out</option>"+
             "<option value='#F2F2EB'>Light</option>"+
-            "<option value='#151D28' selected>Dark</option>"+
+            "<option value='#151D28'>Dark</option>"+
         "</select><br><br>"+
     "</div>"+
     "<div class='separator'></div>";
