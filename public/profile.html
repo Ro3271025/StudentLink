@@ -16,7 +16,11 @@
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
             <p id="displayName">Display Name</p>
             <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p>
-            <p id="userStats">Posts: <a href="">0</a></p>
+            <p id="userStats">
+                Posts: <a href="#" id="postCountLink">0</a>
+                <span aria-hidden="true"> | </span>
+                Listings: <a href="#" id="listingCountLink">0</a>
+            </p>
             <div id="userBio">
                 <button id="edit" class="themeObject">Edit Profile</button>
                 <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name!</textarea>
@@ -111,6 +115,13 @@
         }
         .profileTab:hover {
             color: var(--theme-accent);
+        }
+        #userStats a {
+            text-decoration: none;
+            color: inherit;
+        }
+        #userStats a:hover {
+            text-decoration: none;
         }
         .commentCard {
             border-left: 1px solid var(--border-color);

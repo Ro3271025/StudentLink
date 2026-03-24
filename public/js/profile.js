@@ -49,6 +49,7 @@ async function loadPosts(uidToLoad) {
             orderBy("createdAt", "desc")
         );
         const snap = await getDocs(q);
+        updateCounter('postCountLink', snap.size);
 
         if (snap.empty) {
             container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">No posts yet.</p>';
@@ -153,6 +154,7 @@ async function loadListings(uidToLoad) {
            orderBy("created_at", "desc")
         );
         const snap = await getDocs(q);
+        updateCounter('listingCountLink', snap.size);
 
         if (snap.empty) {
             container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">No listings yet.</p>';
@@ -185,6 +187,58 @@ async function loadListings(uidToLoad) {
     } catch (err) {
         console.error("Failed to load listings:", err);
         container.innerHTML = '<p style="text-align:center;color:#e55;padding:20px;">Failed to load listings.</p>';
+    }
+}
+
+function updateCounter(counterId, count) {
+    const counterEl = document.getElementById(counterId);
+    if (counterEl) counterEl.textContent = String(count);
+}
+
+async function loadProfileCounters(uidToLoad) {
+    try {
+        const postsQuery = query(
+            collection(db, "posts"),
+            where("authorId", "==", uidToLoad)
+        );
+        const listingsQuery = query(
+            collection(db, "listings"),
+            where("userID", "==", uidToLoad)
+        );
+
+        const [postsSnap, listingsSnap] = await Promise.all([
+            getDocs(postsQuery),
+            getDocs(listingsQuery)
+        ]);
+
+        updateCounter('postCountLink', postsSnap.size);
+        updateCounter('listingCountLink', listingsSnap.size);
+    } catch (err) {
+        console.error("Failed to load profile counters:", err);
+    }
+}
+
+function activateProfileTab(tabName) {
+    const tab = document.querySelector(`.profileTab[data-tab="${tabName}"]`);
+    if (tab) tab.click();
+}
+
+function setupCounterLinks() {
+    const postCountLink = document.getElementById('postCountLink');
+    const listingCountLink = document.getElementById('listingCountLink');
+
+    if (postCountLink) {
+        postCountLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            activateProfileTab('posts');
+        });
+    }
+
+    if (listingCountLink) {
+        listingCountLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            activateProfileTab('listings');
+        });
     }
 }
 
@@ -273,6 +327,8 @@ export function setupProfile() {
 
         // Setup tabs and load posts by default
         setupTabs(uidToLoad);
+        setupCounterLinks();
+        await loadProfileCounters(uidToLoad);
         await loadPosts(uidToLoad);
     });
 }
