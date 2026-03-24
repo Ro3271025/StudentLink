@@ -467,6 +467,10 @@ a:hover{
     margin-top:-50%;
 }
 
+#newPostContainer button{
+    transition: 0s !important;
+}
+
 #newPostHeader{
     margin-left: 2%;
 }
