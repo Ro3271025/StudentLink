@@ -1,6 +1,6 @@
 // Account Options
 
-const expandAcc = () => {
+function expandAcc() {
     const accOpt = document.getElementById('accOption');
 
     /* Im sure theres a better comparison but this is the easiest imo */
@@ -52,7 +52,7 @@ function confDelete(){
 
 // Theme Options
 
-const expandTheme = () => {
+function expandTheme() {
     const themeOpt = document.getElementById('themeOption');
 
     if(themeOpt.innerHTML.length > 158){
@@ -64,18 +64,37 @@ const expandTheme = () => {
         "<div class='settingsOpt'>" +
         "<p style='font-weight:bold'>Theme</p>" +
         "<select id='themeSelector' class='themeObject' onchange='changeTheme()'>"+
-            "<option value='#0f73ff' selected>Blue</option>"+
+            "<option disabled hidden selected>Color</option>"+
+            "<option value='#0f73ff'>Blue</option>"+
             "<option value='#A11010'>Red</option>"+
             "<option value='#E86C13'>Orange</option>"+
             "<option value='#A947C9'>Purple</option>"+
             "<option value='#004a41'>Green</option>"+
         "</select> "+      
         "<select id='bgSelector' class='themeObject' onchange='changeBG()'>"+
+            "<option selected disabled hidden>Background</option>"+
             "<option value='#000000'>Lights Out</option>"+
             "<option value='#F2F2EB'>Light</option>"+
-            "<option value='#151D28' selected>Dark</option>"+
+            "<option value='#151D28'>Dark</option>"+
         "</select><br><br>"+
     "</div>"+
     "<div class='separator'></div>";
+    }
+}
+
+
+// "About the app" info - I'm only putting build versions here honestly
+function expandAbout(){
+    const aboutOpt = document.getElementById('aboutOption');
+
+    if(aboutOpt.innerHTML.length > 154){
+        aboutOpt.innerHTML = "<p><button class='openBtn optionTxt' onclick='expandAbout()'>About<br>"+
+        "<small class='smallTxt'>View application information</small></button></p>"
+    } else {
+        aboutOpt.innerHTML = "<p><button class='openBtn optionTxt' onclick='expandAbout()'>About<br>"+
+        "<small class='smallTxt'>View application information</small></button></p>" +
+        "<div class='settingsOpt'>" +
+        "<p style='font-weight:bold'>Application Info</p>"+
+        "<p>App Version: 0.4a</p>"
     }
 }

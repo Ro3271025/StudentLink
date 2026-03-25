@@ -30,8 +30,6 @@ table, th, td{
    
 }
 
-
-
 img{
     max-width: 100%;
     height: auto;
@@ -41,7 +39,7 @@ img{
 button, select{
     line-height: 2vh;
     background-color: var(--theme-accent);
-    border-color: var(--theme-accent);
+    border-color: transparent;
     border-radius: 0.625rem;
     padding: 0.625rem;
     transition: 0.125s;
@@ -54,7 +52,6 @@ button, select{
 
 button:hover, select:hover, input:hover{
     background-color: var(--button-hover);
-    border-color: var(--button-hover);
 }
 
 select{
@@ -292,6 +289,13 @@ a:hover{
     display: inline;
     position: relative;
     word-wrap: break-word;
+    padding: 5px;
+    border: 1px solid var(--theme-accent);
+}
+
+#bioText:hover{
+    background-color: var(--button-hover) !important;
+    transition: 0.125s;
 }
 
 #bioText:disabled{
@@ -303,12 +307,20 @@ a:hover{
     padding:3px 8px;
 }
 
-#edit{
+#edit, #save{
     margin-left: 65%;
     margin-top: -15%;
     margin-right: auto;
     word-wrap: break-word !important; 
+    display: inline;
+    position: relative;
+}
 
+#cancel {
+    margin-left: 45%;
+    margin-top: -21.5%;
+    margin-right: auto;
+    word-wrap: break-word !important; 
     display: inline;
     position: relative;
 }
@@ -462,7 +474,7 @@ footer {
     font-size: 100%;
 }
 
-#newPostContainer{
+#newPostContainer {
     text-align: left;
     width: 50%;
     height: 35%;
@@ -471,16 +483,20 @@ footer {
     background-color: var(--bg-primary); 
     border-color: var(--border-color);
     border: 1px solid;
-    position: -webkit-sticky;
     position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     vertical-align: middle;
     z-index: 4;
     padding: 5px;
     border-radius: 10px;
     font-family: var(--font-family);
     font-size: 18pt;
-    margin-left: 28.25%;
-    margin-top:-50%;
+}
+
+#newPostContainer button{
+    transition: 0s !important;
 }
 
 #newPostHeader{
@@ -509,19 +525,37 @@ footer {
     margin-left: 63%;
 }
 
-.overlayDiv{
+.overlayDiv {
     background-color: rgba(0, 0, 0, 0.5);
-    width: 200%;
-    height: 200%;
+    width: 100%;
+    height: 100%;
     position: fixed;
-    display:flex;
+    top: 0;
+    left: 0;
+    display: flex;
     align-items: center;
-    margin: 0 auto;
-    margin-top: -50%;
-    margin-left: -10%;
+    justify-content: center;
     visibility: var(--overlay-vis);
     z-index: 3;
 }
+
+/* Editing Profile */
+
+#displayName input{
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background:#1e2a38;
+    color:white;
+    outline:none;
+}
+
+#displayName input:hover{
+    background-color: var(--button-hover) !important;
+    transition: 0.125s;
+}
+
 
 /* viewing post */
 
@@ -537,7 +571,7 @@ footer {
 }
 /* Listing styles*/
 .listing-card{
-    border:1px solid #ccc;
+    border:1px solid var(--border-color);
     padding:15px;
     margin-bottom:15px;
     border-radius:10px;
@@ -555,6 +589,7 @@ footer {
     object-fit:cover;
     border-radius:6px;
 }
+
 .listing-image{
 width:100%;
 max-width:500px;
@@ -589,9 +624,9 @@ margin-bottom:10px;
 /* LISTING CARD */
 
 .listingCard{
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    background: white;
+    background: transparent !important;
     padding: 12px;
     cursor: pointer;
     transition: 0.2s;
@@ -627,7 +662,7 @@ margin-bottom:5px;
 
 font-weight:bold;
 
-color:#2a7cff;
+color:var(--theme-accent);
 
 }
 
@@ -645,14 +680,19 @@ color:#777;
 }
 /* CHAT / MESSAGES UI */
 .chatPage{
-margin-left:240px;
-padding:40px;
-max-width:800px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
+}
+
+#searchMessages{
+    width: 100%;
 }
 
 
 .searchBar{
-width:100%;
 padding:12px;
 border-radius:8px;
 border:none;
@@ -662,6 +702,8 @@ color:white;
 outline:none;
 }
 
+
+
 .conversationItem{
 padding:16px;
 border-radius:10px;
@@ -669,6 +711,7 @@ margin-bottom:10px;
 background:#1e2a38;
 cursor:pointer;
 transition:0.2s;
+width: 99%;
 }
 
 .conversationItem:hover{
@@ -689,13 +732,37 @@ color:#cfcfcf;
 }
 
 .chatDetailsPage{
-margin-left:220px;
-padding:30px;
-max-width:700px;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 45%;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+#backArrow{
+    height:auto;
+    width:6.5%;
+    background-color: transparent;
+}
+
+#backArrow:hover{
+    background-color: var(--button-hover);
+    border-radius: 100px;
+}
+
+#backArrowImg{
+    filter: invert(.5);
+}
+
+#chatTargetUser{
+    font-size: 16pt;
 }
 
 #messagesContainer{
-height:500px;
+height:80vh;
 overflow-y:auto;
 margin-bottom:15px;
 }
@@ -709,7 +776,7 @@ border-radius:10px;
 
 .myMessage{
 margin-left:auto;
-background:#0f73ff;
+background:var(--theme-accent);
 color:white;
 text-align:right;
 }
@@ -731,7 +798,9 @@ flex:1;
 padding:10px;
 border-radius:6px;
 border:none;
-
+color: var(--text-fill);
+background-color: transparent !important;
+}
 /* Settings Page */
 
 .settingsHeader{
@@ -768,4 +837,10 @@ border:none;
 .settingsOpt{
     margin-left:3.5%;
 }
+<<<<<<< HEAD
+=======
+
+.settingsOpt input{
+    transition: 0.125s;
+>>>>>>> main
 }

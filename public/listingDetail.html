@@ -1,19 +1,181 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Listing | StudentLink</title>
-<link rel="stylesheet" href="styles/style.css">
+    <title>Listing | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .listingDetailContainer {
+            display: flex;
+            gap: 32px;
+            width: 75%;
+            margin: 32px auto;
+            align-items: flex-start;
+        }
+        .listingImageSection {
+            flex: 0 0 300px;
+        }
+        .listingDetailImage {
+            width: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .listingMiddleSection {
+            flex: 1;
+        }
+        .listingMiddleSection h1 {
+            font-size: 22pt;
+            margin-bottom: 8px;
+        }
+        .listingSeller {
+            font-size: 13pt;
+            color: #aaa;
+            margin-bottom: 16px;
+        }
+        .listingSeller a {
+            color: var(--theme-accent);
+            text-decoration: none;
+        }
+        .listingDescription {
+            font-size: 14pt;
+            line-height: 1.6;
+            color: var(--text-fill);
+            margin-bottom: 16px;
+        }
+        .listingMeta p {
+            font-size: 13pt;
+            color: #aaa;
+            margin: 4px 0;
+        }
+        .listingMeta strong {
+            color: var(--text-fill);
+        }
+        .listingRightSection {
+            flex: 0 0 200px;
+        }
+        .priceBox {
+            background: #1e2a38;
+            border-radius: 10px;
+            padding: 24px 20px;
+            text-align: center;
+        }
+        .priceText {
+            font-size: 28pt;
+            font-weight: bold;
+            color: var(--theme-accent);
+            margin-bottom: 16px;
+        }
+        #messageSellerBtn {
+            width: 100%;
+            font-size: 14pt;
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--theme-accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #messageSellerBtn:hover {
+            background: var(--button-hover);
+        }
+        .ownerControls {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+    </style>
 </head>
+<body id="documentBody">
 
-<body>
+    <div id="header">
+        <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
+    </div>
 
-<div id="listingDetails">
-Loading...
-</div>
+    <!-- LISTING DETAIL -->
+    <div class="listingDetailContainer">
+        <!-- LEFT: IMAGE -->
+        <div class="listingImageSection">
+            <img id="listingImage" class="listingDetailImage" src="" alt="Listing Image">
+        </div>
 
-<script type="module" src="js/listingDetails.js"></script>
+        <!-- MIDDLE: INFO -->
+        <div class="listingMiddleSection">
+            <h1 id="listingTitle">Listing Title</h1>
+            <div class="listingSeller">
+                Seller: <a id="listingUser" href="#">@username</a>
+            </div>
+            <div class="listingDescription" id="listingDescription">
+                Listing description goes here...
+            </div>
+            <div class="listingMeta" id="listingMeta"></div>
+            <div class="ownerControls" id="ownerControls" style="display:none;">
+                <button id="editListingBtn" class="themeObject" style="font-size:13pt; padding:8px 16px;">Edit Listing</button>
+                <button id="deleteListingBtn" class="delBtn" style="font-size:13pt; padding:8px 16px;">Delete Listing</button>
+            </div>
+        </div>
 
+        <!-- RIGHT: PRICE BOX -->
+        <div class="listingRightSection">
+            <div class="priceBox">
+                <div id="listingPrice" class="priceText">$0</div>
+                <button id="messageSellerBtn">Message Seller</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html"><strong>Listings</strong></a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    </div>
+
+    <!-- NEW POST OVERLAY -->
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader">
+                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b>
+                <button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button>
+            </p>
+            <div id="newPostTXT">
+                <textarea maxlength="300" placeholder="What's happening?"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import { setupSidebar } from "./js/showUser.js";
+        setupSidebar();
+    </script>
+    <script type="module" src="js/listingDetails.js"></script>
+    <script src="js/themeSwap.js"></script>
+    <script src="js/toggleVis.js" type="text/javascript"></script>
 </body>
-
 </html>
