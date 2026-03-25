@@ -6,29 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">
-<<<<<<< HEAD
-=======
-
->>>>>>> main
     <div id="profileContainer">
         <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div>
 
         <div id="profileInfo" class="content">
-<<<<<<< HEAD
-            <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG" 
-                 style="cursor: pointer; border-radius: 8px; width: 150px; height: 150px; object-fit: cover;">
-
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-
-            <p id="displayName">Display Name</p>
-            <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p>
-            
-            <p id="userStats">Posts: <a href="">99.9k</a> Followers: <a href="">99.9k</a> Following: <a href="">99.9k</a></p>
-            
-            <div id="userBio">
-                <button id="edit" class="themeObject">Edit Profile</button>
-                <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hey, my name is ....</textarea>
-=======
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                  style="cursor:pointer; border-radius:8px; width:150px; height:150px; object-fit:cover;">
             <input type="file" id="fileInput" accept="image/*" style="display:none;">
@@ -49,109 +30,12 @@
             <div id="userBio">
                 <button id="edit" class="themeObject">Edit Profile</button>
                 <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name!</textarea>
->>>>>>> main
             </div>
         </div>
 
         <!-- TAB NAVIGATION -->
         <div id="userContent">
             <table colspan="5" border="0" cellpadding="2" cellspacing="1" id="selectedContentList">
-<<<<<<< HEAD
-                <th>Posts</th>
-                <th>Comments</th>
-                <th>Listings</th>
-            </table>
-        </div>
-
-        <div class="content">
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
-            <p class="postContentText">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
-            <footer>
-                <a class="postLink postMetrics" href="">40 Likes</a>
-                <a class="postLink postMetrics" href="">6 Comments</a>
-                <a href="" class="postLink postMetrics" style="text-align: right;">Report</a>
-            </footer><br>
-        </div>
-
-        <div class="content">
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
-            <p class="postContentText">Motorsports club is meeting at 4:30pm on Thursday.</p><br>
-            <footer>
-                <a class="postLink postMetrics" href="">12 Likes</a>
-                <a class="postLink postMetrics" href="">4 Comments</a>
-                <a href="" class="postLink postMetrics" style="text-align: right;">Report</a>
-            </footer><br>
-        </div>
-
-        <div class="content">
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <a class="postLink" id="postDisplayName" href="">Display Name </a><small id="postUsername">@Username</small><br>
-            <p class="postContentText">Looking to sell some old textbooks. DM to see if I have anything you need.</p>
-            <div class="imageContainer">
-                <img src="styles/images/placeholder/textbooks.png">
-            </div>
-            <footer>
-                <a class="postLink postMetrics" href="">2 Likes</a>
-                <a class="postLink postMetrics" href="">1 Comment</a>
-                <a href="" class="postLink postMetrics" style="text-align: right;">Report</a>
-            </footer><br>
-        </div>
-
-        <button id="loadMore" class="themeObject">Load More Posts</button>
-        
-        <div class="sidebar" id="leftBar">
-            <br>
-            <img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-            <br>
-            <p id="displayName">Display Name</p>
-            <p id="username">@Username</p>
-            <br>
-            <p class="sidebarText"><a href="home.html">Home</a></p>
-            <p class="sidebarText"><a href="listings.html">Listings</a></p>
-            <p class="sidebarText">Explore</p>
-            <p class="sidebarText">Notifications</p>
-            <p class="sidebarText">Chat</p>
-            <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText">Settings</p>
-            <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button>
-            <br><br>
-            <p>Theme</p>
-            <select id="themeSelector" class="themeObject" onchange="changeTheme()">
-                <option value="#0f73ff" selected>Blue</option>
-                <option value="#A11010">Red</option>
-                <option value="#E86C13">Orange</option>
-                <option value="#A947C9">Purple</option>
-                <option value="#004a41">Green</option>
-            </select><br><br>
-            <select id="bgSelector" class="themeObject" onchange="changeBG()">
-                <option value="#000000">Lights Out</option>
-                <option value="#F2F2EB">Light</option>
-                <option value="#151D28" selected>Dark</option>
-            </select>
-        </div>
-
-        <div class="sidebar" id="rightBar">
-            <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-            <div id="recentSearches">
-                <table class="recentSearchesTable">
-                    <tr><th id="recentHeader">Recent Searches</th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="overlayDiv">
-            <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn">Post</button></p>
-                <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
-=======
                 <tr>
                     <th><a href="#" class="profileTab activeTab" data-tab="posts">Posts</a></th>
                     <th><a href="#" class="profileTab" data-tab="comments">Comments</a></th>
@@ -217,13 +101,10 @@
                     <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
                     <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
                 </table>
->>>>>>> main
             </div>
         </div>
     </div>
 
-<<<<<<< HEAD
-=======
     <style>
         .profileTab {
             text-decoration: none;
@@ -267,7 +148,6 @@
         }
     </style>
 
->>>>>>> main
     <script type="module">
         import { setupProfile } from "./js/profile.js";
         setupProfile();
