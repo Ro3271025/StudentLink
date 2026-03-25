@@ -15,7 +15,14 @@
         <div id="profileInfo" class="content">
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
             <p id="displayName">Display Name</p>
-            <p id="username">@Username <button id="userCollege" class="themeObject">SUNY Farmingdale</button></p>
+
+            <!-- USERNAME ROW with college tag and message button -->
+            <div class="userMetaRow" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
+                <span id="username">@Username</span>
+                <button id="userCollege" class="themeObject">SUNY Farmingdale</button>
+                <button id="messageStudentBtn" class="themeObject" style="display:none;">Message User</button>
+            </div>
+
             <p id="userStats">
                 Posts: <a href="#" id="postCountLink">0</a>
                 <span aria-hidden="true"> | </span>
@@ -63,8 +70,8 @@
             <p id="sideUsername">@Username</p><br>
             <p class="sidebarText"><a href="home.html">Home</a></p>
             <p class="sidebarText"><a href="listings.html">Listings</a></p>
-            <p class="sidebarText">Explore</p>
-            <p class="sidebarText">Notifications</p>
+            <p class="sidebarText"><a href="explore.html">Explore</a></p>
+            <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
             <p class="sidebarText"><a href="chat.html">Chat</a></p>
             <p class="sidebarText"><a href="profile.html">Profile</a></p>
             <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>

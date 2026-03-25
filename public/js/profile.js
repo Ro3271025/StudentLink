@@ -298,8 +298,8 @@ export function setupProfile() {
 
         // Update profile header
         document.getElementById("displayName").innerText = displayName;
-        document.getElementById("username").innerHTML = `${username} <button id="userCollege" class="themeObject">SUNY Farmingdale</button>`;
-
+        document.getElementById("username").innerText = username;
+        
         // Update sidebar
         const sideDisplay = document.getElementById("sideDisplayName");
         const sideUser = document.getElementById("sideUsername");
