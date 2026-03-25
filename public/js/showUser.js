@@ -1,8 +1,10 @@
+/* Generic Script to display the current user on the left sidebar */
+
 import { auth, db } from "./firebaseInitialization.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-export function setupHome() {
+export function setupSidebar() {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
             // not logged in, send back to login page
@@ -15,18 +17,12 @@ export function setupHome() {
 
         const displayEl = document.getElementById("displayName");
         const usernameEl = document.getElementById("username");
-        const backfillBtn = document.getElementById("backfillBtn");
 
         if (displayEl) {
             displayEl.innerText = data.displayName || user.displayName || "";
         }
         if (usernameEl) {
             usernameEl.innerText = data.username ? "@" + data.username : "";
-        }
-        
-        // Show backfill button only for admins
-        if (backfillBtn) {
-            backfillBtn.style.display = data.role === "admin" ? "block" : "none";
         }
     });
 }

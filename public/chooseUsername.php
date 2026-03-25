@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>Choose Username | StudentLink</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../public/styles/style.css">
 </head>
 <body>
   <h1>Choose your username</h1>
@@ -32,7 +33,7 @@
       const userSnap = await getDoc(doc(db, "users", user.uid));
       if (userSnap.exists() && userSnap.data()?.username) {
         // already picked a username; send to main app
-        window.location.href = "home.html";
+        window.location.href = "./home.html";
       }
     });
 
@@ -52,7 +53,7 @@
 
         msg.textContent = `Saved! You are now @${uname}`;
         // after choosing a username go to the main home page
-        window.location.href = "home.html";
+        window.location.href = "./home.html";
       } catch (e) {
         msg.textContent = e.message || "Error saving username.";
       } finally {
