@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 import {
     doc,
     getDoc,
+    updateDoc,
     collection,
     addDoc,
     getDocs,
@@ -12,6 +13,9 @@ import {
     orderBy,
     collectionGroup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const storage = getStorage();
 
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
@@ -100,7 +104,7 @@ async function loadComments(uidToLoad) {
         const q = query(
             collectionGroup(db, "comments"),
             where("authorId", "==", uidToLoad),
-            orderBy("createdAt", "desc")
+            orderBy("created_at", "desc")
         );
         const snap = await getDocs(q);
 
@@ -151,11 +155,11 @@ async function loadListings(uidToLoad) {
         const q = query(
             collection(db, "listings"),
             where("userID", "==", uidToLoad),
-           orderBy("created_at", "desc")
+            orderBy("created_at", "desc")
         );
         const snap = await getDocs(q);
         updateCounter('listingCountLink', snap.size);
-
+        
         if (snap.empty) {
             container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">No listings yet.</p>';
             return;
@@ -187,58 +191,6 @@ async function loadListings(uidToLoad) {
     } catch (err) {
         console.error("Failed to load listings:", err);
         container.innerHTML = '<p style="text-align:center;color:#e55;padding:20px;">Failed to load listings.</p>';
-    }
-}
-
-function updateCounter(counterId, count) {
-    const counterEl = document.getElementById(counterId);
-    if (counterEl) counterEl.textContent = String(count);
-}
-
-async function loadProfileCounters(uidToLoad) {
-    try {
-        const postsQuery = query(
-            collection(db, "posts"),
-            where("authorId", "==", uidToLoad)
-        );
-        const listingsQuery = query(
-            collection(db, "listings"),
-            where("userID", "==", uidToLoad)
-        );
-
-        const [postsSnap, listingsSnap] = await Promise.all([
-            getDocs(postsQuery),
-            getDocs(listingsQuery)
-        ]);
-
-        updateCounter('postCountLink', postsSnap.size);
-        updateCounter('listingCountLink', listingsSnap.size);
-    } catch (err) {
-        console.error("Failed to load profile counters:", err);
-    }
-}
-
-function activateProfileTab(tabName) {
-    const tab = document.querySelector(`.profileTab[data-tab="${tabName}"]`);
-    if (tab) tab.click();
-}
-
-function setupCounterLinks() {
-    const postCountLink = document.getElementById('postCountLink');
-    const listingCountLink = document.getElementById('listingCountLink');
-
-    if (postCountLink) {
-        postCountLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            activateProfileTab('posts');
-        });
-    }
-
-    if (listingCountLink) {
-        listingCountLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            activateProfileTab('listings');
-        });
     }
 }
 
@@ -277,6 +229,15 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
+
+function updateCounter(counterId, count) {
+    const el = document.getElementById(counterId);
+    if (el) el.textContent = String(count);
+}
+
+
+
+
 export function setupProfile() {
     onAuthStateChanged(auth, async (user) => {
         if (!user) {
@@ -298,8 +259,7 @@ export function setupProfile() {
 
         // Update profile header
         document.getElementById("displayName").innerText = displayName;
-        document.getElementById("username").innerText = username;
-        
+        document.getElementById("username").innerText = username;   
         // Update sidebar
         const sideDisplay = document.getElementById("sideDisplayName");
         const sideUser = document.getElementById("sideUsername");
@@ -325,10 +285,80 @@ export function setupProfile() {
             }
         }
 
+        // ── Bio + photo only for own profile ──
+        if (user.uid === uidToLoad) {
+            const bioText = document.getElementById("bioText");
+            const editBtn = document.getElementById("edit");
+            const profileImg = document.getElementById("profileImage");
+
+            // Populate bio
+            if (bioText) bioText.value = data.bio || "";
+
+            // Load profile photo
+            if (data.photoURL && profileImg) profileImg.src = data.photoURL;
+
+            // Bio edit logic
+            let isEditing = false;
+            if (editBtn && bioText) {
+                editBtn.addEventListener("click", async () => {
+                    if (!isEditing) {
+                        isEditing = true;
+                        editBtn.innerText = "Save Bio";
+                        bioText.disabled = false;
+                        bioText.focus();
+                    } else {
+                        try {
+                            const userRef = doc(db, "users", user.uid);
+                            await updateDoc(userRef, { bio: bioText.value });
+                            isEditing = false;
+                            editBtn.innerText = "Edit Profile";
+                            bioText.disabled = true;
+                        } catch (err) {
+                            console.error("Save failed", err);
+                            alert("Failed to save bio.");
+                        }
+                    }
+                });
+            }
+
+            // Profile picture upload — click image to upload
+            if (profileImg) {
+                // Create hidden file input if not already in HTML
+                let fileInput = document.getElementById("fileInput");
+                if (!fileInput) {
+                    fileInput = document.createElement("input");
+                    fileInput.type = "file";
+                    fileInput.id = "fileInput";
+                    fileInput.accept = "image/*";
+                    fileInput.style.display = "none";
+                    document.body.appendChild(fileInput);
+                }
+
+                profileImg.style.cursor = "pointer";
+                profileImg.title = "Click to change profile picture";
+
+                profileImg.onclick = () => fileInput.click();
+
+                fileInput.onchange = async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                        const storageRef = ref(storage, "userPhotos/" + user.uid);
+                        await uploadBytes(storageRef, file);
+                        const url = await getDownloadURL(storageRef);
+                        const userRef = doc(db, "users", user.uid);
+                        await updateDoc(userRef, { photoURL: url });
+                        profileImg.src = url;
+                    } catch (err) {
+                        console.error("Upload failed", err);
+                        alert("Failed to upload photo.");
+                    }
+                };
+            }
+        }
+
         // Setup tabs and load posts by default
         setupTabs(uidToLoad);
-        setupCounterLinks();
-        await loadProfileCounters(uidToLoad);
         await loadPosts(uidToLoad);
     });
 }
