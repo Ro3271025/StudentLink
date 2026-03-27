@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Sign in | StudentLink</title>
-    <link rel="stylesheet" href="../public/styles/style.css">
+    <link rel="stylesheet" href="styles/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -24,13 +24,13 @@
 
             <!-- GOOGLE -->
             <button id="gLoginBtn" class="themeObject">
-                <img src="../public/styles/images/placeholder/GOOGLE_LOGO.svg">
+                <img src="styles/images/placeholder/GOOGLE_LOGO.svg">
                 Sign in with Google
             </button>
 
             <!-- MICROSOFT -->
             <button id="msLoginBtn" class="themeObject">
-                <img src="../public/styles/images/placeholder/MS_LOGO.svg">
+                <img src="styles/images/placeholder/MS_LOGO.svg">
                 Sign in with Microsoft
             </button>
 
