@@ -45,7 +45,7 @@ async function loadListing() {
         imageEl.style.display = "none";
     }
 
-    // Extra meta fields (category, condition, listingType)
+    // Extra meta fields
     let metaHTML = "";
     if (listing.category)    metaHTML += `<p><strong>Category:</strong> ${listing.category}</p>`;
     if (listing.condition)   metaHTML += `<p><strong>Condition:</strong> ${listing.condition}</p>`;
@@ -55,20 +55,25 @@ async function loadListing() {
     // ── Auth-dependent UI ──
     auth.onAuthStateChanged(user => {
 
-        // Message Seller button
+        // Message Seller button logic
         if (messageBtn) {
-            messageBtn.onclick = () => {
-                if (!user) {
-                    alert("You must be logged in to message sellers.");
-                    return;
-                }
-                if (user.uid === listing.userID) {
-                    alert("You cannot message yourself.");
-                    return;
-                }
-                const conversationID = [user.uid, listing.userID].sort().join("_");
-                window.location.href = `chatDetails.html?id=${conversationID}`;
-            };
+            if (user && user.uid === listing.userID) {
+                // Hide button if it's your own listing
+                messageBtn.style.display = "none";
+            } else {
+                // Show button for other users
+                messageBtn.style.display = "block";
+
+                messageBtn.onclick = () => {
+                    if (!user) {
+                        alert("You must be logged in to message sellers.");
+                        return;
+                    }
+
+                    const conversationID = [user.uid, listing.userID].sort().join("_");
+                    window.location.href = `chatDetails.html?id=${conversationID}`;
+                };
+            }
         }
 
         // Owner controls (edit / delete)
@@ -78,14 +83,22 @@ async function loadListing() {
             const editBtn = document.getElementById("editListingBtn");
             const deleteBtn = document.getElementById("deleteListingBtn");
 
-            if (editBtn)   editBtn.onclick   = () => { window.location.href = `editListing.html?id=${id}`; };
-            if (deleteBtn) deleteBtn.onclick = deleteListing;
+            if (editBtn) {
+                editBtn.onclick = () => {
+                    window.location.href = `editListing.html?id=${id}`;
+                };
+            }
+
+            if (deleteBtn) {
+                deleteBtn.onclick = deleteListing;
+            }
         }
     });
 }
 
 async function deleteListing() {
     if (!confirm("Are you sure you want to delete this listing?")) return;
+
     try {
         await deleteDoc(doc(db, "listings", id));
         alert("Listing deleted.");
