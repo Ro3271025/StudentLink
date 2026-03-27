@@ -17,6 +17,7 @@ const descriptionEl = document.getElementById("listingDescription");
 const metaEl        = document.getElementById("listingMeta");
 const messageBtn    = document.getElementById("messageSellerBtn");
 const ownerControls = document.getElementById("ownerControls");
+const gallery       = document.getElementById("imageGallery");
 
 async function loadListing() {
     const ref  = doc(db, "listings", id);
@@ -34,39 +35,72 @@ async function loadListing() {
     priceEl.textContent       = `$${listing.price}`;
     descriptionEl.textContent = listing.description || "";
 
-    // Seller link
     userEl.textContent = `@${listing.username || "Unknown User"}`;
     userEl.href        = `profile.html?id=${listing.userID}`;
 
-    // Image
-    if (listing.imageURL) {
-        imageEl.src = listing.imageURL;
+    // ── IMAGE GALLERY LOGIC ──
+    let currentIndex = 0;
+
+    const images = listing.imageURLs || (listing.imageURL ? [listing.imageURL] : []);
+
+    if (images.length > 0) {
+
+        imageEl.src = images[currentIndex];
+        imageEl.style.cursor = "pointer";
+
+        // Click main image to cycle
+        imageEl.onclick = () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            imageEl.src = images[currentIndex];
+        };
+
+        // Thumbnails
+        if (gallery) {
+            gallery.innerHTML = "";
+
+            images.forEach((imgURL, index) => {
+                const thumb = document.createElement("img");
+                thumb.src = imgURL;
+
+                thumb.style.width = "60px";
+                thumb.style.margin = "5px";
+                thumb.style.cursor = "pointer";
+                thumb.style.borderRadius = "6px";
+                thumb.style.border = "2px solid transparent";
+
+                thumb.onclick = () => {
+                    currentIndex = index;
+                    imageEl.src = images[currentIndex];
+                };
+
+                gallery.appendChild(thumb);
+            });
+        }
+
     } else {
         imageEl.style.display = "none";
     }
 
-    // Extra meta fields
+    // ── Meta ──
     let metaHTML = "";
     if (listing.category)    metaHTML += `<p><strong>Category:</strong> ${listing.category}</p>`;
     if (listing.condition)   metaHTML += `<p><strong>Condition:</strong> ${listing.condition}</p>`;
     if (listing.listingType) metaHTML += `<p><strong>Type:</strong> ${listing.listingType}</p>`;
     if (metaEl) metaEl.innerHTML = metaHTML;
 
-    // ── Auth-dependent UI ──
+    // ── Auth UI ──
     auth.onAuthStateChanged(user => {
 
-        // Message Seller button logic
+        // Message button
         if (messageBtn) {
             if (user && user.uid === listing.userID) {
-                // Hide button if it's your own listing
                 messageBtn.style.display = "none";
             } else {
-                // Show button for other users
                 messageBtn.style.display = "block";
 
                 messageBtn.onclick = () => {
                     if (!user) {
-                        alert("You must be logged in to message sellers.");
+                        alert("You must be logged in.");
                         return;
                     }
 
@@ -76,7 +110,7 @@ async function loadListing() {
             }
         }
 
-        // Owner controls (edit / delete)
+        // Owner controls
         if (user && user.uid === listing.userID) {
             if (ownerControls) ownerControls.style.display = "flex";
 
