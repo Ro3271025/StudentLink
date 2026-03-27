@@ -52,15 +52,23 @@ export function setupLogin() {
 
     // MICROSOFT BUTTON
     const msBtn = document.getElementById("msLoginBtn");
-
     if (msBtn) {
         msBtn.addEventListener("click", async () => {
             console.log(" Microsoft login clicked");
-
             try {
                 await signInWithPopup(auth, microsoftProvider);
             } catch (error) {
-                console.error("Microsoft login error:", error);
+                if (error.code === "auth/account-exists-with-different-credential") {
+                    alert("This email is already linked with another provider. Signing you in...");
+                    const email = error.customData.email;
+                    // Sign in with Google first
+                    const result = await signInWithPopup(auth, googleProvider);
+                    // Link Microsoft credential
+                    await linkWithCredential(result.user, error.credential);
+                    console.log(" Accounts linked successfully");
+                } else {
+                    console.error("Microsoft login error:", error);
+                }
             }
         });
     }
