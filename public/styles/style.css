@@ -821,6 +821,18 @@ color:#777;
 .chatInputArea button:hover{
     opacity: 0.9;
 }
+.messageTime{
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 4px;
+}
+
+.messageStatus{
+    font-size: 11px;
+    opacity: 0.6;
+    text-align: right;
+    margin-top: 2px;
+}
 /* Settings Page */
 
 .settingsHeader{
