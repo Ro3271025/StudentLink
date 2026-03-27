@@ -27,9 +27,6 @@ const chatTargetUser    = document.getElementById("chatTargetUser");
 const chatTargetSmall   = document.querySelector(".chatDetailsPage small.smallTxt");
 
 
-// ========================
-// FORMAT TIME
-// ========================
 function formatTime(date) {
     return date.toLocaleTimeString([], {
         hour: "2-digit",
@@ -37,10 +34,6 @@ function formatTime(date) {
     });
 }
 
-
-// ========================
-// LOAD RECIPIENT INFO
-// ========================
 async function loadRecipientInfo(currentUserId) {
     if (!conversationID) return;
 
@@ -78,11 +71,7 @@ async function loadRecipientInfo(currentUserId) {
         console.error("Failed to load recipient info:", err);
     }
 }
-
-
-// ========================
-// LOAD MESSAGES (REALTIME)
-// ========================
+// Load Messages
 function loadMessages(currentUserId) {
 
     const q = query(
@@ -94,23 +83,28 @@ function loadMessages(currentUserId) {
 
         messagesContainer.innerHTML = "";
 
-        snapshot.forEach(d => {
+        const docs = snapshot.docs;
+
+        docs.forEach((d, index) => {
             const msg = d.data();
+            const isLast = index === docs.length - 1;
 
             const div = document.createElement("div");
             div.classList.add("message");
 
-            if (msg.senderID === currentUserId) {
+            const isMine = msg.senderID === currentUserId;
+
+            if (isMine) {
                 div.classList.add("myMessage");
             } else {
                 div.classList.add("otherMessage");
             }
 
-            // TEXT
+            /* TEXT */
             const text = document.createElement("div");
             text.textContent = msg.text;
 
-            // TIME
+            /* TIME */
             const time = document.createElement("div");
             time.classList.add("messageTime");
 
@@ -122,10 +116,17 @@ function loadMessages(currentUserId) {
             div.appendChild(text);
             div.appendChild(time);
 
+            /* ✅ SEEN (ONLY LAST MESSAGE + ONLY YOUR MESSAGE) */
+            if (isMine && isLast && msg.seen) {
+                const seen = document.createElement("div");
+                seen.classList.add("messageSeen");
+                seen.textContent = "Seen";
+                div.appendChild(seen);
+            }
+
             messagesContainer.appendChild(div);
         });
 
-        // AUTO SCROLL
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 }
