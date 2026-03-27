@@ -10,7 +10,7 @@
 
     <div id="loginContainer">
 
-        <!-- LEFT SIDE -->
+        <!-- LEFT -->
         <div id="loginLeft">
             <p id="signIn">StudentLink</p>
             <p id="subtitle">Connect with your campus</p>
@@ -19,15 +19,16 @@
         <!-- DIVIDER -->
         <div id="verticalDivider"></div>
 
-        <!-- RIGHT SIDE -->
+        <!-- RIGHT -->
         <div id="loginRight">
 
+            <!-- GOOGLE -->
             <button id="gLoginBtn" class="themeObject">
                 <img src="../public/styles/images/placeholder/GOOGLE_LOGO.svg">
                 Sign in with Google
             </button>
 
-            <!-- (optional for later) -->
+            <!-- MICROSOFT -->
             <button id="msLoginBtn" class="themeObject">
                 <img src="../public/styles/images/placeholder/MS_LOGO.svg">
                 Sign in with Microsoft
@@ -37,7 +38,6 @@
 
     </div>
 
-    <!-- LOAD YOUR EXISTING AUTH LOGIC -->
     <script type="module">
         import { setupLogin } from "../public/js/auth.js";
         setupLogin();
