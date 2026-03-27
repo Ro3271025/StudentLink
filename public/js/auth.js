@@ -10,6 +10,7 @@ import {
     getDoc,
     setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 console.log(" AUTH.JS LOADED");
 
@@ -43,6 +44,7 @@ export function setupLogin() {
 
         if (!user.email.endsWith(".edu")) {
             alert("Only .edu emails allowed.");
+            await signOut(auth);
             return;
         }
 
@@ -76,10 +78,10 @@ export function setupLogin() {
         const data = userSnap.data() || {};
         if (!data.username) {
             // new user or hasn't picked a username yet
-            window.location.href = "./chooseUsername.php";
+            window.location.replace = "./chooseUsername.php";
         } else {
             // already has a username; send to the main application
-            window.location.href = "home.html";
+            window.location.replace = "home.html";
         }
     });
 }
