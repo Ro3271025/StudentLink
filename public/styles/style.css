@@ -843,6 +843,20 @@ color:#777;
     color: var(--text-fill);
 }
 
+.logoutBtn{
+    font-size:12pt;
+    padding:5px;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.logoutBtn:hover{
+    background-color: var(--border-color);
+}
+
 .delBtn{
     font-size:12pt; 
     padding:5px; 
