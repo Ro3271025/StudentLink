@@ -4,7 +4,9 @@ import { auth, db } from "./firebaseInitialization.js";
 import { 
 collection, 
 addDoc, 
-serverTimestamp 
+serverTimestamp,
+doc,
+getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { 
@@ -25,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
 const imageInput = document.getElementById("listingImage");
 const preview = document.getElementById("imagePreview");
 
-if(imageInput && preview){
-
+// MULTI IMAGE PREVIEW
+if (imageInput && preview) {
 imageInput.addEventListener("change", () => {
 
 preview.innerHTML = "";
@@ -43,7 +45,6 @@ for (let file of files) {
 }
 
 });
-
 }
 
 console.log("CreateListing JS Loaded");
@@ -89,6 +90,19 @@ if (!user) {
     return;
 }
 
+// USERNAME FROM FIRESTORE
+let username = "user";
+
+try {
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+        const userData = userDoc.data();
+        username = userData.username || "user";
+    }
+} catch (err) {
+    console.error("Failed to fetch username:", err);
+}
+
 // FORM VALUES
 const title = document.getElementById("title").value.trim();
 const description = document.getElementById("description").value.trim();
@@ -112,7 +126,6 @@ if (!condition || !listingType) {
 
 // MULTIPLE IMAGE UPLOAD
 const imageFiles = document.getElementById("listingImage")?.files;
-
 let imageURLs = [];
 
 if (imageFiles && imageFiles.length > 0) {
@@ -147,7 +160,7 @@ try {
 await addDoc(collection(db, "listings"), {
 
 userID: user.uid,
-username: user.displayName || "user",
+username: username, // ✅ NOW CORRECT
 
 campusID: "farmingdale",
 
@@ -159,7 +172,7 @@ listingType,
 condition,
 
 imageURLs,
-imageURL: imageURLs[0] || null, // first image
+imageURL: imageURLs[0] || null,
 
 status: "active",
 
@@ -167,6 +180,8 @@ created_at: serverTimestamp(),
 expires_at: expiresAt
 
 });
+
+console.log("Listing created with username:", username);
 
 window.location.href = "listings.html";
 
