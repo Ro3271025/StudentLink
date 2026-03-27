@@ -1,3 +1,4 @@
+// public/js/createListings.js
 import { auth, db } from "./firebaseInitialization.js";
 
 import { 
@@ -17,26 +18,28 @@ import {
 onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-
 const storage = getStorage();
-
 
 document.addEventListener("DOMContentLoaded", () => {
 
 const imageInput = document.getElementById("listingImage");
 const preview = document.getElementById("imagePreview");
 
-if(imageInput){
+if(imageInput && preview){
 
 imageInput.addEventListener("change", () => {
 
-const file = imageInput.files[0];
+preview.innerHTML = "";
 
-if(file){
+const files = imageInput.files;
 
-preview.src = URL.createObjectURL(file);
-preview.style.display = "block";
-
+for (let file of files) {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.style.maxWidth = "120px";
+    img.style.margin = "5px";
+    img.style.borderRadius = "8px";
+    preview.appendChild(img);
 }
 
 });
@@ -54,59 +57,39 @@ if (!form || !categorySelect || !supplyOptions) {
     return;
 }
 
-
 // SHOW CONDITION + SELL/RENT ONLY FOR SUPPLY CATEGORIES
-
 categorySelect.addEventListener("change", () => {
 
 const value = categorySelect.value;
 
 if (["Textbook", "Calculator", "Tech"].includes(value)) {
-
-supplyOptions.style.display = "block";
-
+    supplyOptions.style.display = "block";
 } else {
-
-supplyOptions.style.display = "none";
-
+    supplyOptions.style.display = "none";
 }
 
 });
-
 
 // PROTECT ROUTE
-
 onAuthStateChanged(auth, (user) => {
-
 if (!user) {
-
-window.location.href = "login.php";
-
+    window.location.href = "login.php";
 }
-
 });
 
-
 // SUBMIT LISTING
-
 form.addEventListener("submit", async (e) => {
 
 e.preventDefault();
 
-console.log("Submit triggered");
-
 const user = auth.currentUser;
 
 if (!user) {
-
-alert("Not logged in.");
-return;
-
+    alert("Not logged in.");
+    return;
 }
 
-
 // FORM VALUES
-
 const title = document.getElementById("title").value.trim();
 const description = document.getElementById("description").value.trim();
 const category = categorySelect.value;
@@ -115,63 +98,50 @@ const price = Number(document.getElementById("price").value);
 let condition = null;
 let listingType = null;
 
-
 // CONDITIONAL FIELDS
-
 if (["Textbook", "Calculator", "Tech"].includes(category)) {
 
 condition = document.getElementById("condition").value;
 listingType = document.getElementById("listingType").value;
 
 if (!condition || !listingType) {
-
-alert("Please select condition and sell/rent option.");
-return;
-
+    alert("Please select condition and sell/rent option.");
+    return;
+}
 }
 
-}
+// MULTIPLE IMAGE UPLOAD
+const imageFiles = document.getElementById("listingImage")?.files;
 
+let imageURLs = [];
 
-// IMAGE UPLOAD
-
-const imageFile = document.getElementById("listingImage")?.files[0];
-
-let imageURL = null;
-
-if (imageFile) {
+if (imageFiles && imageFiles.length > 0) {
 
 try {
+    for (let file of imageFiles) {
 
-const storageRef = ref(
-storage,
-`listings/${user.uid}/${Date.now()}_${imageFile.name}`
-);
+        const storageRef = ref(
+            storage,
+            `listings/${user.uid}/${Date.now()}_${file.name}`
+        );
 
-await uploadBytes(storageRef, imageFile);
+        await uploadBytes(storageRef, file);
 
-imageURL = await getDownloadURL(storageRef);
-
-console.log("Image uploaded:", imageURL);
+        const url = await getDownloadURL(storageRef);
+        imageURLs.push(url);
+    }
 
 } catch (error) {
-
-console.error("Image upload failed:", error);
-alert("Image upload failed. Check console.");
-
+    console.error("Image upload failed:", error);
+    alert("Image upload failed.");
 }
-
 }
-
 
 // EXPIRATION DATE
-
 const expiresAt = new Date();
 expiresAt.setDate(expiresAt.getDate() + 30);
 
-
 // CREATE LISTING
-
 try {
 
 await addDoc(collection(db, "listings"), {
@@ -188,7 +158,8 @@ price,
 listingType,
 condition,
 
-imageURL,
+imageURLs,
+imageURL: imageURLs[0] || null, // first image
 
 status: "active",
 
@@ -197,14 +168,11 @@ expires_at: expiresAt
 
 });
 
-console.log("Listing created successfully");
-
 window.location.href = "listings.html";
 
 } catch (error) {
 
 console.error("Error creating listing:", error);
-
 alert("Failed to create listing.");
 
 }
