@@ -16,9 +16,7 @@ import {
 
 console.log(" AUTH.JS LOADED");
 
-/* =========================
-   PROVIDERS
-========================= */
+// PROVIDERS
 
 // GOOGLE
 const googleProvider = new GoogleAuthProvider();
@@ -32,9 +30,8 @@ microsoftProvider.setCustomParameters({
     prompt: "select_account"
 });
 
-/* =========================
-   SETUP LOGIN BUTTONS
-========================= */
+
+//SETUP LOGIN BUTTONS
 
 export function setupLogin() {
 
@@ -68,9 +65,7 @@ export function setupLogin() {
         });
     }
 
-    /* =========================
-       AUTH STATE LISTENER
-    ========================= */
+//AUTH STATE LISTENER
 
     onAuthStateChanged(auth, async (user) => {
 
