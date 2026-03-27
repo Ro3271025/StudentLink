@@ -288,7 +288,11 @@ a:hover{
 
 #userCollege{
     font-size:12px;
-    padding:3px 8px;
+    padding:3px 6px;
+}
+#messageStudentBtn{
+    font-size:12px;
+    padding:3px 6px;
 }
 
 #edit, #save{
