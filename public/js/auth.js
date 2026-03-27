@@ -1,8 +1,11 @@
 import { auth, db } from "./firebaseInitialization.js";
+
 import {
     GoogleAuthProvider,
+    OAuthProvider,
     signInWithPopup,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import {
@@ -10,53 +13,92 @@ import {
     getDoc,
     setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 console.log(" AUTH.JS LOADED");
 
+/* =========================
+   PROVIDERS
+========================= */
+
+// GOOGLE
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
     prompt: 'select_account'
 });
 
+// MICROSOFT
+const microsoftProvider = new OAuthProvider('microsoft.com');
+microsoftProvider.setCustomParameters({
+    prompt: "select_account"
+});
+
+/* =========================
+   SETUP LOGIN BUTTONS
+========================= */
+
 export function setupLogin() {
+
+    // GOOGLE BUTTON
     const googleBtn = document.getElementById("gLoginBtn");
 
     if (googleBtn) {
         googleBtn.addEventListener("click", async () => {
-            console.log(" Google button clicked");
+            console.log(" Google login clicked");
 
             try {
                 await signInWithPopup(auth, googleProvider);
-                console.log(" signInWithPopup triggered");
             } catch (error) {
                 console.error("Google login error:", error);
             }
         });
-    } else {
-        console.log(" gLoginBtn NOT FOUND in DOM");
     }
-    // Central auth listener
+
+    // MICROSOFT BUTTON
+    const msBtn = document.getElementById("msLoginBtn");
+
+    if (msBtn) {
+        msBtn.addEventListener("click", async () => {
+            console.log(" Microsoft login clicked");
+
+            try {
+                await signInWithPopup(auth, microsoftProvider);
+            } catch (error) {
+                console.error("Microsoft login error:", error);
+            }
+        });
+    }
+
+    /* =========================
+       AUTH STATE LISTENER
+    ========================= */
+
     onAuthStateChanged(auth, async (user) => {
-        console.log(" onAuthStateChanged fired. User:", user);
+
+        console.log(" Auth state changed:", user);
 
         if (!user) return;
 
-        if (!user.email.endsWith(".edu")) {
+        // 🔒 Restrict to .edu emails
+        if (!user.email || !user.email.endsWith(".edu")) {
             alert("Only .edu emails allowed.");
             await signOut(auth);
             return;
         }
 
+        // detect provider (optional)
+        const provider = user.providerData[0]?.providerId;
+        console.log(" Provider:", provider);
+
         const userRef = doc(db, "users", user.uid);
         let userSnap = await getDoc(userRef);
 
-        console.log(" Checking if user exists:", userSnap.exists());
-
+        // CREATE USER IF NOT EXISTS
         if (!userSnap.exists()) {
-            console.log(" Creating new user document");
+
+            console.log(" Creating new user...");
 
             await setDoc(userRef, {
+                uid: user.uid,
                 name: user.displayName || "",
                 email: user.email,
                 campus: "",
@@ -66,22 +108,21 @@ export function setupLogin() {
                 courses: [],
                 profilePicURL: "",
                 role: "student",
-                provider: "google",
+                provider: provider,
                 profileCompleted: false,
                 createdAt: new Date()
             });
-            // re‑read the document so we have a data object below
+
             userSnap = await getDoc(userRef);
         }
 
-        // at this point we have a document (new or existing)
         const data = userSnap.data() || {};
+
+        // REDIRECT LOGIC
         if (!data.username) {
-            // new user or hasn't picked a username yet
-            window.location.replace = "./chooseUsername.php";
+            window.location.replace("./chooseUsername.php");
         } else {
-            // already has a username; send to the main application
-            window.location.replace = "home.html";
+            window.location.replace("home.html");
         }
     });
 }
