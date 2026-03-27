@@ -26,6 +26,12 @@ function expandAcc() {
             "<button class='saveBtn' type='button' style='font-size:12pt; padding:3px'>Save</button>"+
         "</div>"+
         "<div class='settingsOpt'>" + 
+            "<p><strong>Log Out</strong></p>" +
+            "<p>Log out of your account on this device</p>" +
+            "<button class='logoutBtn' type='button' onclick='handleLogout()'>Log Out</button><br><br>"+
+        "</div>" +
+
+        "<div class='settingsOpt'>" + 
             "<p><strong>Delete Your Account</strong></p>"+
             "<p><b><u>WARNING:</u></b> This will permanently delete your account</p>"+
         
@@ -97,4 +103,15 @@ function expandAbout(){
         "<p style='font-weight:bold'>Application Info</p>"+
         "<p>App Version: 0.4a</p>"
     }
+}
+function handleLogout(){
+    // Firebase sign out (if you're using it)
+    import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js")
+    .then(({ signOut }) => {
+        import("./firebaseInitialization.js").then(({ auth }) => {
+            signOut(auth).then(() => {
+                window.location.href = "login.php";
+            });
+        });
+    });
 }
