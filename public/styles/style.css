@@ -654,6 +654,15 @@ color:#777;
     margin-right: 240px;  /* space for right sidebar */
     padding: 20px;
 }
+#imageGallery img:hover {
+    transform: scale(1.05);
+    border: 2px solid var(--theme-accent);
+}
+
+.listingDetailImage {
+    max-width: 100%;
+    border-radius: 10px;
+}
 /* CHAT / MESSAGES UI */
 .chatPage{
     align-items: center;
