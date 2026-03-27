@@ -24,13 +24,13 @@
 
             <!-- GOOGLE -->
             <button id="gLoginBtn" class="themeObject">
-                <img src="styles/images/placeholder/GOOGLE_LOGO.svg">
+                <img src="styles/images/GOOGLE_LOGO.svg">
                 Sign in with Google
             </button>
 
             <!-- MICROSOFT -->
             <button id="msLoginBtn" class="themeObject">
-                <img src="styles/images/placeholder/MS_LOGO.svg">
+                <img src="styles/images/MS_LOGO.svg">
                 Sign in with Microsoft
             </button>
 
