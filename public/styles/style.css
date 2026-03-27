@@ -663,6 +663,30 @@ color:#777;
     max-width: 100%;
     border-radius: 10px;
 }
+#imageGallery {
+    margin-top: 12px;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-secondary);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+#imageGallery img {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+#imageGallery img:hover {
+    transform: scale(1.05);
+    border-color: var(--theme-accent);
+}
 /* CHAT / MESSAGES UI */
 .chatPage{
     align-items: center;
