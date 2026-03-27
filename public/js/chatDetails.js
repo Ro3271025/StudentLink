@@ -131,10 +131,8 @@ function loadMessages(currentUserId) {
     });
 }
 
-
-// ========================
 // SEND MESSAGE
-// ========================
+
 async function sendMessage(currentUserId) {
 
     const text = messageInput.value.trim();
@@ -166,10 +164,7 @@ async function sendMessage(currentUserId) {
     messageInput.value = "";
 }
 
-
-// ========================
 // MARK AS SEEN
-// ========================
 async function markMessagesAsSeen(currentUserId) {
 
     const snapshot = await getDocs(
