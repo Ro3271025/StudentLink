@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home | StudentLink</title>
+    <link rel="stylesheet" href="../public/styles/style.css">
+    <meta name="viewport" content="width=device-width, inital-scale=1">
+</head>
+<body id="documentBody">
+    <div id="header">
+        <img id="logo" src="../public/styles/images/placeholder/DEFAULT_BANNER.svg">
+    </div>
+
+    <!-- LEFT SIDEBAR -->
+
+    <div class="sidebar" id="leftBar">
+        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+        
+
+        <div class="overlayDiv">
+            <div id="newPostContainer">
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')" onclick="toggleOverlay('newPostContainer')">Post</button></p>
+                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="sidebar" id="rightBar">
+        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+            </table>
+        </div>
+    </div>
+    <script type="module" src="../public/js/userSearch.js"></script>
+    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
+    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
+</body>
+</html>
