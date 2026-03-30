@@ -2,14 +2,14 @@
 <html>
 <head>
     <title>Settings | StudentLink</title>
-    <link rel="stylesheet" href="../public/styles/style.css">
+    <link rel="stylesheet" href="styles/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body id="documentBody">
 
     <div id="header">
-        <img id="logo" src="../public/styles/images/placeholder/DEFAULT_BANNER.svg">
+        <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
     </div>
 
     <div class="content">
@@ -68,7 +68,7 @@
     <!-- LEFT SIDEBAR (unchanged) -->
     <div class="sidebar" id="leftBar">
         <br>
-        <img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>
 
@@ -88,15 +88,14 @@
 
     <!-- SCRIPTS -->
     <script type="module">
-        import { setupSidebar } from "../public/js/showUser.js";
+        import { setupSidebar } from "public/js/showUser.js";
         setupSidebar();
     </script>
 
-    <!-- 🔥 NEW: Load header username -->
-    <script type="module" src="../public/js/settingsUser.js"></script>
+    <script type="module" src="js/settingsUser.js"></script>
 
-    <script src="../public/js/themeSwap.js"></script>
-    <script src="../public/js/settingsOptions.js"></script>
+    <script src="js/themeSwap.js"></script>
+    <script src="js/settingsOptions.js"></script>
 
 </body>
 </html>
