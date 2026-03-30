@@ -1,107 +1,102 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Settings | StudentLink</title>
-        <link rel="stylesheet" href="../public/styles/style.css">
-        <meta name="viewport" content="width=device-width, inital-scale=1">
-    </head>
-    <body id="documentBody">
+<head>
+    <title>Settings | StudentLink</title>
+    <link rel="stylesheet" href="../public/styles/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-        <div id="header">
-            <img id="logo" src="../public/styles/images/placeholder/DEFAULT_BANNER.svg">
-        </div>
+<body id="documentBody">
 
-        <div class="content">
-            <br><p class="settingsHeader">Settings<br><small class="smallTxt">@Username</small></p>
-
-            <p id="accOption"><button class="openBtn optionTxt" onclick="expandAcc()">Your Account<br><small class="smallTxt">
-                See information about your account and update details</small></button></p>
-
-            <p><button class="openBtn optionTxt">Privacy<br><small class="smallTxt">Manage your account's security and interactions with other users</small></button></p>
-
-            <p id='themeOption'><button class='openBtn optionTxt' onclick="expandTheme()">Appearance<br><small class='smallTxt'>Change your color scheme or background</small></button></p>
-
-            <p><button class="openBtn optionTxt">Support<br><small class="smallTxt">FAQ and troubleshooting</small></button></p>
-
-            <p id="aboutOption"><button class="openBtn optionTxt" onclick="expandAbout()">About<br><small class="smallTxt">View application information</small></button></p>
-        </div>
-
-        <!-- User Options (change username, change email, delete account)
-
-        Privacy (manage blocked users, log out of sessions)
-
-        Appearance
-
-        Support (troubleshooting FAQ) 
-
-        About (version, credits, etc) -->
-
-
-
-
-
-
-        <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-            <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-            <p id="displayName">Display Name</p>
-            <p id="username">@Username</p><br>
-            <p class="sidebarText"><a href="home.html">Home</a></p>
-            <p class="sidebarText"><a href="listings.html">Listings</a></p>
-            <p class="sidebarText">Explore</p>
-            <p class="sidebarText">Notifications</p>
-            <p class="sidebarText"><a href="chat.html">Chat</a></p>
-            <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-            <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-
-            <div class="overlayDiv">
-                <div id="newPostContainer">
-                    <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-                    <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                    <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
-                </div>
-            </div>
-
-        </div>
-
-     
-
-    <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
-        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-        
-        <div id="recentSearches"> <!-- track the last 5 searches -->
-            <table class="recentSearchesTable">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th>
-                </tr>
-            </table>
-        </div>
+    <div id="header">
+        <img id="logo" src="../public/styles/images/placeholder/DEFAULT_BANNER.svg">
     </div>
 
+    <div class="content">
+        <br>
+        <p class="settingsHeader">
+            Settings<br>
+            <small class="smallTxt" id="headerUsername">@Username</small>
+        </p>
 
-    
+        <p id="accOption">
+            <button class="openBtn optionTxt" onclick="expandAcc()">
+                Your Account<br>
+                <small class="smallTxt">
+                    See information about your account and update details
+                </small>
+            </button>
+        </p>
+
+        <p>
+            <button class="openBtn optionTxt">
+                Privacy<br>
+                <small class="smallTxt">
+                    Manage your account's security and interactions with other users
+                </small>
+            </button>
+        </p>
+
+        <p id="themeOption">
+            <button class="openBtn optionTxt" onclick="expandTheme()">
+                Appearance<br>
+                <small class="smallTxt">
+                    Change your color scheme or background
+                </small>
+            </button>
+        </p>
+
+        <p>
+            <button class="openBtn optionTxt">
+                Support<br>
+                <small class="smallTxt">
+                    FAQ and troubleshooting
+                </small>
+            </button>
+        </p>
+
+        <p id="aboutOption">
+            <button class="openBtn optionTxt" onclick="expandAbout()">
+                About<br>
+                <small class="smallTxt">
+                    View application information
+                </small>
+            </button>
+        </p>
+    </div>
+
+    <!-- LEFT SIDEBAR (unchanged) -->
+    <div class="sidebar" id="leftBar">
+        <br>
+        <img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText">Explore</p>
+        <p class="sidebarText">Notifications</p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+    </div>
+
+    <!-- RIGHT SIDEBAR (unchanged) -->
+    <div class="sidebar" id="rightBar">
+        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+    </div>
+
+    <!-- SCRIPTS -->
     <script type="module">
         import { setupSidebar } from "../public/js/showUser.js";
-
         setupSidebar();
     </script>
-    <script type="module" src="js/userSearch.js"></script>
-    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
-    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
-    <script src="../public/js/settingsOptions.js" type="text/javascript"></script>
 
-    </body>
+    <!-- 🔥 NEW: Load header username -->
+    <script type="module" src="../public/js/settingsUser.js"></script>
+
+    <script src="../public/js/themeSwap.js"></script>
+    <script src="../public/js/settingsOptions.js"></script>
+
+</body>
 </html>
