@@ -183,3 +183,8 @@ function handleLogout() {
         });
     });
 }
+window.expandAcc = expandAcc;
+window.expandTheme = expandTheme;
+window.expandAbout = expandAbout;
+window.handleLogout = handleLogout;
+window.confDelete = confDelete;
