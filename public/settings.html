@@ -65,7 +65,7 @@
         </p>
     </div>
 
-    <!-- LEFT SIDEBAR (unchanged) -->
+    
     <div class="sidebar" id="leftBar">
         <br>
         <img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
@@ -81,21 +81,21 @@
         <p class="sidebarText"><a href="settings.html">Settings</a></p>
     </div>
 
-    <!-- RIGHT SIDEBAR (unchanged) -->
+
     <div class="sidebar" id="rightBar">
         <br><input class="searchBar themeObject" placeholder="Search"><br><br>
     </div>
 
-    <!-- SCRIPTS -->
+    
     <script type="module">
-        import { setupSidebar } from "public/js/showUser.js";
+        import { setupSidebar } from "./js/showUser.js";  <!-- FIXED PATH -->
         setupSidebar();
     </script>
 
     <script type="module" src="js/settingsOptions.js"></script>
 
+ 
     <script src="js/themeSwap.js"></script>
-    <script src="js/settingsOptions.js"></script>
 
 </body>
 </html>
