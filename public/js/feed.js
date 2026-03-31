@@ -8,8 +8,30 @@ loadAndRenderFeed();
 
 async function loadAndRenderFeed() {
     const posts = await getRecentPosts();
+    await syncCommentCounts(posts);
     renderPosts(posts);
 }
+
+async function syncCommentCounts(posts) {
+    await Promise.all(posts.map(async (post) => {
+        try {
+            const snap = await getDocs(
+                collection(db, "posts", post.id, "comments")
+            );
+            post.commentCount = snap.size;
+        } catch (err) {
+            // keep stored count if fetch fails
+        }
+    }));
+}
+
+
+
+
+
+
+
+
 
 async function getRecentPosts() {
     const postsCol = collection(db, "posts");
@@ -40,6 +62,7 @@ function renderPosts(posts) {
         const card = document.createElement('div');
         card.className = 'content';
         card.dataset.postId = post.id;
+        card.style.cursor = 'pointer';
 
         const displayName = post.authorName || 'Display Name';
         const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
@@ -61,7 +84,7 @@ function renderPosts(posts) {
         card.innerHTML = `
             <img class="profileImgMini" src="${profileImg}">
             <span class="postHeader">
-                <a class="postLink postDisplayName" href="#">${displayName}</a>
+                <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">${displayName}</a>
                 <small class="postUsername" style="margin-left: 6px; color: #aaa;">${username}</small>
             </span><br>
             <p class="postContentText">${postText}</p>
@@ -106,6 +129,18 @@ function renderPosts(posts) {
             </div>
         `;
 
+        // Navigate to post page on card click (but not on interactive elements)
+        card.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('postMetrics') &&
+                !e.target.classList.contains('likeBtn') &&
+                !e.target.classList.contains('commentToggleBtn') &&
+                !e.target.classList.contains('submitCommentBtn') &&
+                !e.target.classList.contains('postDisplayName') &&
+                !e.target.closest('.commentSection') &&
+                !e.target.closest('footer')) {
+            window.location.href = `post.html?id=${post.id}`;            }
+        });
+
         container.appendChild(card);
     });
 
@@ -129,7 +164,7 @@ function attachEventListeners() {
             btn.style.pointerEvents = 'none';
 
             try {
-                const { liked, newCount } = await toggleLike(postId, userId);
+                const { liked, newCount } = await toggleLike(postId, userId, getCurrentUserName());
                 btn.dataset.likeCount = newCount;
                 btn.textContent = `${newCount} Like${newCount !== 1 ? 's' : ''}`;
 
@@ -199,16 +234,6 @@ function attachEventListeners() {
 
                 input.value = '';
                 await loadComments(postId);
-
-                const card = document.querySelector(`.content[data-post-id="${postId}"]`);
-                if (card) {
-                    const toggleBtn = card.querySelector('.commentToggleBtn');
-                    if (toggleBtn) {
-                        const currentCount = parseInt(toggleBtn.textContent) || 0;
-                        const newCount = currentCount + 1;
-                        toggleBtn.textContent = `${newCount} Comment${newCount !== 1 ? 's' : ''}`;
-                    }
-                }
             } catch (err) {
                 console.error("Comment failed:", err);
                 alert("Failed to post comment. Please try again.");
@@ -241,6 +266,16 @@ async function loadComments(postId) {
 
     try {
         const comments = await getComments(postId, { pageSize: 50 });
+
+        // Sync comment count display to real count
+        const card = document.querySelector(`.content[data-post-id="${postId}"]`);
+        if (card) {
+            const toggleBtn = card.querySelector('.commentToggleBtn');
+            if (toggleBtn) {
+                const realCount = comments.length;
+                toggleBtn.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
+            }
+        }
 
         if (comments.length === 0) {
             list.innerHTML = `<p style="color:#aaa; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
@@ -297,17 +332,6 @@ async function loadComments(postId) {
                 try {
                     await deleteComment(postId, commentId);
                     await loadComments(postId);
-
-                    // Update comment count in footer
-                    const card = document.querySelector(`.content[data-post-id="${postId}"]`);
-                    if (card) {
-                        const toggleBtn = card.querySelector('.commentToggleBtn');
-                        if (toggleBtn) {
-                            const currentCount = parseInt(toggleBtn.textContent) || 0;
-                            const newCount = Math.max(0, currentCount - 1);
-                            toggleBtn.textContent = `${newCount} Comment${newCount !== 1 ? 's' : ''}`;
-                        }
-                    }
                 } catch (err) {
                     console.error("Delete failed:", err);
                     alert("Failed to delete comment.");
@@ -319,11 +343,10 @@ async function loadComments(postId) {
         list.querySelectorAll('.editCommentBtn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const { postId, commentId, commentText } = btn.dataset;
+                const { postId, commentId } = btn.dataset;
                 const textEl = list.querySelector(`.commentText-${commentId}`);
                 if (!textEl) return;
 
-                // Replace text with an input field
                 const originalText = textEl.textContent.trim();
                 textEl.style.display = 'none';
                 btn.style.display = 'none';
@@ -345,19 +368,16 @@ async function loadComments(postId) {
                 const saveBtn = editRow.querySelectorAll('button')[0];
                 const cancelBtn = editRow.querySelectorAll('button')[1];
 
-                // Insert edit row after the text
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
                 editInput.setSelectionRange(editInput.value.length, editInput.value.length);
 
-                // Cancel
                 cancelBtn.addEventListener('click', () => {
                     editRow.remove();
                     textEl.style.display = '';
                     btn.style.display = '';
                 });
 
-                // Save
                 saveBtn.addEventListener('click', async () => {
                     const newText = editInput.value.trim();
                     if (!newText) return;
@@ -375,7 +395,6 @@ async function loadComments(postId) {
                     }
                 });
 
-                // Enter key to save
                 editInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') saveBtn.click();
                     if (e.key === 'Escape') cancelBtn.click();

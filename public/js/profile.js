@@ -85,7 +85,7 @@ async function loadPosts(uidToLoad) {
                 </footer><br>
             `;
             card.addEventListener('click', () => {
-                window.location.href = `post.php?id=${post.id}`;
+                window.location.href = `post.html?id=${post.id}`;
             });
             container.appendChild(card);
         });
@@ -104,7 +104,7 @@ async function loadComments(uidToLoad) {
         const q = query(
             collectionGroup(db, "comments"),
             where("authorId", "==", uidToLoad),
-            orderBy("created_at", "desc")
+            orderBy("createdAt", "desc")
         );
         const snap = await getDocs(q);
 
@@ -136,7 +136,7 @@ async function loadComments(uidToLoad) {
                 <p class="commentText">${escapeHtml(comment.text || '')}</p>
             `;
             card.addEventListener('click', () => {
-                window.location.href = `post.php?id=${postId}`;
+                window.location.href = `post.html?id=${postId}`;
             });
             container.appendChild(card);
         }
