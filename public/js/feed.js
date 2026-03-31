@@ -2,9 +2,17 @@
 import { db, auth } from './firebaseInitialization.js';
 import { toggleLike, createPost } from './postsService.js';
 import { addComment, getComments, deleteComment, editComment } from './commentsService.js';
-import { collection, query, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FEED_PAGE_SIZE = 10;
+
+let loadedPosts = [];
+let lastVisibleDoc = null;
+let hasMorePosts = true;
+let isLoadingPosts = false;
 
 loadAndRenderFeed();
+setupLoadMoreButton();
 setupNewPostComposer();
 
 async function getCurrentUserUsername(user) {
@@ -79,9 +87,63 @@ function setupNewPostComposer() {
 }
 
 async function loadAndRenderFeed() {
-    const posts = await getRecentPosts();
-    await syncCommentCounts(posts);
-    renderPosts(posts);
+    loadedPosts = [];
+    lastVisibleDoc = null;
+    hasMorePosts = true;
+    await loadMorePosts({ reset: true });
+}
+
+function setupLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', async () => {
+        await loadMorePosts();
+    });
+
+    updateLoadMoreButton();
+}
+
+function updateLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    if (!hasMorePosts) {
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+
+    loadMoreBtn.style.display = 'inline-block';
+    loadMoreBtn.disabled = isLoadingPosts;
+    loadMoreBtn.textContent = isLoadingPosts ? 'Loading...' : 'Load More Posts';
+}
+
+async function loadMorePosts(options = {}) {
+    const reset = Boolean(options.reset);
+    if (isLoadingPosts) return;
+    if (!reset && !hasMorePosts) return;
+
+    isLoadingPosts = true;
+    updateLoadMoreButton();
+
+    try {
+        const { posts, nextLastVisibleDoc, hasNextPage } = await getRecentPostsPage(lastVisibleDoc);
+        await syncCommentCounts(posts);
+
+        loadedPosts = reset ? posts : [...loadedPosts, ...posts];
+        if (posts.length > 0) {
+            lastVisibleDoc = nextLastVisibleDoc;
+        }
+        hasMorePosts = hasNextPage;
+
+        renderPosts(loadedPosts);
+    } catch (err) {
+        console.error('Failed to load posts:', err);
+        alert('Failed to load posts. Please try again.');
+    } finally {
+        isLoadingPosts = false;
+        updateLoadMoreButton();
+    }
 }
 
 async function syncCommentCounts(posts) {
@@ -105,14 +167,23 @@ async function syncCommentCounts(posts) {
 
 
 
-async function getRecentPosts() {
+async function getRecentPostsPage(lastDoc = null) {
     const postsCol = collection(db, "posts");
-    const q = query(postsCol, orderBy("createdAt", "desc"));
+    const q = lastDoc
+        ? query(postsCol, orderBy("createdAt", "desc"), startAfter(lastDoc), limit(FEED_PAGE_SIZE))
+        : query(postsCol, orderBy("createdAt", "desc"), limit(FEED_PAGE_SIZE));
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+    const posts = querySnapshot.docs.map(snap => ({
+        id: snap.id,
+        ...snap.data()
     }));
+
+    return {
+        posts,
+        nextLastVisibleDoc: querySnapshot.docs.length ? querySnapshot.docs[querySnapshot.docs.length - 1] : lastDoc,
+        hasNextPage: querySnapshot.docs.length === FEED_PAGE_SIZE
+    };
 }
 
 function getCurrentUserId() {
