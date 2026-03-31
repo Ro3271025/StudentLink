@@ -990,7 +990,6 @@ color:#777;
 .chatImage:hover {
     opacity: 0.85;
 }
-/* PREVIEW CONTAINER */
 #imagePreviewContainer {
     display: flex;
     gap: 8px;
@@ -998,7 +997,6 @@ color:#777;
     overflow-x: auto;
 }
 
-/* EACH IMAGE */
 .previewItem {
     position: relative;
 }
@@ -1010,21 +1008,17 @@ color:#777;
     border-radius: 8px;
 }
 
-/* REMOVE BUTTON */
 .removePreview {
     position: absolute;
     top: -5px;
     right: -5px;
-
     background: var(--theme-accent);
     color: white;
     border: none;
     border-radius: 50%;
-
     width: 18px;
     height: 18px;
     font-size: 12px;
-
     cursor: pointer;
 }
 /* Settings Page */
