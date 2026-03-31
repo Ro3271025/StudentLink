@@ -1,10 +1,82 @@
 // public/js/feed.js
 import { db, auth } from './firebaseInitialization.js';
-import { toggleLike } from './postsService.js';
+import { toggleLike, createPost } from './postsService.js';
 import { addComment, getComments, deleteComment, editComment } from './commentsService.js';
-import { collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 loadAndRenderFeed();
+setupNewPostComposer();
+
+async function getCurrentUserUsername(user) {
+    if (!user) return "";
+
+    try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+            const data = snap.data() || {};
+            if (data.username && String(data.username).trim()) {
+                return String(data.username).trim();
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load username:", err);
+    }
+
+    const email = user.email || "";
+    return email.includes("@") ? email.split("@")[0] : "user";
+}
+
+function setupNewPostComposer() {
+    const createBtn = document.getElementById("createPostBtn");
+    const textArea = document.querySelector("#newPostTXT textarea");
+    if (!createBtn || !textArea) return;
+
+    createBtn.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please log in to post.");
+            return;
+        }
+
+        const body = textArea.value.trim();
+        if (!body) {
+            alert("Please write something before posting.");
+            return;
+        }
+
+        const compactText = body.replace(/\s+/g, " ").trim();
+        const title = (compactText.slice(0, 60) || "Post").trim();
+
+        createBtn.disabled = true;
+        createBtn.textContent = "Posting...";
+
+        try {
+            const authorUsername = await getCurrentUserUsername(user);
+
+            await createPost({
+                authorId: user.uid,
+                authorName: getCurrentUserName(),
+                authorUsername,
+                title,
+                body
+            });
+
+            textArea.value = "";
+
+            if (typeof window.toggleOverlay === "function") {
+                window.toggleOverlay("newPostContainer");
+            }
+
+            await loadAndRenderFeed();
+        } catch (err) {
+            console.error("Failed to create post:", err);
+            alert("Failed to create post. Please try again.");
+        } finally {
+            createBtn.disabled = false;
+            createBtn.textContent = "Post";
+        }
+    });
+}
 
 async function loadAndRenderFeed() {
     const posts = await getRecentPosts();
