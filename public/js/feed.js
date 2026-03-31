@@ -67,7 +67,7 @@ function renderPosts(posts) {
             <p class="postContentText">${postText}</p>
             ${imageSection}
             <br>
-            <footer>
+            <footer style="padding-bottom:5px;">
                 <a class="postLink postMetrics likeBtn${hasLiked ? ' liked' : ''}"
                    href="#"
                    data-post-id="${post.id}"
@@ -243,7 +243,7 @@ async function loadComments(postId) {
         const comments = await getComments(postId, { pageSize: 50 });
 
         if (comments.length === 0) {
-            list.innerHTML = `<p style="color:#aaa; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
+            list.innerHTML = `<p style="color:#aaa; text-align:center; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
             return;
         }
 

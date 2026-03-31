@@ -166,7 +166,7 @@ async function loadComments() {
         const snap = await getDocs(q);
 
         if (snap.empty) {
-            container.innerHTML = '<p style="color:#aaa; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
+            container.innerHTML = '<p style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
             return;
         }
 
