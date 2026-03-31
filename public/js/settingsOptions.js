@@ -120,7 +120,7 @@ function expandTheme() {
                 <p><strong>Theme</strong></p>
 
                 <select id='themeSelector' onchange='changeTheme()'>
-                    <option disabled selected>Color</option>
+                    <option disabled selected hidden>Color</option>
                     <option value='#0f73ff'>Blue</option>
                     <option value='#A11010'>Red</option>
                     <option value='#E86C13'>Orange</option>
@@ -129,7 +129,7 @@ function expandTheme() {
                 </select>
 
                 <select id='bgSelector' onchange='changeBG()'>
-                    <option disabled selected>Background</option>
+                    <option disabled selected hidden>Background</option>
                     <option value='#000000'>Lights Out</option>
                     <option value='#F2F2EB'>Light</option>
                     <option value='#151D28'>Dark</option>
