@@ -990,6 +990,43 @@ color:#777;
 .chatImage:hover {
     opacity: 0.85;
 }
+/* PREVIEW CONTAINER */
+#imagePreviewContainer {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    overflow-x: auto;
+}
+
+/* EACH IMAGE */
+.previewItem {
+    position: relative;
+}
+
+.previewItem img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* REMOVE BUTTON */
+.removePreview {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+
+    background: var(--theme-accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+
+    cursor: pointer;
+}
 /* Settings Page */
 
 .settingsHeader{
