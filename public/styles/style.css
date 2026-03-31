@@ -1,6 +1,7 @@
 :root{
     /* Base Theme */
     --bg-primary: #151D28;
+    --bg-secondary: #1e2a38;
     --theme-accent: #0f73ff;
     --border-color: #586373;
     --button-hover: #113D7A;
@@ -790,7 +791,7 @@ color:#777;
 #backArrowImg{
     width: 100%;
     height: auto;
-
+    filter: invert(0.5);
     opacity: 0.8;
     transition: 0.2s;
 }
