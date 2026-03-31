@@ -62,8 +62,8 @@ async function loadRecipientInfo(currentUserId) {
             };
         }
 
-        if (chatTargetSmall) {
-            chatTargetSmall.textContent = username;
+        if (chatUsername) {
+            chatUsername.textContent = username;
         }
 
     } catch (err) {
