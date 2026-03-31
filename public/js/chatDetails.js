@@ -24,8 +24,7 @@ const messagesContainer = document.getElementById("messagesContainer");
 const sendBtn           = document.getElementById("sendBtn");
 const messageInput      = document.getElementById("messageInput");
 const chatTargetUser    = document.getElementById("chatTargetUser");
-const chatTargetSmall   = document.querySelector(".chatDetailsPage small.smallTxt");
-
+const chatUsername = document.getElementById("chatUsername");
 
 function formatTime(date) {
     return date.toLocaleTimeString([], {
@@ -116,7 +115,6 @@ function loadMessages(currentUserId) {
             div.appendChild(text);
             div.appendChild(time);
 
-            /* ✅ SEEN (ONLY LAST MESSAGE + ONLY YOUR MESSAGE) */
             if (isMine && isLast && msg.seen) {
                 const seen = document.createElement("div");
                 seen.classList.add("messageSeen");
