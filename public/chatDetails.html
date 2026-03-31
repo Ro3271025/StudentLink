@@ -12,18 +12,14 @@
 
     <!-- HEADER -->
     <div class="chatHeader">
-        
-        <!-- BACK BUTTON -->
         <a href="chat.html" id="backArrow">
             <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
         </a>
 
-        <!-- USER INFO -->
         <div class="chatUserRow">
             <span id="chatTargetUser">Display Name</span>
             <span id="chatUsername">@Username</span>
         </div>
-
     </div>
 
     <!-- MESSAGES -->
@@ -31,11 +27,17 @@
 
     <!-- INPUT -->
     <div class="chatInputArea">
+
+        <!-- IMAGE BUTTON -->
+        <label for="imageInput" id="imageUploadBtn">📎</label>
+        <input type="file" id="imageInput" multiple accept="image/*" hidden>
+
         <input
             id="messageInput"
             placeholder="Type message..."
             maxlength="450"
         >
+
         <button id="sendBtn">Send</button>
     </div>
 
@@ -97,7 +99,6 @@
     </div>
 </div>
 
-<!-- SCRIPTS -->
 <script type="module">
     import { setupSidebar } from "./js/showUser.js";
     setupSidebar();
