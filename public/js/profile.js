@@ -286,7 +286,7 @@ export function setupProfile() {
         }
 
         // ── Bio + photo only for own profile ──
-        if (user.uid === uidToLoad) {
+        
             const bioText = document.getElementById("bioText");
             const editBtn = document.getElementById("edit");
             const profileImg = document.getElementById("profileImage");
@@ -296,6 +296,8 @@ export function setupProfile() {
 
             // Load profile photo
             if (data.photoURL && profileImg) profileImg.src = data.photoURL;
+            if (user.uid === uidToLoad) {
+            
 
             // Bio edit logic
             let isEditing = false;
@@ -355,7 +357,17 @@ export function setupProfile() {
                     }
                 };
             }
-        }
+        } else {
+
+        // VISITOR LOGIC: Hide the button and disable click-to-upload
+        if (editBtn) editBtn.style.display = "none";
+        if (profileImg) {
+        profileImg.style.cursor = "default";
+        profileImg.onclick = null;
+        profileImg.title = "";
+    }
+}
+        
 
         // Setup tabs and load posts by default
         setupTabs(uidToLoad);
