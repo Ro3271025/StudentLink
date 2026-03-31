@@ -5,17 +5,31 @@
 <link rel="stylesheet" href="styles/style.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body id="documentBody">
 
 <div class="chatDetailsPage">
-    <div>
-        <button id="backArrow"><a href="chat.html">
+
+    <!-- HEADER -->
+    <div class="chatHeader">
+        
+        <!-- BACK BUTTON -->
+        <a href="chat.html" id="backArrow">
             <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
-        </a></button>
-        <b id="chatTargetUser">Display Name</b>
-        <small class="smallTxt">@Username</small>
+        </a>
+
+        <!-- USER INFO -->
+        <div class="chatUserRow">
+            <span id="chatTargetUser">Display Name</span>
+            <span id="chatUsername">@Username</span>
+        </div>
+
     </div>
+
+    <!-- MESSAGES -->
     <div id="messagesContainer"></div>
+
+    <!-- INPUT -->
     <div class="chatInputArea">
         <input
             id="messageInput"
@@ -24,6 +38,7 @@
         >
         <button id="sendBtn">Send</button>
     </div>
+
 </div>
 
 <!-- LEFT SIDEBAR -->
@@ -31,14 +46,22 @@
     <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
     <p id="displayName">Display Name</p>
     <p id="username">@Username</p><br>
+
     <p class="sidebarText"><a href="home.html">Home</a></p>
     <p class="sidebarText"><a href="listings.html">Listings</a></p>
     <p class="sidebarText"><a href="explore.html">Explore</a></p>
     <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
     <p class="sidebarText"><a href="chat.html">Chat</a></p>
     <p class="sidebarText"><a href="profile.html">Profile</a></p>
-    <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-    <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+    <br><br>
+
+    <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">
+        New Post
+    </button>
+
+    <br><br>
 </div>
 
 <!-- NEW POST OVERLAY -->
@@ -49,13 +72,19 @@
             <b>Create New Post</b>
             <button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button>
         </p>
-        <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
+
+        <div id="newPostTXT">
+            <textarea maxlength="300" placeholder="What's happening?"></textarea>
+        </div>
     </div>
 </div>
 
 <!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
-    <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+    <br>
+    <input class="searchBar themeObject" placeholder="Search">
+    <br><br>
+
     <div id="recentSearches">
         <table class="recentSearchesTable">
             <tr><th id="recentHeader">Recent Searches</th></tr>
@@ -68,13 +97,17 @@
     </div>
 </div>
 
+<!-- SCRIPTS -->
 <script type="module">
     import { setupSidebar } from "./js/showUser.js";
     setupSidebar();
 </script>
+
 <script type="module" src="js/chatDetails.js"></script>
 <script type="module" src="js/userSearch.js"></script>
-<script src="js/themeSwap.js" type="text/javascript"></script>
-<script src="js/toggleVis.js" type="text/javascript"></script>
+
+<script src="js/themeSwap.js"></script>
+<script src="js/toggleVis.js"></script>
+
 </body>
 </html>
