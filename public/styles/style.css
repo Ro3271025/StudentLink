@@ -841,3 +841,88 @@ background-color: transparent !important;
 .settingsOpt input{
     transition: 0.125s;
 }
+/* LISTING DETAIL PAGE */
+.listingDetailContainer {
+    display: grid;
+    grid-template-columns: 300px 1fr 220px;
+    gap: 30px;
+
+    max-width: 1050px; 
+    margin: 40px auto;
+}
+.listingImageSection {
+    width: 100%;
+}
+.listingDetailImage {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.listingMiddleSection {
+    text-align: left;
+}
+
+.listingMiddleSection h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+.listingSeller {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+.listingSeller a {
+    color: var(--theme-accent);
+    text-decoration: none;
+}
+.listingDescription {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+.listingMeta p {
+    font-size: 14px;
+    margin: 4px 0;
+}
+.listingRightSection {
+    position: sticky;
+    top: 100px;
+}
+.priceBox {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.priceText {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--theme-accent);
+}
+#messageSellerBtn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+
+    background: var(--theme-accent);
+    color: white;
+}
+.ownerControls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+#editListingBtn,
+#deleteListingBtn {
+    font-size: 14px;
+    padding: 10px 16px;
+}
