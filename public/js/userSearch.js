@@ -4,7 +4,6 @@ import {
     query,
     where,
     getDocs,
-    orderBy,
     collectionGroup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -91,63 +90,108 @@ async function runSearch(input, value) {
     const dropdown = createDropdown(input);
     dropdown.innerHTML = `<p style="color:#aaa; font-size:13px; padding:12px 16px; margin:0;">Searching...</p>`;
 
-    const lower = value.toLowerCase();
-    const upper = lower + "\uf8ff";
+    const raw = value.trim();
+    const lower = raw.toLowerCase();
+    const upperRaw = raw + "\uf8ff";
+    const upperLower = lower + "\uf8ff";
 
     try {
-        // Run all searches in parallel
-        const [
-            usernameSnap,
-            nameSnap,
-            postsSnap,
-            listingsSnap,
-            commentsSnap
-        ] = await Promise.all([
-            // Users by username
-            getDocs(query(
+        // Query buckets are isolated so one failed index/rule does not kill the whole search.
+        const searchTasks = {
+            username: getDocs(query(
                 collection(db, "users"),
                 where("username", ">=", lower),
-                where("username", "<=", upper)
+                where("username", "<=", upperLower)
             )),
-            // Users by display name
-            getDocs(query(
+            displayName: getDocs(query(
                 collection(db, "users"),
-                where("name", ">=", value),
-                where("name", "<=", value + "\uf8ff")
+                where("displayName", ">=", raw),
+                where("displayName", "<=", upperRaw)
             )),
-            // Posts by body
-            getDocs(query(
+            name: getDocs(query(
+                collection(db, "users"),
+                where("name", ">=", raw),
+                where("name", "<=", upperRaw)
+            )),
+            postBody: getDocs(query(
                 collection(db, "posts"),
-                where("body", ">=", value),
-                where("body", "<=", value + "\uf8ff")
+                where("body", ">=", raw),
+                where("body", "<=", upperRaw)
             )),
-            // Listings by title
-            getDocs(query(
+            postTitle: getDocs(query(
+                collection(db, "posts"),
+                where("title", ">=", raw),
+                where("title", "<=", upperRaw)
+            )),
+            listingTitle: getDocs(query(
                 collection(db, "listings"),
-                where("title", ">=", value),
-                where("title", "<=", value + "\uf8ff")
+                where("title", ">=", raw),
+                where("title", "<=", upperRaw)
             )),
-            // Comments by text
-            getDocs(query(
+            listingDescription: getDocs(query(
+                collection(db, "listings"),
+                where("description", ">=", raw),
+                where("description", "<=", upperRaw)
+            )),
+            comments: getDocs(query(
                 collectionGroup(db, "comments"),
-                where("text", ">=", value),
-                where("text", "<=", value + "\uf8ff")
+                where("text", ">=", raw),
+                where("text", "<=", upperRaw)
             ))
-        ]);
+        };
+
+        const taskEntries = Object.entries(searchTasks);
+        const settled = await Promise.allSettled(taskEntries.map(([, task]) => task));
+        const results = {};
+
+        taskEntries.forEach(([key], index) => {
+            const outcome = settled[index];
+            if (outcome.status === "fulfilled") {
+                results[key] = outcome.value;
+                return;
+            }
+            results[key] = null;
+            console.warn(`Search query failed (${key}):`, outcome.reason);
+        });
 
         // Deduplicate users
         const seen = new Set();
         const users = [];
-        [...usernameSnap.docs, ...nameSnap.docs].forEach(d => {
-            if (!seen.has(d.id)) {
-                seen.add(d.id);
+        const userSnaps = [results.username, results.displayName, results.name].filter(Boolean);
+
+        userSnaps.flatMap(snap => snap.docs).forEach(d => {
+            const userKey = `user:${d.id}`;
+            if (!seen.has(userKey)) {
+                seen.add(userKey);
                 users.push({ id: d.id, ...d.data() });
             }
         });
 
-        const posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const listings = listingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const comments = commentsSnap.docs.map(d => ({
+        const seenPosts = new Set();
+        const posts = [];
+        [results.postBody, results.postTitle]
+            .filter(Boolean)
+            .flatMap(snap => snap.docs)
+            .forEach(d => {
+                const postKey = `post:${d.id}`;
+                if (seenPosts.has(postKey)) return;
+                seenPosts.add(postKey);
+                posts.push({ id: d.id, ...d.data() });
+            });
+
+        const seenListings = new Set();
+        const listings = [];
+        [results.listingTitle, results.listingDescription]
+            .filter(Boolean)
+            .flatMap(snap => snap.docs)
+            .forEach(d => {
+                const listingKey = `listing:${d.id}`;
+                if (seenListings.has(listingKey)) return;
+                seenListings.add(listingKey);
+                listings.push({ id: d.id, ...d.data() });
+            });
+
+        const comments = (results.comments?.docs || []).map(d => ({
             id: d.id,
             postId: d.ref.parent.parent.id,
             ...d.data()
@@ -228,8 +272,8 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-// Attach to all search bars
-const searchInputs = document.querySelectorAll(".searchBar");
+// Attach only to global sidebar search bars.
+const searchInputs = document.querySelectorAll(".searchBar.themeObject");
 
 searchInputs.forEach(input => {
     let debounceTimer;
