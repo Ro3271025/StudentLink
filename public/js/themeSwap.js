@@ -46,33 +46,37 @@ function changeBG(){
             rootCSS.style.setProperty('--text-fill', "#ffffff");
             localStorage.setItem("storedBG", "#151D28");
             localStorage.setItem("storedTXT", "#ffffff");
+            localStorage.setItem("storedSecondary", "#1e2a38");
             break;
         case "#000000": // Lights out
             rootCSS.style.setProperty('--text-fill', "#ffffff");
             localStorage.setItem("storedBG", "#000000");
             localStorage.setItem("storedTXT", "#ffffff");
+            localStorage.setItem("storedSecondary", "#171717");
             break;
         case "#F2F2EB": // Light
             rootCSS.style.setProperty('--text-fill', "#000000");
             localStorage.setItem("storedBG", "#F2F2EB");
             localStorage.setItem("storedTXT", "#000000");
+            localStorage.setItem("storedSecondary", "#A6A695")
             break;
     }
 }
 
-function reloadTheme(accent, hoverAccent, BG, txtFill){
+function reloadTheme(accent, hoverAccent, BG, txtFill, BG2){
     var rootCSS = document.querySelector(':root');
 
     rootCSS.style.setProperty('--bg-primary', BG); // background
     rootCSS.style.setProperty('--theme-accent', accent); // primary accent
     rootCSS.style.setProperty('--button-hover', hoverAccent); // on hover accent
     rootCSS.style.setProperty('--text-fill', txtFill); // text color
+    rootCSS.style.setProperty('--bg-secondary', BG2)
 
 }
 
 // retain the user's theme across refresh
 reloadTheme(localStorage.getItem("storedAccent"), localStorage.getItem("storedHover"), 
-localStorage.getItem("storedBG"), localStorage.getItem("storedTXT"));
+localStorage.getItem("storedBG"), localStorage.getItem("storedTXT"), localStorage.getItem("storedSecondary"));
 
 
 

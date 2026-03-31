@@ -21,7 +21,6 @@
     background-color: var(--theme-accent);
     border-color: var(--theme-accent);
     font-size: 16pt;
-    color: white;
     padding: 5%;
     transition: 0.125s;
     font-family: var(--font-family);
@@ -30,8 +29,7 @@
     border-radius:8px;
     border:none;
     margin-bottom:20px;
-    background:#1e2a38;
-    color:white;
+    background:var(--bg-secondary);
     outline:none;
 }
 
