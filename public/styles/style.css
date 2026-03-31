@@ -956,6 +956,40 @@ color:#777;
     font-size: 14px;
     color: var(--text-muted);
 }
+/* IMAGE BUTTON */
+#imageUploadBtn {
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+#imageUploadBtn:hover {
+    background: var(--button-hover);
+}
+
+/* IMAGE GRID */
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    margin-top: 8px;
+}
+
+/* CHAT IMAGE */
+.chatImage {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    max-height: 150px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.chatImage:hover {
+    opacity: 0.85;
+}
 /* Settings Page */
 
 .settingsHeader{
