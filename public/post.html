@@ -1,102 +1,87 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Post by Display Name | StudentLink</title>
-        <link rel="stylesheet" href="../public/styles/style.css">
-        <meta name="viewport" content="width=device-width, inital-scale=1">
-    </head>
-    <body id="documentBody">
-        
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body id="documentBody">
 
-        <div id="header">
-            <img id="logo" src="../public/styles/images/placeholder/DEFAULT_BANNER.svg">
-        </div> <!-- Small header with our logo -->
-           
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
+    <div id="header">
+        <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
+    </div>
 
-            <p class="postContentText" maxlength="200">Loading content...</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
+    <!-- POST DETAIL -->
+    <div id="postDetailContainer" class="content" style="padding: 16px 3.5%;">
+        <p style="text-align:center; color:#aaa; padding:20px;">Loading post...</p>
+    </div>
 
-            <footer><a class="postLink postMetrics" href="">0 Likes</a><a class="postLink postMetrics" href="">0 Comments</a>
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
+    <!-- COMMENTS SECTION -->
+    <div id="commentsSection" class="content" style="padding: 16px 3.5%; display:none;">
+        <h3 style="font-size:15pt; margin-bottom:12px; border-bottom: 1px solid var(--border-color); padding-bottom:8px;">Comments</h3>
+        <div id="commentsContainer"></div>
+        <div id="addCommentSection" style="margin-top:16px; display:flex; gap:8px; align-items:center;">
+            <input
+                id="commentInput"
+                type="text"
+                placeholder="Write a comment..."
+                maxlength="300"
+                style="flex:1; padding:8px 14px; border-radius:20px; border:1px solid #444; background:#222; color:#fff; font-size:14px; font-family: var(--font-family);"
+            />
+            <button id="addCommentBtn" class="themeObject" style="font-size:13pt; padding: 6px 18px; border-radius:20px;">Post</button>
         </div>
+    </div>
 
-        <!-- Comment Section -->
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
+    <br>
 
-            <textarea class="postContentText postCommentText" maxlength="200" placeholder="Have something to say?"></textarea><br>
-            <!-- Add Img or Video tag too if there's media present --><br>
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+        <button class="themeObject" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    </div>
 
-            <button id="commentBtn">Comment</button><br><br>
-        </div>
-
-        <!-- Comments essentially look the same as posts on most platforms like Twitter/Bluesky/etc -->
-        <div class="content"> <!-- sample post layout (used on the feed page as well)-->
-            <img class="profileImgMini" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-            <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
-
-            <p class="postContentText" maxlength="200">Loading comment...</p><br>
-            <!-- Add Img or Video tag too if there's media present -->
-
-            <footer><a class="postLink postMetrics" href="">0 Likes</a> <!-- Don't track comments on comments, just attach them to the parent post -->
-            <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
-        </div>
-
-        <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-            <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-            <p id="displayName">Display Name</p>
-            <p id="username">@Username</p><br>
-            <p class="sidebarText"><a href="home.html">Home</a></p>
-            <p class="sidebarText">Explore</p>
-            <p class="sidebarText">Notifications</p>
-            <p class="sidebarText"><a href="chat.html">Chat</a></p>
-            <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-            <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-
-            <div class="overlayDiv">
-                <div id="newPostContainer">
-                    <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                    <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                    <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
-                </div>
+    <!-- NEW POST OVERLAY -->
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader">
+                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b>
+                <button class="themeObject" id="createPostBtn">Post</button>
+            </p>
+            <div id="newPostTXT">
+                <textarea maxlength="300" placeholder="What's happening?"></textarea>
             </div>
-
         </div>
+    </div>
 
-     
-
-    <div class="sidebar" id="rightBar"> <!-- Right Sidebar -->
-        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-        
-        <div id="recentSearches"> <!-- track the last 5 searches -->
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
             <table class="recentSearchesTable">
                 <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th>
-                </tr>
-                <tr>
-                    <th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th>
-                </tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
             </table>
         </div>
     </div>
-    
 
-    <script src="../public/js/themeSwap.js" type="text/javascript"></script>
-    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
-    </body>
+    <script type="module" src="js/postDetail.js"></script>
+    <script src="js/themeSwap.js" type="text/javascript"></script>
+    <script src="js/toggleVis.js" type="text/javascript"></script>
+</body>
 </html>
