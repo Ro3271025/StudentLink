@@ -31,11 +31,14 @@ const messagesContainer = document.getElementById("messagesContainer");
 const sendBtn = document.getElementById("sendBtn");
 const messageInput = document.getElementById("messageInput");
 const imageInput = document.getElementById("imageInput");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
 
 const chatTargetUser = document.getElementById("chatTargetUser");
 const chatUsername = document.getElementById("chatUsername");
 
 const storage = getStorage();
+
+let selectedImages = [];
 
 /* ========================= */
 
@@ -43,6 +46,41 @@ function formatTime(date) {
     return date.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit"
+    });
+}
+
+/* ========================= */
+/* IMAGE PREVIEW */
+
+imageInput.addEventListener("change", () => {
+    selectedImages = Array.from(imageInput.files);
+    renderImagePreview();
+});
+
+function renderImagePreview() {
+
+    imagePreviewContainer.innerHTML = "";
+
+    selectedImages.forEach((file, index) => {
+
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("previewItem");
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "✕";
+        removeBtn.classList.add("removePreview");
+
+        removeBtn.onclick = () => {
+            selectedImages.splice(index, 1);
+            renderImagePreview();
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        imagePreviewContainer.appendChild(wrapper);
     });
 }
 
@@ -141,25 +179,23 @@ function loadMessages(currentUserId) {
 async function sendMessage(currentUserId) {
 
     const text = messageInput.value.trim();
-    const files = imageInput.files;
+    const files = selectedImages;
 
     if (!text && files.length === 0) return;
 
     let imageURLs = [];
 
-    if (files.length > 0) {
-        for (let file of files) {
+    for (let file of files) {
 
-            const fileRef = ref(
-                storage,
-                `chatImages/${conversationID}/${Date.now()}_${file.name}`
-            );
+        const fileRef = ref(
+            storage,
+            `chatImages/${conversationID}/${Date.now()}_${file.name}`
+        );
 
-            await uploadBytes(fileRef, file);
-            const url = await getDownloadURL(fileRef);
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
 
-            imageURLs.push(url);
-        }
+        imageURLs.push(url);
     }
 
     await addDoc(
@@ -182,8 +218,10 @@ async function sendMessage(currentUserId) {
         { merge: true }
     );
 
+    /* RESET */
     messageInput.value = "";
-    imageInput.value = "";
+    selectedImages = [];
+    imagePreviewContainer.innerHTML = "";
 }
 
 /* ========================= */
@@ -202,6 +240,8 @@ async function markMessagesAsSeen(currentUserId) {
         }
     });
 }
+
+/* ========================= */
 
 onAuthStateChanged(auth, (user) => {
 
