@@ -72,7 +72,7 @@ function renderPosts(posts) {
                    href="#"
                    data-post-id="${post.id}"
                    data-like-count="${likeCount}"
-                   style="${hasLiked ? 'color: var(--theme-color, #0f73ff); font-weight: 600;' : ''}">
+                   style="${hasLiked ? 'color: var(--theme-color, #E6557C); font-weight: 600;' : ''}">
                    ${likeCount} Like${likeCount !== 1 ? 's' : ''}
                 </a>
                 <a class="postLink postMetrics commentToggleBtn"
@@ -87,13 +87,13 @@ function renderPosts(posts) {
                 <div class="commentsList" id="commentsList-${post.id}">
                     <p style="color:#aaa; font-size:13px;">Loading comments...</p>
                 </div>
-                <div class="commentInputRow" style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+                <div class="commentInputRow" style="display:flex; gap:8px; margin-top:10px; align-items:center; padding: 5px;">
                     <input
                         class="commentInput themeObject"
                         id="commentInput-${post.id}"
                         type="text"
                         placeholder="Write a comment..."
-                        style="flex:1; padding:7px 12px; border-radius:20px; border:1px solid #444; background:#222; color:#fff; font-size:14px;"
+                        style="flex:1; padding:7px 12px; border-radius:20px; border:1px solid #444; background:var(--bg-secondary); color:var(--text-fill); font-size:14px;"
                         maxlength="300"
                     />
                     <button
@@ -271,14 +271,14 @@ async function loadComments(postId) {
             ` : '';
 
             return `
-                <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start;">
+                <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; padding:5px">
                     <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                          style="width:28px; height:28px; border-radius:50%; flex-shrink:0;">
                     <div style="flex:1;">
-                        <span style="font-size:13px; font-weight:600; color:#fff;">
+                        <span style="font-size:13px; font-weight:600; color:var(--text-fill);">
                             ${escapeHtml(c.authorName || 'Anonymous')}
                         </span>
-                        <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:2px 0 0;">
+                        <p class="commentText-${c.id}" style="font-size:14px; color:var(--text-fill); margin:2px 0 0;">
                             ${escapeHtml(c.text)}
                         </p>
                         ${ownerActions}
