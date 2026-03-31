@@ -735,7 +735,8 @@ color:#777;
     margin-top:4px;
     color: var(--text-muted);
 }
-/* CHAT DETAILS PAGE */
+/*Chat Details Page*/
+
 .chatDetailsPage{
     display: flex;
     flex-direction: column;
@@ -753,32 +754,60 @@ color:#777;
 .chatHeader{
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: flex-start;
 
+    gap: 12px;
     padding: 12px 15px;
+
     border-bottom: 1px solid var(--border-color);
+    background: var(--bg-primary);
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
+/* BACK BUTTON */
 #backArrow{
     width: 32px;
     height: 32px;
     padding: 6px;
+
     border-radius: 50%;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
     transition: 0.2s;
 }
+
 #backArrow:hover{
-    background: var(--bg-hover);
+    background: var(--button-hover); /* THEME SECONDARY */
 }
+
 #backArrowImg{
     width: 100%;
     height: auto;
-    filter: invert(0.6);
+
+    opacity: 0.8;
+    transition: 0.2s;
 }
+
+#backArrow:hover #backArrowImg{
+    opacity: 1;
+}
+/* USER NAME */
 #chatTargetUser{
     font-size: 18px;
     font-weight: 600;
     color: var(--text-fill);
+
+    display: flex;
+    align-items: center;
 }
+
 #messagesContainer{
     flex: 1;
     overflow-y: auto;
@@ -789,6 +818,7 @@ color:#777;
 
     padding: 15px;
 }
+
 .message{
     position: relative;
 
@@ -804,20 +834,61 @@ color:#777;
 
     box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
+/* MY MESSAGE */
 .myMessage{
     align-self: flex-end;
+
     background: var(--theme-accent);
     color: white;
 
     border-bottom-right-radius: 4px;
 }
+/* OTHER MESSAGE */
 .otherMessage{
     align-self: flex-start;
+
     background: var(--bg-secondary);
     color: var(--text-fill);
 
     border: 1px solid var(--border-color);
     border-bottom-left-radius: 4px;
+}
+
+.messageTime{
+    position: absolute;
+    bottom: 6px;
+
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+.myMessage .messageTime{
+    right: 10px;
+    color: rgba(255,255,255,0.8);
+}
+
+.otherMessage .messageTime{
+    left: 10px;
+    color: var(--text-muted);
+}
+
+/* SEEN STATUS */
+.messageSeen{
+    position: absolute;
+    bottom: 6px;
+    right: 55px;
+
+    font-size: 10px;
+    opacity: 0.7;
+    color: rgba(255,255,255,0.8);
+}
+
+/* OPTIONAL STATUS TEXT */
+.messageStatus{
+    font-size: 11px;
+    opacity: 0.6;
+    text-align: right;
+    margin-top: 2px;
 }
 .chatInputArea{
     display: flex;
@@ -828,6 +899,7 @@ color:#777;
 
     background: var(--bg-primary);
 }
+/* INPUT */
 #messageInput{
     flex: 1;
 
@@ -839,7 +911,16 @@ color:#777;
 
     background: var(--bg-secondary);
     color: var(--text-fill);
+
+    transition: 0.2s;
 }
+
+#messageInput:focus{
+    border-color: var(--theme-accent);
+    box-shadow: 0 0 0 1px var(--theme-accent);
+}
+
+/* SEND BUTTON */
 .chatInputArea button{
     padding: 10px 16px;
     border-radius: 20px;
@@ -856,36 +937,14 @@ color:#777;
 .chatInputArea button:hover{
     opacity: 0.9;
 }
-.messageTime{
-    position: absolute;
-    bottom: 6px;
 
-    font-size: 10px;
-    opacity: 0.7;
-}
-.myMessage .messageTime{
-    right: 10px;
-    color: rgba(255,255,255,0.8);
-}
-.otherMessage .messageTime{
-    left: 10px;
-    color: var(--text-muted);
+#messagesContainer::-webkit-scrollbar{
+    width: 6px;
 }
 
-.messageStatus{
-    font-size: 11px;
-    opacity: 0.6;
-    text-align: right;
-    margin-top: 2px;
-}
-.messageSeen{
-    position: absolute;
-    bottom: 6px;
-    right: 55px; /* sits left of timestamp */
-
-    font-size: 10px;
-    opacity: 0.7;
-    color: rgba(255,255,255,0.8);
+#messagesContainer::-webkit-scrollbar-thumb{
+    background: var(--border-color);
+    border-radius: 10px;
 }
 /* Settings Page */
 
