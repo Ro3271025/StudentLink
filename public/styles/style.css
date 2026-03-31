@@ -946,6 +946,16 @@ color:#777;
     background: var(--border-color);
     border-radius: 10px;
 }
+.chatUserRow{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#chatUsername{
+    font-size: 14px;
+    color: var(--text-muted);
+}
 /* Settings Page */
 
 .settingsHeader{
