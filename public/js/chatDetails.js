@@ -1,5 +1,3 @@
-// public/js/chatDetails.js
-
 import { db, auth } from "./firebaseInitialization.js";
 import {
     collection,
@@ -15,16 +13,31 @@ import {
     updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const params         = new URLSearchParams(window.location.search);
+/* ========================= */
+
+const params = new URLSearchParams(window.location.search);
 const conversationID = params.get("id") || params.get("conversation");
 
 const messagesContainer = document.getElementById("messagesContainer");
-const sendBtn           = document.getElementById("sendBtn");
-const messageInput      = document.getElementById("messageInput");
-const chatTargetUser    = document.getElementById("chatTargetUser");
+const sendBtn = document.getElementById("sendBtn");
+const messageInput = document.getElementById("messageInput");
+const imageInput = document.getElementById("imageInput");
+
+const chatTargetUser = document.getElementById("chatTargetUser");
 const chatUsername = document.getElementById("chatUsername");
+
+const storage = getStorage();
+
+/* ========================= */
 
 function formatTime(date) {
     return date.toLocaleTimeString([], {
@@ -33,44 +46,29 @@ function formatTime(date) {
     });
 }
 
+/* ========================= */
+
 async function loadRecipientInfo(currentUserId) {
-    if (!conversationID) return;
 
-    try {
-        const convoSnap = await getDoc(doc(db, "conversations", conversationID));
-        if (!convoSnap.exists()) return;
+    const convoSnap = await getDoc(doc(db, "conversations", conversationID));
+    if (!convoSnap.exists()) return;
 
-        const data = convoSnap.data();
-        const members = data.users || data.participants || [];
+    const data = convoSnap.data();
+    const members = data.participants || data.users || [];
 
-        const otherUserId = members.find(id => id !== currentUserId);
-        if (!otherUserId) return;
+    const otherUserId = members.find(id => id !== currentUserId);
 
-        const userSnap = await getDoc(doc(db, "users", otherUserId));
-        if (!userSnap.exists()) return;
+    const userSnap = await getDoc(doc(db, "users", otherUserId));
+    if (!userSnap.exists()) return;
 
-        const userData = userSnap.data();
+    const userData = userSnap.data();
 
-        const displayName = userData.name || userData.displayName || "Display Name";
-        const username = userData.username ? `@${userData.username}` : "@Username";
-
-        if (chatTargetUser) {
-            chatTargetUser.textContent = displayName;
-            chatTargetUser.style.cursor = "pointer";
-            chatTargetUser.onclick = () => {
-                window.location.href = `profile.html?id=${otherUserId}`;
-            };
-        }
-
-        if (chatUsername) {
-            chatUsername.textContent = username;
-        }
-
-    } catch (err) {
-        console.error("Failed to load recipient info:", err);
-    }
+    chatTargetUser.textContent = userData.displayName || "User";
+    chatUsername.textContent = userData.username ? `@${userData.username}` : "";
 }
-// Load Messages
+
+/* ========================= */
+
 function loadMessages(currentUserId) {
 
     const q = query(
@@ -82,39 +80,48 @@ function loadMessages(currentUserId) {
 
         messagesContainer.innerHTML = "";
 
-        const docs = snapshot.docs;
+        snapshot.docs.forEach((docSnap, index) => {
 
-        docs.forEach((d, index) => {
-            const msg = d.data();
-            const isLast = index === docs.length - 1;
+            const msg = docSnap.data();
+            const isMine = msg.senderID === currentUserId;
+            const isLast = index === snapshot.docs.length - 1;
 
             const div = document.createElement("div");
-            div.classList.add("message");
-
-            const isMine = msg.senderID === currentUserId;
-
-            if (isMine) {
-                div.classList.add("myMessage");
-            } else {
-                div.classList.add("otherMessage");
-            }
+            div.classList.add("message", isMine ? "myMessage" : "otherMessage");
 
             /* TEXT */
-            const text = document.createElement("div");
-            text.textContent = msg.text;
+            if (msg.text) {
+                const text = document.createElement("div");
+                text.textContent = msg.text;
+                div.appendChild(text);
+            }
+
+            /* IMAGES */
+            if (msg.images && msg.images.length > 0) {
+                const grid = document.createElement("div");
+                grid.classList.add("imageGrid");
+
+                msg.images.forEach(url => {
+                    const img = document.createElement("img");
+                    img.src = url;
+                    img.classList.add("chatImage");
+                    grid.appendChild(img);
+                });
+
+                div.appendChild(grid);
+            }
 
             /* TIME */
             const time = document.createElement("div");
             time.classList.add("messageTime");
 
             if (msg.timestamp) {
-                const date = msg.timestamp.toDate();
-                time.textContent = formatTime(date);
+                time.textContent = formatTime(msg.timestamp.toDate());
             }
 
-            div.appendChild(text);
             div.appendChild(time);
 
+            /* SEEN */
             if (isMine && isLast && msg.seen) {
                 const seen = document.createElement("div");
                 seen.classList.add("messageSeen");
@@ -129,40 +136,58 @@ function loadMessages(currentUserId) {
     });
 }
 
-// SEND MESSAGE
+/* ========================= */
 
 async function sendMessage(currentUserId) {
 
     const text = messageInput.value.trim();
-    if (!text) return;
+    const files = imageInput.files;
+
+    if (!text && files.length === 0) return;
+
+    let imageURLs = [];
+
+    if (files.length > 0) {
+        for (let file of files) {
+
+            const fileRef = ref(
+                storage,
+                `chatImages/${conversationID}/${Date.now()}_${file.name}`
+            );
+
+            await uploadBytes(fileRef, file);
+            const url = await getDownloadURL(fileRef);
+
+            imageURLs.push(url);
+        }
+    }
 
     await addDoc(
         collection(db, "conversations", conversationID, "messages"),
         {
             senderID: currentUserId,
             text: text,
+            images: imageURLs,
             timestamp: serverTimestamp(),
             seen: false
         }
     );
 
-    // Update conversation metadata
-    const ids = conversationID.split("_");
-
     await setDoc(
         doc(db, "conversations", conversationID),
         {
-            participants: ids,
-            lastMessage: text,
+            lastMessage: text || "📷 Image",
             lastTimestamp: serverTimestamp()
         },
         { merge: true }
     );
 
     messageInput.value = "";
+    imageInput.value = "";
 }
 
-// MARK AS SEEN
+/* ========================= */
+
 async function markMessagesAsSeen(currentUserId) {
 
     const snapshot = await getDocs(
@@ -172,31 +197,16 @@ async function markMessagesAsSeen(currentUserId) {
     snapshot.forEach(async (docSnap) => {
         const msg = docSnap.data();
 
-        if (
-            msg.senderID !== currentUserId &&
-            msg.seen !== true
-        ) {
-            await updateDoc(docSnap.ref, {
-                seen: true
-            });
+        if (msg.senderID !== currentUserId && !msg.seen) {
+            await updateDoc(docSnap.ref, { seen: true });
         }
     });
 }
 
-
-// ========================
-// INIT
-// ========================
 onAuthStateChanged(auth, (user) => {
 
     if (!user) {
         window.location.href = "userlogin.html";
-        return;
-    }
-
-    if (!conversationID) {
-        messagesContainer.innerHTML =
-            '<p style="color:#aaa;text-align:center;padding:20px;">No conversation selected.</p>';
         return;
     }
 
@@ -207,8 +217,6 @@ onAuthStateChanged(auth, (user) => {
     sendBtn.addEventListener("click", () => sendMessage(user.uid));
 
     messageInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            sendMessage(user.uid);
-        }
+        if (e.key === "Enter") sendMessage(user.uid);
     });
 });
