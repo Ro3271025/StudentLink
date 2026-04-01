@@ -1,15 +1,149 @@
 // public/js/feed.js
 import { db, auth } from './firebaseInitialization.js';
-import { toggleLike } from './postsService.js';
+import { toggleLike, createPost } from './postsService.js';
 import { addComment, getComments, deleteComment, editComment } from './commentsService.js';
-import { collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FEED_PAGE_SIZE = 10;
+
+let loadedPosts = [];
+let lastVisibleDoc = null;
+let hasMorePosts = true;
+let isLoadingPosts = false;
 
 loadAndRenderFeed();
+setupLoadMoreButton();
+setupNewPostComposer();
+
+async function getCurrentUserUsername(user) {
+    if (!user) return "";
+
+    try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+            const data = snap.data() || {};
+            if (data.username && String(data.username).trim()) {
+                return String(data.username).trim();
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load username:", err);
+    }
+
+    const email = user.email || "";
+    return email.includes("@") ? email.split("@")[0] : "user";
+}
+
+function setupNewPostComposer() {
+    const createBtn = document.getElementById("createPostBtn");
+    const textArea = document.querySelector("#newPostTXT textarea");
+    if (!createBtn || !textArea) return;
+
+    createBtn.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please log in to post.");
+            return;
+        }
+
+        const body = textArea.value.trim();
+        if (!body) {
+            alert("Please write something before posting.");
+            return;
+        }
+
+        const compactText = body.replace(/\s+/g, " ").trim();
+        const title = (compactText.slice(0, 60) || "Post").trim();
+
+        createBtn.disabled = true;
+        createBtn.textContent = "Posting...";
+
+        try {
+            const authorUsername = await getCurrentUserUsername(user);
+
+            await createPost({
+                authorId: user.uid,
+                authorName: getCurrentUserName(),
+                authorUsername,
+                title,
+                body
+            });
+
+            textArea.value = "";
+
+            if (typeof window.toggleOverlay === "function") {
+                window.toggleOverlay("newPostContainer");
+            }
+
+            await loadAndRenderFeed();
+        } catch (err) {
+            console.error("Failed to create post:", err);
+            alert("Failed to create post. Please try again.");
+        } finally {
+            createBtn.disabled = false;
+            createBtn.textContent = "Post";
+        }
+    });
+}
 
 async function loadAndRenderFeed() {
-    const posts = await getRecentPosts();
-    await syncCommentCounts(posts);
-    renderPosts(posts);
+    loadedPosts = [];
+    lastVisibleDoc = null;
+    hasMorePosts = true;
+    await loadMorePosts({ reset: true });
+}
+
+function setupLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', async () => {
+        await loadMorePosts();
+    });
+
+    updateLoadMoreButton();
+}
+
+function updateLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    if (!hasMorePosts) {
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+
+    loadMoreBtn.style.display = 'inline-block';
+    loadMoreBtn.disabled = isLoadingPosts;
+    loadMoreBtn.textContent = isLoadingPosts ? 'Loading...' : 'Load More Posts';
+}
+
+async function loadMorePosts(options = {}) {
+    const reset = Boolean(options.reset);
+    if (isLoadingPosts) return;
+    if (!reset && !hasMorePosts) return;
+
+    isLoadingPosts = true;
+    updateLoadMoreButton();
+
+    try {
+        const { posts, nextLastVisibleDoc, hasNextPage } = await getRecentPostsPage(lastVisibleDoc);
+        await syncCommentCounts(posts);
+
+        loadedPosts = reset ? posts : [...loadedPosts, ...posts];
+        if (posts.length > 0) {
+            lastVisibleDoc = nextLastVisibleDoc;
+        }
+        hasMorePosts = hasNextPage;
+
+        renderPosts(loadedPosts);
+    } catch (err) {
+        console.error('Failed to load posts:', err);
+        alert('Failed to load posts. Please try again.');
+    } finally {
+        isLoadingPosts = false;
+        updateLoadMoreButton();
+    }
 }
 
 async function syncCommentCounts(posts) {
@@ -33,14 +167,23 @@ async function syncCommentCounts(posts) {
 
 
 
-async function getRecentPosts() {
+async function getRecentPostsPage(lastDoc = null) {
     const postsCol = collection(db, "posts");
-    const q = query(postsCol, orderBy("createdAt", "desc"));
+    const q = lastDoc
+        ? query(postsCol, orderBy("createdAt", "desc"), startAfter(lastDoc), limit(FEED_PAGE_SIZE))
+        : query(postsCol, orderBy("createdAt", "desc"), limit(FEED_PAGE_SIZE));
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+    const posts = querySnapshot.docs.map(snap => ({
+        id: snap.id,
+        ...snap.data()
     }));
+
+    return {
+        posts,
+        nextLastVisibleDoc: querySnapshot.docs.length ? querySnapshot.docs[querySnapshot.docs.length - 1] : lastDoc,
+        hasNextPage: querySnapshot.docs.length === FEED_PAGE_SIZE
+    };
 }
 
 function getCurrentUserId() {
@@ -90,12 +233,12 @@ function renderPosts(posts) {
             <p class="postContentText">${postText}</p>
             ${imageSection}
             <br>
-            <footer>
+            <footer style="padding-bottom:5px;">
                 <a class="postLink postMetrics likeBtn${hasLiked ? ' liked' : ''}"
                    href="#"
                    data-post-id="${post.id}"
                    data-like-count="${likeCount}"
-                   style="${hasLiked ? 'color: var(--theme-color, #0f73ff); font-weight: 600;' : ''}">
+                   style="${hasLiked ? 'color: var(--theme-color, #E6557C); font-weight: 600;' : ''}">
                    ${likeCount} Like${likeCount !== 1 ? 's' : ''}
                 </a>
                 <a class="postLink postMetrics commentToggleBtn"
@@ -110,13 +253,13 @@ function renderPosts(posts) {
                 <div class="commentsList" id="commentsList-${post.id}">
                     <p style="color:#aaa; font-size:13px;">Loading comments...</p>
                 </div>
-                <div class="commentInputRow" style="display:flex; gap:8px; margin-top:10px; align-items:center;">
+                <div class="commentInputRow" style="display:flex; gap:8px; margin-top:10px; align-items:center; padding: 5px;">
                     <input
                         class="commentInput themeObject"
                         id="commentInput-${post.id}"
                         type="text"
                         placeholder="Write a comment..."
-                        style="flex:1; padding:7px 12px; border-radius:20px; border:1px solid #444; background:#222; color:#fff; font-size:14px;"
+                        style="flex:1; padding:7px 12px; border-radius:20px; border:1px solid #444; background:var(--bg-secondary); color:var(--text-fill); font-size:14px;"
                         maxlength="300"
                     />
                     <button
@@ -278,7 +421,7 @@ async function loadComments(postId) {
         }
 
         if (comments.length === 0) {
-            list.innerHTML = `<p style="color:#aaa; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
+            list.innerHTML = `<p style="color:#aaa; text-align:center; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
             return;
         }
 
@@ -306,14 +449,14 @@ async function loadComments(postId) {
             ` : '';
 
             return `
-                <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start;">
+                <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; padding:5px">
                     <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                          style="width:28px; height:28px; border-radius:50%; flex-shrink:0;">
                     <div style="flex:1;">
-                        <span style="font-size:13px; font-weight:600; color:#fff;">
+                        <span style="font-size:13px; font-weight:600; color:var(--text-fill);">
                             ${escapeHtml(c.authorName || 'Anonymous')}
                         </span>
-                        <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:2px 0 0;">
+                        <p class="commentText-${c.id}" style="font-size:14px; color:var(--text-fill); margin:2px 0 0;">
                             ${escapeHtml(c.text)}
                         </p>
                         ${ownerActions}

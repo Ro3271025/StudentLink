@@ -83,6 +83,7 @@
     </div>
 
     <script type="module" src="js/postDetail.js"></script>
+    <script type="module" src="js/userSearch.js"></script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>
 </body>

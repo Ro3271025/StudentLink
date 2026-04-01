@@ -4,9 +4,82 @@ import {
     query,
     where,
     getDocs,
-    orderBy,
     collectionGroup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const RECENT_SEARCHES_KEY = "studentlink_recent_searches";
+const MAX_RECENT_SEARCHES = 5;
+
+function getRecentSearches() {
+    try {
+        const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (err) {
+        console.warn("Failed to read recent searches:", err);
+        return [];
+    }
+}
+
+function saveRecentSearch(term) {
+    const normalized = String(term || "").trim();
+    if (!normalized) return;
+
+    const recent = getRecentSearches()
+        .filter(item => String(item).trim().toLowerCase() !== normalized.toLowerCase());
+
+    recent.unshift(normalized);
+    const next = recent.slice(0, MAX_RECENT_SEARCHES);
+
+    try {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+    } catch (err) {
+        console.warn("Failed to save recent search:", err);
+    }
+}
+
+function renderRecentSearches(input) {
+    const container = document.getElementById("recentSearches");
+    if (!container) return;
+
+    const table = container.querySelector(".recentSearchesTable");
+    if (!table) return;
+
+    table.querySelectorAll(".recentSearchData").forEach(row => row.parentElement?.remove());
+
+    const recent = getRecentSearches();
+    if (recent.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("th");
+        cell.className = "recentSearchData";
+        cell.textContent = "No recent searches";
+        row.appendChild(cell);
+        table.appendChild(row);
+        return;
+    }
+
+    recent.forEach(term => {
+        const row = document.createElement("tr");
+        const cell = document.createElement("th");
+        cell.className = "recentSearchData";
+
+        const link = document.createElement("a");
+        link.className = "tableAnchorLink";
+        link.href = "#";
+        link.textContent = term;
+        link.addEventListener("click", async (e) => {
+            e.preventDefault();
+            input.value = term;
+            await runSearch(input, term, true);
+            input.focus();
+        });
+
+        cell.appendChild(link);
+        row.appendChild(cell);
+        table.appendChild(row);
+    });
+}
 
 function createDropdown(input) {
     const existing = document.getElementById('searchDropdown');
@@ -54,7 +127,7 @@ function sectionHeader(label) {
     return el;
 }
 
-function resultItem(icon, title, subtitle, onClick) {
+function resultItem(icon, title, subtitle, onClick, searchInput, searchTerm) {
     const item = document.createElement('div');
     item.style.cssText = `
         display: flex;
@@ -79,7 +152,13 @@ function resultItem(icon, title, subtitle, onClick) {
     `;
     item.addEventListener('mouseenter', () => item.style.background = '#2a3b4f');
     item.addEventListener('mouseleave', () => item.style.background = 'transparent');
-    item.addEventListener('click', onClick);
+    item.addEventListener('click', () => {
+        if (searchTerm) {
+            saveRecentSearch(searchTerm);
+            renderRecentSearches(searchInput);
+        }
+        onClick();
+    });
     return item;
 }
 
@@ -87,67 +166,116 @@ function noResults(dropdown, value) {
     dropdown.innerHTML = `<p style="color:#aaa; font-size:13px; padding:14px 16px; margin:0; text-align:center;">No results found for "<strong>${escapeHtml(value)}</strong>"</p>`;
 }
 
-async function runSearch(input, value) {
+async function runSearch(input, value, persistRecent = false) {
     const dropdown = createDropdown(input);
     dropdown.innerHTML = `<p style="color:#aaa; font-size:13px; padding:12px 16px; margin:0;">Searching...</p>`;
 
-    const lower = value.toLowerCase();
-    const upper = lower + "\uf8ff";
+    const raw = value.trim();
+    if (persistRecent) {
+        saveRecentSearch(raw);
+        renderRecentSearches(input);
+    }
+    const lower = raw.toLowerCase();
+    const upperRaw = raw + "\uf8ff";
+    const upperLower = lower + "\uf8ff";
 
     try {
-        // Run all searches in parallel
-        const [
-            usernameSnap,
-            nameSnap,
-            postsSnap,
-            listingsSnap,
-            commentsSnap
-        ] = await Promise.all([
-            // Users by username
-            getDocs(query(
+        // Query buckets are isolated so one failed index/rule does not kill the whole search.
+        const searchTasks = {
+            username: getDocs(query(
                 collection(db, "users"),
                 where("username", ">=", lower),
-                where("username", "<=", upper)
+                where("username", "<=", upperLower)
             )),
-            // Users by display name
-            getDocs(query(
+            displayName: getDocs(query(
                 collection(db, "users"),
-                where("name", ">=", value),
-                where("name", "<=", value + "\uf8ff")
+                where("displayName", ">=", raw),
+                where("displayName", "<=", upperRaw)
             )),
-            // Posts by body
-            getDocs(query(
+            name: getDocs(query(
+                collection(db, "users"),
+                where("name", ">=", raw),
+                where("name", "<=", upperRaw)
+            )),
+            postBody: getDocs(query(
                 collection(db, "posts"),
-                where("body", ">=", value),
-                where("body", "<=", value + "\uf8ff")
+                where("body", ">=", raw),
+                where("body", "<=", upperRaw)
             )),
-            // Listings by title
-            getDocs(query(
+            postTitle: getDocs(query(
+                collection(db, "posts"),
+                where("title", ">=", raw),
+                where("title", "<=", upperRaw)
+            )),
+            listingTitle: getDocs(query(
                 collection(db, "listings"),
-                where("title", ">=", value),
-                where("title", "<=", value + "\uf8ff")
+                where("title", ">=", raw),
+                where("title", "<=", upperRaw)
             )),
-            // Comments by text
-            getDocs(query(
+            listingDescription: getDocs(query(
+                collection(db, "listings"),
+                where("description", ">=", raw),
+                where("description", "<=", upperRaw)
+            )),
+            comments: getDocs(query(
                 collectionGroup(db, "comments"),
-                where("text", ">=", value),
-                where("text", "<=", value + "\uf8ff")
+                where("text", ">=", raw),
+                where("text", "<=", upperRaw)
             ))
-        ]);
+        };
+
+        const taskEntries = Object.entries(searchTasks);
+        const settled = await Promise.allSettled(taskEntries.map(([, task]) => task));
+        const results = {};
+
+        taskEntries.forEach(([key], index) => {
+            const outcome = settled[index];
+            if (outcome.status === "fulfilled") {
+                results[key] = outcome.value;
+                return;
+            }
+            results[key] = null;
+            console.warn(`Search query failed (${key}):`, outcome.reason);
+        });
 
         // Deduplicate users
         const seen = new Set();
         const users = [];
-        [...usernameSnap.docs, ...nameSnap.docs].forEach(d => {
-            if (!seen.has(d.id)) {
-                seen.add(d.id);
+        const userSnaps = [results.username, results.displayName, results.name].filter(Boolean);
+
+        userSnaps.flatMap(snap => snap.docs).forEach(d => {
+            const userKey = `user:${d.id}`;
+            if (!seen.has(userKey)) {
+                seen.add(userKey);
                 users.push({ id: d.id, ...d.data() });
             }
         });
 
-        const posts = postsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const listings = listingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const comments = commentsSnap.docs.map(d => ({
+        const seenPosts = new Set();
+        const posts = [];
+        [results.postBody, results.postTitle]
+            .filter(Boolean)
+            .flatMap(snap => snap.docs)
+            .forEach(d => {
+                const postKey = `post:${d.id}`;
+                if (seenPosts.has(postKey)) return;
+                seenPosts.add(postKey);
+                posts.push({ id: d.id, ...d.data() });
+            });
+
+        const seenListings = new Set();
+        const listings = [];
+        [results.listingTitle, results.listingDescription]
+            .filter(Boolean)
+            .flatMap(snap => snap.docs)
+            .forEach(d => {
+                const listingKey = `listing:${d.id}`;
+                if (seenListings.has(listingKey)) return;
+                seenListings.add(listingKey);
+                listings.push({ id: d.id, ...d.data() });
+            });
+
+        const comments = (results.comments?.docs || []).map(d => ({
             id: d.id,
             postId: d.ref.parent.parent.id,
             ...d.data()
@@ -166,11 +294,13 @@ async function runSearch(input, value) {
         if (users.length > 0) {
             dropdown.appendChild(sectionHeader(`People (${users.length})`));
             users.slice(0, 5).forEach(user => {
+                const label = user.name || user.displayName || 'Unknown';
                 dropdown.appendChild(resultItem(
                     '👤',
-                    user.name || user.displayName || 'Unknown',
+                    label,
                     `@${user.username || ''}`,
-                    () => { window.location.href = `profile.html?id=${user.id}`; }
+                    () => { window.location.href = `profile.html?id=${user.id}`; },
+                    input, label
                 ));
             });
         }
@@ -179,11 +309,13 @@ async function runSearch(input, value) {
         if (posts.length > 0) {
             dropdown.appendChild(sectionHeader(`Posts (${posts.length})`));
             posts.slice(0, 5).forEach(post => {
+                const label = post.body?.substring(0, 60) || 'Post';
                 dropdown.appendChild(resultItem(
                     '📝',
-                    post.body?.substring(0, 60) || 'Post',
+                    label,
                     `by @${post.authorUsername || 'unknown'} · ${post.likes || 0} likes`,
-                    () => { window.location.href = `post.php?id=${post.id}`; }
+                    () => { window.location.href = `post.php?id=${post.id}`; },
+                    input, label
                 ));
             });
         }
@@ -192,11 +324,13 @@ async function runSearch(input, value) {
         if (listings.length > 0) {
             dropdown.appendChild(sectionHeader(`Listings (${listings.length})`));
             listings.slice(0, 5).forEach(listing => {
+                const label = listing.title || 'Listing';
                 dropdown.appendChild(resultItem(
                     '🏷️',
-                    listing.title || 'Listing',
+                    label,
                     `$${listing.price || 'N/A'} · ${listing.condition || ''}`,
-                    () => { window.location.href = `listingDetail.html?id=${listing.id}`; }
+                    () => { window.location.href = `listingDetail.html?id=${listing.id}`; },
+                    input, label
                 ));
             });
         }
@@ -205,11 +339,13 @@ async function runSearch(input, value) {
         if (comments.length > 0) {
             dropdown.appendChild(sectionHeader(`Comments (${comments.length})`));
             comments.slice(0, 5).forEach(comment => {
+                const label = comment.text?.substring(0, 60) || 'Comment';
                 dropdown.appendChild(resultItem(
                     '💬',
-                    comment.text?.substring(0, 60) || 'Comment',
+                    label,
                     `by @${comment.authorName || 'unknown'}`,
-                    () => { window.location.href = `post.php?id=${comment.postId}`; }
+                    () => { window.location.href = `post.php?id=${comment.postId}`; },
+                    input, label
                 ));
             });
         }
@@ -228,11 +364,13 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-// Attach to all search bars
-const searchInputs = document.querySelectorAll(".searchBar");
+// Attach only to global sidebar search bars.
+const searchInputs = document.querySelectorAll(".searchBar.themeObject");
 
 searchInputs.forEach(input => {
     let debounceTimer;
+
+    renderRecentSearches(input);
 
     input.addEventListener('input', () => {
         clearTimeout(debounceTimer);
@@ -243,9 +381,10 @@ searchInputs.forEach(input => {
 
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             clearTimeout(debounceTimer);
             const value = input.value.trim();
-            if (value) runSearch(input, value);
+            if (value) runSearch(input, value, true);
         }
         if (e.key === 'Escape') closeDropdown();
     });

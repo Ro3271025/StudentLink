@@ -1,0 +1,31 @@
+.listingInput{
+    border-radius: 10px;
+    background-color: var(--theme-accent);
+    border-color: var(--theme-accent);
+    color:var(--text-fill);
+    font-size: 16pt;
+    padding: 5%;
+    transition: 0.125s;
+    font-family: var(--font-family);
+    display: inline;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background:var(--bg-secondary);
+    outline:none;
+}
+
+.fileInput{
+    line-height: 2vh;
+    background-color: var(--theme-accent);
+    border-color: transparent;
+    border-radius: 0.625rem;
+    padding: 0.625rem;
+    transition: 0.125s;
+    color: white;
+    font-weight: bold;
+    font-size: 12pt;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
