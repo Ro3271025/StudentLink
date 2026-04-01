@@ -127,7 +127,7 @@ function sectionHeader(label) {
     return el;
 }
 
-function resultItem(icon, title, subtitle, onClick) {
+function resultItem(icon, title, subtitle, onClick, searchInput, searchTerm) {
     const item = document.createElement('div');
     item.style.cssText = `
         display: flex;
@@ -152,7 +152,13 @@ function resultItem(icon, title, subtitle, onClick) {
     `;
     item.addEventListener('mouseenter', () => item.style.background = '#2a3b4f');
     item.addEventListener('mouseleave', () => item.style.background = 'transparent');
-    item.addEventListener('click', onClick);
+    item.addEventListener('click', () => {
+        if (searchTerm) {
+            saveRecentSearch(searchTerm);
+            renderRecentSearches(searchInput);
+        }
+        onClick();
+    });
     return item;
 }
 
@@ -288,11 +294,13 @@ async function runSearch(input, value, persistRecent = false) {
         if (users.length > 0) {
             dropdown.appendChild(sectionHeader(`People (${users.length})`));
             users.slice(0, 5).forEach(user => {
+                const label = user.name || user.displayName || 'Unknown';
                 dropdown.appendChild(resultItem(
                     '👤',
-                    user.name || user.displayName || 'Unknown',
+                    label,
                     `@${user.username || ''}`,
-                    () => { window.location.href = `profile.html?id=${user.id}`; }
+                    () => { window.location.href = `profile.html?id=${user.id}`; },
+                    input, label
                 ));
             });
         }
@@ -301,11 +309,13 @@ async function runSearch(input, value, persistRecent = false) {
         if (posts.length > 0) {
             dropdown.appendChild(sectionHeader(`Posts (${posts.length})`));
             posts.slice(0, 5).forEach(post => {
+                const label = post.body?.substring(0, 60) || 'Post';
                 dropdown.appendChild(resultItem(
                     '📝',
-                    post.body?.substring(0, 60) || 'Post',
+                    label,
                     `by @${post.authorUsername || 'unknown'} · ${post.likes || 0} likes`,
-                    () => { window.location.href = `post.php?id=${post.id}`; }
+                    () => { window.location.href = `post.php?id=${post.id}`; },
+                    input, label
                 ));
             });
         }
@@ -314,11 +324,13 @@ async function runSearch(input, value, persistRecent = false) {
         if (listings.length > 0) {
             dropdown.appendChild(sectionHeader(`Listings (${listings.length})`));
             listings.slice(0, 5).forEach(listing => {
+                const label = listing.title || 'Listing';
                 dropdown.appendChild(resultItem(
                     '🏷️',
-                    listing.title || 'Listing',
+                    label,
                     `$${listing.price || 'N/A'} · ${listing.condition || ''}`,
-                    () => { window.location.href = `listingDetail.html?id=${listing.id}`; }
+                    () => { window.location.href = `listingDetail.html?id=${listing.id}`; },
+                    input, label
                 ));
             });
         }
@@ -327,11 +339,13 @@ async function runSearch(input, value, persistRecent = false) {
         if (comments.length > 0) {
             dropdown.appendChild(sectionHeader(`Comments (${comments.length})`));
             comments.slice(0, 5).forEach(comment => {
+                const label = comment.text?.substring(0, 60) || 'Comment';
                 dropdown.appendChild(resultItem(
                     '💬',
-                    comment.text?.substring(0, 60) || 'Comment',
+                    label,
                     `by @${comment.authorName || 'unknown'}`,
-                    () => { window.location.href = `post.php?id=${comment.postId}`; }
+                    () => { window.location.href = `post.php?id=${comment.postId}`; },
+                    input, label
                 ));
             });
         }
