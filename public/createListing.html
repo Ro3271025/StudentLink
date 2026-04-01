@@ -1,17 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Marketplace | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/listings.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body id="documentBody">
+
+    <!-- HEADER -->
+    <div id="header">
+        <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
+    </div>
+
+<!-- LEFT SIDEBAR -->
+
+<div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
+    <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText"><a href="explore.html">Explore</a></p>
+    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+            <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
+            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+        </div>
+    </div>
+
+</div>
+
+
+
+    
+
+    <br><br>
+
+<!-- RIGHT SIDEBAR (Optional but consistent) -->
+<div class="sidebar" id="rightBar">
+    <br>
+    <input class="searchBar themeObject" placeholder="Search"><br><br>
+</div>
+
+
 <form id="listingForm">
 
-    <input type="text" id="title" placeholder="Title" required>
+    <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
 
-    <textarea id="description" placeholder="Description" required></textarea>
+    <textarea id="description" class="listingInput" placeholder="Description" required></textarea><br>
 
-    <select id="category" required>
+    <select id="category" class="" required>
         <option value="">Select Category</option>
         <option value="Textbook">Textbook</option>
         <option value="Calculator">Calculator</option>
         <option value="Tech">Tech</option>
         <option value="Dorm">Dorm</option>
         <option value="Misc">Misc</option>
-    </select>
+    </select><br>
 
     <!-- CONDITIONAL FIELDS (HIDDEN INITIALLY) -->
     <div id="supplyOptions" style="display:none;">
@@ -28,20 +81,31 @@
             <option value="">Sell or Rent?</option>
             <option value="sell">Sell</option>
             <option value="rent">Rent</option>
-        </select>
+        </select><br>
 
-    </div>
+    </div><br>
 
-    <input type="number" id="price" placeholder="Price ($)" min="1" required>
-    <label>Upload Image (optional)</label>
-    <input type="file" id="listingImage" accept="image/*">
+    <input class="listingInput" type="number" id="price" placeholder="Price ($)" min="1" required><br><br>
+    <label>Upload Image (optional)</label><br><br>
+    <input class="themeObject fileInput" type="file" id="listingImage" accept="image/*" multiple>
 
     <br><br>
     <img id="imagePreview" style="display:none; max-width:250px; border-radius:8px;">
-    <br><br>
+    
 
     <button type="submit">Create Listing</button>
 
+    
+
 </form>
 
+<!-- Scripts -->
 <script type="module" src="js/createListings.js"></script>
+<script type="module" src="js/userSearch.js"></script>
+<script type="module">
+    import { setupSidebar } from "../public/js/showUser.js";
+
+    setupSidebar();
+</script>
+<script src="../public/js/toggleVis.js" type="text/javascript"></script>
+<script src="js/themeSwap.js"></script>

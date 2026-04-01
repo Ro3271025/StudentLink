@@ -3,21 +3,15 @@
 <head>
     <title>Home | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, inital-scale=1">
 </head>
 <body id="documentBody">
-
     <div id="header">
         <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
     </div>
 
-    <!-- Feed renders here dynamically -->
-    <div id="feedContainer"></div>
-
-    <br>
-    <button id="loadMore" class="themeObject">Load More Posts</button>
-
     <!-- LEFT SIDEBAR -->
+
     <div class="sidebar" id="leftBar">
         <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
@@ -30,14 +24,21 @@
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
         <p class="sidebarText"><a href="settings.html">Settings</a></p>
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-        <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666; display:none;">Backfill Usernames (Dev)</button>
+        
+
+        <div class="overlayDiv">
+            <div id="newPostContainer">
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')" onclick="toggleOverlay('newPostContainer')">Post</button></p>
+                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- RIGHT SIDEBAR -->
-    <div class="sidebar" id="rightBar">
-        <br>
-        <input class="searchBar themeObject" placeholder="Search"><br><br>
 
+    <div class="sidebar" id="rightBar">
+        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
         <div id="recentSearches">
             <table class="recentSearchesTable">
                 <tr><th id="recentHeader">Recent Searches</th></tr>
@@ -49,46 +50,6 @@
             </table>
         </div>
     </div>
-
-    <!-- NEW POST OVERLAY -->
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader">
-                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                <b>Create New Post</b>
-                <button class="themeObject" id="createPostBtn">Post</button>
-            </p>
-            <div id="newPostTXT">
-                <textarea maxlength="300" placeholder="What's happening?"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { setupHome } from "./js/home.js";
-        import { runBackfill } from "./js/backfillUsernames.js";
-        import "./js/feed.js?v=6";
-
-        setupHome();
-
-        document.getElementById("backfillBtn").addEventListener("click", async () => {
-            const btn = document.getElementById("backfillBtn");
-            btn.disabled = true;
-            btn.textContent = "Running...";
-            try {
-                const result = await runBackfill();
-                btn.textContent = `Done! Updated ${result.updated} posts`;
-                setTimeout(() => {
-                    btn.textContent = "Backfill Usernames (Dev)";
-                    btn.disabled = false;
-                    location.reload();
-                }, 2000);
-            } catch (err) {
-                btn.textContent = "Error: " + err.message;
-                btn.disabled = false;
-            }
-        });
-    </script>
     <script type="module" src="js/userSearch.js"></script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>

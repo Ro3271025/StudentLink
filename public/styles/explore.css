@@ -1,0 +1,39 @@
+.recentExploreSearchData{
+    text-align: center;
+}
+
+#filterSelection{
+    width:100%;
+    font-weight: normal;
+    margin-left: 2.5%;
+}
+
+#exploreSearchBar{
+    width:98%;
+}
+
+#exploreHome{
+    border:none;
+}
+
+.exploreBar{
+    border-radius: 10px;
+    background-color: var(--theme-accent);
+    border-color: var(--theme-accent);
+    font-size: 16pt;
+    padding: 5%;
+    transition: 0.125s;
+    font-family: var(--font-family);
+    display: inline;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background:var(--bg-secondary);
+    outline:none;
+}
+
+.exploreListing{
+    text-align: center;
+    margin-left: 23%;
+}

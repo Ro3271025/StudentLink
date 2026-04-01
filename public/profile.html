@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<title>Profile | StudentLink</title>
-<link rel="stylesheet" href="styles/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body id="documentBody">
-
     <div id="profileContainer">
         <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div>
 
@@ -106,7 +103,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
     <style>
@@ -132,6 +128,11 @@
         #userStats a:hover {
             text-decoration: none;
         }
+        #profileImage:hover {
+        outline: 2px solid #008000;
+        box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
+        cursor: pointer;
+        }
         .commentCard {
             border-left: 1px solid var(--border-color);
             border-right: 1px solid var(--border-color);
@@ -153,7 +154,7 @@
     </style>
 
     <script type="module">
-        import { setupProfile } from "./js/profile.js";
+    import { setupProfile } from "./js/profile.js?v=2";
         setupProfile();
     </script>
     <script type="module" src="js/userSearch.js"></script>

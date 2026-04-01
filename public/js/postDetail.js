@@ -46,7 +46,6 @@ onAuthStateChanged(auth, async (user) => {
 
     document.getElementById('commentsSection').style.display = 'block';
 
-    // Comment submit
     document.getElementById('addCommentBtn').addEventListener('click', submitComment);
     document.getElementById('commentInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') submitComment();
@@ -65,7 +64,6 @@ async function loadPost() {
 
         const post = { id: postSnap.id, ...postSnap.data() };
         const likes = post.likes || 0;
-        const commentCount = post.commentCount || 0;
         const isOwner = currentUser && post.authorId === currentUser.uid;
         const likedBy = post.likedBy || [];
         const hasLiked = currentUser && likedBy.includes(currentUser.uid);
@@ -76,6 +74,15 @@ async function loadPost() {
         const deleteBtn = isOwner
             ? `<button id="deletePostBtn" style="font-size:12pt; padding:4px 14px; border-radius:12px; background:none; border:1px solid #e55; color:#e55; cursor:pointer; margin-left:12px;">Delete Post</button>`
             : '';
+
+        // Get actual comment count from subcollection
+        const commentsSnap = await getDocs(collection(db, "posts", postId, "comments"));
+        const actualCount = commentsSnap.size;
+
+        // In loadPost() - fix stored count
+        if ((post.commentCount || 0) !== actualCount && currentUser) {
+            await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
+}
 
         container.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -100,8 +107,8 @@ async function loadPost() {
                    style="${hasLiked ? 'color: var(--theme-accent); font-weight:600;' : ''}">
                    ${likes} Like${likes !== 1 ? 's' : ''}
                 </a>
-                <a class="postLink postMetrics" href="#" style="margin-left:12px;">
-                    ${commentCount} Comment${commentCount !== 1 ? 's' : ''}
+                <a class="postLink postMetrics" id="commentCountDisplay" href="#" style="margin-left:12px;">
+                    ${actualCount} Comment${actualCount !== 1 ? 's' : ''}
                 </a>
             </footer>
         `;
@@ -165,8 +172,19 @@ async function loadComments() {
         );
         const snap = await getDocs(q);
 
+        // Always sync the stored commentCount to the real count
+        const realCount = snap.size;
+        if (currentUser) {
+            await updateDoc(doc(db, "posts", postId), { commentCount: realCount });
+}
+        // Update the count display on the page
+        const countDisplay = document.getElementById('commentCountDisplay');
+        if (countDisplay) {
+            countDisplay.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
+        }
+
         if (snap.empty) {
-            container.innerHTML = '<p style="color:#aaa; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
+            container.innerHTML = '<p style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
             return;
         }
 
@@ -213,10 +231,7 @@ async function loadComments() {
                 const commentId = btn.dataset.commentId;
                 try {
                     await deleteDoc(doc(db, "posts", postId, "comments", commentId));
-                    await updateDoc(doc(db, "posts", postId), {
-                        commentCount: increment(-1)
-                    });
-                    await loadComments();
+                    await loadComments(); // recount automatically
                 } catch (err) {
                     console.error("Delete comment failed:", err);
                     alert("Failed to delete comment.");
@@ -310,12 +325,8 @@ async function submitComment() {
             createdAt: serverTimestamp()
         });
 
-        await updateDoc(doc(db, "posts", postId), {
-            commentCount: increment(1)
-        });
-
         input.value = '';
-        await loadComments();
+        await loadComments(); // recount automatically
     } catch (err) {
         console.error("Comment failed:", err);
         alert("Failed to post comment.");
