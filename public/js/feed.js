@@ -224,11 +224,24 @@ function renderPosts(posts) {
             imageSection = `<div class="imageContainer"><img src="${imageUrl}"></div>`;
         }
 
+        // Format timestamp
+        let dateString = 'Unknown date';
+        if (post.createdAt) {
+            let dateObj = post.createdAt;
+            if (typeof dateObj.toDate === 'function') {
+                dateObj = dateObj.toDate();
+            }
+            if (dateObj instanceof Date) {
+                dateString = dateObj.toLocaleString();
+            }
+        }
+
         card.innerHTML = `
             <img class="profileImgMini" src="${profileImg}">
             <span class="postHeader">
                 <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">${displayName}</a>
                 <small class="postUsername" style="margin-left: 6px; color: #aaa;">${username}</small>
+                <span class="postTimestamp" style="color:#888;font-size:10pt; margin-left:10px;">${dateString}</span>
             </span><br>
             <p class="postContentText">${postText}</p>
             ${imageSection}

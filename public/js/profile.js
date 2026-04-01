@@ -70,21 +70,34 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
+                // Format timestamp
+                let dateString = 'Unknown date';
+                if (post.createdAt) {
+                    let dateObj = post.createdAt;
+                    if (typeof dateObj.toDate === 'function') {
+                        dateObj = dateObj.toDate();
+                    }
+                    if (dateObj instanceof Date) {
+                        dateString = dateObj.toLocaleString();
+                    }
+                }
+
             const card = document.createElement('div');
             card.className = 'content';
             card.style.cursor = 'pointer';
-            card.innerHTML = `
-                <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-                <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
-                <p class="postContentText">${escapeHtml(post.body || '')}</p>
-                ${imageSection}
-                <br>
-                <footer>
-                    <a class="postLink postMetrics" href="#">${likes} Like${likes !== 1 ? 's' : ''}</a>
-                    <a class="postLink postMetrics" href="#">${comments} Comment${comments !== 1 ? 's' : ''}</a>
-                </footer><br>
-            `;
+                card.innerHTML = `
+                    <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+                    <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
+                    <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                    <p class="postContentText">${escapeHtml(post.body || '')}</p>
+                    <p class="postTimestamp" style="color:#888;font-size:10pt;">${dateString}</p>
+                    ${imageSection}
+                    <br>
+                    <footer>
+                        <a class="postLink postMetrics" href="#">${likes} Like${likes !== 1 ? 's' : ''}</a>
+                        <a class="postLink postMetrics" href="#">${comments} Comment${comments !== 1 ? 's' : ''}</a>
+                    </footer><br>
+                `;
             card.addEventListener('click', () => {
                 window.location.href = `post.html?id=${post.id}`;
             });
