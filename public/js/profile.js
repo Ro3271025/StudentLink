@@ -14,8 +14,9 @@ import {
     collectionGroup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { app } from "./firebaseInitialization.js";
 
-const storage = getStorage();
+const storage = getStorage(app);
 
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
@@ -342,11 +343,13 @@ export function setupProfile() {
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    try {
-                        const storageRef = ref(storage, "userPhotos/" + user.uid);
-                        await uploadBytes(storageRef, file);
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+        // Force token refresh to ensure auth is current
+        await user.getIdToken(true);
+const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
+        await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
