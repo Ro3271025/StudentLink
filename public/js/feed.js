@@ -209,7 +209,7 @@ function renderPosts(posts) {
 
         const displayName = post.authorName || 'Display Name';
         const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
-        const profileImg = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+        const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
         const postText = post.body || post.description || '';
         const likeCount = post.likes || 0;
         const commentCount = post.commentCount || 0;
