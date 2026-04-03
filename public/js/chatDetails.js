@@ -39,6 +39,7 @@ const chatUsername = document.getElementById("chatUsername");
 const storage = getStorage();
 
 let selectedImages = [];
+const MAX_IMAGES = 5;
 
 /* ========================= */
 
@@ -48,11 +49,30 @@ function formatTime(date) {
         minute: "2-digit"
     });
 }
+
+/* ========================= */
 /* IMAGE PREVIEW */
 
 imageInput.addEventListener("change", () => {
+
     const newFiles = Array.from(imageInput.files);
-    selectedImages = [...selectedImages, ...newFiles];
+
+    const remainingSlots = MAX_IMAGES - selectedImages.length;
+
+    if (remainingSlots <= 0) {
+        alert(`You can only upload up to ${MAX_IMAGES} images.`);
+        imageInput.value = "";
+        return;
+    }
+
+    const filesToAdd = newFiles.slice(0, remainingSlots);
+
+    selectedImages = [...selectedImages, ...filesToAdd];
+
+    if (newFiles.length > remainingSlots) {
+        alert(`Only ${remainingSlots} more image(s) allowed.`);
+    }
+
     imageInput.value = "";
     renderImagePreview();
 });
@@ -69,6 +89,7 @@ function renderImagePreview() {
         const img = document.createElement("img");
         const url = URL.createObjectURL(file);
         img.src = url;
+
         img.onload = () => {
             URL.revokeObjectURL(url);
         };
@@ -112,6 +133,7 @@ async function loadRecipientInfo(currentUserId) {
 }
 
 /* ========================= */
+/* 🔥 PRO LEVEL MESSAGES */
 
 function loadMessages(currentUserId) {
 
@@ -121,6 +143,10 @@ function loadMessages(currentUserId) {
     );
 
     onSnapshot(q, snapshot => {
+
+        // 🔥 Detect if user is near bottom BEFORE updating
+        const isNearBottom =
+            messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer.clientHeight + 120;
 
         messagesContainer.innerHTML = "";
 
@@ -149,6 +175,14 @@ function loadMessages(currentUserId) {
                     const img = document.createElement("img");
                     img.src = url;
                     img.classList.add("chatImage");
+
+                    // 🔥 Handle image load scroll
+                    img.onload = () => {
+                        if (isNearBottom) {
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        }
+                    };
+
                     grid.appendChild(img);
                 });
 
@@ -176,7 +210,15 @@ function loadMessages(currentUserId) {
             messagesContainer.appendChild(div);
         });
 
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        // 🔥 Smooth + delayed scroll
+        if (isNearBottom) {
+            setTimeout(() => {
+                messagesContainer.scrollTo({
+                    top: messagesContainer.scrollHeight,
+                    behavior: "smooth"
+                });
+            }, 50);
+        }
     });
 }
 
@@ -224,7 +266,6 @@ async function sendMessage(currentUserId) {
         { merge: true }
     );
 
-    /* RESET */
     messageInput.value = "";
     selectedImages = [];
     imagePreviewContainer.innerHTML = "";
