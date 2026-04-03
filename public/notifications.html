@@ -3,6 +3,7 @@
 <head>
     <title>Home | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/notifications.css">
     <meta name="viewport" content="width=device-width, inital-scale=1">
 </head>
 <body id="documentBody">
@@ -10,46 +11,87 @@
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
+
     <!-- LEFT SIDEBAR -->
+   <div class="sidebar" id="leftBar">
+    <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText"><a href="explore.html">Explore</a></p>
+    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p>
+    <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666; display:none;">Backfill Usernames (Dev)</button>
+</div>
 
-    <div class="sidebar" id="leftBar">
-        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html">Listings</a></p>
-        <p class="sidebarText"><a href="explore.html">Explore</a></p>
-        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p>
-        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-        
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+    <br>
+    <input class="searchBar themeObject" placeholder="Search"><br><br>
 
-        <div class="overlayDiv">
-            <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
-            </div>
+    <div id="recentSearches">
+        <table class="recentSearchesTable">
+            <tr><th id="recentHeader">Recent Searches</th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+        </table>
+    </div>
+</div>
+
+<!-- NEW POST OVERLAY -->
+<div class="overlayDiv">
+    <div id="newPostContainer">
+        <p id="newPostHeader">
+            <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+            <b>Create New Post</b>
+            <button class="themeObject" id="createPostBtn">Post</button>
+        </p>
+        <div id="newPostTXT">
+            <textarea maxlength="300" placeholder="What's happening?"></textarea>
         </div>
+    </div>
+</div>
 
+    <!-- I'm not sure why suddenly this has to be at the bottom -->
+
+    <div class="content"><span class="notifHeader">
+            <img class="notifIconType" src="styles/images/HEART.svg">
+            <!-- Display the latest 3 interacting users' profile images -->
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+            <br><br>
+            <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">Rodolfo Tan</a> and 2 others liked your post
+        </span><br>
+        <small class="postUsername" style="margin-left: 3.5%; color: #aaa;">Making a new test post</small>
+        <br><br>
     </div>
 
+    <div class="content"><span class="notifHeader">
+        <img class="notifIconType" src="styles/images/COMMENT.svg">
+        <!-- Display the latest 3 interacting users' profile images -->
+        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+        <br><br>
+        <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">Rodolfo Tan</a> and 1 others commented on your post
+    </span><br>
+    <small class="postUsername" style="margin-left: 3.5%; color: #aaa;">Making a new test post</small>
+    <br><br>
+</div>
 
-    <div class="sidebar" id="rightBar">
-        <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-        <div id="recentSearches">
-            <table class="recentSearchesTable">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
-            </table>
-        </div>
-    </div>
+
+    <script type="module">
+        import { setupSidebar } from "../public/js/showUser.js";
+
+        setupSidebar();
+    </script>
     <script type="module" src="js/userSearch.js"></script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>
