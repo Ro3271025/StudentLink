@@ -9,6 +9,7 @@ onSnapshot,
 doc,
 getDoc,
 getDocs,
+updateDoc,
 setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -26,8 +27,7 @@ if(!user) return;
 
 const q = query(
 collection(db,"conversations"),
-where("users","array-contains",user.uid),
-orderBy("lastTimestamp","desc")
+where("users","array-contains",user.uid)
 );
 
 onSnapshot(q, async snapshot => {
