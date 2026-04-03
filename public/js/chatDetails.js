@@ -48,12 +48,12 @@ function formatTime(date) {
         minute: "2-digit"
     });
 }
-
-/* ========================= */
 /* IMAGE PREVIEW */
 
 imageInput.addEventListener("change", () => {
-    selectedImages = Array.from(imageInput.files);
+    const newFiles = Array.from(imageInput.files);
+    selectedImages = [...selectedImages, ...newFiles];
+    imageInput.value = "";
     renderImagePreview();
 });
 
