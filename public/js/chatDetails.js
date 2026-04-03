@@ -67,7 +67,11 @@ function renderImagePreview() {
         wrapper.classList.add("previewItem");
 
         const img = document.createElement("img");
-        img.src = URL.createObjectURL(file);
+        const url = URL.createObjectURL(file);
+        img.src = url;
+        img.onload = () => {
+            URL.revokeObjectURL(url);
+        };
 
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "✕";
@@ -75,6 +79,7 @@ function renderImagePreview() {
 
         removeBtn.onclick = () => {
             selectedImages.splice(index, 1);
+            imageInput.value = "";
             renderImagePreview();
         };
 
