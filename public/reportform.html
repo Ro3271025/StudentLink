@@ -36,71 +36,36 @@
         </div>
     </div>
 
-</div>
-
-
-
-    
-
-    <br><br>
+</div><br><br>
 
 <!-- RIGHT SIDEBAR (Optional but consistent) -->
 <div class="sidebar" id="rightBar">
     <br>
     <input class="searchBar themeObject" placeholder="Search"><br><br>
+
+    <div id="recentSearches">
+        <table class="recentSearchesTable">
+            <tr><th id="recentHeader">Recent Searches</th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+        </table>
+    </div>
 </div>
 
 
 <form id="listingForm">
-
+    <p style="font-size: 16pt; font-weight: bold;">User Report Form</p>
     <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
-
-    <textarea id="description" class="listingInput" placeholder="Description" required></textarea><br>
-
-    <select id="category" class="" required>
-        <option value="">Select Category</option>
-        <option value="Textbook">Textbook</option>
-        <option value="Calculator">Calculator</option>
-        <option value="Tech">Tech</option>
-        <option value="Dorm">Dorm</option>
-        <option value="Misc">Misc</option>
-    </select><br>
-
-    <!-- CONDITIONAL FIELDS (HIDDEN INITIALLY) -->
-    <div id="supplyOptions" style="display:none;">
-
-        <select id="condition">
-            <option value="">Select Condition</option>
-            <option value="New">New</option>
-            <option value="Like New">Like New</option>
-            <option value="Good">Good</option>
-            <option value="Fair">Fair</option>
-        </select>
-
-        <select id="listingType">
-            <option value="">Sell or Rent?</option>
-            <option value="sell">Sell</option>
-            <option value="rent">Rent</option>
-        </select><br>
-
-    </div><br>
-
-    <input class="listingInput" type="number" id="price" placeholder="Price ($)" min="1" required><br><br>
-    <label>Upload Image (optional)</label><br><br>
-    <input class="themeObject fileInput" type="file" id="listingImage" accept="image/*" multiple>
-
+    <textarea id="description" class="listingInput" placeholder="Description - Tell us what happened" style="font-size:12pt; width: 15vw;" required></textarea><br>
+    <input class="listingInput" type="url" id="postURL" placeholder="Post URL" required><br><br>
     <br><br>
-    <img id="imagePreview" style="display:none; max-width:250px; border-radius:8px;">
-    
-
-    <button type="submit">Create Listing</button>
-
-    
-
+    <button type="submit">Submit Report</button>
 </form>
 
 <!-- Scripts -->
-<script type="module" src="js/createListings.js"></script>
 <script type="module" src="js/userSearch.js"></script>
 <script type="module">
     import { setupSidebar } from "../public/js/showUser.js";

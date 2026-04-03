@@ -1,0 +1,11 @@
+.notifIconType{
+    margin-left: 3.5%;
+    margin-top: 3.5%;
+    min-height: 3vh;
+    max-height: 4vh;
+    vertical-align: middle;
+}
+
+.notifHeader{
+    line-height: 2vh;
+}
