@@ -1,24 +1,189 @@
 // public/js/feed.js
 import { db, auth } from './firebaseInitialization.js';
-import { toggleLike } from './postsService.js';
+import { toggleLike, createPost } from './postsService.js';
 import { addComment, getComments, deleteComment, editComment } from './commentsService.js';
-import { collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FEED_PAGE_SIZE = 10;
+
+let loadedPosts = [];
+let lastVisibleDoc = null;
+let hasMorePosts = true;
+let isLoadingPosts = false;
 
 loadAndRenderFeed();
+setupLoadMoreButton();
+setupNewPostComposer();
 
-async function loadAndRenderFeed() {
-    const posts = await getRecentPosts();
-    renderPosts(posts);
+async function getCurrentUserUsername(user) {
+    if (!user) return "";
+
+    try {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+            const data = snap.data() || {};
+            if (data.username && String(data.username).trim()) {
+                return String(data.username).trim();
+            }
+        }
+    } catch (err) {
+        console.error("Failed to load username:", err);
+    }
+
+    const email = user.email || "";
+    return email.includes("@") ? email.split("@")[0] : "user";
 }
 
-async function getRecentPosts() {
-    const postsCol = collection(db, "posts");
-    const q = query(postsCol, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
+function setupNewPostComposer() {
+    const createBtn = document.getElementById("createPostBtn");
+    const textArea = document.querySelector("#newPostTXT textarea");
+    if (!createBtn || !textArea) return;
+
+    createBtn.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please log in to post.");
+            return;
+        }
+
+        const body = textArea.value.trim();
+        if (!body) {
+            alert("Please write something before posting.");
+            return;
+        }
+
+        const compactText = body.replace(/\s+/g, " ").trim();
+        const title = (compactText.slice(0, 60) || "Post").trim();
+
+        createBtn.disabled = true;
+        createBtn.textContent = "Posting...";
+
+        try {
+            const authorUsername = await getCurrentUserUsername(user);
+
+            await createPost({
+                authorId: user.uid,
+                authorName: getCurrentUserName(),
+                authorUsername,
+                title,
+                body
+            });
+
+            textArea.value = "";
+
+            if (typeof window.toggleOverlay === "function") {
+                window.toggleOverlay("newPostContainer");
+            }
+
+            await loadAndRenderFeed();
+        } catch (err) {
+            console.error("Failed to create post:", err);
+            alert("Failed to create post. Please try again.");
+        } finally {
+            createBtn.disabled = false;
+            createBtn.textContent = "Post";
+        }
+    });
+}
+
+async function loadAndRenderFeed() {
+    loadedPosts = [];
+    lastVisibleDoc = null;
+    hasMorePosts = true;
+    await loadMorePosts({ reset: true });
+}
+
+function setupLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    loadMoreBtn.addEventListener('click', async () => {
+        await loadMorePosts();
+    });
+
+    updateLoadMoreButton();
+}
+
+function updateLoadMoreButton() {
+    const loadMoreBtn = document.getElementById('loadMore');
+    if (!loadMoreBtn) return;
+
+    if (!hasMorePosts) {
+        loadMoreBtn.style.display = 'none';
+        return;
+    }
+
+    loadMoreBtn.style.display = 'inline-block';
+    loadMoreBtn.disabled = isLoadingPosts;
+    loadMoreBtn.textContent = isLoadingPosts ? 'Loading...' : 'Load More Posts';
+}
+
+async function loadMorePosts(options = {}) {
+    const reset = Boolean(options.reset);
+    if (isLoadingPosts) return;
+    if (!reset && !hasMorePosts) return;
+
+    isLoadingPosts = true;
+    updateLoadMoreButton();
+
+    try {
+        const { posts, nextLastVisibleDoc, hasNextPage } = await getRecentPostsPage(lastVisibleDoc);
+        await syncCommentCounts(posts);
+
+        loadedPosts = reset ? posts : [...loadedPosts, ...posts];
+        if (posts.length > 0) {
+            lastVisibleDoc = nextLastVisibleDoc;
+        }
+        hasMorePosts = hasNextPage;
+
+        renderPosts(loadedPosts);
+    } catch (err) {
+        console.error('Failed to load posts:', err);
+        alert('Failed to load posts. Please try again.');
+    } finally {
+        isLoadingPosts = false;
+        updateLoadMoreButton();
+    }
+}
+
+async function syncCommentCounts(posts) {
+    await Promise.all(posts.map(async (post) => {
+        try {
+            const snap = await getDocs(
+                collection(db, "posts", post.id, "comments")
+            );
+            post.commentCount = snap.size;
+        } catch (err) {
+            // keep stored count if fetch fails
+        }
     }));
+}
+
+
+
+
+
+
+
+
+
+async function getRecentPostsPage(lastDoc = null) {
+    const postsCol = collection(db, "posts");
+    const q = lastDoc
+        ? query(postsCol, orderBy("createdAt", "desc"), startAfter(lastDoc), limit(FEED_PAGE_SIZE))
+        : query(postsCol, orderBy("createdAt", "desc"), limit(FEED_PAGE_SIZE));
+
+    const querySnapshot = await getDocs(q);
+    const posts = querySnapshot.docs.map(snap => ({
+        id: snap.id,
+        ...snap.data()
+    }));
+
+    return {
+        posts,
+        nextLastVisibleDoc: querySnapshot.docs.length ? querySnapshot.docs[querySnapshot.docs.length - 1] : lastDoc,
+        hasNextPage: querySnapshot.docs.length === FEED_PAGE_SIZE
+    };
 }
 
 function getCurrentUserId() {
@@ -40,6 +205,7 @@ function renderPosts(posts) {
         const card = document.createElement('div');
         card.className = 'content';
         card.dataset.postId = post.id;
+        card.style.cursor = 'pointer';
 
         const displayName = post.authorName || 'Display Name';
         const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
@@ -61,7 +227,7 @@ function renderPosts(posts) {
         card.innerHTML = `
             <img class="profileImgMini" src="${profileImg}">
             <span class="postHeader">
-                <a class="postLink postDisplayName" href="#">${displayName}</a>
+                <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">${displayName}</a>
                 <small class="postUsername" style="margin-left: 6px; color: #aaa;">${username}</small>
             </span><br>
             <p class="postContentText">${postText}</p>
@@ -106,6 +272,18 @@ function renderPosts(posts) {
             </div>
         `;
 
+        // Navigate to post page on card click (but not on interactive elements)
+        card.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('postMetrics') &&
+                !e.target.classList.contains('likeBtn') &&
+                !e.target.classList.contains('commentToggleBtn') &&
+                !e.target.classList.contains('submitCommentBtn') &&
+                !e.target.classList.contains('postDisplayName') &&
+                !e.target.closest('.commentSection') &&
+                !e.target.closest('footer')) {
+            window.location.href = `post.html?id=${post.id}`;            }
+        });
+
         container.appendChild(card);
     });
 
@@ -129,7 +307,7 @@ function attachEventListeners() {
             btn.style.pointerEvents = 'none';
 
             try {
-                const { liked, newCount } = await toggleLike(postId, userId);
+                const { liked, newCount } = await toggleLike(postId, userId, getCurrentUserName());
                 btn.dataset.likeCount = newCount;
                 btn.textContent = `${newCount} Like${newCount !== 1 ? 's' : ''}`;
 
@@ -199,16 +377,6 @@ function attachEventListeners() {
 
                 input.value = '';
                 await loadComments(postId);
-
-                const card = document.querySelector(`.content[data-post-id="${postId}"]`);
-                if (card) {
-                    const toggleBtn = card.querySelector('.commentToggleBtn');
-                    if (toggleBtn) {
-                        const currentCount = parseInt(toggleBtn.textContent) || 0;
-                        const newCount = currentCount + 1;
-                        toggleBtn.textContent = `${newCount} Comment${newCount !== 1 ? 's' : ''}`;
-                    }
-                }
             } catch (err) {
                 console.error("Comment failed:", err);
                 alert("Failed to post comment. Please try again.");
@@ -241,6 +409,16 @@ async function loadComments(postId) {
 
     try {
         const comments = await getComments(postId, { pageSize: 50 });
+
+        // Sync comment count display to real count
+        const card = document.querySelector(`.content[data-post-id="${postId}"]`);
+        if (card) {
+            const toggleBtn = card.querySelector('.commentToggleBtn');
+            if (toggleBtn) {
+                const realCount = comments.length;
+                toggleBtn.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
+            }
+        }
 
         if (comments.length === 0) {
             list.innerHTML = `<p style="color:#aaa; text-align:center; font-size:13px; margin:4px 0;">No comments yet. Be the first!</p>`;
@@ -297,17 +475,6 @@ async function loadComments(postId) {
                 try {
                     await deleteComment(postId, commentId);
                     await loadComments(postId);
-
-                    // Update comment count in footer
-                    const card = document.querySelector(`.content[data-post-id="${postId}"]`);
-                    if (card) {
-                        const toggleBtn = card.querySelector('.commentToggleBtn');
-                        if (toggleBtn) {
-                            const currentCount = parseInt(toggleBtn.textContent) || 0;
-                            const newCount = Math.max(0, currentCount - 1);
-                            toggleBtn.textContent = `${newCount} Comment${newCount !== 1 ? 's' : ''}`;
-                        }
-                    }
                 } catch (err) {
                     console.error("Delete failed:", err);
                     alert("Failed to delete comment.");
@@ -319,11 +486,10 @@ async function loadComments(postId) {
         list.querySelectorAll('.editCommentBtn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const { postId, commentId, commentText } = btn.dataset;
+                const { postId, commentId } = btn.dataset;
                 const textEl = list.querySelector(`.commentText-${commentId}`);
                 if (!textEl) return;
 
-                // Replace text with an input field
                 const originalText = textEl.textContent.trim();
                 textEl.style.display = 'none';
                 btn.style.display = 'none';
@@ -345,19 +511,16 @@ async function loadComments(postId) {
                 const saveBtn = editRow.querySelectorAll('button')[0];
                 const cancelBtn = editRow.querySelectorAll('button')[1];
 
-                // Insert edit row after the text
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
                 editInput.setSelectionRange(editInput.value.length, editInput.value.length);
 
-                // Cancel
                 cancelBtn.addEventListener('click', () => {
                     editRow.remove();
                     textEl.style.display = '';
                     btn.style.display = '';
                 });
 
-                // Save
                 saveBtn.addEventListener('click', async () => {
                     const newText = editInput.value.trim();
                     if (!newText) return;
@@ -375,7 +538,6 @@ async function loadComments(postId) {
                     }
                 });
 
-                // Enter key to save
                 editInput.addEventListener('keydown', (e) => {
                     if (e.key === 'Enter') saveBtn.click();
                     if (e.key === 'Escape') cancelBtn.click();
