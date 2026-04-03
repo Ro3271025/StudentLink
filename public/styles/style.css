@@ -776,8 +776,6 @@ color:#777;
     align-items: center;
     z-index: 999;
 }
-
-/* ===== MODAL BOX ===== */
 .chatModalContent {
     width: 380px;
     max-height: 500px;
@@ -789,32 +787,29 @@ color:#777;
     display: flex;
     flex-direction: column;
 }
-
-/* ===== SEARCH INPUT ===== */
 #userSearchInput {
     width: 100%;
+    box-sizing: border-box;
+    
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
+
     background: transparent;
     color: var(--text-fill);
     font-size: 14px;
+
     outline: none;
     transition: 0.2s;
 }
-
 #userSearchInput:focus {
     border-color: var(--theme-accent);
 }
-
-/* ===== RESULTS CONTAINER ===== */
 #userResults {
     margin-top: 10px;
     overflow-y: auto;
     max-height: 260px;
 }
-
-/* ===== USER RESULT ITEM ===== */
 .userResult {
     display: flex;
     flex-direction: column;
@@ -824,24 +819,17 @@ color:#777;
     transition: 0.2s;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
 .userResult:hover {
     background: var(--border-color);
 }
-
-/* NAME */
 .userResult strong {
     font-size: 14px;
     color: var(--text-fill);
 }
-
-/* USERNAME */
 .userResult small {
     font-size: 12px;
     color: #aaa;
 }
-
-/* ===== CLOSE BUTTON ===== */
 #closeModal {
     margin-top: 14px;
     padding: 8px;
@@ -853,7 +841,6 @@ color:#777;
     cursor: pointer;
     transition: 0.2s;
 }
-
 #closeModal:hover {
     background: var(--button-hover);
 }
