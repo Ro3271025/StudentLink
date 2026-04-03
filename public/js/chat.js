@@ -43,7 +43,7 @@ const conversationID = docSnap.id;
 /* determine other user */
 
 const otherUserID =
-convo.participants.find(
+convo.users.find(
 id => id !== user.uid
 );
 
