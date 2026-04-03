@@ -26,7 +26,7 @@ if(!user) return;
 
 const q = query(
 collection(db,"conversations"),
-where("participants","array-contains",user.uid),
+where("users","array-contains",user.uid),
 orderBy("lastTimestamp","desc")
 );
 
