@@ -94,7 +94,7 @@ ${convo.lastMessage || ""}
 div.addEventListener("click",()=>{
 
 window.location.href =
-`chatDetails.html?conversation=${conversationID}`;
+`chatDetails.html?id=${conversationID}`;
 
 });
 
@@ -154,10 +154,10 @@ if (closeBtn) {
 }
 
 // SEARCH USERS
-if (searchInput) {
-    searchInput.addEventListener("input", async () => {
+if (userSearchInput) {
+    userSearchInput.addEventListener("input", async () => {
 
-        const searchValue = searchInput.value.toLowerCase();
+        const searchValue = userSearchInput.value.toLowerCase();
 
         if (!searchValue) {
             resultsContainer.innerHTML = "";
@@ -189,7 +189,6 @@ if (searchInput) {
                     <small>@${userData.username || ""}</small>
                 `;
 
-                // CLICK USER → CREATE / OPEN CHAT
                 div.onclick = async () => {
 
                     const currentUser = auth.currentUser;
