@@ -875,7 +875,6 @@ color:#777;
     top: 0;
     z-index: 10;
 }
-/* BACK BUTTON */
 #backArrow{
     width: 32px;
     height: 32px;
@@ -895,7 +894,6 @@ color:#777;
 #backArrow:hover{
     background: var(--button-hover); /* THEME SECONDARY */
 }
-
 #backArrowImg{
     width: 100%;
     height: auto;
@@ -903,11 +901,9 @@ color:#777;
     opacity: 0.8;
     transition: 0.2s;
 }
-
 #backArrow:hover #backArrowImg{
     opacity: 1;
 }
-/* USER NAME */
 #chatTargetUser{
     font-size: 18px;
     font-weight: 600;
@@ -916,7 +912,6 @@ color:#777;
     display: flex;
     align-items: center;
 }
-
 #messagesContainer{
     flex: 1;
     overflow-y: auto;
@@ -927,7 +922,6 @@ color:#777;
 
     padding: 15px;
 }
-
 .message{
     position: relative;
 
