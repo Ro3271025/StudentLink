@@ -149,7 +149,7 @@ if (closeBtn) {
     closeBtn.onclick = () => {
         modal.style.display = "none";
         resultsContainer.innerHTML = "";
-        searchInput.value = "";
+        userSearchInput.value = "";
     };
 }
 
