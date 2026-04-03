@@ -78,6 +78,7 @@ function renderImagePreview() {
         removeBtn.classList.add("removePreview");
 
         removeBtn.onclick = () => {
+            URL.revokeObjectURL(img.src);
             selectedImages.splice(index, 1);
             imageInput.value = "";
             renderImagePreview();
