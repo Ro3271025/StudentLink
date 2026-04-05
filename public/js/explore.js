@@ -42,9 +42,10 @@ async function loadExplore() {
 /* RENDER */
 function renderFeed(items) {
     feed.innerHTML = "";
-    console.log(item);
 
     items.forEach(item => {
+        console.log(item);
+
         const div = document.createElement("div");
         div.className = "feedItem";
 
