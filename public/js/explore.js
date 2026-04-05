@@ -44,7 +44,8 @@ function renderFeed(items) {
     feed.innerHTML = "";
 
     items.forEach(item => {
-        console.log(item);
+
+        console.log(item); // ✅ debug safely
 
         const div = document.createElement("div");
         div.className = "feedItem";
@@ -52,16 +53,16 @@ function renderFeed(items) {
         if (item.type === "post") {
             div.innerHTML = `
                 <strong>@${item.username || "user"}</strong>
-                <p>${item.text || ""}</p>
+                <p>${item.text || item.content || item.description || ""}</p>
             `;
         }
 
         if (item.type === "listing") {
             div.innerHTML = `
                 <strong>@${item.username || "user"}</strong>
-                <p>${item.title || ""}</p>
+                <p>${item.title || item.name || ""}</p>
                 <p>$${item.price || ""}</p>
-                ${item.imageURL ? `<img src="${item.imageURL}">` : ""}
+                ${(item.imageURL || item.image) ? `<img src="${item.imageURL || item.image}">` : ""}
             `;
         }
 
