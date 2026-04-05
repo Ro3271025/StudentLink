@@ -42,6 +42,7 @@ async function loadExplore() {
 /* RENDER */
 function renderFeed(items) {
     feed.innerHTML = "";
+    console.log(item);
 
     items.forEach(item => {
         const div = document.createElement("div");

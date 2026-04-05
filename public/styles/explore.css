@@ -44,14 +44,21 @@ margin: 15px 0;
 }
 
 .centralCard {
-flex: 1;
-padding: 15px;
-border-radius: 12px;
-background-color: var(--bg-primary);
-border: 1px solid var(--border-color);
-text-align: center;
+    flex: 1;
+    padding: 20px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+    border: 1px solid var(--border-color);
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
 }
 
+.centralCard:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--theme-accent);
+}
 /* SECTIONS */
 .sectionTitle {
 margin-top: 25px;
