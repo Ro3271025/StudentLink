@@ -16,98 +16,53 @@
     <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 
 <div id="explorePage" class="content">
 
 ```
 <!-- SEARCH -->
-<input 
-    class="searchBar themeObject" 
-    id="exploreSearchBar" 
-    placeholder="Search StudentLink..."
->
+<input class="searchBar themeObject" id="exploreSearchBar" placeholder="Search StudentLink...">
 
 <!-- FILTER -->
 <select class="exploreBar themeObject" id="filterSelection">
-    <option value="all" selected>All</option>
+    <option value="all">All</option>
     <option value="posts">Posts</option>
     <option value="listings">Listings</option>
-    <option value="users">Users</option>
-    <option value="events">Events</option>
-    <option value="clubs">Clubs</option>
-    <option value="news">News</option>
 </select>
 
-<!-- RECENT SEARCHES -->
+<!-- RECENT -->
 <div id="recentSearches">
-    <table class="recentSearchesTable">
-        <tr><th id="recentHeader">Recent Searches</th></tr>
-    </table>
+    <p class="sectionTitle">Recent Searches</p>
+    <div id="recentContainer"></div>
 </div>
 
-<!-- CAMPUS CENTRAL SECTION -->
+<!-- CAMPUS CENTRAL -->
 <h2 class="sectionTitle">Campus Central</h2>
 
 <div class="centralTopCards">
-
-    <div class="centralCard">
-        <h3>Organizations</h3>
-        <p>Join clubs and meet new people</p>
-    </div>
-
-    <div class="centralCard">
-        <h3>Events</h3>
-        <p>Discover what’s happening on campus</p>
-    </div>
-
-    <div class="centralCard">
-        <h3>News</h3>
-        <p>Stay updated with student activity</p>
-    </div>
-
+    <div class="centralCard">Organizations</div>
+    <div class="centralCard">Events</div>
+    <div class="centralCard">News</div>
 </div>
 
-<!-- ORGANIZATIONS -->
-<h3 class="sectionTitle">Organizations</h3>
-<div class="gridContainer" id="orgContainer">
-    <!-- dynamically loaded -->
-</div>
-
-<!-- EVENTS -->
-<h3 class="sectionTitle">Upcoming Events</h3>
-<div class="gridContainer" id="eventContainer">
-    <!-- dynamically loaded -->
-</div>
-
-<!-- NEWS -->
-<h3 class="sectionTitle">Latest News</h3>
-<div id="newsContainer">
-    <!-- dynamically loaded -->
-</div>
-
-<!-- 🔎 MAIN EXPLORE FEED -->
+<!-- FEED -->
 <h2 class="sectionTitle">Explore Feed</h2>
-<div id="exploreFeed">
-    <!-- posts / listings / users will load here -->
-</div>
+<div id="exploreFeed"></div>
 ```
 
 </div>
 
-<!-- LEFT SIDEBAR -->
+<!-- SIDEBAR -->
 
 <div class="sidebar" id="leftBar">
 
 ```
 <br>
-<img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-<br>
+<img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
 <p id="displayName">Display Name</p>
-<p id="username">@Username</p>
-
-<br>
+<p id="username">@Username</p><br>
 
 <p class="sidebarText"><a href="home.html">Home</a></p>
 <p class="sidebarText"><a href="listings.html">Listings</a></p>
@@ -116,55 +71,13 @@
 <p class="sidebarText"><a href="chat.html">Chat</a></p>
 <p class="sidebarText"><a href="profile.html">Profile</a></p>
 <p class="sidebarText"><a href="settings.html">Settings</a></p>
-
-<!-- NEW POST BUTTON -->
-<button 
-    class="themeObject" 
-    id="newPostBtn" 
-    onclick="toggleOverlay('newPostContainer')"
->
-    New Post
-</button>
-
-<!-- NEW POST OVERLAY -->
-<div class="overlayDiv">
-    <div id="newPostContainer">
-
-        <p id="newPostHeader">
-            <button 
-                class="themeObject" 
-                id="closeNewPostBtn" 
-                onclick="toggleOverlay('newPostContainer')"
-            >
-                X
-            </button>
-
-            <b>Create New Post</b>
-
-            <button 
-                class="themeObject" 
-                id="createPostBtn"
-            >
-                Post
-            </button>
-        </p>
-
-        <div id="newPostTXT">
-            <textarea maxlength="300" placeholder="What's happening?"></textarea>
-        </div>
-
-    </div>
-</div>
 ```
 
 </div>
+
 <script type="module" src="js/explore.js"></script>
 
-<script type="module" src="js/userSearch.js"></script>
-
 <script src="js/themeSwap.js"></script>
-
-<script src="js/toggleVis.js"></script>
 
 </body>
 </html>
