@@ -1,39 +1,73 @@
-.recentExploreSearchData{
-    text-align: center;
+/* SEARCH */
+#exploreSearchBar {
+width: 100%;
+padding: 12px;
+border-radius: 8px;
+border: 1px solid var(--border-color);
+margin-bottom: 10px;
 }
 
-#filterSelection{
-    width:100%;
-    font-weight: normal;
-    margin-left: 2.5%;
+#filterSelection {
+width: 100%;
+padding: 12px;
+border-radius: 8px;
+border: 1px solid var(--border-color);
+margin-bottom: 20px;
 }
 
-#exploreSearchBar{
-    width:98%;
+/* RECENT */
+#recentSearches {
+padding: 10px;
+border-radius: 10px;
+background-color: var(--bg-primary);
+border: 1px solid var(--border-color);
+margin-bottom: 20px;
 }
 
-#exploreHome{
-    border:none;
+.recentItem {
+padding: 8px;
+border-bottom: 1px solid var(--border-color);
+cursor: pointer;
 }
 
-.exploreBar{
-    border-radius: 10px;
-    background-color: var(--theme-accent);
-    border-color: var(--theme-accent);
-    font-size: 16pt;
-    padding: 5%;
-    transition: 0.125s;
-    font-family: var(--font-family);
-    display: inline;
-    padding:12px;
-    border-radius:8px;
-    border:none;
-    margin-bottom:20px;
-    background:var(--bg-secondary);
-    outline:none;
+.recentItem:hover {
+background-color: var(--border-color);
 }
 
-.exploreListing{
-    text-align: center;
-    margin-left: 23%;
+/* CAMPUS */
+.centralTopCards {
+display: flex;
+gap: 15px;
+margin: 15px 0;
+}
+
+.centralCard {
+flex: 1;
+padding: 15px;
+border-radius: 12px;
+background-color: var(--bg-primary);
+border: 1px solid var(--border-color);
+text-align: center;
+}
+
+/* SECTIONS */
+.sectionTitle {
+margin-top: 25px;
+margin-bottom: 10px;
+font-size: 16pt;
+}
+
+/* FEED */
+.feedItem {
+padding: 15px;
+border-radius: 10px;
+background-color: var(--bg-primary);
+border: 1px solid var(--border-color);
+margin-bottom: 15px;
+}
+
+.feedItem img {
+width: 100%;
+border-radius: 8px;
+margin-top: 10px;
 }
