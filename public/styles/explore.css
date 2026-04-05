@@ -1,10 +1,12 @@
-/* SEARCH */
-#exploreSearchBar {
-width: 100%;
-padding: 12px;
-border-radius: 8px;
-border: 1px solid var(--border-color);
-margin-bottom: 10px;
+.exploreSearchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 14pt;
+    margin-bottom: 20px;
 }
 
 #filterSelection {
