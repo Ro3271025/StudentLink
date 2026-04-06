@@ -6,7 +6,7 @@ import {
     getDoc,
     updateDoc,
     collection,
-    addDoc,
+    setDoc,
     getDocs,
     query,
     where,
@@ -22,24 +22,25 @@ const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
 async function getOrCreateConversation(currentUserId, otherUserId) {
-    const q = query(
-        collection(db, "conversations"),
-        where("users", "array-contains", currentUserId)
-    );
-    const snapshot = await getDocs(q);
-    let existingConversation = null;
-    snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.users.includes(otherUserId)) {
-            existingConversation = docSnap.id;
-        }
-    });
-    if (existingConversation) return existingConversation;
-    const newDoc = await addDoc(collection(db, "conversations"), {
-        users: [currentUserId, otherUserId],
-        createdAt: new Date()
-    });
-    return newDoc.id;
+
+    const conversationID =
+        [currentUserId, otherUserId]
+        .sort()
+        .join("_");
+
+    const convoRef = doc(db, "conversations", conversationID);
+    const convoSnap = await getDoc(convoRef);
+
+    if (!convoSnap.exists()) {
+        await setDoc(convoRef, {
+            users: [currentUserId, otherUserId],
+            createdAt: new Date(),
+            lastMessage: "",
+            lastTimestamp: new Date()
+        });
+    }
+
+    return conversationID;
 }
 
 // ── Render user's posts ──
