@@ -6,7 +6,7 @@ import {
     getDoc,
     updateDoc,
     collection,
-    addDoc,
+    setDoc,
     getDocs,
     query,
     where,
@@ -14,31 +14,33 @@ import {
     collectionGroup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { app } from "./firebaseInitialization.js";
 
-const storage = getStorage();
+const storage = getStorage(app);
 
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
 async function getOrCreateConversation(currentUserId, otherUserId) {
-    const q = query(
-        collection(db, "conversations"),
-        where("users", "array-contains", currentUserId)
-    );
-    const snapshot = await getDocs(q);
-    let existingConversation = null;
-    snapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.users.includes(otherUserId)) {
-            existingConversation = docSnap.id;
-        }
-    });
-    if (existingConversation) return existingConversation;
-    const newDoc = await addDoc(collection(db, "conversations"), {
-        users: [currentUserId, otherUserId],
-        createdAt: new Date()
-    });
-    return newDoc.id;
+
+    const conversationID =
+        [currentUserId, otherUserId]
+        .sort()
+        .join("_");
+
+    const convoRef = doc(db, "conversations", conversationID);
+    const convoSnap = await getDoc(convoRef);
+
+    if (!convoSnap.exists()) {
+        await setDoc(convoRef, {
+            users: [currentUserId, otherUserId],
+            createdAt: new Date(),
+            lastMessage: "",
+            lastTimestamp: new Date()
+        });
+    }
+
+    return conversationID;
 }
 
 // ── Render user's posts ──
@@ -72,6 +74,18 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
+                // Format timestamp
+                let dateString = 'Unknown date';
+                if (post.createdAt) {
+                    let dateObj = post.createdAt;
+                    if (typeof dateObj.toDate === 'function') {
+                        dateObj = dateObj.toDate();
+                    }
+                    if (dateObj instanceof Date) {
+                        dateString = dateObj.toLocaleString();
+                    }
+                }
+
             const card = document.createElement('div');
             card.className = 'content';
             card.style.cursor = 'pointer';
@@ -80,6 +94,7 @@ async function loadPosts(uidToLoad) {
                 <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
                 <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
+                <p class="postTimestamp" style="color:#888;font-size:10pt;">${dateString}</p>
                 ${imageSection}
                 <br>
                 <footer>
@@ -350,11 +365,13 @@ export function setupProfile() {
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    try {
-                        const storageRef = ref(storage, "userPhotos/" + user.uid);
-                        await uploadBytes(storageRef, file);
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+        // Force token refresh to ensure auth is current
+        await user.getIdToken(true);
+const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
+        await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
