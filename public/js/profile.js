@@ -54,6 +54,8 @@ async function loadPosts(uidToLoad) {
             where("authorId", "==", uidToLoad),
             orderBy("createdAt", "desc")
         );
+        const userSnap = await getDoc(doc(db, "users", uidToLoad));
+        const currentUserPhoto = userSnap.exists() ? userSnap.data().photoURL : null;
         const snap = await getDocs(q);
         updateCounter('postCountLink', snap.size);
 
@@ -67,6 +69,7 @@ async function loadPosts(uidToLoad) {
             const post = { id: d.id, ...d.data() };
             const likes = post.likes || 0;
             const comments = post.commentCount || 0;
+            const authorImg = currentUserPhoto || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
             const imageSection = post.imageUrl
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
@@ -86,19 +89,19 @@ async function loadPosts(uidToLoad) {
             const card = document.createElement('div');
             card.className = 'content';
             card.style.cursor = 'pointer';
-                card.innerHTML = `
-                    <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
-                    <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                    <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
-                    <p class="postContentText">${escapeHtml(post.body || '')}</p>
-                    <p class="postTimestamp" style="color:#888;font-size:10pt;">${dateString}</p>
-                    ${imageSection}
-                    <br>
-                    <footer>
-                        <a class="postLink postMetrics" href="#">${likes} Like${likes !== 1 ? 's' : ''}</a>
-                        <a class="postLink postMetrics" href="#">${comments} Comment${comments !== 1 ? 's' : ''}</a>
-                    </footer><br>
-                `;
+            card.innerHTML = `
+                <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
+                <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
+                <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <p class="postContentText">${escapeHtml(post.body || '')}</p>
+                <p class="postTimestamp" style="color:#888;font-size:10pt;">${dateString}</p>
+                ${imageSection}
+                <br>
+                <footer>
+                    <a class="postLink postMetrics" href="#">${likes} Like${likes !== 1 ? 's' : ''}</a>
+                    <a class="postLink postMetrics" href="#">${comments} Comment${comments !== 1 ? 's' : ''}</a>
+                </footer><br>
+            `;
             card.addEventListener('click', () => {
                 window.location.href = `post.html?id=${post.id}`;
             });
@@ -131,6 +134,7 @@ async function loadComments(uidToLoad) {
         container.innerHTML = '';
         for (const d of snap.docs) {
             const comment = { id: d.id, ...d.data() };
+            const commenterImg = comment.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
 
             // Get the parent post title
             const postId = d.ref.parent.parent.id;
@@ -147,8 +151,12 @@ async function loadComments(uidToLoad) {
             card.className = 'commentCard';
             card.style.cursor = 'pointer';
             card.innerHTML = `
-                <p class="postTitle">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
-                <p class="commentText">${escapeHtml(comment.text || '')}</p>
+            
+                <img class="profileImgMini" src="${commenterImg}" 
+             style="width:30px; height:30px; object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
+             onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
+                <p class="postTitle" style="display:inline-block;">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
+                <p class="commentText" style="margin-top:8px;">${escapeHtml(comment.text || '')}</p>
             `;
             card.addEventListener('click', () => {
                 window.location.href = `post.html?id=${postId}`;
@@ -275,13 +283,16 @@ export function setupProfile() {
         // Update profile header
         document.getElementById("displayName").innerText = displayName;
         document.getElementById("username").innerText = username;   
-        // Update sidebar
+
+        // ── Sidebar Update ──
         const sideDisplay = document.getElementById("sideDisplayName");
         const sideUser = document.getElementById("sideUsername");
+        const sidebarProfileImg = document.getElementById("sidebarProfileImg"); // Added ID for sidebar photo
+
         if (sideDisplay) sideDisplay.innerText = displayName;
         if (sideUser) sideUser.innerText = username;
 
-        // Message button
+        // Message button logic
         const messageBtn = document.getElementById("messageStudentBtn");
         if (messageBtn) {
             if (user.uid === uidToLoad) {
@@ -300,21 +311,21 @@ export function setupProfile() {
             }
         }
 
-        // ── Bio + photo only for own profile ──
-        
-            const bioText = document.getElementById("bioText");
-            const editBtn = document.getElementById("edit");
-            const profileImg = document.getElementById("profileImage");
+        // ── Bio + Photo Logic ──
+        const bioText = document.getElementById("bioText");
+        const editBtn = document.getElementById("edit");
+        const profileImg = document.getElementById("profileImage");
 
-            // Populate bio
-            if (bioText) bioText.value = data.bio || "";
+        if (bioText) bioText.value = data.bio || "";
 
-            // Load profile photo
-            if (data.photoURL && profileImg) profileImg.src = data.photoURL;
-            if (user.uid === uidToLoad) {
-            
+        // Load profile photo for EVERYONE (Main and Sidebar)
+        if (data.photoURL) {
+            if (profileImg) profileImg.src = data.photoURL;
+            if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL; // Sync sidebar photo
+        }
 
-            // Bio edit logic
+        if (user.uid === uidToLoad) {
+            // OWNER LOGIC
             let isEditing = false;
             if (editBtn && bioText) {
                 editBtn.addEventListener("click", async () => {
@@ -338,9 +349,7 @@ export function setupProfile() {
                 });
             }
 
-            // Profile picture upload — click image to upload
             if (profileImg) {
-                // Create hidden file input if not already in HTML
                 let fileInput = document.getElementById("fileInput");
                 if (!fileInput) {
                     fileInput = document.createElement("input");
@@ -353,7 +362,6 @@ export function setupProfile() {
 
                 profileImg.style.cursor = "pointer";
                 profileImg.title = "Click to change profile picture";
-
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
@@ -367,7 +375,10 @@ const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
+                        
+                        // Update both images instantly after upload
                         profileImg.src = url;
+                        if (sidebarProfileImg) sidebarProfileImg.src = url; 
                     } catch (err) {
                         console.error("Upload failed", err);
                         alert("Failed to upload photo.");
@@ -375,18 +386,15 @@ const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
                 };
             }
         } else {
+            // VISITOR LOGIC
+            if (editBtn) editBtn.style.display = "none";
+            if (profileImg) {
+                profileImg.style.cursor = "default";
+                profileImg.onclick = null;
+                profileImg.title = "";
+            }
+        }
 
-        // VISITOR LOGIC: Hide the button and disable click-to-upload
-        if (editBtn) editBtn.style.display = "none";
-        if (profileImg) {
-        profileImg.style.cursor = "default";
-        profileImg.onclick = null;
-        profileImg.title = "";
-    }
-}
-        
-
-        // Setup tabs and load posts by default
         setupTabs(uidToLoad);
         await loadPosts(uidToLoad);
     });
