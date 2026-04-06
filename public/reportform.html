@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Marketplace | StudentLink</title>
+    <title>Report | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/listings.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body id="documentBody">
-
     <!-- HEADER -->
     <div id="header">
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
-
 <!-- LEFT SIDEBAR -->
-
-<div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
+<div class="sidebar" id="leftBar">
     <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
     <p id="displayName">Display Name</p>
     <p id="username">@Username</p><br>
@@ -27,22 +23,18 @@
     <p class="sidebarText"><a href="chat.html">Chat</a></p>
     <p class="sidebarText"><a href="profile.html">Profile</a></p>
     <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-
     <div class="overlayDiv">
         <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
             <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
         </div>
     </div>
-
 </div><br><br>
-
-<!-- RIGHT SIDEBAR (Optional but consistent) -->
+<!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
     <br>
     <input class="searchBar themeObject" placeholder="Search"><br><br>
-
     <div id="recentSearches">
         <table class="recentSearchesTable">
             <tr><th id="recentHeader">Recent Searches</th></tr>
@@ -54,8 +46,6 @@
         </table>
     </div>
 </div>
-
-
 <form id="listingForm">
     <p style="font-size: 16pt; font-weight: bold;">User Report Form</p>
     <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
@@ -64,13 +54,23 @@
     <br><br>
     <button type="submit">Submit Report</button>
 </form>
-
 <!-- Scripts -->
 <script type="module" src="js/userSearch.js"></script>
 <script type="module">
     import { setupSidebar } from "../public/js/showUser.js";
-
     setupSidebar();
 </script>
 <script src="../public/js/toggleVis.js" type="text/javascript"></script>
 <script src="js/themeSwap.js"></script>
+
+<!-- Auto-fill Post URL from report button -->
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('postId');
+    if (postId) {
+        document.getElementById('postURL').value =
+            window.location.origin + '/public/post.html?id=' + postId;
+    }
+</script>
+</body>
+</html>

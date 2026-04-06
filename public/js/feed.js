@@ -159,14 +159,6 @@ async function syncCommentCounts(posts) {
     }));
 }
 
-
-
-
-
-
-
-
-
 async function getRecentPostsPage(lastDoc = null) {
     const postsCol = collection(db, "posts");
     const q = lastDoc
@@ -259,7 +251,10 @@ function renderPosts(posts) {
                    data-post-id="${post.id}">
                    ${commentCount} Comment${commentCount !== 1 ? 's' : ''}
                 </a>
-                <a href="reportform.html" class="postLink postMetrics" style="text-align: right;">Report</a>
+                <a href="reportform.html?postId=${post.id}"
+                   class="postLink postMetrics reportBtn"
+                   data-post-id="${post.id}"
+                   style="text-align: right;">Report</a>
             </footer>
 
             <div class="commentSection" id="comments-${post.id}" style="display:none; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
@@ -291,10 +286,12 @@ function renderPosts(posts) {
                 !e.target.classList.contains('likeBtn') &&
                 !e.target.classList.contains('commentToggleBtn') &&
                 !e.target.classList.contains('submitCommentBtn') &&
+                !e.target.classList.contains('reportBtn') &&
                 !e.target.classList.contains('postDisplayName') &&
                 !e.target.closest('.commentSection') &&
                 !e.target.closest('footer')) {
-            window.location.href = `post.html?id=${post.id}`;            }
+                window.location.href = `post.html?id=${post.id}`;
+            }
         });
 
         container.appendChild(card);
@@ -397,6 +394,13 @@ function attachEventListeners() {
                 btn.disabled = false;
                 btn.textContent = 'Post';
             }
+        });
+    });
+
+    // ── Report buttons ──
+    document.querySelectorAll('.reportBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
     });
 
