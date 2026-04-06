@@ -259,7 +259,7 @@ function renderPosts(posts) {
                    data-post-id="${post.id}">
                    ${commentCount} Comment${commentCount !== 1 ? 's' : ''}
                 </a>
-                <a href="#" class="postLink postMetrics" style="text-align: right;">Report</a>
+                <a href="reportform.html" class="postLink postMetrics" style="text-align: right;">Report</a>
             </footer>
 
             <div class="commentSection" id="comments-${post.id}" style="display:none; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">

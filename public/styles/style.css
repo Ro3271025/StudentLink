@@ -145,10 +145,6 @@ a:hover{
     font-size: 48pt;
 }
 
-#subtitle{
-    font-weight: bold;
-    font-size: 24pt;
-}
 
 
 /* may want to consider splitting css files at some point 
