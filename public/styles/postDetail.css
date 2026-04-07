@@ -1,0 +1,53 @@
+#commentsHeader{
+    font-size:15pt; 
+    margin-bottom:12px; 
+    border-bottom: 1px solid var(--border-color); 
+    padding-bottom:8px; 
+    margin-top: 0; 
+    padding-top:8px; 
+    padding-left:8px
+}
+
+#commentInput{
+    flex:1; 
+    padding:8px 14px; 
+    border-radius:20px; 
+    border:1px solid #444; 
+    background:#222; 
+    color:#fff; 
+    font-size:14px; 
+    font-family: var(--font-family);
+}
+
+#loading{
+    text-align: center;
+    color:#aaa;
+}
+
+#addCommentSection{
+    margin-top:16px; 
+    display:flex; 
+    gap:8px; 
+    align-items:center; 
+    padding:8px;
+}
+
+#postDetailContainer div{
+    padding-left: 2%;
+    padding-top: 2%;
+}
+
+#addCommentBtn{
+    font-size:13pt; 
+    padding: 6px 18px; 
+    border-radius:20px;
+}
+
+.postContentText{
+    margin-left: 2%;
+}
+
+#postFooter{
+    margin-left:-1%; 
+    padding-bottom: 8px;
+}
