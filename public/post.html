@@ -2,34 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Post | StudentLink</title>
+    <title id="postTitle">Post | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/postDetail.css"
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">
 
     <div id="header">
-        <img id="logo" src="styles/images/placeholder/DEFAULT_BANNER.svg">
+        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
     <!-- POST DETAIL -->
-    <div id="postDetailContainer" class="content" style="padding: 16px 3.5%;">
-        <p style="text-align:center; color:#aaa; padding:20px;">Loading post...</p>
+    <div id="postDetailContainer" class="content" >
+            <p id="loading">Loading post...</p>
     </div>
 
     <!-- COMMENTS SECTION -->
-    <div id="commentsSection" class="content" style="padding: 16px 3.5%; display:none;">
-        <h3 style="font-size:15pt; margin-bottom:12px; border-bottom: 1px solid var(--border-color); padding-bottom:8px;">Comments</h3>
-        <div id="commentsContainer"></div>
-        <div id="addCommentSection" style="margin-top:16px; display:flex; gap:8px; align-items:center;">
-            <input
-                id="commentInput"
-                type="text"
-                placeholder="Write a comment..."
-                maxlength="300"
-                style="flex:1; padding:8px 14px; border-radius:20px; border:1px solid #444; background:#222; color:#fff; font-size:14px; font-family: var(--font-family);"
-            />
-            <button id="addCommentBtn" class="themeObject" style="font-size:13pt; padding: 6px 18px; border-radius:20px;">Post</button>
+    <div id="commentsSection" class="content">
+        <div>
+            <h3 id="commentsHeader">Comments</h3>
+            <div id="commentsContainer"></div>
+            <div id="addCommentSection">
+                <input
+                    id="commentInput"
+                    type="text"
+                    placeholder="Write a comment..."
+                    maxlength="300"
+                />
+                <button id="addCommentBtn" class="themeObject">Post</button>
+            </div>
         </div>
     </div>
 
@@ -71,11 +73,6 @@
         <div id="recentSearches">
             <table class="recentSearchesTable">
                 <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
             </table>
         </div>
     </div>
