@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Marketplace | StudentLink</title>
+    <title>Report | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/listings.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body id="documentBody">
-
     <!-- HEADER -->
     <div id="header">
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
-
 <!-- LEFT SIDEBAR -->
-
-<div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
+<div class="sidebar" id="leftBar">
     <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
     <p id="displayName">Display Name</p>
     <p id="username">@Username</p><br>
@@ -27,22 +23,18 @@
     <p class="sidebarText"><a href="chat.html">Chat</a></p>
     <p class="sidebarText"><a href="profile.html">Profile</a></p>
     <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-
     <div class="overlayDiv">
         <div id="newPostContainer">
-            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
+            <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
             <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-            <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+            <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
         </div>
     </div>
-
 </div><br><br>
-
-<!-- RIGHT SIDEBAR (Optional but consistent) -->
+<!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
     <br>
     <input class="searchBar themeObject" placeholder="Search"><br><br>
-
     <div id="recentSearches">
         <table class="recentSearchesTable">
             <tr><th id="recentHeader">Recent Searches</th></tr>
@@ -55,22 +47,115 @@
     </div>
 </div>
 
-
 <form id="listingForm">
     <p style="font-size: 16pt; font-weight: bold;">User Report Form</p>
     <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
     <textarea id="description" class="listingInput" placeholder="Description - Tell us what happened" style="font-size:12pt; width: 15vw;" required></textarea><br>
     <input class="listingInput" type="url" id="postURL" placeholder="Post URL" required><br><br>
-    <br><br>
-    <button type="submit">Submit Report</button>
+    <p id="reportError" style="color:#e55; font-size:12pt; display:none;"></p>
+    <p id="reportSuccess" style="color:#1D9E75; font-size:12pt; display:none;">Report submitted successfully. Thank you for helping keep StudentLink safe!</p>
+    <br>
+    <button type="submit" id="submitBtn">Submit Report</button>
 </form>
 
 <!-- Scripts -->
 <script type="module" src="js/userSearch.js"></script>
 <script type="module">
     import { setupSidebar } from "../public/js/showUser.js";
-
     setupSidebar();
 </script>
 <script src="../public/js/toggleVis.js" type="text/javascript"></script>
 <script src="js/themeSwap.js"></script>
+
+<script type="module">
+    import { auth, db } from "./js/firebaseInitialization.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import {
+        collection, addDoc, query, where, getDocs, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // Auto-fill Post URL from ?postId= in URL
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('postId');
+    if (postId) {
+        document.getElementById('postURL').value =
+            window.location.origin + '/public/post.html?id=' + postId;
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "userlogin.html";
+            return;
+        }
+
+        document.getElementById('listingForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const postURL = document.getElementById('postURL').value.trim();
+            const errorEl = document.getElementById('reportError');
+            const successEl = document.getElementById('reportSuccess');
+            const submitBtn = document.getElementById('submitBtn');
+
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            if (!title || !description || !postURL) {
+                errorEl.textContent = 'Please fill in all fields.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // Prevent duplicate reports from same user on same post
+            if (postId) {
+                const existing = await getDocs(query(
+                    collection(db, "reports"),
+                    where("postId", "==", postId),
+                    where("reportedBy", "==", user.uid)
+                ));
+                if (!existing.empty) {
+                    errorEl.textContent = 'You have already reported this post.';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                await addDoc(collection(db, "reports"), {
+                    postId: postId || null,
+                    postURL,
+                    title,
+                    description,
+                    reportedBy: user.uid,
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+
+                // Clear form
+                document.getElementById('title').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('postURL').value = '';
+
+                successEl.style.display = 'block';
+
+                // Redirect back after 2 seconds
+                setTimeout(() => {
+                    history.back();
+                }, 2000);
+
+            } catch (err) {
+                console.error("Report failed:", err);
+                errorEl.textContent = 'Failed to submit report. Please try again.';
+                errorEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Report';
+            }
+        });
+    });
+</script>
+</body>
+</html>

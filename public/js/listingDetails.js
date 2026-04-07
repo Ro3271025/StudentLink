@@ -3,6 +3,7 @@ import { auth, db } from "./firebaseInitialization.js";
 import {
     doc,
     getDoc,
+    setDoc, // ✅ ADDED
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -20,6 +21,7 @@ const ownerControls = document.getElementById("ownerControls");
 const gallery       = document.getElementById("imageGallery");
 
 async function loadListing() {
+
     const ref  = doc(db, "listings", id);
     const snap = await getDoc(ref);
 
@@ -38,9 +40,8 @@ async function loadListing() {
     userEl.textContent = `@${listing.username || "Unknown User"}`;
     userEl.href        = `profile.html?id=${listing.userID}`;
 
-    // ── IMAGE GALLERY LOGIC ──
+    // ── IMAGE GALLERY ──
     let currentIndex = 0;
-
     const images = listing.imageURLs || (listing.imageURL ? [listing.imageURL] : []);
 
     if (images.length > 0) {
@@ -48,13 +49,11 @@ async function loadListing() {
         imageEl.src = images[currentIndex];
         imageEl.style.cursor = "pointer";
 
-        // Click main image to cycle
         imageEl.onclick = () => {
             currentIndex = (currentIndex + 1) % images.length;
             imageEl.src = images[currentIndex];
         };
 
-        // Thumbnails
         if (gallery) {
             gallery.innerHTML = "";
 
@@ -66,7 +65,6 @@ async function loadListing() {
                 thumb.style.margin = "5px";
                 thumb.style.cursor = "pointer";
                 thumb.style.borderRadius = "6px";
-                thumb.style.border = "2px solid transparent";
 
                 thumb.onclick = () => {
                     currentIndex = index;
@@ -89,29 +87,56 @@ async function loadListing() {
     if (metaEl) metaEl.innerHTML = metaHTML;
 
     // ── Auth UI ──
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async (user) => {
 
-        // Message button
+        // MESSAGE BUTTON FIXED
         if (messageBtn) {
+
             if (user && user.uid === listing.userID) {
                 messageBtn.style.display = "none";
             } else {
                 messageBtn.style.display = "block";
 
-                messageBtn.onclick = () => {
+                messageBtn.onclick = async () => {
+
                     if (!user) {
                         alert("You must be logged in.");
                         return;
                     }
 
-                    const conversationID = [user.uid, listing.userID].sort().join("_");
-                    window.location.href = `chatDetails.html?id=${conversationID}`;
+                    try {
+                        // ✅ SAME ID SYSTEM AS PROFILE
+                        const conversationID =
+                            [user.uid, listing.userID]
+                            .sort()
+                            .join("_");
+
+                        const convoRef = doc(db, "conversations", conversationID);
+                        const convoSnap = await getDoc(convoRef);
+
+                        // ✅ CREATE ONLY IF DOESN'T EXIST
+                        if (!convoSnap.exists()) {
+                            await setDoc(convoRef, {
+                                users: [user.uid, listing.userID],
+                                createdAt: new Date(),
+                                lastMessage: "",
+                                lastTimestamp: new Date()
+                            });
+                        }
+
+                        window.location.href = `chatDetails.html?id=${conversationID}`;
+
+                    } catch (err) {
+                        console.error("Chat error:", err);
+                        alert("Could not start chat.");
+                    }
                 };
             }
         }
 
-        // Owner controls
+        // ── Owner controls ──
         if (user && user.uid === listing.userID) {
+
             if (ownerControls) ownerControls.style.display = "flex";
 
             const editBtn = document.getElementById("editListingBtn");

@@ -17,12 +17,22 @@ export function setupHome() {
         const usernameEl = document.getElementById("username");
         const backfillBtn = document.getElementById("backfillBtn");
 
+        
+
+
+
         if (displayEl) {
             displayEl.innerText = data.displayName || user.displayName || "";
         }
         if (usernameEl) {
             usernameEl.innerText = data.username ? "@" + data.username : "";
         }
+
+        // Update sidebar profile photo
+        const sideProfileIcon = document.querySelector('.sideProfileIcon');
+        if (sideProfileIcon && data.photoURL) {
+            sideProfileIcon.src = data.photoURL;
+            }
         
         // Show backfill button only for admins
         if (backfillBtn) {

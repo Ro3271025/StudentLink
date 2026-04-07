@@ -159,14 +159,6 @@ async function syncCommentCounts(posts) {
     }));
 }
 
-
-
-
-
-
-
-
-
 async function getRecentPostsPage(lastDoc = null) {
     const postsCol = collection(db, "posts");
     const q = lastDoc
@@ -209,7 +201,7 @@ function renderPosts(posts) {
 
         const displayName = post.authorName || 'Display Name';
         const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
-        const profileImg = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+        const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
         const postText = post.body || post.description || '';
         const likeCount = post.likes || 0;
         const commentCount = post.commentCount || 0;
@@ -224,11 +216,24 @@ function renderPosts(posts) {
             imageSection = `<div class="imageContainer"><img src="${imageUrl}"></div>`;
         }
 
+        // Format timestamp
+        let dateString = 'Unknown date';
+        if (post.createdAt) {
+            let dateObj = post.createdAt;
+            if (typeof dateObj.toDate === 'function') {
+                dateObj = dateObj.toDate();
+            }
+            if (dateObj instanceof Date) {
+                dateString = dateObj.toLocaleString();
+            }
+        }
+
         card.innerHTML = `
             <img class="profileImgMini" src="${profileImg}">
             <span class="postHeader">
                 <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">${displayName}</a>
                 <small class="postUsername" style="margin-left: 6px; color: #aaa;">${username}</small>
+                <span class="postTimestamp" style="color:#888;font-size:10pt; margin-left:10px;">${dateString}</span>
             </span><br>
             <p class="postContentText">${postText}</p>
             ${imageSection}
@@ -246,7 +251,10 @@ function renderPosts(posts) {
                    data-post-id="${post.id}">
                    ${commentCount} Comment${commentCount !== 1 ? 's' : ''}
                 </a>
-                <a href="reportform.html" class="postLink postMetrics" style="text-align: right;">Report</a>
+                <a href="reportform.html?postId=${post.id}"
+                   class="postLink postMetrics reportBtn"
+                   data-post-id="${post.id}"
+                   style="text-align: right;">Report</a>
             </footer>
 
             <div class="commentSection" id="comments-${post.id}" style="display:none; margin-top: 10px; border-top: 1px solid #333; padding-top: 10px;">
@@ -278,10 +286,12 @@ function renderPosts(posts) {
                 !e.target.classList.contains('likeBtn') &&
                 !e.target.classList.contains('commentToggleBtn') &&
                 !e.target.classList.contains('submitCommentBtn') &&
+                !e.target.classList.contains('reportBtn') &&
                 !e.target.classList.contains('postDisplayName') &&
                 !e.target.closest('.commentSection') &&
                 !e.target.closest('footer')) {
-            window.location.href = `post.html?id=${post.id}`;            }
+                window.location.href = `post.html?id=${post.id}`;
+            }
         });
 
         container.appendChild(card);
@@ -384,6 +394,13 @@ function attachEventListeners() {
                 btn.disabled = false;
                 btn.textContent = 'Post';
             }
+        });
+    });
+
+    // ── Report buttons ──
+    document.querySelectorAll('.reportBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
     });
 
