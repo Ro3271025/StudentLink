@@ -96,22 +96,28 @@ async function loadPost() {
                 ${deleteBtn}
             </div>
 
-            ${post.title ? `<h2 style="font-size:16pt; margin-bottom:8px;">${escapeHtml(post.title)}</h2>` : ''}
-            <p class="postContentText" style="margin-left:0;">${escapeHtml(post.body || '')}</p>
+            ${post.title ? `<h2 class="postContentText">${escapeHtml(post.title)}</h2>` : ''}
+            <p class="postContentText">${escapeHtml(post.body || '')}</p>
             ${imageSection}
             <br>
-            <footer>
+            <footer id="postFooter">
                 <a class="postLink postMetrics likeBtn${hasLiked ? ' liked' : ''}"
                    href="#"
                    data-post-id="${post.id}"
-                   style="${hasLiked ? 'color: var(--theme-accent); font-weight:600;' : ''}">
+                   style="${hasLiked ? 'color: #E6557C; font-weight:600;' : ''}">
                    ${likes} Like${likes !== 1 ? 's' : ''}
                 </a>
                 <a class="postLink postMetrics" id="commentCountDisplay" href="#" style="margin-left:12px;">
                     ${actualCount} Comment${actualCount !== 1 ? 's' : ''}
                 </a>
             </footer>
-        `;
+        `; // The post title in here is not supposed to be there, but I won't remove it yet to avoid conflicts
+
+        const postTitle = document.getElementById("postTitle");
+        const titleSubStr = `${post.title}`.substring(0,15);
+
+        postTitle.innerHTML =  titleSubStr + ` - ` + `${post.authorName}` + ` | StudentLink`;
+
 
         // Like button
         const likeBtn = container.querySelector('.likeBtn');
