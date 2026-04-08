@@ -94,7 +94,7 @@ async function loadPosts(uidToLoad) {
                 <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
                 <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
-                <p class="postTimestamp" style="color:#888;font-size:10pt;">${dateString}</p>
+                <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}
                 <br>
                 <footer>
@@ -148,19 +148,20 @@ async function loadComments(uidToLoad) {
             } catch (e) {}
 
             const card = document.createElement('div');
-            card.className = 'commentCard';
+            card.className = 'content';
             card.style.cursor = 'pointer';
             card.innerHTML = `
             
                 <img class="profileImgMini" src="${commenterImg}" 
-             style="width:30px; height:30px; object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
+             style="object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
              onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
-                <p class="postTitle" style="display:inline-block;">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
-                <p class="commentText" style="margin-top:8px;">${escapeHtml(comment.text || '')}</p>
+                <p class="postTitle" style="display:inline-block;margin-left:3.5%">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
+                <p class="commentText" style="margin-top:8px;margin-left:3.5%">${escapeHtml(comment.text || '')}</p>
             `;
             card.addEventListener('click', () => {
                 window.location.href = `post.html?id=${postId}`;
             });
+
             container.appendChild(card);
         }
     } catch (err) {

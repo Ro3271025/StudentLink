@@ -323,7 +323,7 @@ function attachEventListeners() {
 
                 if (liked) {
                     btn.classList.add('liked');
-                    btn.style.color = 'var(--theme-color, #0f73ff)';
+                    btn.style.color = 'var(--theme-color, #E6557C)';
                     btn.style.fontWeight = '600';
                 } else {
                     btn.classList.remove('liked');
