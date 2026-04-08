@@ -15,7 +15,6 @@
     background:var(--bg-secondary);
     outline:none;
 }
-
 .fileInput{
     line-height: 2vh;
     background-color: var(--theme-accent);
@@ -28,4 +27,23 @@
     font-size: 12pt;
     vertical-align: middle;
     word-wrap: break-word;
+}
+/* CENTER MAIN CONTENT */
+.listingContainer {
+    width: 45%;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+/* IMAGE BOX */
+.imagePreviewBox {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px;
+    display: inline-block;
+    background: var(--bg-secondary);
+}
+.imagePreviewBox img {
+    max-width: 250px;
+    border-radius: 8px;
+    display: none;
 }
