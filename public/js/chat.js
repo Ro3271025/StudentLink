@@ -13,13 +13,11 @@ updateDoc,
 setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-
 const container =
 document.getElementById("conversationsContainer");
 
 const searchInput =
 document.getElementById("searchMessages");
-
 
 auth.onAuthStateChanged(async user => {
 
@@ -27,60 +25,48 @@ if(!user) return;
 
 const q = query(
 collection(db,"conversations"),
-where("users","array-contains",user.uid)
+where("users","array-contains",user.uid),
+orderBy("lastTimestamp","desc") // 🔥 FIX: SORT BY LATEST
 );
 
 onSnapshot(q, async snapshot => {
 
 container.innerHTML="";
 
-for(const docSnap of snapshot.docs){
+/* 🔥 PARALLEL LOAD USERS (FASTER) */
+const promises = snapshot.docs.map(async docSnap => {
 
 const convo = docSnap.data();
 const conversationID = docSnap.id;
 
-
 /* determine other user */
-
 const otherUserID =
-convo.users.find(
-id => id !== user.uid
-);
-
+convo.users.find(id => id !== user.uid);
 
 /* get username */
-
 let username = "User";
 
 try{
-
 const userDoc =
 await getDoc(doc(db,"users",otherUserID));
 
 if(userDoc.exists()){
-
 username =
-userDoc.data().displayName || "User";
-
+userDoc.data().username ||
+userDoc.data().displayName ||
+"User";
 }
-
 }catch(error){
-
 console.log(error);
-
 }
-
 
 /* build UI */
-
-const div =
-document.createElement("div");
-
+const div = document.createElement("div");
 div.classList.add("conversationItem");
 
 div.innerHTML = `
 <div class="conversationName">
-${username}
+@${username}
 </div>
 
 <div class="lastMessage">
@@ -88,19 +74,19 @@ ${convo.lastMessage || ""}
 </div>
 `;
 
-
 /* open chat */
-
 div.addEventListener("click",()=>{
-
 window.location.href =
 `chatDetails.html?id=${conversationID}`;
+});
+
+return div;
 
 });
 
-container.appendChild(div);
-
-}
+/* 🔥 WAIT ALL USERS THEN RENDER */
+const elements = await Promise.all(promises);
+elements.forEach(el => container.appendChild(el));
 
 });
 
@@ -129,6 +115,8 @@ text.includes(value)
 });
 
 });
+
+
 // ───────── START CHAT SYSTEM ─────────
 
 const startBtn = document.getElementById("startChatBtn");
@@ -206,7 +194,7 @@ if (userSearchInput) {
                             users: [currentUser.uid, uid],
                             createdAt: new Date(),
                             lastMessage: "",
-                            lastTimestamp: new Date()
+                            lastTimestamp: new Date() // ⚠️ OK FOR NOW (we’ll upgrade later)
                         });
                     }
 
