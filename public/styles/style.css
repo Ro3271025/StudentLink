@@ -175,7 +175,6 @@ a:hover{
     /*border: 2px white solid;*/ /* debug for positioning */
     margin-left: 80%;
     margin-right: 3.5%; /* prevent it from hitting the wall  */
-    padding-top: 20px;
 }
 
 .searchBar{
@@ -195,14 +194,6 @@ a:hover{
     justify-content: center;
 }
 
-.imageContainer img {
-    max-width: 93%;
-    border-radius: 8px;
-    margin-left: 3.5%;
-    margin-top: 10px;
-    margin-bottom: 15px
-}
-
 #leftBar{
     margin-left: 6%;
 }
@@ -218,21 +209,20 @@ a:hover{
     font-weight: bold;
 }
 
-#banner {
+#banner{
     border: 1px solid var(--border-color);
     margin: 0 auto;
-    width: 60%; 
-    height: 20vh;
-    position: relative;
-    overflow: hidden; 
-    background-color: #151D28;
-    box-sizing: border-box;
+    width: 55%;
+    height:20vh;
+    position: -webkit-sticky;
+    align-items: center;
+    vertical-align: middle;
+    text-align: center;
 }
 
-#banner img {
+#banner img{
     height: 100%;
     width: 100%;
-    object-fit: contain;
 }
 
 .content{
@@ -243,18 +233,13 @@ a:hover{
     justify-content: center;
     text-align: left;
     margin: 0 auto;
-    width: 60% !important;
-    padding-bottom: 10px; 
-    margin-bottom: 10px;
-    box-sizing: border-box;
+    width: 55%;
 }
+
 
 #profileInfo{
     position: static;
-    width: 60%;
-    margin: 0 auto;
     height:37vh;
-    box-sizing: border-box;
 }
 
 
@@ -327,12 +312,11 @@ a:hover{
 }
 
 #userContent{
-    width: 60% !important;
+    width: 55%;
     margin: 0 auto;
     border-left: 1px var(--border-color) solid;
     border-right: 1px var(--border-color) solid;
     border-bottom: 1px var(--border-color) solid;
-    box-sizing: border-box;
 }
 
 .profileImgMini{
@@ -367,12 +351,10 @@ a:hover{
     font-size: 14pt
 }
 
-.postMetrics {
-    margin-left: 0;
-    margin-right: 12px; 
+.postMetrics{
+    margin-left: 3.5%;
     text-decoration: none;
     color: var(--border-color);
-    font-size: 13pt;
 }
 
 .openBtn{
@@ -394,16 +376,9 @@ a:hover{
     background-color: rgba(0, 0, 0, 0) !important;
 }*/
 
-#selectedContentList {
-    width: 100%;
-    margin-left: 0;
-}
-
-footer {
-    display: flex;
-    margin-top: 15px;
-    padding-bottom: 5px;
-    padding-left: 3.5%;
+#selectedContentList{
+    width:60.5%;
+    margin-left: 18.25%;
 }
 
 
@@ -432,10 +407,8 @@ footer {
     
 }
 
-#loadMore {
-    display: block;
-    margin: 40px auto;
-    padding: 10px 25px;
+#loadMore{
+    text-align: center;
 }
 
 .imageContainer{
@@ -762,6 +735,7 @@ color:#777;
     margin-top:4px;
     color: var(--text-muted);
 }
+
 /* ===== CHAT MODAL BACKDROP ===== */
 .chatModal {
     position: fixed;
@@ -844,7 +818,12 @@ color:#777;
 #closeModal:hover {
     background: var(--button-hover);
 }
+
+
+
+
 /*Chat Details Page*/
+
 
 .chatDetailsPage{
     display: flex;
@@ -875,6 +854,7 @@ color:#777;
     top: 0;
     z-index: 10;
 }
+/* BACK BUTTON */
 #backArrow{
     width: 32px;
     height: 32px;
@@ -894,6 +874,7 @@ color:#777;
 #backArrow:hover{
     background: var(--button-hover);
 }
+
 #backArrowImg{
     width: 100%;
     height: auto;
@@ -901,9 +882,11 @@ color:#777;
     opacity: 0.8;
     transition: 0.2s;
 }
+
 #backArrow:hover #backArrowImg{
     opacity: 1;
 }
+/* USER NAME */
 #chatTargetUser{
     font-size: 18px;
     font-weight: 600;
@@ -912,6 +895,7 @@ color:#777;
     display: flex;
     align-items: center;
 }
+
 #messagesContainer{
     flex: 1;
     overflow-y: auto;
@@ -922,6 +906,7 @@ color:#777;
 
     padding: 15px;
 }
+
 .message{
     position: relative;
 
@@ -1110,26 +1095,18 @@ color:#777;
     object-fit: cover;
     border-radius: 8px;
 }
+
 .removePreview {
     position: absolute;
-    top: -6px;
-    right: -6px;
-
-    width: 18px;
-    height: 18px;
-
+    top: -5px;
+    right: -5px;
     background: var(--theme-accent);
     color: white;
-
     border: none;
     border-radius: 50%;
-
-    display: flex;           
-    align-items: center;        
-    justify-content: center;    
-
+    width: 18px;
+    height: 18px;
     font-size: 12px;
-    line-height: 1;
     cursor: pointer;
 }
 /* Settings Page */

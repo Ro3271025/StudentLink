@@ -72,12 +72,6 @@
         <input class="searchBar themeObject" placeholder="Search"><br><br>
         <div id="recentSearches">
             <table class="recentSearchesTable">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
             </table>
         </div>
     </div>
