@@ -1,42 +1,119 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Edit Listing | StudentLink</title>
-<link rel="stylesheet" href="styles/style.css">
+    <title>Edit Listing | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/listings.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body>
+<body id="documentBody">
 
-<h1>Edit Listing</h1>
+    <!-- HEADER -->
+    <div id="header">
+        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+    </div>
 
-<form id="editListingForm">
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br>
+        <img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
 
-<input type="text" id="title" placeholder="Title" required>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <br><br>
+    </div>
 
-<textarea id="description" placeholder="Description" required></textarea>
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+    </div>
 
-<input type="number" id="price" placeholder="Price" required>
+    <!-- MAIN CONTENT -->
+    <div class="listingContainer">
 
-<br><br>
+        <h2>Edit Listing</h2>
 
-<label>Current Image</label>
-<br>
-<img id="currentImage" style="max-width:300px; display:none;">
+        <form id="editListingForm">
 
-<br><br>
+            <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
 
-<label>Replace Image (optional)</label>
-<input type="file" id="listingImage" accept="image/*">
+            <textarea id="description" class="listingInput" placeholder="Description" required></textarea><br>
 
-<br><br>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option value="Textbook">Textbook</option>
+                <option value="Calculator">Calculator</option>
+                <option value="Tech">Tech</option>
+                <option value="Dorm">Dorm</option>
+                <option value="Misc">Misc</option>
+            </select><br>
 
-<button type="submit">Save Changes</button>
+            <!-- CONDITIONAL FIELDS -->
+            <div id="supplyOptions" style="display:none;">
 
-</form>
+                <select id="condition">
+                    <option value="">Select Condition</option>
+                    <option value="New">New</option>
+                    <option value="Like New">Like New</option>
+                    <option value="Good">Good</option>
+                    <option value="Fair">Fair</option>
+                </select>
 
-<script type="module" src="js/editListing.js"></script>
+                <select id="listingType">
+                    <option value="">Sell or Rent?</option>
+                    <option value="sell">Sell</option>
+                    <option value="rent">Rent</option>
+                </select>
+
+            </div><br>
+
+            <input class="listingInput" type="number" id="price" placeholder="Price ($)" min="1" required><br>
+
+            <!-- CURRENT IMAGE -->
+            <label>Current Image</label><br><br>
+            <div class="imagePreviewBox">
+                <img id="currentImage">
+            </div>
+
+            <br>
+
+            <!-- NEW IMAGE -->
+            <label>Replace Image (optional)</label><br><br>
+            <input class="themeObject fileInput" type="file" id="listingImage" accept="image/*">
+
+            <br><br>
+
+            <!-- PREVIEW NEW IMAGE -->
+            <img id="imagePreview" style="display:none; max-width:250px; border-radius:8px;">
+
+            <br><br>
+
+            <button type="submit">Save Changes</button>
+
+        </form>
+
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/editListing.js"></script>
+    <script type="module" src="js/userSearch.js"></script>
+
+    <script type="module">
+        import { setupSidebar } from "../public/js/showUser.js";
+        setupSidebar();
+    </script>
+
+    <script src="../public/js/toggleVis.js"></script>
+    <script src="js/themeSwap.js"></script>
 
 </body>
-
 </html>
