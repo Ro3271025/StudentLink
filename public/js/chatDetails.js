@@ -132,9 +132,6 @@ async function loadRecipientInfo(currentUserId) {
     chatUsername.textContent = userData.username ? `@${userData.username}` : "";
 }
 
-/* ========================= */
-/* 🔥 PRO LEVEL MESSAGES */
-
 function loadMessages(currentUserId) {
 
     const q = query(
@@ -144,7 +141,6 @@ function loadMessages(currentUserId) {
 
     onSnapshot(q, snapshot => {
 
-        // 🔥 Detect if user is near bottom BEFORE updating
         const isNearBottom =
             messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer.clientHeight + 120;
 
@@ -156,61 +152,64 @@ function loadMessages(currentUserId) {
             const isMine = msg.senderID === currentUserId;
             const isLast = index === snapshot.docs.length - 1;
 
-            const div = document.createElement("div");
-            div.classList.add("message", isMine ? "myMessage" : "otherMessage");
+            /* ROW (LEFT / RIGHT) */
+            const row = document.createElement("div");
+            row.classList.add("messageRow", isMine ? "me" : "them");
+
+            /* BUBBLE */
+            const bubble = document.createElement("div");
+            bubble.classList.add("messageBubble");
 
             /* TEXT */
             if (msg.text) {
                 const text = document.createElement("div");
+                text.classList.add("msgText");
                 text.textContent = msg.text;
-                div.appendChild(text);
+                bubble.appendChild(text);
             }
 
             /* IMAGES */
             if (msg.images && msg.images.length > 0) {
-                const grid = document.createElement("div");
-                grid.classList.add("imageGrid");
+                const imgContainer = document.createElement("div");
+                imgContainer.classList.add("msgImages");
 
                 msg.images.forEach(url => {
                     const img = document.createElement("img");
                     img.src = url;
                     img.classList.add("chatImage");
 
-                    // 🔥 Handle image load scroll
                     img.onload = () => {
                         if (isNearBottom) {
                             messagesContainer.scrollTop = messagesContainer.scrollHeight;
                         }
                     };
 
-                    grid.appendChild(img);
+                    imgContainer.appendChild(img);
                 });
 
-                div.appendChild(grid);
+                bubble.appendChild(imgContainer);
             }
 
             /* TIME */
-            const time = document.createElement("div");
-            time.classList.add("messageTime");
-
             if (msg.timestamp) {
+                const time = document.createElement("div");
+                time.classList.add("messageTime");
                 time.textContent = formatTime(msg.timestamp.toDate());
+                bubble.appendChild(time);
             }
-
-            div.appendChild(time);
 
             /* SEEN */
             if (isMine && isLast && msg.seen) {
                 const seen = document.createElement("div");
                 seen.classList.add("messageSeen");
                 seen.textContent = "Seen";
-                div.appendChild(seen);
+                bubble.appendChild(seen);
             }
 
-            messagesContainer.appendChild(div);
+            row.appendChild(bubble);
+            messagesContainer.appendChild(row);
         });
 
-        // 🔥 Smooth + delayed scroll
         if (isNearBottom) {
             setTimeout(() => {
                 messagesContainer.scrollTo({
