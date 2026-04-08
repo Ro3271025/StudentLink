@@ -111,10 +111,10 @@ async function loadPost() {
                     ${actualCount} Comment${actualCount !== 1 ? 's' : ''}
                 </a>
             </footer>
-        `;
+        `; // The post title in here is not supposed to be there, but I won't remove it yet to avoid conflicts
 
         const postTitle = document.getElementById("postTitle");
-        const titleSubStr = `${post.title}`.substring(0,15);
+        const titleSubStr = `${post.title}`.substring(0, 15);
         postTitle.innerHTML = titleSubStr + ` - ` + `${post.authorName}` + ` | StudentLink`;
 
         // Like button
@@ -167,7 +167,7 @@ async function loadPost() {
 
 async function loadComments() {
     const container = document.getElementById('commentsContainer');
-    container.innerHTML = '<p style="color:#aaa; font-size:13px;">Loading comments...</p>';
+    container.innerHTML = '<p id="loading" style="color:#aaa; font-size:13px;">Loading comments...</p>';
 
     try {
         const q = query(
@@ -189,7 +189,7 @@ async function loadComments() {
         }
 
         if (snap.empty) {
-            container.innerHTML = '<p style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
+            container.innerHTML = '<p id="loading" style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
             return;
         }
 
