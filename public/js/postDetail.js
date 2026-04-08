@@ -95,8 +95,6 @@ async function loadPost() {
                 </div>
                 ${deleteBtn}
             </div>
-
-            ${post.title ? `<h2 class="postContentText">${escapeHtml(post.title)}</h2>` : ''}
             <p class="postContentText">${escapeHtml(post.body || '')}</p>
             ${imageSection}
             <br>
@@ -216,7 +214,7 @@ async function loadComments() {
 
             const el = document.createElement('div');
             el.id = `comment-${c.id}`;
-            el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;';
+            el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;padding-left:8px';
             el.innerHTML = `
                 <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                      style="width:32px; height:32px; border-radius:50%; flex-shrink:0;">
