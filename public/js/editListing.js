@@ -120,7 +120,7 @@ function renderImages(){
 
         div.innerHTML = `
             <img src="${url}">
-            <button class="removeImgBtn" data-index="${index}">X</button>
+            <button class="removeImgBtn"data-index="${index}">X</button>
         `;
 
         gallery.appendChild(div);
