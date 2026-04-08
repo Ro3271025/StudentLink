@@ -80,6 +80,24 @@ await uploadBytes(storageRef,imageFile);
 imageURL = await getDownloadURL(storageRef);
 
 }
+// SHOW CURRENT IMAGE
+const currentImg = document.getElementById("currentImage");
+if(listing.imageURL){
+    currentImg.src = listing.imageURL;
+    currentImg.style.display = "block";
+}
+
+// PREVIEW NEW IMAGE
+const imageInput = document.getElementById("listingImage");
+const preview = document.getElementById("imagePreview");
+
+imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if(file){
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    }
+});
 
 /* build update object */
 
@@ -100,5 +118,6 @@ await updateDoc(doc(db,"listings",id),updateData);
 window.location.href = `listingDetail.html?id=${id}`;
 
 });
+
 
 loadListing();
