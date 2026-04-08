@@ -892,7 +892,7 @@ color:#777;
 }
 
 #backArrow:hover{
-    background: var(--button-hover); /* THEME SECONDARY */
+    background: var(--button-hover);
 }
 #backArrowImg{
     width: 100%;
