@@ -44,10 +44,13 @@
 
         <form id="editListingForm">
 
+            <!-- TITLE -->
             <input class="listingInput" type="text" id="title" placeholder="Title" required><br>
 
+            <!-- DESCRIPTION -->
             <textarea id="description" class="listingInput" placeholder="Description" required></textarea><br>
 
+            <!-- CATEGORY -->
             <select id="category" required>
                 <option value="">Select Category</option>
                 <option value="Textbook">Textbook</option>
@@ -57,7 +60,7 @@
                 <option value="Misc">Misc</option>
             </select><br>
 
-            <!-- CONDITIONAL FIELDS -->
+            <!-- CONDITIONAL -->
             <div id="supplyOptions" style="display:none;">
 
                 <select id="condition">
@@ -76,27 +79,24 @@
 
             </div><br>
 
+            <!-- PRICE -->
             <input class="listingInput" type="number" id="price" placeholder="Price ($)" min="1" required><br>
 
-            <!-- CURRENT IMAGE -->
-            <label>Current Image</label><br><br>
-            <div class="imagePreviewBox">
-                <img id="currentImage">
-            </div>
+            <!-- 🔥 IMAGE SECTION (NEW) -->
+            <label>Images</label><br><br>
+
+            <div id="imageGallery" class="imageGallery"></div>
 
             <br>
 
-            <!-- NEW IMAGE -->
-            <label>Replace Image (optional)</label><br><br>
-            <input class="themeObject fileInput" type="file" id="listingImage" accept="image/*">
+            <label class="uploadBtn">
+                + Add Images
+                <input type="file" id="listingImage" accept="image/*" multiple hidden>
+            </label>
 
             <br><br>
 
-            <!-- PREVIEW NEW IMAGE -->
-            <img id="imagePreview" style="display:none; max-width:250px; border-radius:8px;">
-
-            <br><br>
-
+            <!-- BUTTON -->
             <button type="submit">Save Changes</button>
 
         </form>
