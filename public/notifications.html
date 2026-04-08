@@ -1,97 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home | StudentLink</title>
+    <title>Notifications | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/notifications.css">
-    <meta name="viewport" content="width=device-width, inital-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">
     <div id="header">
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
-
     <!-- LEFT SIDEBAR -->
-   <div class="sidebar" id="leftBar">
-    <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-    <p id="displayName">Display Name</p>
-    <p id="username">@Username</p><br>
-    <p class="sidebarText"><a href="home.html">Home</a></p>
-    <p class="sidebarText"><a href="listings.html">Listings</a></p>
-    <p class="sidebarText"><a href="explore.html">Explore</a></p>
-    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-    <p class="sidebarText"><a href="chat.html">Chat</a></p>
-    <p class="sidebarText"><a href="profile.html">Profile</a></p>
-    <p class="sidebarText"><a href="settings.html">Settings</a></p>
-    <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-    <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666; display:none;">Backfill Usernames (Dev)</button>
-</div>
-
-<!-- RIGHT SIDEBAR -->
-<div class="sidebar" id="rightBar">
-    <br>
-    <input class="searchBar themeObject" placeholder="Search"><br><br>
-
-    <div id="recentSearches">
-        <table class="recentSearchesTable">
-            <tr><th id="recentHeader">Recent Searches</th></tr>
-            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-            <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
-        </table>
+    <div class="sidebar" id="leftBar">
+        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+        <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666; display:none;">Backfill Usernames (Dev)</button>
     </div>
-</div>
 
-<!-- NEW POST OVERLAY -->
-<div class="overlayDiv">
-    <div id="newPostContainer">
-        <p id="newPostHeader">
-            <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-            <b>Create New Post</b>
-            <button class="themeObject" id="createPostBtn">Post</button>
-        </p>
-        <div id="newPostTXT">
-            <textarea maxlength="300" placeholder="What's happening?"></textarea>
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
+                <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
+            </table>
         </div>
     </div>
-</div>
 
-    <!-- I'm not sure why suddenly this has to be at the bottom -->
-
-    <div class="content"><span class="notifHeader">
-            <img class="notifIconType" src="styles/images/HEART.svg">
-            <!-- Display the latest 3 interacting users' profile images -->
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-            <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-            <br><br>
-            <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">Rodolfo Tan</a> and 2 others liked your post
-        </span><br>
-        <small class="postUsername" style="margin-left: 3.5%; color: #aaa;">Making a new test post</small>
-        <br><br>
+    <!-- NEW POST OVERLAY -->
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader">
+                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b>
+                <button class="themeObject" id="createPostBtn">Post</button>
+            </p>
+            <div id="newPostTXT">
+                <textarea maxlength="300" placeholder="What's happening?"></textarea>
+            </div>
+        </div>
     </div>
 
-    <div class="content"><span class="notifHeader">
-        <img class="notifIconType" src="styles/images/COMMENT.svg">
-        <!-- Display the latest 3 interacting users' profile images -->
-        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-        <br><br>
-        <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">Rodolfo Tan</a> and 1 others commented on your post
-    </span><br>
-    <small class="postUsername" style="margin-left: 3.5%; color: #aaa;">Making a new test post</small>
-    <br><br>
-</div>
-
+    <!-- NOTIFICATIONS LIST — rendered dynamically below -->
+    <div id="notificationsContainer">
+        <p style="color:#aaa; text-align:center; padding:30px;">Loading notifications...</p>
+    </div>
 
     <script type="module">
-        import { setupSidebar } from "../public/js/showUser.js";
+        import { auth, db } from "./js/firebaseInitialization.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getNotifications, markAsRead, markAllAsRead } from "./js/notificationsService.js";
 
-        setupSidebar();
+        const ICON_SRC = {
+            like:    'styles/images/HEART.svg',
+            comment: 'styles/images/COMMENT.svg',
+            reply:   'styles/images/COMMENT.svg',
+            message: 'styles/images/COMMENT.svg'
+        };
+
+        const LABELS = {
+            like:    'liked your post',
+            comment: 'commented on your post',
+            reply:   'replied in a post you commented on',
+            message: 'sent you a message'
+        };
+
+        function timeAgo(ts) {
+            if (!ts) return '';
+            const date = ts.toDate ? ts.toDate() : new Date(ts);
+            const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return `${Math.floor(diff / 86400)}d ago`;
+        }
+
+        function renderNotifications(notifications) {
+            const container = document.getElementById('notificationsContainer');
+
+            if (notifications.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:50px 0; color:#aaa;">
+                        <p style="font-size:15px;">No notifications yet</p>
+                        <p style="font-size:13px; color:#586373;">When someone likes or comments on your posts, you'll see it here.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+
+            notifications.forEach(notif => {
+                const iconSrc = ICON_SRC[notif.type] || 'styles/images/HEART.svg';
+                const label = LABELS[notif.type] || 'interacted with you';
+                const placeholder = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg';
+
+                const card = document.createElement('div');
+                card.className = 'content';
+                card.style.cursor = 'pointer';
+                if (!notif.read) card.style.borderLeft = '3px solid var(--theme-accent)';
+
+                card.innerHTML = `
+                    <span class="notifHeader">
+                        <img class="notifIconType" src="${iconSrc}">
+                        <img class="profileImgMini" src="${placeholder}">
+                        <br><br>
+                        <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">
+                            ${notif.fromUserName || 'Someone'}
+                        </a> ${label}
+                        <span style="color:#586373; font-size:11px; margin-left:8px;">${timeAgo(notif.createdAt)}</span>
+                    </span><br>
+                    ${notif.postBody ? `<small class="postUsername" style="margin-left: 3.5%; color: #aaa;">${notif.postBody}</small>` : ''}
+                    ${notif.commentText ? `<small class="postUsername" style="margin-left: 3.5%; color: #0f73ff;">→ "${notif.commentText}"</small>` : ''}
+                    <br><br>
+                `;
+
+                card.addEventListener('click', async () => {
+                    if (!notif.read) {
+                        await markAsRead(notif.id);
+                        card.style.borderLeft = '';
+                    }
+                    if (notif.postId) {
+                        window.location.href = `post.html?id=${notif.postId}`;
+                    } else if (notif.type === 'message') {
+                        window.location.href = 'chat.html';
+                    }
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "userlogin.html";
+                return;
+            }
+
+            // Update sidebar
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            const data = userSnap.exists() ? userSnap.data() : {};
+            const displayEl = document.getElementById("displayName");
+            const usernameEl = document.getElementById("username");
+            if (displayEl) displayEl.innerText = data.displayName || user.displayName || "";
+            if (usernameEl) usernameEl.innerText = data.username ? "@" + data.username : "";
+
+            const sideProfileIcon = document.querySelector('.sideProfileIcon');
+            if (sideProfileIcon && data.photoURL) sideProfileIcon.src = data.photoURL;
+
+            // Load notifications
+            const notifications = await getNotifications(user.uid);
+            renderNotifications(notifications);
+        });
     </script>
+
     <script type="module" src="js/userSearch.js"></script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>

@@ -79,10 +79,10 @@ async function loadPost() {
         const commentsSnap = await getDocs(collection(db, "posts", postId, "comments"));
         const actualCount = commentsSnap.size;
 
-        // In loadPost() - fix stored count
+        // Fix stored count if it's wrong
         if ((post.commentCount || 0) !== actualCount && currentUser) {
             await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
-}
+        }
 
         container.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -114,10 +114,8 @@ async function loadPost() {
         `; // The post title in here is not supposed to be there, but I won't remove it yet to avoid conflicts
 
         const postTitle = document.getElementById("postTitle");
-        const titleSubStr = `${post.title}`.substring(0,15);
-
-        postTitle.innerHTML =  titleSubStr + ` - ` + `${post.authorName}` + ` | StudentLink`;
-
+        const titleSubStr = `${post.title}`.substring(0, 15);
+        postTitle.innerHTML = titleSubStr + ` - ` + `${post.authorName}` + ` | StudentLink`;
 
         // Like button
         const likeBtn = container.querySelector('.likeBtn');
@@ -169,7 +167,7 @@ async function loadPost() {
 
 async function loadComments() {
     const container = document.getElementById('commentsContainer');
-    container.innerHTML = '<p style="color:#aaa; font-size:13px;">Loading comments...</p>';
+    container.innerHTML = '<p id="loading" style="color:#aaa; font-size:13px;">Loading comments...</p>';
 
     try {
         const q = query(
@@ -182,7 +180,8 @@ async function loadComments() {
         const realCount = snap.size;
         if (currentUser) {
             await updateDoc(doc(db, "posts", postId), { commentCount: realCount });
-}
+        }
+
         // Update the count display on the page
         const countDisplay = document.getElementById('commentCountDisplay');
         if (countDisplay) {
@@ -190,7 +189,7 @@ async function loadComments() {
         }
 
         if (snap.empty) {
-            container.innerHTML = '<p style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
+            container.innerHTML = '<p id="loading" style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
             return;
         }
 
@@ -237,7 +236,7 @@ async function loadComments() {
                 const commentId = btn.dataset.commentId;
                 try {
                     await deleteDoc(doc(db, "posts", postId, "comments", commentId));
-                    await loadComments(); // recount automatically
+                    await loadComments();
                 } catch (err) {
                     console.error("Delete comment failed:", err);
                     alert("Failed to delete comment.");
@@ -331,8 +330,28 @@ async function submitComment() {
             createdAt: serverTimestamp()
         });
 
+        // Send notification to post author
+        try {
+            const { createNotification } = await import('./NotificationsService.js');
+            const postSnap = await getDoc(doc(db, "posts", postId));
+            if (postSnap.exists()) {
+                const postData = postSnap.data();
+                await createNotification({
+                    toUserId: postData.authorId,
+                    fromUserId: currentUser.uid,
+                    fromUserName: currentUser.displayName || currentUser.email || "Anonymous",
+                    type: "comment",
+                    postId,
+                    postBody: postData.body || postData.title || "",
+                    commentText: text
+                });
+            }
+        } catch (notifErr) {
+            console.error("Notification failed:", notifErr);
+        }
+
         input.value = '';
-        await loadComments(); // recount automatically
+        await loadComments();
     } catch (err) {
         console.error("Comment failed:", err);
         alert("Failed to post comment.");
