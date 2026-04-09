@@ -1072,27 +1072,34 @@ color:#777;
     padding: 8px;
     overflow-x: auto;
 }
-
+/* EACH PREVIEW */
 .previewItem {
     position: relative;
-}
-.previewItem img {
     width: 60px;
     height: 60px;
+}
+/* IMAGE */
+.previewItem img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
 }
 .removePreview {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    background: var(--theme-accent);
-    color: white;
-    border: none;
-    border-radius: 50%;
+    top: -6px;
+    right: -6px;
     width: 18px;
     height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: var(--theme-accent);
+    color: white;
     font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
 }
 /* Settings Page */
