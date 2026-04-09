@@ -10,7 +10,8 @@ doc,
 getDoc,
 getDocs,
 updateDoc,
-setDoc
+setDoc,
+deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const container =
@@ -33,7 +34,7 @@ onSnapshot(q, async snapshot => {
 
 container.innerHTML="";
 
-/* 🔥 PARALLEL LOAD USERS (FASTER) */
+/* PARALLEL LOAD USERS (FASTER) */
 const promises = snapshot.docs.map(async docSnap => {
 
 const convo = docSnap.data();
@@ -84,7 +85,7 @@ return div;
 
 });
 
-/* 🔥 WAIT ALL USERS THEN RENDER */
+/* WAIT ALL USERS THEN RENDER */
 const elements = await Promise.all(promises);
 elements.forEach(el => container.appendChild(el));
 
