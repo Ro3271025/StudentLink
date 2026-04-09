@@ -65,7 +65,11 @@ console.log(error);
 const div = document.createElement("div");
 div.classList.add("conversationItem");
 
-div.innerHTML = `
+/* CONTENT */
+const content = document.createElement("div");
+content.classList.add("conversationContent");
+
+content.innerHTML = `
 <div class="conversationName">
 @${username}
 </div>
@@ -75,11 +79,29 @@ ${convo.lastMessage || ""}
 </div>
 `;
 
-/* open chat */
-div.addEventListener("click",()=>{
-window.location.href =
-`chatDetails.html?id=${conversationID}`;
+/* DELETE BUTTON */
+const deleteBtn = document.createElement("button");
+deleteBtn.classList.add("deleteChatBtn");
+deleteBtn.innerText = "✕";
+
+/* OPEN CHAT */
+content.addEventListener("click", () => {
+    window.location.href = `chatDetails.html?id=${conversationID}`;
 });
+
+/* DELETE CHAT */
+deleteBtn.addEventListener("click", async (e) => {
+    e.stopPropagation(); // 🚨 prevents opening chat
+
+    const confirmDelete = confirm("Delete this chat?");
+    if (!confirmDelete) return;
+
+    await deleteConversation(conversationID);
+});
+
+/* APPEND */
+div.appendChild(content);
+div.appendChild(deleteBtn);
 
 return div;
 
