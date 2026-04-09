@@ -723,7 +723,6 @@ color:#777;
 .conversationItem:active{
     transform: scale(0.98);
 }
-
 .conversationName{
     font-size:16px;
     font-weight:600;
@@ -735,7 +734,35 @@ color:#777;
     margin-top:4px;
     color: var(--text-muted);
 }
+.conversationItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+.conversationContent {
+    flex: 1;
+}
+/* DELETE BUTTON */
+.deleteChatBtn {
+    opacity: 0;
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+/* SHOW ON HOVER */
+.conversationItem:hover .deleteChatBtn {
+    opacity: 1;
+}
+.deleteChatBtn:hover {
+    transform: scale(1.2);
+}
 /* ===== CHAT MODAL BACKDROP ===== */
 .chatModal {
     position: fixed;
