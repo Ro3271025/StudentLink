@@ -943,6 +943,15 @@ color:#777;
     word-wrap: break-word;
     text-align: left;
 }
+/* YOUR MESSAGES */
+.messageRow.me .msgText {
+    text-align: right;
+}
+
+/* OTHER USER */
+.messageRow.them .msgText {
+    text-align: left;
+}
 /* IMAGE CONTAINER */
 .msgImages {
     display: flex;
