@@ -229,3 +229,35 @@ if (userSearchInput) {
         });
     });
 }
+/*Delete Function*/
+async function deleteConversation(conversationID) {
+    try {
+
+        // DELETE ALL MESSAGES FIRST
+        const messagesRef = collection(
+            db,
+            "conversations",
+            conversationID,
+            "messages"
+        );
+
+        const snapshot = await getDocs(messagesRef);
+
+        const deletePromises = snapshot.docs.map(docSnap =>
+            deleteDoc(docSnap.ref)
+        );
+
+        await Promise.all(deletePromises);
+
+        // DELETE CONVERSATION
+        await deleteDoc(
+            doc(db, "conversations", conversationID)
+        );
+
+        console.log("Chat deleted successfully");
+
+    } catch (error) {
+        console.error("Delete failed:", error);
+        alert("Error deleting chat");
+    }
+}
