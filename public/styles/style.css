@@ -960,11 +960,17 @@ color:#777;
 .chatImage:hover {
     opacity: 0.9;
 }
-/* TIME */
+/*Message Time*/
 .messageTime {
     font-size: 11px;
     opacity: 0.7;
     margin-top: 2px;
+}
+.messageRow.me .messageTime {
+    text-align: right;
+}
+.messageRow.them .messageTime {
+    text-align: left;
 }
 /* SEEN TEXT */
 .messageSeen {
