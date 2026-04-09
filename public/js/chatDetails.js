@@ -160,15 +160,7 @@ function loadMessages(currentUserId) {
             const bubble = document.createElement("div");
             bubble.classList.add("messageBubble");
 
-            /* TEXT */
-            if (msg.text) {
-                const text = document.createElement("div");
-                text.classList.add("msgText");
-                text.textContent = msg.text;
-                bubble.appendChild(text);
-            }
-
-            /* IMAGES */
+            /* IMAGES FIRST */
             if (msg.images && msg.images.length > 0) {
                 const imgContainer = document.createElement("div");
                 imgContainer.classList.add("msgImages");
@@ -183,11 +175,16 @@ function loadMessages(currentUserId) {
                             messagesContainer.scrollTop = messagesContainer.scrollHeight;
                         }
                     };
-
                     imgContainer.appendChild(img);
                 });
-
                 bubble.appendChild(imgContainer);
+            }
+            /* TEXT UNDER IMAGE */
+            if (msg.text) {
+                const text = document.createElement("div");
+                text.classList.add("msgText");
+                text.textContent = msg.text;
+                bubble.appendChild(text);
             }
 
             /* TIME */
