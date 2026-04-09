@@ -941,6 +941,7 @@ color:#777;
     font-size: 14px;
     line-height: 1.4;
     word-wrap: break-word;
+    text-align: left;
 }
 /* IMAGE CONTAINER */
 .msgImages {
