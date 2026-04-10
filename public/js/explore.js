@@ -1,38 +1,41 @@
-import { db } from "./firebaseInitialization.js";
+import { db, auth } from "./firebaseInitialization.js";
+
 import {
     collection,
     getDocs,
     query,
-    orderBy, 
+    orderBy,
     doc,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 import {
     getStorage,
     ref,
     getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const displayNameEl = document.getElementById("displayName");
+const usernameEl = document.getElementById("username");
 const profilePic = document.getElementById("profilePic");
+
+const feed = document.getElementById("exploreFeed");
+const filter = document.getElementById("filterSelection");
+const searchBar = document.getElementById("exploreSearchBar");
 
 const storage = getStorage();
 
-try {
-    const imgRef = ref(storage, `userPhotos/${user.uid}/profile.jpg`);
-    const url = await getDownloadURL(imgRef);
-    profilePic.src = url;
-} catch {
-    // fallback stays default
-}
+let allItems = [];
 
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-const displayNameEl = document.getElementById("displayName");
-const usernameEl = document.getElementById("username");
+/* USER INFO */
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) return;
 
     try {
+        /* LOAD USER DATA */
         const userRef = doc(db, "users", user.uid);
         const snap = await getDoc(userRef);
 
@@ -42,44 +45,66 @@ onAuthStateChanged(auth, async (user) => {
             displayNameEl.textContent = data.displayName || "No Name";
             usernameEl.textContent = "@" + (data.username || "username");
         }
+        /* LOAD PROFILE IMAGE */
+        try {
+            const imgRef = ref(storage, `userPhotos/${user.uid}/profile.jpg`);
+            const url = await getDownloadURL(imgRef);
+            profilePic.src = url;
+        } catch {
+            // keep default image
+        }
+
     } catch (err) {
         console.error("Error loading user:", err);
     }
 });
 
-const feed = document.getElementById("exploreFeed");
-const filter = document.getElementById("filterSelection");
-const searchBar = document.getElementById("exploreSearchBar");
-
-let allItems = [];
-
 /* LOAD DATA */
+
 async function loadExplore() {
     feed.innerHTML = "Loading...";
 
-    const postsSnap = await getDocs(query(
-        collection(db, "posts"),
-        orderBy("timestamp", "desc")
-    ));
+    try {
+        const postsSnap = await getDocs(query(
+            collection(db, "posts"),
+            orderBy("timestamp", "desc")
+        ));
 
-    const listingsSnap = await getDocs(query(
-        collection(db, "listings"),
-        orderBy("timestamp", "desc")
-    ));
+        const listingsSnap = await getDocs(query(
+            collection(db, "listings"),
+            orderBy("timestamp", "desc")
+        ));
 
-    allItems = [];
+        allItems = [];
 
-    postsSnap.forEach(doc => {
-        allItems.push({ id: doc.id, type: "post", ...doc.data() });
-    });
+        postsSnap.forEach(doc => {
+            allItems.push({
+                id: doc.id,
+                type: "post",
+                ...doc.data()
+            });
+        });
 
-    listingsSnap.forEach(doc => {
-        allItems.push({ id: doc.id, type: "listing", ...doc.data() });
-    });
+        listingsSnap.forEach(doc => {
+            allItems.push({
+                id: doc.id,
+                type: "listing",
+                ...doc.data()
+            });
+        });
 
-    renderFeed(allItems);
+        /* SORT EVERYTHING TOGETHER */
+        allItems.sort((a, b) => {
+            return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
+        });
+
+        renderFeed(allItems);
+
+    } catch (err) {
+        console.error("Error loading explore:", err);
+        feed.innerHTML = "Failed to load content.";
+    }
 }
-
 /* RENDER */
 function renderFeed(items) {
     feed.innerHTML = "";
@@ -88,6 +113,7 @@ function renderFeed(items) {
         const div = document.createElement("div");
         div.className = "feedItem";
 
+        /* POST */
         if (item.type === "post") {
             div.innerHTML = `
                 <div class="feedHeader">
@@ -105,6 +131,7 @@ function renderFeed(items) {
             };
         }
 
+        /* LISTING */
         if (item.type === "listing") {
             div.innerHTML = `
                 <div class="feedHeader">
@@ -117,8 +144,9 @@ function renderFeed(items) {
                     <p class="price">$${item.price || ""}</p>
                 </div>
 
-                ${(item.imageURL || item.image) ? 
-                    `<img class="feedImage" src="${item.imageURL || item.image}">` : ""}
+                ${(item.imageURL || item.image) 
+                    ? `<img class="feedImage" src="${item.imageURL || item.image}">`
+                    : ""}
             `;
 
             div.onclick = () => {
@@ -131,6 +159,7 @@ function renderFeed(items) {
 }
 
 /* FILTER */
+
 filter.addEventListener("change", () => {
     const val = filter.value;
 
@@ -153,7 +182,11 @@ searchBar.addEventListener("input", () => {
     const val = searchBar.value.toLowerCase();
 
     const filtered = allItems.filter(i =>
-        (i.text || i.title || "").toLowerCase().includes(val)
+        (
+            (i.text || "") +
+            (i.title || "") +
+            (i.description || "")
+        ).toLowerCase().includes(val)
     );
 
     renderFeed(filtered);
