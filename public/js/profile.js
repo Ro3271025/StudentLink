@@ -364,7 +364,7 @@ export function setupProfile() {
                 }
 
                 profileImg.style.cursor = "pointer";
-                profileImg.title = "Click to change profile picture";
+                profileImg.title = "Click to change profile picture (400 x 400px)";
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
