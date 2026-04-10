@@ -44,26 +44,45 @@ function renderFeed(items) {
     feed.innerHTML = "";
 
     items.forEach(item => {
-
-        console.log(item); // ✅ debug safely
-
         const div = document.createElement("div");
         div.className = "feedItem";
 
         if (item.type === "post") {
             div.innerHTML = `
-                <strong>@${item.username || "user"}</strong>
-                <p>${item.text || item.content || item.description || ""}</p>
+                <div class="feedHeader">
+                    <span class="feedUser">@${item.username || "user"}</span>
+                    <span class="feedType">Post</span>
+                </div>
+
+                <div class="feedContent">
+                    ${item.text || item.content || item.description || ""}
+                </div>
             `;
+
+            div.onclick = () => {
+                window.location.href = `home.html#post-${item.id}`;
+            };
         }
 
         if (item.type === "listing") {
             div.innerHTML = `
-                <strong>@${item.username || "user"}</strong>
-                <p>${item.title || item.name || ""}</p>
-                <p>$${item.price || ""}</p>
-                ${(item.imageURL || item.image) ? `<img src="${item.imageURL || item.image}">` : ""}
+                <div class="feedHeader">
+                    <span class="feedUser">@${item.username || "user"}</span>
+                    <span class="feedType">Listing</span>
+                </div>
+
+                <div class="feedContent">
+                    <strong>${item.title || item.name || ""}</strong>
+                    <p class="price">$${item.price || ""}</p>
+                </div>
+
+                ${(item.imageURL || item.image) ? 
+                    `<img class="feedImage" src="${item.imageURL || item.image}">` : ""}
             `;
+
+            div.onclick = () => {
+                window.location.href = `listingDetail.html?id=${item.id}`;
+            };
         }
 
         feed.appendChild(div);
