@@ -36,7 +36,7 @@ function expandAcc() {
             <button class='openBtn optionTxt' onclick='expandAcc()'>
                 Your Account<br>
                 <small class='smallTxt'>
-                    See information about your account and update details
+                    See information about your account, update details, or sign out
                 </small>
             </button>
         `;
@@ -46,7 +46,7 @@ function expandAcc() {
             <button class='openBtn optionTxt' onclick='expandAcc()'>
                 Your Account<br>
                 <small class='smallTxt'>
-                    See information about your account and update details
+                    See information about your account, update details, or sign out
                 </small>
             </button>
 
