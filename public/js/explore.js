@@ -192,16 +192,30 @@ searchBar.addEventListener("input", () => {
     renderFeed(filtered);
 });
 
-document.getElementById("orgCard").onclick = () => {
-    window.location.href = "organizations.html";
-};
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("eventCard").onclick = () => {
-    window.location.href = "events.html";
-};
+    const orgCard = document.getElementById("orgCard");
+    const eventCard = document.getElementById("eventCard");
+    const newsCard = document.getElementById("newsCard");
 
-document.getElementById("newsCard").onclick = () => {
-    window.location.href = "news.html";
-};
+    if (orgCard) {
+        orgCard.onclick = () => {
+            window.location.href = "organizations.html";
+        };
+    }
+
+    if (eventCard) {
+        eventCard.onclick = () => {
+            window.location.href = "events.html";
+        };
+    }
+
+    if (newsCard) {
+        newsCard.onclick = () => {
+            window.location.href = "news.html";
+        };
+    }
+
+});
 
 loadExplore();
