@@ -3,8 +3,49 @@ import {
     collection,
     getDocs,
     query,
-    orderBy
+    orderBy, 
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+    getStorage,
+    ref,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+const profilePic = document.getElementById("profilePic");
+
+const storage = getStorage();
+
+try {
+    const imgRef = ref(storage, `userPhotos/${user.uid}/profile.jpg`);
+    const url = await getDownloadURL(imgRef);
+    profilePic.src = url;
+} catch {
+    // fallback stays default
+}
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const displayNameEl = document.getElementById("displayName");
+const usernameEl = document.getElementById("username");
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+
+    try {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+
+        if (snap.exists()) {
+            const data = snap.data();
+
+            displayNameEl.textContent = data.displayName || "No Name";
+            usernameEl.textContent = "@" + (data.username || "username");
+        }
+    } catch (err) {
+        console.error("Error loading user:", err);
+    }
+});
 
 const feed = document.getElementById("exploreFeed");
 const filter = document.getElementById("filterSelection");
