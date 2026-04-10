@@ -95,6 +95,56 @@ function confDelete() {
     }
 }
 
+// PRIVACY OPTIONS
+function expandPrivacy(){
+    const privacyOpt = document.getElementById('privacyOption');
+
+    if(privacyOpen){
+        privacyOpt.innerHTML = 
+            `<button class="openBtn optionTxt" onclick="expandPrivacy()">
+            Privacy<br>
+            <small class="smallTxt">
+                Manage your account's security and interactions with other users
+            </small>
+            </button>`;
+            privacyOpen = false;
+    } else {
+        privacyOpt.innerHTML = `
+            <button class="openBtn optionTxt" onclick="expandPrivacy()">
+                Privacy<br>
+                <small class="smallTxt">
+                    Manage your account's security and interactions with other users
+                </small>
+            </button>
+            
+            <div class='settingsOpt'>
+                <div id='profileVisContainer'>
+                    <p><strong>Profile Visibility:</strong></p>
+                    <input type='radio' id='profileVisOpt-PUBLIC' value='public' name='profileVisOpt'>
+                    <label for='profileVisOpt-PUBLIC'>Public</label><br>
+                    <input type='radio' id='profileVisOpt-PRIVATE' value='private' name='profileVisOpt'>
+                    <label for='profileVisOpt-PRIVATE'>Private</label><br><br>
+                    <button class='saveBtn'>Save</button>
+                </div><br>
+
+
+                <div id='reportsContainer'>
+                    <p><strong>Blocked Users:</strong></p>
+                    <input class='settingsInput' id='reportSearch' placeholder='Search Blocked Users'/>
+                    <div class='reportItem'>
+                        <!-- THIS IS A SAMPLE USER REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
+                        <p class='reportItemTitle'><strong>User:</strong><br>Derek Mendez<br><small class='smallTxt'>@mendd2</small></p>
+                        <p class='reportItemURL'><strong>Profile URL:</strong> <a href="http://localhost/StudentLink/public/profile.html?id=OqTA2B5xB2NcHgw6POxwaFf3yWY2">Go to Profile</a></p>
+                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
+                        <button class='delBtn'>Unblock User</button>
+                    </div>
+                </div>
+            </div>`;
+            privacyOpen = true;
+    }
+}
+
+
 // THEME OPTIONS
 function expandTheme() {
     const themeOpt = document.getElementById('themeOption');
@@ -175,7 +225,7 @@ function expandAbout() {
 }
 
 
-
+// SUPPORT OPTIONS
 function expandSupport(){
     const supportOpt = document.getElementById('supportOption');
 
@@ -217,53 +267,7 @@ function expandSupport(){
     }
 }
 
-function expandPrivacy(){
-    const privacyOpt = document.getElementById('privacyOption');
 
-    if(privacyOpen){
-        privacyOpt.innerHTML = 
-            `<button class="openBtn optionTxt" onclick="expandPrivacy()">
-            Privacy<br>
-            <small class="smallTxt">
-                Manage your account's security and interactions with other users
-            </small>
-            </button>`;
-            privacyOpen = false;
-    } else {
-        privacyOpt.innerHTML = `
-            <button class="openBtn optionTxt" onclick="expandPrivacy()">
-                Privacy<br>
-                <small class="smallTxt">
-                    Manage your account's security and interactions with other users
-                </small>
-            </button>
-            
-            <div class='settingsOpt'>
-                <div id='profileVisContainer'>
-                    <p><strong>Profile Visibility:</strong></p>
-                    <input type='radio' id='profileVisOpt-PUBLIC' value='public' name='profileVisOpt'>
-                    <label for='profileVisOpt-PUBLIC'>Public</label><br>
-                    <input type='radio' id='profileVisOpt-PRIVATE' value='private' name='profileVisOpt'>
-                    <label for='profileVisOpt-PRIVATE'>Private</label><br><br>
-                    <button class='saveBtn'>Save</button>
-                </div><br>
-
-
-                <div id='reportsContainer'>
-                    <p><strong>Blocked Users:</strong></p>
-                    <input class='settingsInput' id='reportSearch' placeholder='Search Blocked Users'/>
-                    <div class='reportItem'>
-                        <!-- THIS IS A SAMPLE USER REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
-                        <p class='reportItemTitle'><strong>User:</strong><br>Derek Mendez<br><small class='smallTxt'>@mendd2</small></p>
-                        <p class='reportItemURL'><strong>Profile URL:</strong> <a href="http://localhost/StudentLink/public/profile.html?id=OqTA2B5xB2NcHgw6POxwaFf3yWY2">Go to Profile</a></p>
-                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
-                        <button class='delBtn'>Unblock User</button>
-                    </div>
-                </div>
-            </div>`;
-            privacyOpen = true;
-    }
-}
 
 
 // LOGOUT
