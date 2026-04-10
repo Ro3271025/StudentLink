@@ -249,8 +249,10 @@ a:hover{
 
 
 #profileImage{
-    max-height: 15vh;
-    min-height: 15vh;
+    max-height: 25rem;
+    max-width: 25rem;
+    height: 25rem;
+    width: 25rem;
     margin-left: 3.5%;
     margin-top: 3.5%;
 }
@@ -327,8 +329,8 @@ a:hover{
 .profileImgMini{
     margin-left: 3.5%;
     margin-top: 3.5%;
-    min-height: 5vh;
-    height:5vh;
+    height:3.75rem;
+    width:3.75rem;
 }
 
 .sideProfileIcon{
