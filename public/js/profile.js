@@ -92,7 +92,7 @@ async function loadPosts(uidToLoad) {
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
                 <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(post.authorUsername || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
                 <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}
