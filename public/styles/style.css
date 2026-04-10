@@ -86,6 +86,7 @@ a:hover{
     overflow: hidden;
 }
 
+
 /* Container structure */
 #loginContainer {
     display: flex;
@@ -98,6 +99,7 @@ a:hover{
     flex: 1;
     padding: 5%;
 }
+
 
 /* Left side */
 #loginLeft {
@@ -339,6 +341,7 @@ a:hover{
     margin-top: 3.5%;
     height:3.75rem;
     width:3.75rem;
+    border-radius: 4px;
 }
 
 .sideProfileIcon{
