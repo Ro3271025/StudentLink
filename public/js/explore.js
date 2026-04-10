@@ -192,6 +192,16 @@ searchBar.addEventListener("input", () => {
     renderFeed(filtered);
 });
 
+document.getElementById("orgCard").onclick = () => {
+    window.location.href = "organizations.html";
+};
 
+document.getElementById("eventCard").onclick = () => {
+    window.location.href = "events.html";
+};
+
+document.getElementById("newsCard").onclick = () => {
+    window.location.href = "news.html";
+};
 
 loadExplore();
