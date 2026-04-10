@@ -65,7 +65,6 @@ margin-top: 25px;
 margin-bottom: 10px;
 font-size: 16pt;
 }
-
 /* FEED */
 .feedItem {
     padding: 14px;
@@ -76,12 +75,10 @@ font-size: 16pt;
     transition: 0.2s;
     cursor: pointer;
 }
-
 .feedItem:hover {
     background-color: #2a3b4f;
     transform: translateY(-2px);
 }
-
 /* HEADER */
 .feedHeader {
     display: flex;
@@ -89,32 +86,33 @@ font-size: 16pt;
     align-items: center;
     margin-bottom: 6px;
 }
-
 .feedUser {
     font-weight: bold;
     font-size: 11pt;
 }
-
 .feedType {
     font-size: 9pt;
     opacity: 0.6;
 }
-
 /* CONTENT */
 .feedContent {
     font-size: 13pt;
     margin-bottom: 8px;
 }
-
 /* PRICE */
 .price {
     color: var(--theme-accent);
     font-weight: bold;
 }
-
 /* IMAGE */
 .feedImage {
     width: 100%;
     border-radius: 10px;
     margin-top: 10px;
+}
+.feedItem strong {
+    font-size: 14pt;
+}
+.feedItem p {
+    margin: 4px 0;
 }
