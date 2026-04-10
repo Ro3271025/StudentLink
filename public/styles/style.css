@@ -344,6 +344,7 @@ a:hover{
 .sideProfileIcon{
     height:50%;
     width: 50%;
+    border-radius: 4px;
 }
 
 .postLink{
