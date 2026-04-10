@@ -8,6 +8,7 @@
     --text-fill: #ffffff;
     --font-family: Helvetica, sans-serif;
     --overlay-vis: hidden;
+    --username-color: #586373;
 }
 
 
@@ -204,9 +205,9 @@ a:hover{
 }
 
 
-#username{
+#username, #sideUsername{
     font-size: 14pt;
-    color: #586373;
+    color: var(--username-color);
 }
 
 #displayName{
@@ -223,6 +224,14 @@ a:hover{
     align-items: center;
     vertical-align: middle;
     text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#banner:hover{
+    outline: 2px solid #008000;
+    box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
+    cursor: pointer;
 }
 
 #banner img{
