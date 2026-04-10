@@ -301,14 +301,13 @@ a:hover{
 }
 
 #edit, #save{
-    margin-left: 65%;
+    margin-left: 70%;
     margin-top: -15%;
     margin-right: auto;
     word-wrap: break-word !important; 
     display: inline;
     position: relative;
 }
-
 #cancel {
     margin-left: 45%;
     margin-top: -21.5%;

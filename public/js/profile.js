@@ -333,6 +333,7 @@ export function setupProfile() {
                     if (!isEditing) {
                         isEditing = true;
                         editBtn.innerText = "Save Bio";
+                        editBtn.style.marginLeft = "75%"
                         bioText.disabled = false;
                         bioText.focus();
                     } else {
@@ -341,6 +342,7 @@ export function setupProfile() {
                             await updateDoc(userRef, { bio: bioText.value });
                             isEditing = false;
                             editBtn.innerText = "Edit Profile";
+                            editBtn.style.marginLeft = "70%"
                             bioText.disabled = true;
                         } catch (err) {
                             console.error("Save failed", err);
