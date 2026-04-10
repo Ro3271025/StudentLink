@@ -129,3 +129,6 @@ font-size: 16pt;
 .feedItem p {
     margin: 4px 0;
 }
+#exploreFeed {
+    margin-top: 10px;
+}
