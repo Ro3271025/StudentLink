@@ -8,6 +8,11 @@
     font-size: 14pt;
     margin-bottom: 20px;
 }
+.exploreSearchBar:focus,
+#filterSelection:focus {
+    outline: none;
+    border-color: var(--theme-accent);
+}
 #filterSelection {
 width: 100%;
 padding: 12px;
