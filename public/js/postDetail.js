@@ -84,9 +84,11 @@ async function loadPost() {
             await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
         }
 
+        const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+
         container.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-                <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG" style="margin:0;">
+                <img class="profileImgMini" src="${authorPhoto}" style="margin:0;">
                 <div>
                     <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">
                         ${escapeHtml(post.authorName || 'Display Name')}
@@ -216,7 +218,7 @@ async function loadComments() {
             el.id = `comment-${c.id}`;
             el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;padding-left:8px';
             el.innerHTML = `
-                <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
+                <img src="${c.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'}"
                      style="width:32px; height:32px; border-radius:50%; flex-shrink:0;">
                 <div style="flex:1;">
                     <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(c.authorName || 'Anonymous')}</span>

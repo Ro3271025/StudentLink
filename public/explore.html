@@ -60,10 +60,7 @@
         <p style="text-align:center"><a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small></p><br>
     </div><br>
 
-
-
     <!-- LEFT SIDEBAR -->
-
     <div class="sidebar" id="leftBar">
         <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
@@ -76,19 +73,21 @@
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
         <p class="sidebarText"><a href="settings.html">Settings</a></p>
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-        
 
         <div class="overlayDiv">
             <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
+                <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
             </div>
         </div>
-
     </div>
 
     <script type="module" src="js/userSearch.js"></script>
+    <script type="module">
+        import { setupSidebar } from "./js/showUser.js";
+        setupSidebar();
+    </script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>
 </body>
