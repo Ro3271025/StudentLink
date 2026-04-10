@@ -31,6 +31,10 @@ table, th, td{
    
 }
 
+label{
+    cursor: pointer;
+}
+
 img{
     max-width: 100%;
     height: auto;
@@ -49,6 +53,7 @@ button, select{
     font-size: 18pt;
     vertical-align: middle;
     word-wrap: break-word;
+    cursor: pointer;
 }
 
 button:hover, select:hover, input:hover{
@@ -1109,60 +1114,7 @@ color:#777;
     font-size: 12px;
     cursor: pointer;
 }
-/* Settings Page */
 
-.settingsHeader{
-    margin: 0 auto;
-    padding-left:1%;
-    padding-bottom: 1%;
-    font-size: 16pt;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.optionTxt{
-    color: var(--text-fill) !important;
-}
-
-.settingsInput{
-    border: 1px solid var(--theme-accent);
-    border-radius: 4px;
-    background-color: transparent !important;
-    padding:4px;
-    color: var(--text-fill);
-}
-
-.logoutBtn{
-    font-size:12pt;
-    padding:5px;
-    background-color: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-fill);
-    border-radius: 4px;
-    transition: 0.2s;
-}
-
-.logoutBtn:hover{
-    background-color: var(--border-color);
-}
-
-.delBtn{
-    font-size:12pt; 
-    padding:5px; 
-    background-color: #A11010;
-    border-color:transparent;
-}
-
-.separator{
-    border-bottom:1px solid var(--border-color);
-}
-
-.settingsOpt{
-    margin-left:3.5%;
-}
-
-.settingsOpt input{
-    transition: 0.125s;
-}
 /* LISTING DETAIL PAGE */
 .listingDetailContainer {
     display: grid;
