@@ -144,7 +144,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    max-width: 650px;
+    max-width: 640px;
 }
 .orgCard {
     display: flex;
@@ -161,7 +161,7 @@ body {
 
     overflow: hidden;
     width: 100%;
-    max-width: 650px;
+    max-width: 640px;
 }
 .orgCard:hover {
     transform: translateY(-2px);
