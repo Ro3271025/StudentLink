@@ -115,6 +115,14 @@ let isMember = false;
 const joinBtn = document.getElementById("joinBtn");
 const memberCountEl = document.getElementById("memberCount");
 
+onAuthStateChanged(auth, (user) => {
+    currentUser = user;
 
+    if (user) {
+        setupJoinSystem();
+    } else {
+        joinBtn.style.display = "none";
+    }
+});
 
 loadOrg();
