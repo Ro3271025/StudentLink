@@ -9,11 +9,15 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import {
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs,
     setDoc,
     deleteDoc,
-    onSnapshot,
-    collection,
-    getDocs
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
