@@ -92,7 +92,7 @@ async function loadPosts(uidToLoad) {
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
                 <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(post.authorUsername || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
                 <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}
@@ -333,6 +333,7 @@ export function setupProfile() {
                     if (!isEditing) {
                         isEditing = true;
                         editBtn.innerText = "Save Bio";
+                        editBtn.style.marginLeft = "75%"
                         bioText.disabled = false;
                         bioText.focus();
                     } else {
@@ -341,6 +342,7 @@ export function setupProfile() {
                             await updateDoc(userRef, { bio: bioText.value });
                             isEditing = false;
                             editBtn.innerText = "Edit Profile";
+                            editBtn.style.marginLeft = "70%"
                             bioText.disabled = true;
                         } catch (err) {
                             console.error("Save failed", err);
@@ -362,7 +364,7 @@ export function setupProfile() {
                 }
 
                 profileImg.style.cursor = "pointer";
-                profileImg.title = "Click to change profile picture";
+                profileImg.title = "Click to change profile picture (400 x 400px)";
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {

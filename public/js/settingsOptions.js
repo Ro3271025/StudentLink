@@ -1,7 +1,7 @@
 // Settings
 import { auth, db } from "./firebaseInitialization.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // LOAD USERNAME 
 onAuthStateChanged(auth, async (user) => {
@@ -12,11 +12,15 @@ onAuthStateChanged(auth, async (user) => {
 
     if (snap.exists()) {
         const data = snap.data();
+        const usernameVal = "@" + (data.username || "user");
 
+        // Update Header
         const headerUsername = document.getElementById("headerUsername");
-        if (headerUsername) {
-            headerUsername.textContent = "@" + (data.username || "user");
-        }
+        if (headerUsername) headerUsername.textContent = usernameVal;
+
+        // Update Sidebar (top left)
+        const sidebarUsername = document.getElementById("username");
+        if (sidebarUsername) sidebarUsername.textContent = usernameVal;
     }
 });
 
@@ -36,7 +40,7 @@ function expandAcc() {
             <button class='openBtn optionTxt' onclick='expandAcc()'>
                 Your Account<br>
                 <small class='smallTxt'>
-                    See information about your account and update details
+                    See information about your account, update details, or sign out
                 </small>
             </button>
         `;
@@ -46,21 +50,21 @@ function expandAcc() {
             <button class='openBtn optionTxt' onclick='expandAcc()'>
                 Your Account<br>
                 <small class='smallTxt'>
-                    See information about your account and update details
+                    See information about your account, update details, or sign out
                 </small>
             </button>
 
             <div class='settingsOpt'>
                 <p><strong>Choose a New Username</strong></p>
                 <p>This will display as <strong>@username</strong></p>
-                <input class='settingsInput' placeholder='e.g., rodolfo_tan' />
-                <button class='saveBtn'>Save</button>
+                <input id='newUsername' class='settingsInput' placeholder='e.g., rodolfo_tan' />
+                <button class='saveBtn' onclick='saveUsername()'>Save</button>
             </div>
 
             <div class='settingsOpt'>
                 <p><strong>Change Email (.edu only)</strong></p>
-                <input class='settingsInput' placeholder='e.g., jdoe@suny.edu' />
-                <button class='saveBtn'>Save</button>
+                <input id='newEmail' class='settingsInput' placeholder='e.g., jdoe@suny.edu' />
+                <button class='saveBtn' onclick='saveEmail()'>Save</button>
             </div>
 
             <div class='settingsOpt'>
@@ -74,6 +78,54 @@ function expandAcc() {
             </div>
         `;
         accOpen = true;
+    }
+}
+
+// SAVE USERNAME FUNCTION
+async function saveUsername() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const newUsername = document.getElementById('newUsername').value.trim();
+    if (!newUsername) return alert("Please enter a username.");
+
+    try {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { username: newUsername });
+
+        // Update UI immediately in both places
+        document.getElementById("headerUsername").textContent = "@" + newUsername;
+        document.getElementById("username").textContent = "@" + newUsername;
+
+        alert("Username updated successfully!");
+    } catch (error) {
+        console.error("Error updating username:", error);
+        alert("Failed to update username.");
+    }
+}
+
+// SAVE EMAIL FUNCTION
+async function saveEmail() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const newEmail = document.getElementById('newEmail').value.trim();
+
+    // Validates .edu only
+    if (!newEmail.toLowerCase().endsWith(".edu")) {
+        return alert("Please use a valid .edu email address.");
+    }
+
+    try {
+        await updateEmail(user, newEmail);
+        alert("Email updated successfully!");
+    } catch (error) {
+        // Firebase requires a recent login to change emails
+        if (error.code === 'auth/requires-recent-login') {
+            alert("Security check: Please log out and back in to change your email.");
+        } else {
+            alert("Error: " + error.message);
+        }
     }
 }
 
@@ -94,6 +146,56 @@ function confDelete() {
         alert("Username does not match.");
     }
 }
+
+// PRIVACY OPTIONS
+function expandPrivacy(){
+    const privacyOpt = document.getElementById('privacyOption');
+
+    if(privacyOpen){
+        privacyOpt.innerHTML = 
+            `<button class="openBtn optionTxt" onclick="expandPrivacy()">
+            Privacy<br>
+            <small class="smallTxt">
+                Manage your account's security and interactions with other users
+            </small>
+            </button>`;
+            privacyOpen = false;
+    } else {
+        privacyOpt.innerHTML = `
+            <button class="openBtn optionTxt" onclick="expandPrivacy()">
+                Privacy<br>
+                <small class="smallTxt">
+                    Manage your account's security and interactions with other users
+                </small>
+            </button>
+            
+            <div class='settingsOpt'>
+                <div id='profileVisContainer'>
+                    <p><strong>Profile Visibility:</strong></p>
+                    <input type='radio' id='profileVisOpt-PUBLIC' value='public' name='profileVisOpt'>
+                    <label for='profileVisOpt-PUBLIC'>Public</label><br>
+                    <input type='radio' id='profileVisOpt-PRIVATE' value='private' name='profileVisOpt'>
+                    <label for='profileVisOpt-PRIVATE'>Private</label><br><br>
+                    <button class='saveBtn'>Save</button>
+                </div><br>
+
+
+                <div id='reportsContainer'>
+                    <p><strong>Blocked Users:</strong></p>
+                    <input class='settingsInput' id='reportSearch' placeholder='Search Blocked Users'/>
+                    <div class='reportItem'>
+                        <!-- THIS IS A SAMPLE USER REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
+                        <p class='reportItemTitle'><strong>User:</strong><br>Derek Mendez<br><small class='smallTxt'>@mendd2</small></p>
+                        <p class='reportItemURL'><strong>Profile URL:</strong> <a href="http://localhost/StudentLink/public/profile.html?id=OqTA2B5xB2NcHgw6POxwaFf3yWY2">Go to Profile</a></p>
+                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
+                        <button class='delBtn'>Unblock User</button>
+                    </div>
+                </div>
+            </div>`;
+            privacyOpen = true;
+    }
+}
+
 
 // THEME OPTIONS
 function expandTheme() {
@@ -175,7 +277,7 @@ function expandAbout() {
 }
 
 
-
+// SUPPORT OPTIONS
 function expandSupport(){
     const supportOpt = document.getElementById('supportOption');
 
@@ -217,53 +319,7 @@ function expandSupport(){
     }
 }
 
-function expandPrivacy(){
-    const privacyOpt = document.getElementById('privacyOption');
 
-    if(privacyOpen){
-        privacyOpt.innerHTML = 
-            `<button class="openBtn optionTxt" onclick="expandPrivacy()">
-            Privacy<br>
-            <small class="smallTxt">
-                Manage your account's security and interactions with other users
-            </small>
-            </button>`;
-            privacyOpen = false;
-    } else {
-        privacyOpt.innerHTML = `
-            <button class="openBtn optionTxt" onclick="expandPrivacy()">
-                Privacy<br>
-                <small class="smallTxt">
-                    Manage your account's security and interactions with other users
-                </small>
-            </button>
-            
-            <div class='settingsOpt'>
-                <div id='profileVisContainer'>
-                    <p><strong>Profile Visibility:</strong></p>
-                    <input type='radio' id='profileVisOpt-PUBLIC' value='public' name='profileVisOpt'>
-                    <label for='profileVisOpt-PUBLIC'>Public</label><br>
-                    <input type='radio' id='profileVisOpt-PRIVATE' value='private' name='profileVisOpt'>
-                    <label for='profileVisOpt-PRIVATE'>Private</label><br><br>
-                    <button class='saveBtn'>Save</button>
-                </div><br>
-
-
-                <div id='reportsContainer'>
-                    <p><strong>Blocked Users:</strong></p>
-                    <input class='settingsInput' id='reportSearch' placeholder='Search Blocked Users'/>
-                    <div class='reportItem'>
-                        <!-- THIS IS A SAMPLE USER REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
-                        <p class='reportItemTitle'><strong>User:</strong><br>Derek Mendez<br><small class='smallTxt'>@mendd2</small></p>
-                        <p class='reportItemURL'><strong>Profile URL:</strong> <a href="http://localhost/StudentLink/public/profile.html?id=OqTA2B5xB2NcHgw6POxwaFf3yWY2">Go to Profile</a></p>
-                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
-                        <button class='delBtn'>Unblock User</button>
-                    </div>
-                </div>
-            </div>`;
-            privacyOpen = true;
-    }
-}
 
 
 // LOGOUT
@@ -285,3 +341,5 @@ window.expandTheme = expandTheme;
 window.expandAbout = expandAbout;
 window.handleLogout = handleLogout;
 window.confDelete = confDelete;
+window.saveUsername = saveUsername;
+window.saveEmail = saveEmail;
