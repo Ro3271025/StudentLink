@@ -109,5 +109,12 @@ function loadOfficers(data) {
         officersEl.appendChild(div);
     });
 }
+let currentUser = null;
+let isMember = false;
+
+const joinBtn = document.getElementById("joinBtn");
+const memberCountEl = document.getElementById("memberCount");
+
+
 
 loadOrg();
