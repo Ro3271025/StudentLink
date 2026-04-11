@@ -5,38 +5,34 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/explore.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body id="documentBody">
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-    <div id="sidebarTop">
-        <img id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-        <span id="sidebarUsername">@username</span>
-    </div>
-
-    <div id="sidebarLinks">
-        <a href="home.html">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="explore.html" class="active">Explore</a>
-        <a href="chat.html">Chat</a>
-        <a href="profile.html">Profile</a>
-        <a href="settings.html">Settings</a>
-    </div>
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
 </div>
 
-<!-- MAIN -->
-<div id="campusCentralPage">
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
 
-    <h2>Events</h2>
+    <!-- TITLE -->
+    <h2 class="sectionTitle">Events</h2>
 
+    <!-- LAYOUT -->
     <div class="eventsLayout">
 
         <!-- LEFT FILTER -->
         <div class="eventSidebar">
 
-            <input id="eventSearch" placeholder="Search Events">
+            <input 
+                id="eventSearch" 
+                class="exploreSearchBar"
+                placeholder="Search events..."
+            >
 
             <label>
                 <input type="checkbox" id="onlineOnly">
@@ -52,7 +48,27 @@
 
 </div>
 
+<!-- SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
 <script type="module" src="js/events.js"></script>
+<script src="js/themeSwap.js"></script>
 
 </body>
 </html>
