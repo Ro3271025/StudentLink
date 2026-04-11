@@ -142,13 +142,11 @@ function setupJoinSystem() {
     /* REAL-TIME MEMBER STATUS */
     onSnapshot(memberRef, (snap) => {
         isMember = snap.exists();
-
         joinBtn.textContent = isMember ? "Leave Organization" : "Join Organization";
     });
 
     /* BUTTON ACTION */
     joinBtn.onclick = async () => {
-
         if (!isMember) {
             await setDoc(memberRef, {
                 joinedAt: new Date()
@@ -158,16 +156,16 @@ function setupJoinSystem() {
         }
     };
 
-    /* MEMBER COUNT */
-    loadMemberCount();
+    /* REAL-TIME COUNT */
+    loadMemberCountRealtime();
 }
 /* Member Count */
-async function loadMemberCount() {
-    const snap = await getDocs(
-        collection(db, "organizations", orgId, "members")
-    );
+function loadMemberCountRealtime() {
+    const membersRef = collection(db, "organizations", orgId, "members");
 
-    memberCountEl.textContent = `${snap.size} members`;
+    onSnapshot(membersRef, (snap) => {
+        memberCountEl.textContent = `${snap.size} members`;
+    });
 }
 
 loadOrg();
