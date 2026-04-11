@@ -20,7 +20,9 @@ import {
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+/* ========================= */
 /* ELEMENTS */
+/* ========================= */
 
 const btn = document.getElementById("createEventBtn");
 const orgSelect = document.getElementById("eventOrg");
@@ -30,8 +32,9 @@ const storage = getStorage();
 let currentUser = null;
 let allowedOrgIds = [];
 
-
+/* ========================= */
 /* AUTH */
+/* ========================= */
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -44,7 +47,9 @@ onAuthStateChanged(auth, async (user) => {
     await loadUserOrganizations();
 });
 
+/* ========================= */
 /* LOAD ORGS USER CAN POST TO */
+/* ========================= */
 
 async function loadUserOrganizations() {
 
@@ -88,7 +93,9 @@ async function loadUserOrganizations() {
     }
 }
 
+/* ========================= */
 /* CREATE EVENT */
+/* ========================= */
 
 btn.addEventListener("click", async () => {
 
