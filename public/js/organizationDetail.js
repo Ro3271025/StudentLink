@@ -1,0 +1,104 @@
+import { db, auth } from "./firebaseInitialization.js";
+
+import {
+    doc,
+    getDoc,
+    collection,
+    query,
+    where,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+/* GET ORG ID */
+const params = new URLSearchParams(window.location.search);
+const orgId = params.get("id");
+
+/* ELEMENTS */
+const nameEl = document.getElementById("orgName");
+const descEl = document.getElementById("orgDescription");
+const imgEl = document.getElementById("orgProfileImg");
+const emailEl = document.getElementById("orgEmail");
+
+const galleryEl = document.getElementById("orgGallery");
+const eventsEl = document.getElementById("orgEvents");
+const officersEl = document.getElementById("orgOfficers");
+
+/* LOAD ORG */
+async function loadOrg() {
+    const snap = await getDoc(doc(db, "organizations", orgId));
+
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+
+    nameEl.textContent = data.name;
+    descEl.textContent = data.description;
+    emailEl.textContent = data.email || "N/A";
+
+    imgEl.src = data.imageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg";
+
+    loadGallery(data);
+    loadEvents();
+    loadOfficers(data);
+}
+
+/* GALLERY */
+function loadGallery(data) {
+    galleryEl.innerHTML = "";
+
+    if (!data.gallery) return;
+
+    data.gallery.forEach(img => {
+        const el = document.createElement("img");
+        el.src = img;
+        galleryEl.appendChild(el);
+    });
+}
+
+/* EVENTS */
+async function loadEvents() {
+    const snap = await getDocs(query(
+        collection(db, "events"),
+        where("orgId", "==", orgId)
+    ));
+
+    eventsEl.innerHTML = "";
+
+    snap.forEach(docSnap => {
+        const data = docSnap.data();
+
+        const div = document.createElement("div");
+        div.className = "eventCard";
+
+        div.innerHTML = `
+            <img src="${data.imageURL}">
+            <h4>${data.title}</h4>
+            <p>${data.date}</p>
+            <p>${data.location}</p>
+        `;
+
+        eventsEl.appendChild(div);
+    });
+}
+
+/* OFFICERS */
+function loadOfficers(data) {
+    officersEl.innerHTML = "";
+
+    if (!data.officers) return;
+
+    data.officers.forEach(officer => {
+        const div = document.createElement("div");
+        div.className = "officerCard";
+
+        div.innerHTML = `
+            <div class="officerAvatar"></div>
+            <strong>${officer.role}</strong>
+            <p>${officer.name}</p>
+        `;
+
+        officersEl.appendChild(div);
+    });
+}
+
+loadOrg();
