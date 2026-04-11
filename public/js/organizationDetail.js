@@ -164,7 +164,8 @@ function loadMemberCountRealtime() {
     const membersRef = collection(db, "organizations", orgId, "members");
 
     onSnapshot(membersRef, (snap) => {
-        memberCountEl.textContent = `${snap.size} members`;
+        memberCountEl.textContent =
+        snap.size === 1 ? "1 member" : `${snap.size} members`;
     });
 }
 
