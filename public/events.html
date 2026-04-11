@@ -1,17 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Events</title>
+    <title>Events | StudentLink</title>
+
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
 </head>
 
-<body>
+<body id="documentBody">
 
-<h2>Events</h2>
+<!-- SIDEBAR -->
+<div id="sidebar">
+    <div id="sidebarTop">
+        <img id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+        <span id="sidebarUsername">@username</span>
+    </div>
 
-<button id="createEventBtnUI">+ Create Event</button>
+    <div id="sidebarLinks">
+        <a href="home.html">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="explore.html" class="active">Explore</a>
+        <a href="chat.html">Chat</a>
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+    </div>
+</div>
 
-<div id="eventContainer"></div>
+<!-- MAIN -->
+<div id="campusCentralPage">
+
+    <h2>Events</h2>
+
+    <div class="eventsLayout">
+
+        <!-- LEFT FILTER -->
+        <div class="eventSidebar">
+
+            <input id="eventSearch" placeholder="Search Events">
+
+            <label>
+                <input type="checkbox" id="onlineOnly">
+                Online
+            </label>
+
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div id="eventsContainer" class="eventsGrid"></div>
+
+    </div>
+
+</div>
 
 <script type="module" src="js/events.js"></script>
 
