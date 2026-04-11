@@ -1,8 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+/* MAIN PAGE */
 #campusCentralPage {
     margin-left: 220px;
     padding: 20px;
     max-width: 1100px;
 }
+/* SEARCH */
 .exploreSearchBar {
     width: 100%;
     padding: 12px;
@@ -19,34 +28,34 @@
     border-color: var(--theme-accent);
 }
 #filterSelection {
-width: 100%;
-padding: 12px;
-border-radius: 8px;
-border: 1px solid var(--border-color);
-margin-bottom: 20px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
 }
 /* RECENT */
 #recentSearches {
-padding: 10px;
-border-radius: 10px;
-background-color: var(--bg-primary);
-border: 1px solid var(--border-color);
-margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
 }
 .recentItem {
-padding: 8px;
-border-bottom: 1px solid var(--border-color);
-cursor: pointer;
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
 .recentItem:hover {
-background-color: var(--border-color);
+    background-color: var(--border-color);
 }
-/* CAMPUS Central Section */
+/* CAMPUS CENTRAL CARDS */
 .centralTopCards {
-display: flex;
-gap: 15px;
-margin: 15px 0;
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
 }
 .centralCard {
     flex: 1;
@@ -77,12 +86,6 @@ margin: 15px 0;
 .centralCard:hover::after {
     opacity: 0.08;
 }
-/* SECTIONS */
-.sectionTitle {
-margin-top: 25px;
-margin-bottom: 10px;
-font-size: 16pt;
-}
 /* FEED */
 .feedItem {
     padding: 14px;
@@ -93,57 +96,21 @@ font-size: 16pt;
     transition: 0.2s;
     cursor: pointer;
 }
+
 .feedItem:hover {
     background-color: #2a3b4f;
     transform: translateY(-2px);
 }
-/* HEADER */
-.feedHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-.feedUser {
-    font-weight: bold;
-    font-size: 11pt;
-}
-.feedType {
-    font-size: 9pt;
-    opacity: 0.6;
-}
-/* CONTENT */
-.feedContent {
-    font-size: 13pt;
-    margin-bottom: 8px;
-}
-/* PRICE */
-.price {
-    color: var(--theme-accent);
-    font-weight: bold;
-}
-/* IMAGE */
-.feedImage {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-.feedItem strong {
-    font-size: 14pt;
-}
-.feedItem p {
-    margin: 4px 0;
-}
-#exploreFeed {
-    margin-top: 10px;
-}
-/* Organization Page */
+/* ORGANIZATIONS */
 .orgLayout {
     display: flex;
     gap: 20px;
+    align-items: flex-start;
 }
 .orgSidebar {
     width: 250px;
+    flex-shrink: 0;
+
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -155,7 +122,7 @@ font-size: 16pt;
 }
 .orgSidebar input,
 .orgSidebar select {
-    width: 100%; /* ADD THIS */
+    width: 100%;
     padding: 8px;
     border-radius: 6px;
     border: 1px solid var(--border-color);
@@ -180,20 +147,28 @@ font-size: 16pt;
 
     transition: 0.2s;
     cursor: pointer;
+
+    overflow: hidden;
 }
 .orgCard:hover {
     transform: translateY(-2px);
     border-color: var(--theme-accent);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* ADD THIS */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 .orgImage {
     width: 55px;
     height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    flex-shrink: 0;
 }
 .orgInfo {
     display: flex;
     flex-direction: column;
-    gap: 4px; /* ADD THIS */
+    gap: 4px;
+
+    min-width: 0;
 }
 .orgName {
     font-size: 16px;
@@ -205,15 +180,14 @@ font-size: 16pt;
 
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap; /* keeps cards clean */
+    white-space: nowrap;
 }
 .orgCategory {
     font-size: 11px;
     opacity: 0.6;
-    margin-top: 2px;
 }
-/* Org Details Page */
-/* HEADER */
+/* ORG DETAILS */
+
 .orgHeader {
     display: flex;
     justify-content: space-between;
@@ -238,54 +212,11 @@ font-size: 16pt;
     gap: 10px;
 }
 
-/* SECTIONS */
 .orgSection {
     margin-bottom: 30px;
 }
-
-/* GALLERY */
-.orgGallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.orgGallery img {
-    width: 100%;
-    border-radius: 8px;
-}
-
 /* EVENTS */
-.orgEvents {
-    display: flex;
-    gap: 15px;
-}
 
-.eventCard {
-    width: 250px;
-}
-
-/* OFFICERS */
-.orgOfficers {
-    display: flex;
-    gap: 15px;
-}
-
-.officerCard {
-    background: var(--bg-secondary);
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.officerAvatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: gray;
-    margin: 0 auto 10px;
-}
-/* EVENTS LAYOUT */
 .eventsLayout {
     display: flex;
     gap: 20px;
@@ -302,7 +233,6 @@ font-size: 16pt;
     border-radius: 10px;
 }
 
-/* GRID */
 .eventsGrid {
     flex: 1;
     display: grid;
@@ -310,7 +240,6 @@ font-size: 16pt;
     gap: 15px;
 }
 
-/* CARD */
 .eventCard {
     background: var(--bg-secondary);
     border-radius: 10px;
@@ -343,8 +272,9 @@ font-size: 16pt;
     font-size: 12px;
     opacity: 0.7;
 }
-/* Events Detail Page */
-/* TOP */
+
+/* EVENT DETAILS */
+
 .eventTop {
     display: flex;
     gap: 20px;
@@ -362,7 +292,6 @@ font-size: 16pt;
     gap: 10px;
 }
 
-/* MAIN */
 .eventMain {
     display: flex;
     gap: 20px;
@@ -376,7 +305,6 @@ font-size: 16pt;
     flex: 1;
 }
 
-/* RSVP */
 .rsvpBox {
     background: var(--bg-secondary);
     padding: 15px;
