@@ -101,6 +101,10 @@ body {
     background-color: #2a3b4f;
     transform: translateY(-2px);
 }
+#explorePage.content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 /* ORGANIZATIONS */
 .orgLayout {
     display: flex;
@@ -134,6 +138,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    max-width: 700px;
 }
 .orgCard {
     display: flex;
