@@ -8,6 +8,15 @@ import {
     where,
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+    setDoc,
+    deleteDoc,
+    onSnapshot,
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 /* GET ORG ID */
 const params = new URLSearchParams(window.location.search);
