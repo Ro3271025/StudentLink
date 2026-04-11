@@ -176,7 +176,6 @@ font-size: 16pt;
     transition: 0.2s;
     cursor: pointer;
 }
-
 .orgCard:hover {
     transform: translateY(-2px);
     border-color: var(--theme-accent);
@@ -191,13 +190,15 @@ font-size: 16pt;
     display: flex;
     flex-direction: column;
 }
-
 .orgName {
     font-size: 16px;
     font-weight: bold;
 }
-
 .orgDesc {
     font-size: 13px;
     opacity: 0.8;
+}
+.orgCategory {
+    font-size: 11px;
+    opacity: 0.6;
 }
