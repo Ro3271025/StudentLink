@@ -112,17 +112,19 @@ body {
     align-items: flex-start;
 }
 .orgSidebar {
-    width: 200px;
-    flex-shrink: 0;
+    width: 100%;
+    max-width: 230px;
 
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
 
-    background: var(--bg-secondary);
-    padding: 12px;
-    border-radius: 10px;
+    background: var(--bg-primary); 
+    padding: 16px;
+    border-radius: 12px;
     border: 1px solid var(--border-color);
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 #createOrgBtnUI {
     font-size: 12px;
@@ -238,34 +240,32 @@ body {
 }
 .eventSidebar {
     width: 100%;
-    max-width: 240px;
+    max-width: 230px;
 
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px);
 
-    background: var(--bg-secondary);
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
+    padding: 16px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
 
 /* MATCH ORG INPUT STYLE */
-.eventSidebar input {
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    background: transparent;
-    color: var(--text-fill);
-}
-
-/* CHECKBOX CLEAN */
 .eventSidebar label {
     font-size: 13px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    opacity: 0.85;
+}
+
+.eventSidebar input[type="checkbox"] {
+    accent-color: var(--theme-accent);
 }
 .eventsGrid {
     display: grid;
