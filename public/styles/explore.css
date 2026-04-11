@@ -124,10 +124,16 @@ body {
     border-radius: 10px;
     border: 1px solid var(--border-color);
 }
+#createOrgBtnUI {
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 8px;
+}
 .orgSidebar input,
 .orgSidebar select {
     width: 100%;
-    padding: 8px;
+    padding: 6px;
+    font-size: 12px;
     border-radius: 6px;
     border: 1px solid var(--border-color);
     background: transparent;
