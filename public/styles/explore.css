@@ -415,6 +415,86 @@ body {
     opacity: 0.9;
     font-weight: 500;
 }
+/* ORG TOP LAYOUT */
+.orgTopLayout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+/* LEFT SIDE */
+.orgLeft {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* RIGHT SIDE */
+.orgRight {
+    flex: 1;
+}
+/* HEADER */
+.orgHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#orgProfileImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+#orgName {
+    font-size: 28px;
+    font-weight: bold;
+}
+/* ACTION BUTTONS */
+.orgActions {
+    display: flex;
+    gap: 10px;
+}
+/* DESCRIPTION */
+#orgDescription {
+    line-height: 1.6;
+    color: var(--text-fill);
+}
+/* CONTACT */
+.orgContact {
+    margin-top: 10px;
+    font-size: 14px;
+}
+/* GALLERY GRID */
+.orgGallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.orgGallery img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.orgGallery img:hover {
+    transform: scale(1.03);
+}
+/* EVENTS + OFFICERS */
+.orgSection {
+    margin-top: 30px;
+}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .orgTopLayout {
+        flex-direction: column;
+    }
+
+    .orgGallery {
+        grid-template-columns: 1fr 1fr;
+    }
+}
 /* EVENT DETAILS */
 .eventTop {
     display: flex;
