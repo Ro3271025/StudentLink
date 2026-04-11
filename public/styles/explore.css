@@ -228,33 +228,110 @@ body {
     font-size: 11px;
     opacity: 0.6;
 }
-/* ORG DETAILS */
+/* ORG DETAIL PAGE */
+/* HEADER */
 .orgHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
-
+/* LEFT SIDE */
 .orgHeaderLeft {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-
+/* PROFILE IMAGE */
 #orgProfileImg {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
 }
-
+/* NAME */
+#orgName {
+    font-size: 24px;
+    font-weight: bold;
+}
+/* MEMBER COUNT */
+#memberCount {
+    font-size: 14px;
+    color: var(--text-muted, #aaa);
+}
+/* RIGHT BUTTONS */
 .orgHeaderRight {
     display: flex;
     gap: 10px;
 }
-
+/* CARD SYSTEM */
+.card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+}
+/* SECTION */
 .orgSection {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+}
+/* CONTACT */
+.orgContact {
+    margin-top: 10px;
+    font-size: 14px;
+}
+/* GALLERY */
+.orgGallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+.orgGallery img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.orgGallery img:hover {
+    transform: scale(1.05);
+}
+/* OFFICERS */
+.orgOfficers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.orgOfficerCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    padding: 8px 12px;
+}
+.orgOfficerCard img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+/* BUTTONS */
+.secondaryBtn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.secondaryBtn:hover {
+    background: var(--border-color);
 }
 /* EVENTS PAGE */
 .eventsLayout {
