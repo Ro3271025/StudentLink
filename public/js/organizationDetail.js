@@ -157,5 +157,13 @@ function setupJoinSystem() {
     /* MEMBER COUNT */
     loadMemberCount();
 }
+/* Member Count */
+async function loadMemberCount() {
+    const snap = await getDocs(
+        collection(db, "organizations", orgId, "members")
+    );
+
+    memberCountEl.textContent = `${snap.size} members`;
+}
 
 loadOrg();
