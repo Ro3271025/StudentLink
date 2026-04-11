@@ -229,7 +229,6 @@ body {
     opacity: 0.6;
 }
 /* ORG DETAILS */
-
 .orgHeader {
     display: flex;
     justify-content: space-between;
@@ -257,8 +256,7 @@ body {
 .orgSection {
     margin-bottom: 30px;
 }
-/* EVENTS */
-/* LAYOUT */
+/* EVENTS PAGE */
 .eventsLayout {
     display: grid;
     grid-template-columns: 240px 1fr;
@@ -281,7 +279,6 @@ body {
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
-
 /* MATCH ORG INPUT STYLE */
 .eventSidebar label {
     font-size: 13px;
@@ -290,7 +287,6 @@ body {
     gap: 8px;
     opacity: 0.85;
 }
-
 .eventSidebar input[type="checkbox"] {
     accent-color: var(--theme-accent);
 }
@@ -372,4 +368,125 @@ body {
     padding: 15px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
+}
+/* EVENT DETAIL PAGE */
+#campusCentralPage {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+/* TOP SECTION */
+.eventTop {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+/* IMAGE */
+#eventImage {
+    width: 420px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+/* INFO */
+.eventTopInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#eventTitle {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--text-fill);
+}
+#eventDate,
+#eventLocation {
+    color: var(--text-muted, #aaa);
+    font-size: 14px;
+}
+/* MAIN SECTION */
+.eventMain {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+}
+/* LEFT (DESCRIPTION) */
+.eventLeft {
+    flex: 2;
+}
+.eventLeft h2 {
+    margin-bottom: 10px;
+}
+#eventDescription {
+    line-height: 1.6;
+    color: var(--text-fill);
+}
+/* RIGHT (RSVP BOX) */
+.eventRight {
+    flex: 1;
+}
+/* RSVP CARD */
+.rsvpBox {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: sticky;
+    top: 20px;
+}
+/* RSVP TEXT */
+#rsvpCount {
+    font-size: 14px;
+    color: var(--text-muted, #aaa);
+}
+/* RSVP BUTTON */
+#rsvpBtn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 15px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+#rsvpBtn:hover {
+    transform: translateY(-2px);
+}
+/* HOST ORG */
+#hostOrgCard {
+    margin-top: 10px;
+}
+/* RELATED EVENTS */
+#relatedEvents {
+    margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+
+    .eventTop {
+        flex-direction: column;
+    }
+
+    #eventImage {
+        width: 100%;
+        height: 220px;
+    }
+
+    .eventMain {
+        flex-direction: column;
+    }
+
+    .eventRight {
+        width: 100%;
+    }
+
+    .rsvpBox {
+        position: static;
+    }
 }
