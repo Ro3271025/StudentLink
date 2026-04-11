@@ -147,9 +147,9 @@ body {
     padding: 10px;
     border-radius: 10px;
 
-    border: none;
+    border: 1px solid var(--border-color);
 
-    background: linear-gradient(135deg, #ff3b3b, #c91414);
+    background: var(--theme-accent); /* 🔥 THEME CONTROLLED */
     color: white;
 
     font-weight: bold;
@@ -159,9 +159,14 @@ body {
     transition: 0.25s;
 }
 
+/* HOVER MATCHES THEME */
 #createEventBtnUI:hover {
+    background: var(--button-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(255,0,0,0.3);
+}
+/* OPTIONAL ACTIVE FEEDBACK */
+#createEventBtnUI:active {
+    transform: scale(0.98);
 }
 .orgList {
     flex: 1;
