@@ -202,3 +202,76 @@ font-size: 16pt;
     font-size: 11px;
     opacity: 0.6;
 }
+/* Org Details Page */
+/* HEADER */
+.orgHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.orgHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#orgProfileImg {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.orgHeaderRight {
+    display: flex;
+    gap: 10px;
+}
+
+/* SECTIONS */
+.orgSection {
+    margin-bottom: 30px;
+}
+
+/* GALLERY */
+.orgGallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.orgGallery img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* EVENTS */
+.orgEvents {
+    display: flex;
+    gap: 15px;
+}
+
+.eventCard {
+    width: 250px;
+}
+
+/* OFFICERS */
+.orgOfficers {
+    display: flex;
+    gap: 15px;
+}
+
+.officerCard {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.officerAvatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: gray;
+    margin: 0 auto 10px;
+}
