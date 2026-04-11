@@ -75,7 +75,7 @@ async function loadHostOrg() {
     `;
 
     orgCard.onclick = () => {
-        window.location.href = `organizationDetail.html?id=${orgId}`;
+        window.location.href = `organizationDetails.html?id=${orgId}`;
     };
 }
 
