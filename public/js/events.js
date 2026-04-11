@@ -1,3 +1,5 @@
+import { db, auth } from "./firebaseInitialization.js";
+
 import {
     collection,
     getDocs,
@@ -6,9 +8,10 @@ import {
     doc,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db, auth } from "./firebaseInitialization.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+/* CREATE EVENT BUTTON LOGIC */
 
 const createBtn = document.getElementById("createEventBtnUI");
 
@@ -31,6 +34,8 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
+/* EVENTS LOGIC */
+
 const container = document.getElementById("eventsContainer");
 const searchInput = document.getElementById("eventSearch");
 
@@ -50,24 +55,17 @@ async function loadEvents() {
     for (const docSnap of snap.docs) {
         const data = docSnap.data();
 
-        // get org name
-        let orgName = "Unknown Org";
-
-        if (data.orgId) {
-            const orgSnap = await getDoc(doc(db, "organizations", data.orgId));
-            if (orgSnap.exists()) {
-                orgName = orgSnap.data().name;
-            }
-        }
-
         allEvents.push({
             id: docSnap.id,
             title: data.title,
-            description: data.description,
+            description: data.description || "",
             date: data.date,
             location: data.location,
             image: data.imageURL || "styles/images/placeholder/DEFAULT_BANNER.svg",
-            orgName
+
+            // 🔥 USE STORED VALUES (NO EXTRA QUERY)
+            orgName: data.orgName || "Unknown Org",
+            orgImage: data.orgImage || ""
         });
     }
 
@@ -95,7 +93,11 @@ function renderEvents(events) {
                 <div class="eventTitle">${ev.title}</div>
                 <div class="eventMeta">${ev.date}</div>
                 <div class="eventMeta">${ev.location || ""}</div>
-                <div class="eventMeta">${ev.orgName}</div>
+
+                <div class="eventMeta">
+                    ${ev.orgImage ? `<img src="${ev.orgImage}" style="width:16px;height:16px;border-radius:50%;margin-right:5px;">` : ""}
+                    ${ev.orgName}
+                </div>
             </div>
         `;
 
