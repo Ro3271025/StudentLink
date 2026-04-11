@@ -23,14 +23,15 @@ const storage = getStorage();
 const officerList = document.getElementById("officerList");
 const addOfficerBtn = document.getElementById("addOfficerBtn");
 
-/* ADD OFFICER INPUT ROW */
+
+/* ADD OFFICER INPUT */
 
 function addOfficerInput() {
     const div = document.createElement("div");
     div.className = "officerInputRow";
 
     div.innerHTML = `
-        <input type="text" placeholder="User UID" class="officerUID">
+        <input type="text" placeholder="Full Name" class="officerName">
 
         <select class="officerRole">
             <option value="President">President</option>
@@ -40,18 +41,16 @@ function addOfficerInput() {
             <option value="Officer">Officer</option>
         </select>
 
+        <input type="text" placeholder="Email (optional)" class="officerEmail">
+
         <button type="button" class="removeOfficerBtn">X</button>
     `;
 
-    /* REMOVE BUTTON */
-    div.querySelector(".removeOfficerBtn").onclick = () => {
-        div.remove();
-    };
+    div.querySelector(".removeOfficerBtn").onclick = () => div.remove();
 
     officerList.appendChild(div);
 }
 
-/* ADD BUTTON EVENT */
 if (addOfficerBtn) {
     addOfficerBtn.onclick = addOfficerInput;
 }
@@ -80,6 +79,7 @@ btn.addEventListener("click", async () => {
     try {
 
         let imageURL = "";
+
         /* UPLOAD IMAGE */
 
         if (file) {
@@ -91,6 +91,7 @@ btn.addEventListener("click", async () => {
             await uploadBytes(storageRef, file);
             imageURL = await getDownloadURL(storageRef);
         }
+
         /* COLLECT OFFICERS */
 
         let officers = [];
@@ -98,17 +99,20 @@ btn.addEventListener("click", async () => {
         const officerRows = document.querySelectorAll(".officerInputRow");
 
         officerRows.forEach(row => {
-            const uid = row.querySelector(".officerUID").value.trim();
+            const name = row.querySelector(".officerName").value.trim();
             const role = row.querySelector(".officerRole").value;
+            const email = row.querySelector(".officerEmail").value.trim();
 
-            if (uid) {
+            if (name) {
                 officers.push({
-                    uid,
-                    role
+                    name,
+                    role,
+                    email
                 });
             }
         });
-        /* SAVE TO FIRESTORE */
+
+        /* SAVE */
 
         await addDoc(collection(db, "organizations"), {
             name,
@@ -116,6 +120,7 @@ btn.addEventListener("click", async () => {
             imageURL,
             createdBy: user.uid,
             timestamp: serverTimestamp(),
+
             officers: officers
         });
 
