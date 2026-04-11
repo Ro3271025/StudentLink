@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Organization | StudentLink</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body id="documentBody">
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+    <div id="sidebarTop">
+        <img id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+        <span id="sidebarUsername">@username</span>
+    </div>
+
+    <div id="sidebarLinks">
+        <a href="home.html">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="explore.html" class="active">Explore</a>
+        <a href="chat.html">Chat</a>
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div id="campusCentralPage">
+
+    <!-- HEADER -->
+    <div class="orgHeader">
+
+        <div class="orgHeaderLeft">
+            <img id="orgProfileImg">
+            <h1 id="orgName"></h1>
+        </div>
+
+        <div class="orgHeaderRight">
+            <button id="joinBtn" class="themeObject">Join</button>
+            <button id="contactBtn">Contact</button>
+        </div>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="orgSection">
+        <p id="orgDescription"></p>
+
+        <div class="orgContact">
+            <p><strong>Email:</strong> <span id="orgEmail"></span></p>
+        </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="orgSection">
+        <h2>Gallery</h2>
+        <div id="orgGallery" class="orgGallery"></div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="orgSection">
+        <div class="sectionHeader">
+            <h2>All Events</h2>
+        </div>
+        <div id="orgEvents" class="orgEvents"></div>
+    </div>
+
+    <!-- OFFICERS -->
+    <div class="orgSection">
+        <div class="sectionHeader">
+            <h2>Officers</h2>
+        </div>
+        <div id="orgOfficers" class="orgOfficers"></div>
+    </div>
+
+</div>
+
+<script type="module" src="js/organizationDetail.js"></script>
+
+</body>
+</html>
