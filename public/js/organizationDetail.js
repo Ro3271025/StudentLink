@@ -124,5 +124,37 @@ onAuthStateChanged(auth, (user) => {
         joinBtn.style.display = "none";
     }
 });
+function setupJoinSystem() {
+
+    const memberRef = doc(
+        db,
+        "organizations",
+        orgId,
+        "members",
+        currentUser.uid
+    );
+
+    /* REAL-TIME MEMBER STATUS */
+    onSnapshot(memberRef, (snap) => {
+        isMember = snap.exists();
+
+        joinBtn.textContent = isMember ? "Leave Organization" : "Join Organization";
+    });
+
+    /* BUTTON ACTION */
+    joinBtn.onclick = async () => {
+
+        if (!isMember) {
+            await setDoc(memberRef, {
+                joinedAt: new Date()
+            });
+        } else {
+            await deleteDoc(memberRef);
+        }
+    };
+
+    /* MEMBER COUNT */
+    loadMemberCount();
+}
 
 loadOrg();
