@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Event | StudentLink</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
+</head>
+
+<body id="documentBody">
+
+<div id="campusCentralPage">
+
+    <!-- TOP SECTION -->
+    <div class="eventTop">
+
+        <img id="eventImage">
+
+        <div class="eventTopInfo">
+            <h1 id="eventTitle"></h1>
+
+            <p id="eventDate"></p>
+            <p id="eventLocation"></p>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- MAIN CONTENT -->
+    <div class="eventMain">
+
+        <!-- LEFT -->
+        <div class="eventLeft">
+            <h2>Description</h2>
+            <p id="eventDescription"></p>
+        </div>
+
+        <!-- RIGHT RSVP -->
+        <div class="eventRight">
+            <div class="rsvpBox">
+                <h3>RSVP to Event</h3>
+                <p id="rsvpCount">0 going</p>
+                <button id="rsvpBtn" class="themeObject">
+                    RSVP
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <!-- HOST ORG -->
+    <h2>Host Organization</h2>
+    <div id="hostOrgCard" class="orgCard"></div>
+
+    <hr>
+
+    <!-- OTHER EVENTS -->
+    <h2>Other events from this organization</h2>
+    <div id="relatedEvents" class="eventsGrid"></div>
+
+</div>
+
+<script type="module" src="js/eventDetail.js"></script>
+
+</body>
+</html>
