@@ -1,19 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Organizations</title>
+    <title>Organizations | StudentLink</title>
+
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/campusCentral.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body>
+<body id="documentBody">
+<div id="sidebar">
 
-<h2>Organizations</h2>
+    <div id="sidebarTop">
+        <img id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
+        <span id="sidebarUsername">@username</span>
+    </div>
 
-<button id="createOrgBtnUI">+ Create Organization</button>
+    <div id="sidebarLinks">
+        <a href="home.html">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="explore.html" class="active">Explore</a>
+        <a href="chat.html">Chat</a>
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+    </div>
 
-<div id="orgContainer"></div>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="campusCentralPage">
+
+    <!-- HEADER -->
+    <div class="pageHeader">
+        <h2>Organizations</h2>
+        <button id="themeSwapBtn">🌙</button>
+    </div>
+
+    <!-- LAYOUT -->
+    <div class="orgLayout">
+
+        <!-- LEFT FILTER PANEL -->
+        <div class="orgSidebar">
+
+            <input 
+                type="text" 
+                id="orgSearchInput" 
+                placeholder="Search Organizations..."
+            >
+
+            <div class="filterGroup">
+                <label>Category</label>
+                <select id="categoryFilter">
+                    <option value="">All</option>
+                    <option value="academic">Academic</option>
+                    <option value="sports">Sports</option>
+                    <option value="cultural">Cultural</option>
+                </select>
+            </div>
+
+            <button id="createOrgBtnUI" class="themeObject">
+                + Create Organization
+            </button>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div id="orgContainer" class="orgList"></div>
+
+    </div>
+
+</div>
 
 <script type="module" src="js/organizations.js"></script>
+
+<script>
+const themeBtn = document.getElementById("themeSwapBtn");
+const body = document.getElementById("documentBody");
+
+themeBtn.onclick = () => {
+    body.classList.toggle("lightMode");
+    localStorage.setItem("theme", body.classList.contains("lightMode") ? "light" : "dark");
+};
+
+window.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+        body.classList.add("lightMode");
+    }
+});
+</script>
 
 </body>
 </html>
