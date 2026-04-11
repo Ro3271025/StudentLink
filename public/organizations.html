@@ -11,69 +11,71 @@
 
 <body id="documentBody">
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-
-    <div id="sidebarTop">
-        <img id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg">
-        <span id="sidebarUsername">@username</span>
-    </div>
-
-    <div id="sidebarLinks">
-        <a href="home.html">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="explore.html" class="active">Explore</a>
-        <a href="chat.html">Chat</a>
-        <a href="profile.html">Profile</a>
-        <a href="settings.html">Settings</a>
-    </div>
-
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
 </div>
 
-<!-- MAIN -->
-<div id="campusCentralPage">
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
 
-    <!-- HEADER -->
-    <div class="pageHeader">
-        <h2>Organizations</h2>
-    </div>
+    <!-- TITLE -->
+    <h2 class="sectionTitle">Organizations</h2>
 
-    <!-- CONTENT -->
+    <!-- LAYOUT -->
     <div class="orgLayout">
 
-        <!-- LEFT SIDEBAR -->
+        <!-- LEFT FILTER -->
         <div class="orgSidebar">
 
             <input 
                 type="text" 
                 id="orgSearchInput" 
+                class="exploreSearchBar"
                 placeholder="Search organizations..."
             >
 
-            <div class="filterGroup">
-                <label>Category</label>
-                <select id="categoryFilter">
-                    <option value="">All</option>
-                    <option value="academic">Academic</option>
-                    <option value="sports">Sports</option>
-                    <option value="cultural">Cultural</option>
-                </select>
-            </div>
+            <select id="categoryFilter" class="exploreBar">
+                <option value="">All</option>
+                <option value="academic">Academic</option>
+                <option value="sports">Sports</option>
+                <option value="cultural">Cultural</option>
+            </select>
 
-            <button id="createOrgBtnUI" class="primaryBtn">
+            <button id="createOrgBtnUI" class="centralCard">
                 + Create Organization
             </button>
 
         </div>
 
-        <!-- RIGHT -->
+        <!-- RIGHT CONTENT -->
         <div id="orgContainer" class="orgList"></div>
 
     </div>
 
 </div>
 
+<!-- SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
 <script type="module" src="js/organizations.js"></script>
+<script src="js/themeSwap.js"></script>
 
 </body>
 </html>
