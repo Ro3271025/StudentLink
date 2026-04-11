@@ -124,6 +124,7 @@ onAuthStateChanged(auth, (user) => {
         joinBtn.style.display = "none";
     }
 });
+/* Join Organization*/
 function setupJoinSystem() {
 
     const memberRef = doc(
