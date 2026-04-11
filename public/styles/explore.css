@@ -37,7 +37,7 @@ cursor: pointer;
 .recentItem:hover {
 background-color: var(--border-color);
 }
-/* CAMPUS */
+/* CAMPUS Central Section */
 .centralTopCards {
 display: flex;
 gap: 15px;
@@ -131,4 +131,73 @@ font-size: 16pt;
 }
 #exploreFeed {
     margin-top: 10px;
+}
+/* Organization Page */
+.orgLayout {
+    display: flex;
+    gap: 20px;
+}
+.orgSidebar {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.orgSidebar input,
+.orgSidebar select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-fill);
+}
+.orgList {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.orgCard {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.orgCard:hover {
+    transform: translateY(-2px);
+    border-color: var(--theme-accent);
+}
+.orgImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.orgInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.orgName {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.orgDesc {
+    font-size: 13px;
+    opacity: 0.8;
 }
