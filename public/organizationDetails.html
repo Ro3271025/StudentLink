@@ -10,7 +10,6 @@
 </head>
 
 <body id="documentBody">
-
 <!-- HEADER -->
 <div id="header">
     <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
@@ -22,57 +21,65 @@
     <h2 class="sectionTitle">Organization</h2>
 
     <div id="campusCentralPage">
-        <!-- HEADER -->
-        <div class="orgHeader">
+        <!-- TOP SECTION (MAIN LAYOUT) -->
+        <div class="orgTopLayout">
 
-            <div class="orgHeaderLeft">
-                <img id="orgProfileImg">
-                <div>
-                    <h1 id="orgName"></h1>
-                    <p id="memberCount"></p>
+            <!-- LEFT SIDE -->
+            <div class="orgLeft">
+                <!-- HEADER -->
+                <div class="orgHeader">
+                    <img id="orgProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
+
+                    <div>
+                        <h1 id="orgName">Organization Name</h1>
+                        <p id="memberCount">0 members</p>
+                    </div>
+                </div>
+                <!-- ACTION BUTTONS -->
+                <div class="orgActions">
+                    <button id="joinBtn" class="primaryBtn">Join</button>
+                    <button id="contactBtn" class="secondaryBtn">Contact</button>
+                </div>
+                <!-- DESCRIPTION -->
+                <p id="orgDescription">
+                    Organization description will appear here.
+                </p>
+                <!-- CONTACT -->
+                <div class="orgContact">
+                    <h3>Contact Information</h3>
+                    <p><strong>Email:</strong> <span id="orgEmail"></span></p>
+                </div>
+
+            </div>
+            <!-- RIGHT SIDE (GALLERY) -->
+            <div class="orgRight">
+                <div id="orgGallery" class="orgGallery">
+                    <!-- Images injected by JS -->
                 </div>
             </div>
 
-            <div class="orgHeaderRight">
-                <button id="joinBtn" class="primaryBtn">Join</button>
-                <button id="contactBtn" class="secondaryBtn">Contact</button>
-            </div>
-
-        </div>
-        <!-- DESCRIPTION -->
-        <div class="orgSection card">
-            <h2>About</h2>
-            <p id="orgDescription"></p>
-
-            <div class="orgContact">
-                <p><strong>Email:</strong> <span id="orgEmail"></span></p>
-            </div>
-        </div>
-        <!-- GALLERY -->
-        <div class="orgSection card">
-            <h2>Gallery</h2>
-            <div id="orgGallery" class="orgGallery"></div>
         </div>
         <!-- EVENTS -->
-        <div class="orgSection card">
+        <div class="orgSection">
             <div class="sectionHeader">
-                <h2>Events</h2>
+                <h2>All Events</h2>
             </div>
+
             <div id="orgEvents" class="eventsGrid"></div>
         </div>
         <!-- OFFICERS -->
-        <div class="orgSection card">
+        <div class="orgSection">
             <div class="sectionHeader">
                 <h2>Officers</h2>
             </div>
+
             <div id="orgOfficers" class="orgOfficers"></div>
         </div>
 
     </div>
 
 </div>
-
-<!-- SIDEBAR (MATCH EVENTS PAGE EXACTLY) -->
+<!-- SIDEBAR (MATCHES EVENTS PAGE) -->
 <div class="sidebar" id="leftBar">
 
 <br>
@@ -90,7 +97,7 @@
 <p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
-
+<!-- SCRIPTS -->
 <script type="module" src="js/organizationDetail.js"></script>
 <script src="js/themeSwap.js"></script>
 
