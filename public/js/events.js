@@ -1,5 +1,3 @@
-import { db } from "./firebaseInitialization.js";
-
 import {
     collection,
     getDocs,
