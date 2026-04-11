@@ -8,8 +8,30 @@ import {
     doc,
     getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { db, auth } from "./firebaseInitialization.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ELEMENTS */
+const createBtn = document.getElementById("createEventBtnUI");
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        createBtn.style.display = "none";
+        return;
+    }
+
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const role = snap.data()?.role;
+
+    if (role === "admin" || role === "orgLeader") {
+        createBtn.style.display = "block";
+        createBtn.onclick = () => {
+            window.location.href = "createEvent.html";
+        };
+    } else {
+        createBtn.style.display = "none";
+    }
+});
 
 const container = document.getElementById("eventsContainer");
 const searchInput = document.getElementById("eventSearch");
@@ -30,7 +52,7 @@ async function loadEvents() {
     for (const docSnap of snap.docs) {
         const data = docSnap.data();
 
-        // 🔥 get org name
+        // get org name
         let orgName = "Unknown Org";
 
         if (data.orgId) {
