@@ -3,113 +3,100 @@
 <head>
     <title>Event | StudentLink</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- GLOBAL STYLES -->
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/explore.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body id="documentBody">
 
-<!-- APP LAYOUT -->
-<div class="appLayout">
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
 
-    <!-- SIDEBAR (MATCHES APP) -->
-    <aside class="sidebar">
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
 
-        <div class="sidebarTop">
-            <h2 class="logoText">StudentLink</h2>
-        </div>
+    <!-- TITLE -->
+    <h2 class="sectionTitle">Event</h2>
 
-        <div class="sidebarProfile">
-            <img id="sidebarProfileImg" src="styles/images/PROFILE_DEFAULT_IMAGE.SVG">
-            <span id="sidebarUsername">@username</span>
-        </div>
+    <div id="campusCentralPage">
+        <!-- TOP SECTION -->
+        <div class="eventTop">
 
-        <nav class="sidebarNav">
-            <a href="home.html">Home</a>
-            <a href="listings.html">Listings</a>
-            <a href="explore.html" class="active">Explore</a>
-            <a href="chat.html">Chat</a>
-            <a href="profile.html">Profile</a>
-            <a href="settings.html">Settings</a>
-        </nav>
+            <img id="eventImage">
 
-    </aside>
-    <!-- MAIN CONTENT -->
-    <main class="mainContent">
+            <div class="eventTopInfo">
+                <h1 id="eventTitle"></h1>
 
-        <!-- HEADER -->
-        <div class="pageHeader">
-            <h1>Event</h1>
-        </div>
-
-        <!-- EVENT PAGE -->
-        <div id="campusCentralPage" class="pageContent">
-
-            <!-- TOP SECTION -->
-            <div class="eventTop">
-
-                <img id="eventImage">
-
-                <div class="eventTopInfo">
-                    <h1 id="eventTitle"></h1>
-
-                    <p id="eventDate"></p>
-                    <p id="eventLocation"></p>
-                </div>
-
+                <p id="eventDate"></p>
+                <p id="eventLocation"></p>
             </div>
 
-            <hr>
+        </div>
 
-            <!-- MAIN CONTENT -->
-            <div class="eventMain">
+        <hr>
+        <!-- MAIN CONTENT -->
+        <div class="eventMain">
 
-                <!-- LEFT -->
-                <div class="eventLeft">
-                    <h2>Description</h2>
-                    <p id="eventDescription"></p>
-                </div>
-
-                <!-- RIGHT RSVP -->
-                <aside class="eventRight">
-                    <div class="rsvpBox">
-                        <h3>RSVP to Event</h3>
-                        <p id="rsvpCount">0 going</p>
-
-                        <button id="rsvpBtn" class="themeObject">
-                            RSVP
-                        </button>
-                    </div>
-                </aside>
-
+            <!-- LEFT -->
+            <div class="eventLeft">
+                <h2>Description</h2>
+                <p id="eventDescription"></p>
             </div>
 
-            <hr>
+            <!-- RIGHT RSVP -->
+            <div class="eventRight">
+                <div class="rsvpBox">
+                    <h3>RSVP to Event</h3>
+                    <p id="rsvpCount">0 going</p>
 
-            <!-- HOST ORG -->
-            <section>
-                <h2>Host Organization</h2>
-                <div id="hostOrgCard" class="orgCard"></div>
-            </section>
-
-            <hr>
-
-            <!-- OTHER EVENTS -->
-            <section>
-                <h2>Other events from this organization</h2>
-                <div id="relatedEvents" class="eventsGrid"></div>
-            </section>
+                    <button id="rsvpBtn" class="primaryBtn">
+                        RSVP
+                    </button>
+                </div>
+            </div>
 
         </div>
 
-    </main>
+        <hr>
+        <!-- HOST ORG -->
+        <h2>Host Organization</h2>
+        <div id="hostOrgCard" class="orgCard"></div>
+
+        <hr>
+        <!-- RELATED EVENTS -->
+        <h2>Other events from this organization</h2>
+        <div id="relatedEvents" class="eventsGrid"></div>
+
+    </div>
 
 </div>
 
+<!-- SIDEBAR (EXACT SAME AS EVENTS PAGE) -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
+<!-- SCRIPTS -->
 <script type="module" src="js/eventDetail.js"></script>
+<script src="js/themeSwap.js"></script>
 
 </body>
 </html>
