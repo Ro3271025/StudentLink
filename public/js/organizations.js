@@ -72,7 +72,7 @@ function renderOrgs(orgs) {
         `;
 
         div.onclick = () => {
-            window.location.href = `organizationDetail.html?id=${org.id}`;
+            window.location.href = `organizationDetails.html?id=${org.id}`;
         };
 
         container.appendChild(div);
