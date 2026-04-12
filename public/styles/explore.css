@@ -149,7 +149,7 @@ body {
 
     border: 1px solid var(--border-color);
 
-    background: var(--theme-accent); /* 🔥 THEME CONTROLLED */
+    background: var(--theme-accent);
     color: white;
 
     font-weight: bold;
@@ -645,5 +645,112 @@ body {
 
     .rsvpBox {
         position: static;
+    }
+}
+/* CREATE ORG PAGE */
+#createOrgForm {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* INPUTS */
+#createOrgForm input,
+#createOrgForm textarea,
+#createOrgForm select {
+    width: 100%;
+    padding: 10px;
+
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+
+    font-size: 14px;
+}
+#createOrgForm textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+/* LABELS */
+#createOrgForm label {
+    font-size: 14px;
+    color: var(--text-muted, #aaa);
+}
+/* FILE INPUT */
+.fileInput {
+    padding: 6px;
+    cursor: pointer;
+}
+/* GALLERY PREVIEW */
+.galleryPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+.galleryPreview img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+/* OFFICER SECTION */
+#officerList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+/* EACH ROW */
+.officerInputRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+/* INPUTS IN ROW */
+.officerInputRow input,
+.officerInputRow select {
+    flex: 1;
+}
+/* REMOVE BUTTON */
+.removeOfficerBtn {
+    background: #a11010;
+    color: white;
+    border: none;
+    border-radius: 6px;
+
+    padding: 6px 10px;
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+.removeOfficerBtn:hover {
+    opacity: 0.8;
+}
+/* BUTTONS */
+#createOrgBtn {
+    margin-top: 10px;
+    font-size: 15px;
+}
+#addOfficerBtn {
+    margin-top: 5px;
+}
+/* SECTION TITLES */
+#createOrgForm h2 {
+    margin-bottom: 10px;
+}
+#createOrgForm h3 {
+    margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .officerInputRow {
+        flex-direction: column;
+        align-items: stretch;
     }
 }
