@@ -34,6 +34,7 @@
 <p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
+
 <!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
     <br>
@@ -46,71 +47,76 @@
 
         <h2 class="sectionTitle">Create Event</h2>
 
-        <!-- inputs stay same -->
+        <!-- TITLE -->
+        <div class="formGroup">
+            <input 
+                id="eventTitle" 
+                class="listingInput"
+                placeholder="Event Title" 
+                required
+            >
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="formGroup">
+            <textarea 
+                id="eventDesc" 
+                class="listingInput"
+                placeholder="Description"
+                required
+            ></textarea>
+        </div>
+
+        <!-- DATE -->
+        <div class="formGroup">
+            <label>Date & Time</label>
+            <input 
+                id="eventDate" 
+                type="datetime-local"
+                class="listingInput"
+                required
+            >
+        </div>
+
+        <!-- LOCATION -->
+        <div class="formGroup">
+            <input 
+                id="eventLocation" 
+                class="listingInput"
+                placeholder="Location or 'Online'"
+                required
+            >
+        </div>
+
+        <!-- IMAGE -->
+        <div class="formGroup">
+            <label>Event Image</label>
+            <input 
+                id="eventImage" 
+                type="file" 
+                class="themeObject fileInput"
+                accept="image/*"
+            >
+
+            <img id="eventPreview" class="eventPreview">
+        </div>
+
+        <!-- ORG SELECT -->
+        <div class="formGroup">
+            <label>Select Organization</label>
+            <select id="eventOrg" class="listingInput" required></select>
+        </div>
+
+        <!-- SUBMIT -->
+        <button 
+            type="button"
+            id="createEventBtn" 
+            class="primaryBtn"
+        >
+            Create Event
+        </button>
 
     </div>
-
-</form>
-
-    <h2 class="sectionTitle">Create Event</h2>
-
-    <!-- TITLE -->
-    <input 
-        id="eventTitle" 
-        class="listingInput"
-        placeholder="Event Title" 
-        required
-    >
-
-    <!-- DESCRIPTION -->
-    <textarea 
-        id="eventDesc" 
-        class="listingInput"
-        placeholder="Description"
-        required
-    ></textarea>
-
-    <!-- DATE -->
-    <label>Date & Time</label>
-    <input 
-        id="eventDate" 
-        type="datetime-local"
-        class="listingInput"
-        required
-    >
-
-    <!-- LOCATION -->
-    <input 
-        id="eventLocation" 
-        class="listingInput"
-        placeholder="Location or 'Online'"
-        required
-    >
-
-    <!-- IMAGE -->
-    <label>Event Image</label>
-    <input 
-        id="eventImage" 
-        type="file" 
-        class="themeObject fileInput"
-        accept="image/*"
-    >
-
-    <!-- PREVIEW -->
-    <img id="eventPreview" class="eventPreview">
-
-    <!-- ORG SELECT -->
-    <label>Select Organization</label>
-    <select id="eventOrg" class="listingInput" required></select>
-
-    <!-- SUBMIT -->
-    <button 
-        type="button"
-        id="createEventBtn" 
-        class="primaryBtn"
-    >
-        Create Event
-    </button>
 
 </form>
 
