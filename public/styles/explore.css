@@ -754,3 +754,20 @@ body {
         align-items: stretch;
     }
 }
+/* CREATE EVENT PAGE */
+#createEventForm {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* IMAGE PREVIEW */
+.eventPreview {
+    display: none;
+    max-width: 250px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
