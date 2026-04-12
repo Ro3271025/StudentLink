@@ -16,13 +16,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 /* ELEMENTS */
-
 const btn = document.getElementById("createOrgBtn");
 const storage = getStorage();
 
 const officerList = document.getElementById("officerList");
 const addOfficerBtn = document.getElementById("addOfficerBtn");
 
+const galleryInput = document.getElementById("orgGalleryImages");
+const previewEl = document.getElementById("galleryPreview");
 
 /* ADD OFFICER INPUT */
 
@@ -54,6 +55,24 @@ function addOfficerInput() {
 if (addOfficerBtn) {
     addOfficerBtn.onclick = addOfficerInput;
 }
+/* GALLERY PREVIEW */
+
+if (galleryInput) {
+    galleryInput.onchange = (e) => {
+        previewEl.innerHTML = "";
+
+        Array.from(e.target.files).forEach(file => {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.style.width = "80px";
+            img.style.height = "80px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "6px";
+
+            previewEl.appendChild(img);
+        });
+    };
+}
 
 /* CREATE ORG */
 
@@ -73,14 +92,16 @@ btn.addEventListener("click", async () => {
     const name = document.getElementById("orgName").value;
     const desc = document.getElementById("orgDesc").value;
     const file = document.getElementById("orgImage").files[0];
+    const galleryFiles = galleryInput.files;
 
     if (!name) return alert("Name required");
 
     try {
 
         let imageURL = "";
+        let galleryURLs = [];
 
-        /* UPLOAD IMAGE */
+        /* UPLOAD LOGO */
 
         if (file) {
             const storageRef = ref(
@@ -92,6 +113,21 @@ btn.addEventListener("click", async () => {
             imageURL = await getDownloadURL(storageRef);
         }
 
+        /* UPLOAD GALLERY */
+
+        for (let i = 0; i < galleryFiles.length; i++) {
+            const file = galleryFiles[i];
+
+            const storageRef = ref(
+                storage,
+                `orgGallery/${user.uid}_${Date.now()}_${i}`
+            );
+
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+
+            galleryURLs.push(url);
+        }
         /* COLLECT OFFICERS */
 
         let officers = [];
@@ -104,20 +140,17 @@ btn.addEventListener("click", async () => {
             const email = row.querySelector(".officerEmail").value.trim();
 
             if (name) {
-                officers.push({
-                    name,
-                    role,
-                    email
-                });
+                officers.push({ name, role, email });
             }
         });
-
         /* SAVE */
 
         await addDoc(collection(db, "organizations"), {
             name,
             description: desc,
             imageURL,
+            gallery: galleryURLs,
+
             createdBy: user.uid,
             timestamp: serverTimestamp(),
 
