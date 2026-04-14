@@ -1,7 +1,7 @@
 // Settings
 import { auth, db } from "./firebaseInitialization.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // LOAD USERNAME 
 onAuthStateChanged(auth, async (user) => {
@@ -12,11 +12,15 @@ onAuthStateChanged(auth, async (user) => {
 
     if (snap.exists()) {
         const data = snap.data();
+        const usernameVal = "@" + (data.username || "user");
 
+        // Update Header
         const headerUsername = document.getElementById("headerUsername");
-        if (headerUsername) {
-            headerUsername.textContent = "@" + (data.username || "user");
-        }
+        if (headerUsername) headerUsername.textContent = usernameVal;
+
+        // Update Sidebar (top left)
+        const sidebarUsername = document.getElementById("username");
+        if (sidebarUsername) sidebarUsername.textContent = usernameVal;
     }
 });
 
@@ -53,14 +57,14 @@ function expandAcc() {
             <div class='settingsOpt'>
                 <p><strong>Choose a New Username</strong></p>
                 <p>This will display as <strong>@username</strong></p>
-                <input class='settingsInput' placeholder='e.g., rodolfo_tan' />
-                <button class='saveBtn'>Save</button>
+                <input id='newUsername' class='settingsInput' placeholder='e.g., rodolfo_tan' />
+                <button class='saveBtn' onclick='saveUsername()'>Save</button>
             </div>
 
             <div class='settingsOpt'>
                 <p><strong>Change Email (.edu only)</strong></p>
-                <input class='settingsInput' placeholder='e.g., jdoe@suny.edu' />
-                <button class='saveBtn'>Save</button>
+                <input id='newEmail' class='settingsInput' placeholder='e.g., jdoe@suny.edu' />
+                <button class='saveBtn' onclick='saveEmail()'>Save</button>
             </div>
 
             <div class='settingsOpt'>
@@ -74,6 +78,54 @@ function expandAcc() {
             </div>
         `;
         accOpen = true;
+    }
+}
+
+// SAVE USERNAME FUNCTION
+async function saveUsername() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const newUsername = document.getElementById('newUsername').value.trim();
+    if (!newUsername) return alert("Please enter a username.");
+
+    try {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { username: newUsername });
+
+        // Update UI immediately in both places
+        document.getElementById("headerUsername").textContent = "@" + newUsername;
+        document.getElementById("username").textContent = "@" + newUsername;
+
+        alert("Username updated successfully!");
+    } catch (error) {
+        console.error("Error updating username:", error);
+        alert("Failed to update username.");
+    }
+}
+
+// SAVE EMAIL FUNCTION
+async function saveEmail() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const newEmail = document.getElementById('newEmail').value.trim();
+
+    // Validates .edu only
+    if (!newEmail.toLowerCase().endsWith(".edu")) {
+        return alert("Please use a valid .edu email address.");
+    }
+
+    try {
+        await updateEmail(user, newEmail);
+        alert("Email updated successfully!");
+    } catch (error) {
+        // Firebase requires a recent login to change emails
+        if (error.code === 'auth/requires-recent-login') {
+            alert("Security check: Please log out and back in to change your email.");
+        } else {
+            alert("Error: " + error.message);
+        }
     }
 }
 
@@ -289,3 +341,5 @@ window.expandTheme = expandTheme;
 window.expandAbout = expandAbout;
 window.handleLogout = handleLogout;
 window.confDelete = confDelete;
+window.saveUsername = saveUsername;
+window.saveEmail = saveEmail;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Event</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
+</head>
+
+<body id="documentBody">
+
+<div id="campusCentralPage">
+
+    <h2>Create Event</h2>
+
+    <input id="eventTitle" placeholder="Event Title">
+
+    <textarea id="eventDesc" placeholder="Description"></textarea>
+
+    <input id="eventDate" type="datetime-local">
+
+    <input id="eventLocation" placeholder="Location">
+
+    <input id="eventImage" type="file">
+
+    <!-- SELECT ORG -->
+    <select id="eventOrg"></select>
+
+    <button id="createEventBtn" class="themeObject">
+        Create Event
+    </button>
+
+</div>
+
+<script type="module" src="js/createEvent.js"></script>
+
+</body>
+</html>

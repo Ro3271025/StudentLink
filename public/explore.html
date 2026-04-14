@@ -1,87 +1,79 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
-    <title>Home | StudentLink</title>
+    <title>Explore | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/explore.css">
-    <meta name="viewport" content="width=device-width, inital-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body id="documentBody">
-    <div id="header">
-        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
-    </div><br><br>
 
-    <div id="exploreHome" class="content">
-        <input class="searchBar themeObject" id="exploreSearchBar" placeholder="Search"><br>
-        <select class="exploreBar themeObject" id="filterSelection"><br>
-            <option selected disabled hidden>Select Search Filter</option>
-            <option>Posts</option>
-            <option>Listings</option>
-            <option>Users</option>
-        </select>
-        <div id="recentSearches">
-            <table class="recentSearchesTable" style="width:100%;">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-            </table>
-        </div>
-    </div><br><br>
+<!-- HEADER -->
 
-    <!-- SAMPLE POST 1-->
-    <p>Posts:</p>
-    <div class="content" style="border-top:1px var(--border-color) solid; border-radius:10px">
-        <button class="openBtn">
-        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"> 
-        <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small><br>
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
 
-        <p class="postContentText" maxlength="200">How did you guys do on the BCS 315 midterm? It was super easy!</p><br>
+<!-- MAIN -->
 
-        <footer><a class="postLink postMetrics" href="">40 Likes</a><a class="postLink postMetrics" href="">6 Comments</a>
-        <a href="" class="postLink postMetrics" style="text-align: right;">Report</a></footer><br>
-    </div><br>
+<div id="explorePage" class="content">
 
-    <!-- SAMPLE LISTING 1 -->
-    <p>Listings:</p>
-    <div class="content" style="border-top:1px var(--border-color) solid; border-radius:10px">
-        <button class="openBtn">
-        <p style="text-align:center">Sold by: <a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small></p><br>
-        <img class="exploreListing" src="styles/images/placeholder/textbooks.png" style="margin-top: 1%;"> 
+<!-- SEARCH -->
+<input class="searchBar themeObject" id="exploreSearchBar" placeholder="Search StudentLink...">
 
-        <p class="postContentText" maxlength="200" style="text-align: center;">Textbook - Unix Operating Systems</p>
-        <p class="postContentText" maxlength="200" style="text-align: center;"><a style="text-decoration: none;" href="#">$60</a></p>
+<!-- FILTER -->
+<select class="exploreBar themeObject" id="filterSelection">
+    <option value="all">All</option>
+    <option value="posts">Posts</option>
+    <option value="listings">Listings</option>
+</select>
 
-        
-    </div><br>
+<!-- RECENT -->
+<div id="recentSearches">
+    <p class="sectionTitle">Recent Searches</p>
+    <div id="recentContainer"></div>
+</div>
 
-    <!-- SAMPLE USER 1-->
-    <p>Users:</p>
-    <div class="content" style="border-top:1px var(--border-color) solid; border-radius:10px">
-        <button class="openBtn">
-        <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG" style="margin-left:47.5%"><br>
-        <p style="text-align:center"><a class="postLink" class="postDisplayName" href="">Display Name </a><small class="smallTxt">@Username</small></p><br>
-    </div><br>
+<!-- CAMPUS CENTRAL -->
+<h2 class="sectionTitle">Campus Central</h2>
 
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar" id="leftBar">
-        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html">Listings</a></p>
-        <p class="sidebarText"><a href="explore.html">Explore</a></p>
-        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p>
-        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+<div class="centralTopCards">
+    <div class="centralCard" id="orgCard">Organizations</div>
+    <div class="centralCard" id="eventCard">Events</div>
+    <div class="centralCard" id="newsCard">News</div>
+</div>
 
-        <div class="overlayDiv">
-            <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
-            </div>
-        </div>
-    </div>
+<!-- FEED -->
+<h2 class="sectionTitle">Explore Feed</h2>
+<div id="exploreFeed"></div>
+
+</div>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id = "profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
+<script type="module" src="js/explore.js"></script>
+
+<script src="js/themeSwap.js"></script>
 
     <script type="module" src="js/userSearch.js"></script>
     <script type="module">
