@@ -18,9 +18,11 @@ export function setupSidebar() {
         if (usernameEl) {
             usernameEl.innerText = data.username ? "@" + data.username : "";
         }
+
+        // Update sidebar profile photo
         const sideProfileIcon = document.querySelector('.sideProfileIcon');
         if (sideProfileIcon && data.photoURL) {
             sideProfileIcon.src = data.photoURL;
-        }
+            }
     });
 }

@@ -8,6 +8,7 @@
     --text-fill: #ffffff;
     --font-family: Helvetica, sans-serif;
     --overlay-vis: hidden;
+    --username-color: #586373;
 }
 
 
@@ -85,6 +86,7 @@ a:hover{
     overflow: hidden;
 }
 
+
 /* Container structure */
 #loginContainer {
     display: flex;
@@ -97,6 +99,7 @@ a:hover{
     flex: 1;
     padding: 5%;
 }
+
 
 /* Left side */
 #loginLeft {
@@ -204,9 +207,9 @@ a:hover{
 }
 
 
-#username{
+#username, #sideUsername{
     font-size: 14pt;
-    color: #586373;
+    color: var(--username-color);
 }
 
 #displayName{
@@ -223,6 +226,14 @@ a:hover{
     align-items: center;
     vertical-align: middle;
     text-align: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+#banner:hover{
+    outline: 2px solid #008000;
+    box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
+    cursor: pointer;
 }
 
 #banner img{
@@ -249,8 +260,10 @@ a:hover{
 
 
 #profileImage{
-    max-height: 15vh;
-    min-height: 15vh;
+    max-height: 25rem;
+    max-width: 25rem;
+    height: 25rem;
+    width: 25rem;
     margin-left: 3.5%;
     margin-top: 3.5%;
 }
@@ -299,14 +312,13 @@ a:hover{
 }
 
 #edit, #save{
-    margin-left: 65%;
+    margin-left: 70%;
     margin-top: -15%;
     margin-right: auto;
     word-wrap: break-word !important; 
     display: inline;
     position: relative;
 }
-
 #cancel {
     margin-left: 45%;
     margin-top: -21.5%;
@@ -327,13 +339,15 @@ a:hover{
 .profileImgMini{
     margin-left: 3.5%;
     margin-top: 3.5%;
-    min-height: 5vh;
-    height:5vh;
+    height:3.75rem;
+    width:3.75rem;
+    border-radius: 4px;
 }
 
 .sideProfileIcon{
     height:50%;
     width: 50%;
+    border-radius: 4px;
 }
 
 .postLink{

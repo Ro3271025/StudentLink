@@ -218,8 +218,8 @@ async function loadComments() {
             el.id = `comment-${c.id}`;
             el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;padding-left:8px';
             el.innerHTML = `
-                <img src="${c.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'}"
-                     style="width:32px; height:32px; border-radius:50%; flex-shrink:0;">
+                <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
+                     style="width:32px; height:32px; border-radius:4px; flex-shrink:0;">
                 <div style="flex:1;">
                     <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(c.authorName || 'Anonymous')}</span>
                     <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:3px 0 0;">${escapeHtml(c.text)}</p>
