@@ -63,21 +63,34 @@
         <!-- EMAIL -->
         <input class="listingInput" type="email" id="emailInput" placeholder="Contact Email"><br>
 
-        <!-- IMAGE SECTION -->
-        <label>Organization Image</label><br><br>
+        <!-- IMAGE GALLERY -->
 
-        <div id="imagePreviewContainer" class="imageGallery"></div>
+        <label>Organization Images</label><br><br>
+
+        <div id="imageGallery" class="imageGallery"></div>
 
         <br>
 
         <label class="uploadBtn">
-            + Change Image
-            <input type="file" id="imageInput" accept="image/*" hidden>
+            + Add Images
+            <input type="file" id="imageInput" accept="image/*" multiple hidden>
         </label>
 
         <br><br>
 
-        <!-- BUTTON -->
+        <!-- OFFICERS (NEW) -->
+
+        <h3>Officers</h3>
+
+        <div id="officersContainer"></div>
+
+        <button type="button" id="addOfficerBtn" class="secondaryBtn">
+            + Add Officer
+        </button>
+
+        <br><br>
+
+        <!-- SUBMIT -->
         <button type="submit">Save Changes</button>
 
     </form>
