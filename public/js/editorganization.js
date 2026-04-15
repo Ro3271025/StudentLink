@@ -16,33 +16,37 @@ import {
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-/* ========================= */
 /* ELEMENTS */
-/* ========================= */
+
+const form = document.getElementById("editOrgForm");
 
 const nameInput = document.getElementById("nameInput");
 const descInput = document.getElementById("descInput");
 const categoryInput = document.getElementById("categoryInput");
 const emailInput = document.getElementById("emailInput");
-const saveBtn = document.getElementById("saveBtn");
 
 const imageInput = document.getElementById("imageInput");
-const previewImage = document.getElementById("previewImage");
+const imageGallery = document.getElementById("imageGallery");
 
-/* ========================= */
+const officersContainer = document.getElementById("officersContainer");
+const addOfficerBtn = document.getElementById("addOfficerBtn");
+
 
 const params = new URLSearchParams(window.location.search);
 const orgId = params.get("id");
 
 let currentUser = null;
+let currentUserRole = null;
 let orgData = null;
-let newImageFile = null;
+
+let imageFiles = [];
+let existingImages = [];
+
+let officers = [];
 
 const storage = getStorage();
 
-/* ========================= */
 /* LOAD DATA */
-/* ========================= */
 
 async function loadOrg() {
     const orgRef = doc(db, "organizations", orgId);
@@ -50,74 +54,151 @@ async function loadOrg() {
 
     if (!snap.exists()) {
         alert("Organization not found.");
+        window.location.href = "organizations.html";
         return;
     }
 
     orgData = snap.data();
 
-    /* PREFILL */
     nameInput.value = orgData.name || "";
     descInput.value = orgData.description || "";
     categoryInput.value = orgData.category || "";
     emailInput.value = orgData.email || "";
 
-    previewImage.src = orgData.imageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg";
+    /* IMAGES */
+    existingImages = orgData.imageURLs || 
+        (orgData.imageURL ? [orgData.imageURL] : []);
+
+    renderGallery();
+
+    /* OFFICERS */
+    officers = orgData.officers || [];
+    renderOfficers();
+}
+/* IMAGE GALLERY */
+
+function renderGallery() {
+    imageGallery.innerHTML = "";
+
+    /* EXISTING */
+    existingImages.forEach((url, index) => {
+        const div = document.createElement("div");
+        div.className = "imageWrapper";
+
+        div.innerHTML = `
+            <img src="${url}">
+            <button class="removeImgBtn">✕</button>
+        `;
+
+        div.querySelector("button").onclick = () => {
+            existingImages.splice(index, 1);
+            renderGallery();
+        };
+
+        imageGallery.appendChild(div);
+    });
+
+    /* NEW */
+    imageFiles.forEach((file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const div = document.createElement("div");
+            div.className = "imageWrapper";
+
+            div.innerHTML = `
+                <img src="${e.target.result}">
+                <button class="removeImgBtn">✕</button>
+            `;
+
+            div.querySelector("button").onclick = () => {
+                imageFiles.splice(index, 1);
+                renderGallery();
+            };
+
+            imageGallery.appendChild(div);
+        };
+
+        reader.readAsDataURL(file);
+    });
 }
 
-/* ========================= */
-/* IMAGE PREVIEW */
-/* ========================= */
+/* IMAGE INPUT */
 
 imageInput.addEventListener("change", () => {
-    const file = imageInput.files[0];
-    if (!file) return;
-
-    newImageFile = file;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        previewImage.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+    const files = Array.from(imageInput.files);
+    imageFiles.push(...files);
+    renderGallery();
 });
 
-/* ========================= */
+/* OFFICERS */
+
+function renderOfficers() {
+    officersContainer.innerHTML = "";
+
+    officers.forEach((officer, index) => {
+        const div = document.createElement("div");
+        div.className = "officerRow";
+
+        div.innerHTML = `
+            <input class="listingInput" value="${officer.name}" placeholder="Name">
+            <input class="listingInput" value="${officer.role}" placeholder="Role">
+            <button class="removeOfficerBtn">✕</button>
+        `;
+
+        const inputs = div.querySelectorAll("input");
+
+        inputs[0].oninput = (e) => officers[index].name = e.target.value;
+        inputs[1].oninput = (e) => officers[index].role = e.target.value;
+
+        div.querySelector("button").onclick = () => {
+            officers.splice(index, 1);
+            renderOfficers();
+        };
+
+        officersContainer.appendChild(div);
+    });
+}
+
+/* ADD OFFICER */
+
+addOfficerBtn.onclick = () => {
+    officers.push({ name: "", role: "" });
+    renderOfficers();
+};
+
 /* SAVE */
-/* ========================= */
 
-saveBtn.onclick = async () => {
-    if (!nameInput.value.trim()) {
-        alert("Name is required.");
-        return;
-    }
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    saveBtn.innerText = "Saving...";
-    saveBtn.disabled = true;
+    const submitBtn = form.querySelector("button");
+    submitBtn.innerText = "Saving...";
+    submitBtn.disabled = true;
 
     try {
         const orgRef = doc(db, "organizations", orgId);
 
-        let imageURL = orgData.imageURL || "";
+        let finalImages = [...existingImages];
 
-        /* UPLOAD NEW IMAGE */
-        if (newImageFile) {
-            const imageRef = ref(storage, `organizationImages/${orgId}/${Date.now()}`);
-            await uploadBytes(imageRef, newImageFile);
-            imageURL = await getDownloadURL(imageRef);
+        for (const file of imageFiles) {
+            const imageRef = ref(storage, `organizationImages/${orgId}/${Date.now()}_${file.name}`);
+            await uploadBytes(imageRef, file);
+            const url = await getDownloadURL(imageRef);
+            finalImages.push(url);
         }
 
-        /* UPDATE */
         await updateDoc(orgRef, {
             name: nameInput.value,
             description: descInput.value,
             category: categoryInput.value,
             email: emailInput.value,
-            imageURL,
+            imageURLs: finalImages,
+            officers: officers.filter(o => o.name && o.role),
             updatedAt: serverTimestamp()
         });
 
-        alert("Organization updated successfully!");
-
+        alert("Organization updated!");
         window.location.href = `organizationDetails.html?id=${orgId}`;
 
     } catch (err) {
@@ -125,17 +206,14 @@ saveBtn.onclick = async () => {
         alert("Error updating organization.");
     }
 
-    saveBtn.innerText = "Save Changes";
-    saveBtn.disabled = false;
-};
+    submitBtn.innerText = "Save Changes";
+    submitBtn.disabled = false;
+});
 
-/* ========================= */
-/* AUTH + PERMISSION */
-/* ========================= */
+/* AUTH */
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        alert("Not authorized.");
         window.location.href = "organizations.html";
         return;
     }
@@ -143,17 +221,16 @@ onAuthStateChanged(auth, async (user) => {
     currentUser = user;
 
     const userSnap = await getDoc(doc(db, "users", user.uid));
-    const role = userSnap.data()?.role;
+    currentUserRole = userSnap.data()?.role;
 
     await loadOrg();
 
-    /* PERMISSION CHECK */
     if (
-        role !== "admin" &&
-        role !== "orgLeader" &&
+        currentUserRole !== "admin" &&
+        currentUserRole !== "orgLeader" &&
         currentUser.uid !== orgData.createdBy
     ) {
-        alert("You do not have permission to edit this organization.");
-        window.location.href = "organizationDetails.html?id=" + orgId;
+        alert("No permission.");
+        window.location.href = `organizationDetails.html?id=${orgId}`;
     }
 });
