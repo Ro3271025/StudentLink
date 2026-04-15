@@ -228,6 +228,27 @@ body {
     font-size: 11px;
     opacity: 0.6;
 }
+/* TOP RIGHT EDIT BUTTON */
+.orgCardTop {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+}
+
+.editBtn {
+    background: var(--theme-accent);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.editBtn:hover {
+    opacity: 0.85;
+}
 /* ORG DETAIL PAGE */
 /* HEADER */
 .orgHeader {
