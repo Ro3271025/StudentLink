@@ -242,6 +242,9 @@ body {
     align-items: center;
     gap: 15px;
 }
+.orgHeaderInfo {
+    flex: 1;
+}
 /* PROFILE IMAGE */
 #orgProfileImg {
     width: 80px;
