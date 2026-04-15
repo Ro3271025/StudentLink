@@ -18,9 +18,9 @@ const btn = document.getElementById("createOrgBtnUI");
 const searchInput = document.getElementById("orgSearchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 
-/* STATE */
-
 let allOrgs = [];
+let currentUser = null;
+let currentUserRole = null;
 
 /* LOAD ORGS */
 
@@ -40,7 +40,8 @@ async function loadOrgs() {
             name: data.name || "No Name",
             description: data.description || "",
             category: data.category || "",
-            image: data.imageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg"
+            image: data.imageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg",
+            createdBy: data.createdBy || null // important for edit permission
         });
     });
 
@@ -62,6 +63,10 @@ function renderOrgs(orgs) {
         div.className = "orgCard";
 
         div.innerHTML = `
+            <div class="orgCardTop">
+                ${canEdit(org) ? `<button class="editBtn" data-id="${org.id}">Edit</button>` : ""}
+            </div>
+
             <img src="${org.image}" class="orgImage">
 
             <div class="orgInfo">
@@ -71,12 +76,34 @@ function renderOrgs(orgs) {
             </div>
         `;
 
+        /* CLICK CARD (GO TO DETAILS) */
         div.onclick = () => {
             window.location.href = `organizationDetails.html?id=${org.id}`;
         };
 
+        /* EDIT BUTTON CLICK */
+        const editBtn = div.querySelector(".editBtn");
+
+        if (editBtn) {
+            editBtn.onclick = (e) => {
+                e.stopPropagation(); // prevents card click
+                window.location.href = `editOrganization.html?id=${org.id}`;
+            };
+        }
+
         container.appendChild(div);
     });
+}
+/* PERMISSION CHECK */
+
+function canEdit(org) {
+    if (!currentUser) return false;
+
+    return (
+        currentUserRole === "admin" ||
+        currentUserRole === "orgLeader" ||
+        currentUser.uid === org.createdBy
+    );
 }
 /* SEARCH + FILTER */
 
@@ -106,19 +133,23 @@ if (searchInput) {
 if (categoryFilter) {
     categoryFilter.addEventListener("change", filterOrgs);
 }
-
-/* ROLE-BASED CREATE BUTTON */
+/* AUTH + ROLE */
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         btn.style.display = "none";
+        currentUser = null;
+        currentUserRole = null;
         return;
     }
 
-    const snap = await getDoc(doc(db, "users", user.uid));
-    const role = snap.data()?.role;
+    currentUser = user;
 
-    if (role === "orgLeader" || role === "admin") {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    currentUserRole = snap.data()?.role;
+
+    /* CREATE BUTTON */
+    if (currentUserRole === "orgLeader" || currentUserRole === "admin") {
         btn.style.display = "block";
         btn.onclick = () => {
             window.location.href = "createOrganization.html";
@@ -126,7 +157,10 @@ onAuthStateChanged(auth, async (user) => {
     } else {
         btn.style.display = "none";
     }
+
+    /* RE-RENDER to show edit buttons */
+    renderOrgs(allOrgs);
 });
 
-
+/* INIT */
 loadOrgs();
