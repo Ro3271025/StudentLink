@@ -244,6 +244,19 @@ body {
 }
 .orgHeaderInfo {
     flex: 1;
+}/* EDIT BUTTON */
+.editOrgBtn {
+    background: var(--theme-accent);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+.editOrgBtn:hover {
+    opacity: 0.85;
 }
 /* PROFILE IMAGE */
 #orgProfileImg {
