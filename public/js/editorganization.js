@@ -25,11 +25,17 @@ const descInput = document.getElementById("descInput");
 const categoryInput = document.getElementById("categoryInput");
 const emailInput = document.getElementById("emailInput");
 
-const imageInput = document.getElementById("imageInput");
-const imageGallery = document.getElementById("imageGallery");
+/* NEW IMAGE SYSTEM */
+const mainImageContainer = document.getElementById("mainImageContainer");
+const mainImageInput = document.getElementById("mainImageInput");
 
+const galleryContainer = document.getElementById("galleryContainer");
+const galleryInput = document.getElementById("galleryInput");
+
+/* OFFICERS */
 const officersContainer = document.getElementById("officersContainer");
 const addOfficerBtn = document.getElementById("addOfficerBtn");
+
 
 
 const params = new URLSearchParams(window.location.search);
@@ -39,9 +45,14 @@ let currentUser = null;
 let currentUserRole = null;
 let orgData = null;
 
-let imageFiles = [];
-let existingImages = [];
+/* IMAGE STATE */
+let mainImageFile = null;
+let existingMainImage = "";
 
+let galleryFiles = [];
+let existingGallery = [];
+
+/* OFFICERS */
 let officers = [];
 
 const storage = getStorage();
@@ -65,23 +76,50 @@ async function loadOrg() {
     categoryInput.value = orgData.category || "";
     emailInput.value = orgData.email || "";
 
-    /* IMAGES */
-    existingImages = orgData.imageURLs || 
-        (orgData.imageURL ? [orgData.imageURL] : []);
+    /* MAIN IMAGE */
+    existingMainImage =
+        orgData.mainImageURL ||
+        orgData.imageURL ||
+        "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg";
 
+    /* GALLERY */
+    existingGallery = orgData.galleryImages || [];
+
+    renderMainImage();
     renderGallery();
 
     /* OFFICERS */
     officers = orgData.officers || [];
     renderOfficers();
 }
-/* IMAGE GALLERY */
+
+/* MAIN IMAGE */
+
+function renderMainImage() {
+    mainImageContainer.innerHTML = `<img src="${existingMainImage}">`;
+}
+
+mainImageInput.addEventListener("change", () => {
+    const file = mainImageInput.files[0];
+    if (!file) return;
+
+    mainImageFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        existingMainImage = e.target.result;
+        renderMainImage();
+    };
+    reader.readAsDataURL(file);
+});
+
+/* GALLERY */
 
 function renderGallery() {
-    imageGallery.innerHTML = "";
+    galleryContainer.innerHTML = "";
 
     /* EXISTING */
-    existingImages.forEach((url, index) => {
+    existingGallery.forEach((url, index) => {
         const div = document.createElement("div");
         div.className = "imageWrapper";
 
@@ -91,15 +129,15 @@ function renderGallery() {
         `;
 
         div.querySelector("button").onclick = () => {
-            existingImages.splice(index, 1);
+            existingGallery.splice(index, 1);
             renderGallery();
         };
 
-        imageGallery.appendChild(div);
+        galleryContainer.appendChild(div);
     });
 
     /* NEW */
-    imageFiles.forEach((file, index) => {
+    galleryFiles.forEach((file, index) => {
         const reader = new FileReader();
 
         reader.onload = (e) => {
@@ -112,22 +150,20 @@ function renderGallery() {
             `;
 
             div.querySelector("button").onclick = () => {
-                imageFiles.splice(index, 1);
+                galleryFiles.splice(index, 1);
                 renderGallery();
             };
 
-            imageGallery.appendChild(div);
+            galleryContainer.appendChild(div);
         };
 
         reader.readAsDataURL(file);
     });
 }
 
-/* IMAGE INPUT */
-
-imageInput.addEventListener("change", () => {
-    const files = Array.from(imageInput.files);
-    imageFiles.push(...files);
+galleryInput.addEventListener("change", () => {
+    const files = Array.from(galleryInput.files);
+    galleryFiles.push(...files);
     renderGallery();
 });
 
@@ -160,8 +196,6 @@ function renderOfficers() {
     });
 }
 
-/* ADD OFFICER */
-
 addOfficerBtn.onclick = () => {
     officers.push({ name: "", role: "" });
     renderOfficers();
@@ -179,13 +213,22 @@ form.addEventListener("submit", async (e) => {
     try {
         const orgRef = doc(db, "organizations", orgId);
 
-        let finalImages = [...existingImages];
+        let mainImageURL = existingMainImage;
+        let galleryURLs = [...existingGallery];
 
-        for (const file of imageFiles) {
-            const imageRef = ref(storage, `organizationImages/${orgId}/${Date.now()}_${file.name}`);
-            await uploadBytes(imageRef, file);
-            const url = await getDownloadURL(imageRef);
-            finalImages.push(url);
+        /* MAIN IMAGE UPLOAD */
+        if (mainImageFile) {
+            const refPath = ref(storage, `organizationMain/${orgId}/${Date.now()}`);
+            await uploadBytes(refPath, mainImageFile);
+            mainImageURL = await getDownloadURL(refPath);
+        }
+
+        /* GALLERY UPLOAD */
+        for (const file of galleryFiles) {
+            const refPath = ref(storage, `organizationGallery/${orgId}/${Date.now()}_${file.name}`);
+            await uploadBytes(refPath, file);
+            const url = await getDownloadURL(refPath);
+            galleryURLs.push(url);
         }
 
         await updateDoc(orgRef, {
@@ -193,7 +236,8 @@ form.addEventListener("submit", async (e) => {
             description: descInput.value,
             category: categoryInput.value,
             email: emailInput.value,
-            imageURLs: finalImages,
+            mainImageURL,
+            galleryImages: galleryURLs,
             officers: officers.filter(o => o.name && o.role),
             updatedAt: serverTimestamp()
         });
