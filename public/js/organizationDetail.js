@@ -28,7 +28,6 @@ if (!orgId) {
 const nameEl = document.getElementById("orgName");
 const descEl = document.getElementById("orgDescription");
 const profileImgEl = document.getElementById("orgProfileImg");
-const mainImgEl = document.getElementById("orgMainImage");
 const emailEl = document.getElementById("orgEmail");
 
 const galleryEl = document.getElementById("orgGallery");
@@ -37,6 +36,8 @@ const officersEl = document.getElementById("orgOfficers");
 
 const joinBtn = document.getElementById("joinBtn");
 const memberCountEl = document.getElementById("memberCount");
+
+const editBtn = document.getElementById("editOrgBtn");
 
 /* LOAD ORG */
 
@@ -57,20 +58,16 @@ async function loadOrg() {
         emailEl.textContent = data.email || "N/A";
 
         /* IMAGE SYSTEM */
-
         const mainImage =
             data.mainImageURL ||
-            data.imageURL || // fallback for old data
+            data.imageURL ||
             "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg";
 
         const galleryImages = data.galleryImages || [];
 
-        /* SET IMAGES */
         profileImgEl.src = mainImage;
 
         loadGallery(galleryImages);
-
-        /* OTHER DATA */
         loadEvents();
         loadOfficers(data);
 
@@ -168,24 +165,12 @@ function loadOfficers(data) {
         officersEl.appendChild(div);
     });
 }
-
 /* JOIN SYSTEM */
 
 let currentUser = null;
 let isMember = false;
 
-onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-
-    if (user) {
-        setupJoinSystem();
-    } else {
-        joinBtn.style.display = "none";
-    }
-});
-
 function setupJoinSystem() {
-
     const memberRef = doc(
         db,
         "organizations",
@@ -217,7 +202,6 @@ function setupJoinSystem() {
 
     loadMemberCountRealtime();
 }
-
 /* MEMBER COUNT */
 
 function loadMemberCountRealtime() {
@@ -230,6 +214,39 @@ function loadMemberCountRealtime() {
                 : `${snap.size} members`;
     });
 }
+/* AUTH + EDIT BUTTON */
+
+onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+
+    if (!user) {
+        joinBtn.style.display = "none";
+        if (editBtn) editBtn.style.display = "none";
+        return;
+    }
+
+    setupJoinSystem();
+
+    try {
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        const role = userSnap.data()?.role;
+
+        if (editBtn) {
+            if (role === "admin" || role === "orgLeader") {
+                editBtn.style.display = "block";
+
+                editBtn.onclick = () => {
+                    window.location.href = `editOrganization.html?id=${orgId}`;
+                };
+            } else {
+                editBtn.style.display = "none";
+            }
+        }
+
+    } catch (err) {
+        console.error("Auth error:", err);
+    }
+});
 /* INIT */
 
 loadOrg();
