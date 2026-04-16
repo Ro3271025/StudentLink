@@ -13,11 +13,11 @@
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                  style="cursor:pointer; border-radius:8px; width:150px; height:150px; object-fit:cover;">
             <input type="file" id="fileInput" accept="image/*" style="display:none;">
-            <p id="displayName">Display Name</p>
+            <p id="profileDisplayName">Display Name</p>
 
             <!-- USERNAME ROW with college tag and message button -->
             <div class="userMetaRow" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
-                <span id="username">@Username</span>
+                <span id="profileUsername">@Username</span>
                 <button id="userCollege" class="themeObject">SUNY Farmingdale</button>
                 <button id="messageStudentBtn" class="themeObject" style="display:none;">Message User</button>
             </div>
@@ -65,8 +65,8 @@
         <!-- LEFT SIDEBAR -->
         <div class="sidebar" id="leftBar">
             <br><img class="sideProfileIcon" id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-            <p id="sideDisplayName">Display Name</p>
-            <p id="sideUsername">@Username</p><br>
+            <p id="displayName">Display Name</p>
+            <p id="username">@Username</p><br>
             <p class="sidebarText"><a href="home.html">Home</a></p>
             <p class="sidebarText"><a href="listings.html">Listings</a></p>
             <p class="sidebarText"><a href="explore.html">Explore</a></p>
@@ -166,10 +166,13 @@
         }
     </style>
 
-    <script type="module">
-        import { setupProfile } from "./js/profile.js?v=5";
-        import { setupSidebar } from "./js/showUser.js";
+<script type="module">
+    import { setupProfile } from "./js/profile.js?v=5";
         setupProfile();
+        setupSidebar();
+    </script>
+    <script type="module">
+        import { setupSidebar } from "./js/showUser.js";
         setupSidebar();
     </script>
     <script type="module" src="js/userSearch.js"></script>
