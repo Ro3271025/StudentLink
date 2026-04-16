@@ -846,11 +846,171 @@ body {
     justify-content: center;
     background: var(--bg-secondary);
 }
-
 .mainImageBox img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+/* PAGE LAYOUT */
+.listingContainer {
+    max-width: 600px;
+    margin: 0 auto;
+}
+/* FORM STRUCTURE */
+#editOrgForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+/* INPUTS */
+.listingInput,
+#categoryInput {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 14px;
+}
+.listingInput:focus,
+#categoryInput:focus {
+    outline: none;
+    border-color: var(--theme-accent);
+}
+/* TEXTAREA FIX */
+textarea.listingInput {
+    resize: vertical;
+    min-height: 80px;
+}
+/* MAIN IMAGE */
+.mainImageBox {
+    width: 100%;
+    height: 180px;
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+    background: var(--bg-secondary);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+.mainImageBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/* GALLERY */
+.imageGallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.imageWrapper {
+    position: relative;
+    width: 90px;
+    height: 90px;
+}
+.imageWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+/* REMOVE IMAGE BUTTON */
+.removeImgBtn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+
+    background: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+}
+/* BUTTONS */
+.uploadBtn {
+    display: inline-block;
+    border: 1px solid var(--theme-accent);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+    text-align: center;
+}
+.uploadBtn:hover {
+    background: var(--theme-accent);
+    color: white;
+}
+/* SAVE BUTTON */
+button[type="submit"] {
+    background: var(--theme-accent);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button[type="submit"]:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+/* OFFICERS */
+.officerRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.officerRow input {
+    flex: 1;
+}
+/* REMOVE OFFICER BUTTON */
+.removeOfficerBtn {
+    background: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+/* ADD OFFICER BUTTON */
+#addOfficerBtn {
+    align-self: center;
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#addOfficerBtn:hover {
+    background: var(--border-color);
+}
+/* LABELS */
+label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: -6px;
+}
+/* SECTION HEADERS */
+h2.sectionTitle {
+    text-align: center;
+    margin-bottom: 20px;
+}
+h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 /* CREATE EVENT PAGE */
 #createEventForm {
