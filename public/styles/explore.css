@@ -250,19 +250,6 @@ body {
     opacity: 0.85;
 }
 /* ORG DETAIL PAGE */
-.orgHero {
-    width: 100%;
-    height: 220px;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 20px;
-    border: 1px solid var(--border-color);
-}
-.orgHero img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 /* HEADER */
 .orgHeader {
     display: flex;
@@ -288,7 +275,7 @@ body {
     height: 75px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--border-color);
+    border: 3px solid var(--border-color);
     background: var(--bg-secondary);
 }
 /* NAME */
