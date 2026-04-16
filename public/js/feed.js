@@ -473,8 +473,8 @@ async function loadComments(postId) {
 
             return `
                 <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; padding:5px">
-                    <img src="${commentPhoto}"
-                         style="width:28px; height:28px; border-radius:50%; flex-shrink:0;">
+                    <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
+                         style="width:28px; height:28px; border-radius:4px; flex-shrink:0;">
                     <div style="flex:1;">
                         <span style="font-size:13px; font-weight:600; color:var(--text-fill);">
                             ${escapeHtml(c.authorName || 'Anonymous')}

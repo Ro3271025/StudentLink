@@ -10,9 +10,9 @@ doc,
 getDoc,
 getDocs,
 updateDoc,
-setDoc
+setDoc,
+deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
 
 const container =
 document.getElementById("conversationsContainer");
@@ -20,67 +20,58 @@ document.getElementById("conversationsContainer");
 const searchInput =
 document.getElementById("searchMessages");
 
-
 auth.onAuthStateChanged(async user => {
 
 if(!user) return;
 
 const q = query(
 collection(db,"conversations"),
-where("users","array-contains",user.uid)
+where("users","array-contains",user.uid),
+orderBy("lastTimestamp","desc") // 🔥 FIX: SORT BY LATEST
 );
 
 onSnapshot(q, async snapshot => {
 
 container.innerHTML="";
 
-for(const docSnap of snapshot.docs){
+/* PARALLEL LOAD USERS (FASTER) */
+const promises = snapshot.docs.map(async docSnap => {
 
 const convo = docSnap.data();
 const conversationID = docSnap.id;
 
-
 /* determine other user */
-
 const otherUserID =
-convo.users.find(
-id => id !== user.uid
-);
-
+convo.users.find(id => id !== user.uid);
 
 /* get username */
-
 let username = "User";
 
 try{
-
 const userDoc =
 await getDoc(doc(db,"users",otherUserID));
 
 if(userDoc.exists()){
-
 username =
-userDoc.data().displayName || "User";
-
+userDoc.data().username ||
+userDoc.data().displayName ||
+"User";
 }
-
 }catch(error){
-
 console.log(error);
-
 }
-
 
 /* build UI */
-
-const div =
-document.createElement("div");
-
+const div = document.createElement("div");
 div.classList.add("conversationItem");
 
-div.innerHTML = `
+/* CONTENT */
+const content = document.createElement("div");
+content.classList.add("conversationContent");
+
+content.innerHTML = `
 <div class="conversationName">
-${username}
+@${username}
 </div>
 
 <div class="lastMessage">
@@ -88,19 +79,37 @@ ${convo.lastMessage || ""}
 </div>
 `;
 
+/* DELETE BUTTON */
+const deleteBtn = document.createElement("button");
+deleteBtn.classList.add("deleteChatBtn");
+deleteBtn.innerText = "✕";
 
-/* open chat */
+/* OPEN CHAT */
+content.addEventListener("click", () => {
+    window.location.href = `chatDetails.html?id=${conversationID}`;
+});
 
-div.addEventListener("click",()=>{
+/* DELETE CHAT */
+deleteBtn.addEventListener("click", async (e) => {
+    e.stopPropagation(); // 🚨 prevents opening chat
 
-window.location.href =
-`chatDetails.html?id=${conversationID}`;
+    const confirmDelete = confirm("Delete this chat?");
+    if (!confirmDelete) return;
+
+    await deleteConversation(conversationID);
+});
+
+/* APPEND */
+div.appendChild(content);
+div.appendChild(deleteBtn);
+
+return div;
 
 });
 
-container.appendChild(div);
-
-}
+/* WAIT ALL USERS THEN RENDER */
+const elements = await Promise.all(promises);
+elements.forEach(el => container.appendChild(el));
 
 });
 
@@ -129,6 +138,8 @@ text.includes(value)
 });
 
 });
+
+
 // ───────── START CHAT SYSTEM ─────────
 
 const startBtn = document.getElementById("startChatBtn");
@@ -206,7 +217,7 @@ if (userSearchInput) {
                             users: [currentUser.uid, uid],
                             createdAt: new Date(),
                             lastMessage: "",
-                            lastTimestamp: new Date()
+                            lastTimestamp: new Date() // ⚠️ OK FOR NOW (we’ll upgrade later)
                         });
                     }
 
@@ -217,4 +228,36 @@ if (userSearchInput) {
             }
         });
     });
+}
+/*Delete Function*/
+async function deleteConversation(conversationID) {
+    try {
+
+        // DELETE ALL MESSAGES FIRST
+        const messagesRef = collection(
+            db,
+            "conversations",
+            conversationID,
+            "messages"
+        );
+
+        const snapshot = await getDocs(messagesRef);
+
+        const deletePromises = snapshot.docs.map(docSnap =>
+            deleteDoc(docSnap.ref)
+        );
+
+        await Promise.all(deletePromises);
+
+        // DELETE CONVERSATION
+        await deleteDoc(
+            doc(db, "conversations", conversationID)
+        );
+
+        console.log("Chat deleted successfully");
+
+    } catch (error) {
+        console.error("Delete failed:", error);
+        alert("Error deleting chat");
+    }
 }

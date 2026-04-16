@@ -1,39 +1,649 @@
-.recentExploreSearchData{
-    text-align: center;
+* {
+    box-sizing: border-box;
 }
 
-#filterSelection{
-    width:100%;
-    font-weight: normal;
-    margin-left: 2.5%;
+body {
+    overflow-x: hidden;
 }
-
-#exploreSearchBar{
-    width:98%;
+/* MAIN PAGE */
+#campusCentralPage {
+    margin-left: 220px;
+    padding: 20px;
+    max-width: 1100px;
 }
-
-#exploreHome{
-    border:none;
+/* SEARCH */
+.exploreSearchBar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 14pt;
+    margin-bottom: 20px;
 }
-
-.exploreBar{
-    border-radius: 10px;
-    background-color: var(--theme-accent);
+.exploreSearchBar:focus,
+#filterSelection:focus {
+    outline: none;
     border-color: var(--theme-accent);
-    font-size: 16pt;
-    padding: 5%;
-    transition: 0.125s;
-    font-family: var(--font-family);
-    display: inline;
-    padding:12px;
-    border-radius:8px;
-    border:none;
-    margin-bottom:20px;
-    background:var(--bg-secondary);
-    outline:none;
+}
+#filterSelection {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+/* RECENT */
+#recentSearches {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+.recentItem {
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
-.exploreListing{
+.recentItem:hover {
+    background-color: var(--border-color);
+}
+/* CAMPUS CENTRAL CARDS */
+.centralTopCards {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0;
+}
+.centralCard {
+    flex: 1;
+    padding: 22px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+    border: 1px solid var(--border-color);
     text-align: center;
-    margin-left: 23%;
+    cursor: pointer;
+    transition: 0.25s;
+    font-weight: bold;
+    font-size: 13pt;
+    position: relative;
+    overflow: hidden;
+}
+.centralCard:hover {
+    transform: translateY(-6px) scale(1.03);
+    border-color: var(--theme-accent);
+}
+.centralCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--theme-accent);
+    opacity: 0;
+    transition: 0.25s;
+}
+.centralCard:hover::after {
+    opacity: 0.08;
+}
+/* FEED */
+.feedItem {
+    padding: 14px;
+    border-radius: 12px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 14px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.feedItem:hover {
+    background-color: #2a3b4f;
+    transform: translateY(-2px);
+}
+#explorePage.content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+/* ORGANIZATIONS */
+.orgLayout {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+.orgSidebar {
+    width: 100%;
+    max-width: 230px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    background: var(--bg-primary); 
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+#createOrgBtnUI {
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 8px;
+}
+.orgSidebar input,
+.orgSidebar select {
+    width: 100%;
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-fill);
+}
+#createEventBtnUI {
+    margin-top: 5px;
+
+    padding: 10px;
+    border-radius: 10px;
+
+    border: 1px solid var(--border-color);
+
+    background: var(--theme-accent); /* 🔥 THEME CONTROLLED */
+    color: white;
+
+    font-weight: bold;
+    font-size: 14px;
+
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+/* HOVER MATCHES THEME */
+#createEventBtnUI:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+}
+/* OPTIONAL ACTIVE FEEDBACK */
+#createEventBtnUI:active {
+    transform: scale(0.98);
+}
+.orgList {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 630px;
+}
+.orgCard {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+
+    transition: 0.2s;
+    cursor: pointer;
+
+    overflow: hidden;
+    width: 100%;
+    max-width: 630px;
+}
+.orgCard:hover {
+    transform: translateY(-2px);
+    border-color: var(--theme-accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.orgImage {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    flex-shrink: 0;
+}
+.orgInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    min-width: 0;
+}
+.orgName {
+    font-size: 16px;
+    font-weight: bold;
+}
+.orgDesc {
+    font-size: 13px;
+    opacity: 0.8;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.orgCategory {
+    font-size: 11px;
+    opacity: 0.6;
+}
+/* ORG DETAIL PAGE */
+/* HEADER */
+.orgHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+/* LEFT SIDE */
+.orgHeaderLeft {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+/* PROFILE IMAGE */
+#orgProfileImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+/* NAME */
+#orgName {
+    font-size: 24px;
+    font-weight: bold;
+}
+/* MEMBER COUNT */
+#memberCount {
+    font-size: 14px;
+    color: var(--text-muted, #aaa);
+}
+/* RIGHT BUTTONS */
+.orgHeaderRight {
+    display: flex;
+    gap: 10px;
+}
+/* CARD SYSTEM */
+.card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+}
+/* SECTION */
+.orgSection {
+    margin-bottom: 25px;
+}
+/* CONTACT */
+.orgContact {
+    margin-top: 10px;
+    font-size: 14px;
+}
+/* GALLERY */
+.orgGallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+}
+.orgGallery img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.orgGallery img:hover {
+    transform: scale(1.05);
+}
+/* OFFICERS */
+.orgOfficers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.orgOfficerCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    padding: 8px 12px;
+}
+.orgOfficerCard img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+/* BUTTONS */
+.secondaryBtn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.secondaryBtn:hover {
+    background: var(--border-color);
+}
+/* EVENTS PAGE */
+.eventsLayout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+.eventSidebar {
+    width: 100%;
+    max-width: 230px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px);
+
+    padding: 16px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+/* MATCH ORG INPUT STYLE */
+.eventSidebar label {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.85;
+}
+.eventSidebar input[type="checkbox"] {
+    accent-color: var(--theme-accent);
+}
+.eventsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+}
+.eventCard {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+
+    cursor: pointer;
+    transition: 0.25s;
+
+    display: flex;
+    flex-direction: column;
+}
+.eventCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--theme-accent);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+/* IMAGE */
+.eventCard img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+.eventInfo {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+/* TITLE */
+.eventTitle {
+    font-weight: bold;
+    font-size: 14px;
+}
+/* META */
+.eventMeta {
+    font-size: 12px;
+    opacity: 0.7;
+}
+.eventMeta:last-child {
+    opacity: 0.9;
+    font-weight: 500;
+}
+/* ORG TOP LAYOUT */
+.orgTopLayout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+/* LEFT SIDE */
+.orgLeft {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* RIGHT SIDE */
+.orgRight {
+    flex: 1;
+}
+/* HEADER */
+.orgHeader {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+#orgProfileImg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+#orgName {
+    font-size: 28px;
+    font-weight: bold;
+}
+/* ACTION BUTTONS */
+.orgActions {
+    display: flex;
+    gap: 10px;
+}
+/* DESCRIPTION */
+#orgDescription {
+    line-height: 1.6;
+    color: var(--text-fill);
+}
+/* CONTACT */
+.orgContact {
+    margin-top: 10px;
+    font-size: 14px;
+}
+/* GALLERY GRID */
+.orgGallery {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.orgGallery img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+.orgGallery img:hover {
+    transform: scale(1.03);
+}
+/* EVENTS + OFFICERS */
+.orgSection {
+    margin-top: 30px;
+}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .orgTopLayout {
+        flex-direction: column;
+    }
+
+    .orgGallery {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+/* EVENT DETAILS */
+.eventTop {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+#eventImage {
+    width: 300px;
+    border-radius: 10px;
+}
+.eventTopInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.eventMain {
+    display: flex;
+    gap: 20px;
+}
+.eventLeft {
+    flex: 2;
+}
+.eventRight {
+    flex: 1;
+}
+.rsvpBox {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+/* EVENT DETAIL PAGE */
+#campusCentralPage {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+/* TOP SECTION */
+.eventTop {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+/* IMAGE */
+#eventImage {
+    width: 420px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+/* INFO */
+.eventTopInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+#eventTitle {
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--text-fill);
+}
+#eventDate,
+#eventLocation {
+    color: var(--text-muted, #aaa);
+    font-size: 14px;
+}
+/* MAIN SECTION */
+.eventMain {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+}
+/* LEFT (DESCRIPTION) */
+.eventLeft {
+    flex: 2;
+}
+.eventLeft h2 {
+    margin-bottom: 10px;
+}
+#eventDescription {
+    line-height: 1.6;
+    color: var(--text-fill);
+}
+/* RIGHT (RSVP BOX) */
+.eventRight {
+    flex: 1;
+}
+/* RSVP CARD */
+.rsvpBox {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: sticky;
+    top: 20px;
+}
+/* RSVP TEXT */
+#rsvpCount {
+    font-size: 14px;
+    color: var(--text-muted, #aaa);
+}
+/* RSVP BUTTON */
+#rsvpBtn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 15px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+#rsvpBtn:hover {
+    transform: translateY(-2px);
+}
+/* HOST ORG */
+#hostOrgCard {
+    margin-top: 10px;
+}
+/* RELATED EVENTS */
+#relatedEvents {
+    margin-top: 10px;
+}
+/* RESPONSIVE */
+@media (max-width: 900px) {
+
+    .eventTop {
+        flex-direction: column;
+    }
+
+    #eventImage {
+        width: 100%;
+        height: 220px;
+    }
+
+    .eventMain {
+        flex-direction: column;
+    }
+
+    .eventRight {
+        width: 100%;
+    }
+
+    .rsvpBox {
+        position: static;
+    }
 }

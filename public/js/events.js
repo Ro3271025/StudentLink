@@ -1,0 +1,129 @@
+import { db, auth } from "./firebaseInitialization.js";
+
+import {
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+/* CREATE EVENT BUTTON LOGIC */
+
+const createBtn = document.getElementById("createEventBtnUI");
+
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+        createBtn.style.display = "none";
+        return;
+    }
+
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const role = snap.data()?.role;
+
+    if (role === "admin" || role === "orgLeader") {
+        createBtn.style.display = "block";
+        createBtn.onclick = () => {
+            window.location.href = "createEvent.html";
+        };
+    } else {
+        createBtn.style.display = "none";
+    }
+});
+
+/* EVENTS LOGIC */
+
+const container = document.getElementById("eventsContainer");
+const searchInput = document.getElementById("eventSearch");
+
+let allEvents = [];
+
+/* LOAD EVENTS */
+
+async function loadEvents() {
+
+    const snap = await getDocs(query(
+        collection(db, "events"),
+        orderBy("timestamp", "desc")
+    ));
+
+    allEvents = [];
+
+    for (const docSnap of snap.docs) {
+        const data = docSnap.data();
+
+        allEvents.push({
+            id: docSnap.id,
+            title: data.title,
+            description: data.description || "",
+            date: data.date,
+            location: data.location,
+            image: data.imageURL || "styles/images/placeholder/DEFAULT_BANNER.svg",
+
+            // 🔥 USE STORED VALUES (NO EXTRA QUERY)
+            orgName: data.orgName || "Unknown Org",
+            orgImage: data.orgImage || ""
+        });
+    }
+
+    renderEvents(allEvents);
+}
+
+/* RENDER */
+
+function renderEvents(events) {
+    container.innerHTML = "";
+
+    if (events.length === 0) {
+        container.innerHTML = "<p>No events found.</p>";
+        return;
+    }
+
+    events.forEach(ev => {
+        const div = document.createElement("div");
+        div.className = "eventCard";
+
+        div.innerHTML = `
+            <img src="${ev.image}">
+
+            <div class="eventInfo">
+                <div class="eventTitle">${ev.title}</div>
+                <div class="eventMeta">${ev.date}</div>
+                <div class="eventMeta">${ev.location || ""}</div>
+
+                <div class="eventMeta">
+                    ${ev.orgImage ? `<img src="${ev.orgImage}" style="width:16px;height:16px;border-radius:50%;margin-right:5px;">` : ""}
+                    ${ev.orgName}
+                </div>
+            </div>
+        `;
+
+        div.onclick = () => {
+            window.location.href = `eventDetail.html?id=${ev.id}`;
+        };
+
+        container.appendChild(div);
+    });
+}
+
+/* SEARCH */
+
+function filterEvents() {
+    const value = searchInput.value.toLowerCase();
+
+    const filtered = allEvents.filter(ev =>
+        ev.title.toLowerCase().includes(value) ||
+        ev.description.toLowerCase().includes(value)
+    );
+
+    renderEvents(filtered);
+}
+
+searchInput.addEventListener("input", filterEvents);
+
+/* INIT */
+
+loadEvents();

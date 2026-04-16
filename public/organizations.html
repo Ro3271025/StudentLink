@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Organizations | StudentLink</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body id="documentBody">
+
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
+
+    <!-- TITLE -->
+    <h2 class="sectionTitle">Organizations</h2>
+
+    <!-- LAYOUT -->
+    <div class="orgLayout">
+
+        <!-- LEFT FILTER -->
+        <div class="orgSidebar">
+
+            <input 
+                type="text" 
+                id="orgSearchInput" 
+                class="exploreSearchBar"
+                placeholder="Search organizations..."
+            >
+
+            <select id="categoryFilter" class="exploreBar">
+                <option value="">All</option>
+                <option value="academic">Academic</option>
+                <option value="sports">Sports</option>
+                <option value="cultural">Cultural</option>
+            </select>
+
+            <button id="createOrgBtnUI" class="centralCard">
+                + Create Organization
+            </button>
+
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div id="orgContainer" class="orgList"></div>
+
+    </div>
+
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
+<script type="module" src="js/organizations.js"></script>
+<script src="js/themeSwap.js"></script>
+
+</body>
+</html>
