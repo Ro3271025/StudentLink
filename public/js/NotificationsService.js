@@ -10,7 +10,8 @@ import {
     where,
     orderBy,
     serverTimestamp,
-    writeBatch
+    writeBatch,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /**
@@ -28,7 +29,6 @@ export async function createNotification({
 }) {
     if (!toUserId || !fromUserId) return;
     if (toUserId === fromUserId) return;
-
     await addDoc(collection(db, "notifications"), {
         toUserId,
         fromUserId,
@@ -47,13 +47,11 @@ export async function createNotification({
  */
 export async function getNotifications(userId) {
     if (!userId) return [];
-
     const q = query(
         collection(db, "notifications"),
         where("toUserId", "==", userId),
         orderBy("createdAt", "desc")
     );
-
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
@@ -74,27 +72,40 @@ export async function markAllAsRead(userId) {
         where("toUserId", "==", userId),
         where("read", "==", false)
     );
-
     const snap = await getDocs(q);
     if (snap.empty) return;
-
     const batch = writeBatch(db);
     snap.docs.forEach(d => batch.update(d.ref, { read: true }));
     await batch.commit();
 }
 
 /**
- * Get unread notification count for a user.
+ * Get unread notification count for a user (one-time fetch).
  */
 export async function getUnreadCount(userId) {
     if (!userId) return 0;
-
     const q = query(
         collection(db, "notifications"),
         where("toUserId", "==", userId),
         where("read", "==", false)
     );
-
     const snap = await getDocs(q);
     return snap.size;
+}
+
+/**
+ * Listen to unread notification count in real time.
+ * Calls callback(count) whenever it changes.
+ * Returns the unsubscribe function.
+ */
+export function listenUnreadCount(userId, callback) {
+    if (!userId) return () => {};
+    const q = query(
+        collection(db, "notifications"),
+        where("toUserId", "==", userId),
+        where("read", "==", false)
+    );
+    return onSnapshot(q, (snap) => {
+        callback(snap.size);
+    });
 }

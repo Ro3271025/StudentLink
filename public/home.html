@@ -6,17 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">
-
     <div id="header">
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
-
     <!-- Feed renders here dynamically -->
     <div id="feedContainer"></div>
-
     <br>
     <button id="loadMore" class="themeObject">Load More Posts</button>
-
     <!-- LEFT SIDEBAR -->
     <div class="sidebar" id="leftBar">
         <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
@@ -32,19 +28,16 @@
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
         <button id="backfillBtn" style="font-size: 10px; padding: 4px 8px; background: #666; display:none;">Backfill Usernames (Dev)</button>
     </div>
-
     <!-- RIGHT SIDEBAR -->
     <div class="sidebar" id="rightBar">
         <br>
         <input class="searchBar themeObject" placeholder="Search"><br><br>
-
         <div id="recentSearches">
             <table class="recentSearchesTable">
                 <tr><th id="recentHeader">Recent Searches</th></tr>
             </table>
         </div>
     </div>
-
     <!-- NEW POST OVERLAY -->
     <div class="overlayDiv">
         <div id="newPostContainer">
@@ -58,14 +51,13 @@
             </div>
         </div>
     </div>
-
     <script type="module">
         import { setupHome } from "./js/home.js";
         import { runBackfill } from "./js/backfillUsernames.js";
+        import { setupSidebar } from "./js/showUser.js";
         import "./js/feed.js?v=6";
-
         setupHome();
-
+        setupSidebar();
         document.getElementById("backfillBtn").addEventListener("click", async () => {
             const btn = document.getElementById("backfillBtn");
             btn.disabled = true;
