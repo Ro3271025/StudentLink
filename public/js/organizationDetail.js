@@ -66,7 +66,6 @@ async function loadOrg() {
         const galleryImages = data.galleryImages || [];
 
         /* SET IMAGES */
-        mainImgEl.src = mainImage;
         profileImgEl.src = mainImage;
 
         loadGallery(galleryImages);
