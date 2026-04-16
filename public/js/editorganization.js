@@ -16,6 +16,7 @@ import {
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+
 /* ELEMENTS */
 
 const form = document.getElementById("editOrgForm");
@@ -36,7 +37,7 @@ const galleryInput = document.getElementById("galleryInput");
 const officersContainer = document.getElementById("officersContainer");
 const addOfficerBtn = document.getElementById("addOfficerBtn");
 
-
+/* ========================= */
 
 const params = new URLSearchParams(window.location.search);
 const orgId = params.get("id");
@@ -112,6 +113,7 @@ mainImageInput.addEventListener("change", () => {
     };
     reader.readAsDataURL(file);
 });
+
 
 /* GALLERY */
 
@@ -201,6 +203,7 @@ addOfficerBtn.onclick = () => {
     renderOfficers();
 };
 
+
 /* SAVE */
 
 form.addEventListener("submit", async (e) => {
@@ -253,6 +256,7 @@ form.addEventListener("submit", async (e) => {
     submitBtn.innerText = "Save Changes";
     submitBtn.disabled = false;
 });
+
 
 /* AUTH */
 
