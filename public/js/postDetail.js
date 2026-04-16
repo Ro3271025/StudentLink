@@ -84,9 +84,11 @@ async function loadPost() {
             await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
         }
 
+        const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'; 
+
         container.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-                <img class="profileImgMini" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG" style="margin:0;">
+                <img class="profileImgMini" src="${authorPhoto}" style="margin:0;">
                 <div>
                     <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">
                         ${escapeHtml(post.authorName || 'Display Name')}
