@@ -250,22 +250,63 @@ body {
     opacity: 0.85;
 }
 /* ORG DETAIL PAGE */
+.orgHero {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+}
+.orgHero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 /* HEADER */
 .orgHeader {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
 }
-/* LEFT SIDE */
+/* LEFT GROUP */
 .orgHeaderLeft {
     display: flex;
     align-items: center;
     gap: 15px;
 }
+/* TEXT STACK */
 .orgHeaderInfo {
-    flex: 1;
-}/* EDIT BUTTON */
+    display: flex;
+    flex-direction: column;
+}
+/* PROFILE IMAGE */
+#orgProfileImg {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    background: var(--bg-secondary);
+}
+/* NAME */
+#orgName {
+    font-size: 26px;
+    font-weight: 600;
+}
+/* MEMBER COUNT */
+#memberCount {
+    font-size: 13px;
+    color: var(--text-muted, #aaa);
+}
+/* RIGHT SIDE BUTTONS */
+.orgHeaderRight {
+    display: flex;
+    gap: 10px;
+}
+/* EDIT BUTTON */
 .editOrgBtn {
     background: var(--theme-accent);
     color: white;
@@ -274,33 +315,17 @@ body {
     border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
-    transition: 0.2s;
+    transition: 0.2s ease;
 }
 .editOrgBtn:hover {
-    opacity: 0.85;
+    transform: translateY(-1px);
+    opacity: 0.9;
 }
-/* PROFILE IMAGE */
-#orgProfileImg {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--border-color);
-}
-/* NAME */
-#orgName {
-    font-size: 24px;
-    font-weight: bold;
-}
-/* MEMBER COUNT */
-#memberCount {
-    font-size: 14px;
-    color: var(--text-muted, #aaa);
-}
-/* RIGHT BUTTONS */
-.orgHeaderRight {
+/* ACTION BUTTONS */
+.orgActions {
     display: flex;
     gap: 10px;
+    margin-bottom: 15px;
 }
 /* CARD SYSTEM */
 .card {
@@ -308,6 +333,10 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 15px;
+    transition: 0.2s;
+}
+.card:hover {
+    border-color: var(--theme-accent);
 }
 /* SECTION */
 .orgSection {
@@ -321,54 +350,81 @@ body {
 /* GALLERY */
 .orgGallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
 .orgGallery img {
     width: 100%;
-    height: 100px;
+    height: 110px;
     object-fit: cover;
-    border-radius: 8px;
-    transition: 0.2s;
+    border-radius: 10px;
+    transition: 0.25s ease;
     cursor: pointer;
 }
 .orgGallery img:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 /* OFFICERS */
 .orgOfficers {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
 }
 .orgOfficerCard {
     display: flex;
     align-items: center;
     gap: 10px;
 
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: 10px;
 
-    padding: 8px 12px;
+    padding: 10px 14px;
+    transition: 0.2s;
 }
-.orgOfficerCard img {
+.orgOfficerCard:hover {
+    transform: translateY(-2px);
+    border-color: var(--theme-accent);
+}
+/* OFFICER AVATAR */
+.officerAvatar {
     width: 35px;
     height: 35px;
     border-radius: 50%;
+    background: var(--theme-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 /* BUTTONS */
+.primaryBtn {
+    background: var(--theme-accent);
+    border: none;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.primaryBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
 .secondaryBtn {
     background: transparent;
     border: 1px solid var(--border-color);
     color: var(--text-fill);
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
 }
 .secondaryBtn:hover {
     background: var(--border-color);
+    transform: translateY(-1px);
 }
 /* EVENTS PAGE */
 .eventsLayout {
