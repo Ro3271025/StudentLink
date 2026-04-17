@@ -1,11 +1,82 @@
-<h2>Create News</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create News | StudentLink</title>
 
-<input id="newsTitle" placeholder="News Title">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/news.css">
 
-<textarea id="newsContent" placeholder="Write your news..."></textarea>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-<input type="file" id="newsImage" accept="image/*">
+<body id="documentBody">
 
-<button id="createNewsBtn">Post News</button>
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
+
+    <h2 class="sectionTitle">Create News</h2>
+
+    <div class="newsForm">
+
+        <input 
+            id="newsTitle" 
+            class="exploreSearchBar"
+            placeholder="News Title"
+        >
+
+        <input 
+            id="newsOrg" 
+            class="exploreSearchBar"
+            placeholder="Organization (optional)"
+        >
+
+        <textarea 
+            id="newsContent" 
+            class="exploreSearchBar"
+            placeholder="Write your news..."
+        ></textarea>
+
+        <input type="file" id="newsImage">
+
+        <button id="createNewsBtn" class="themeObject">
+            Post News
+        </button>
+
+    </div>
+
+</div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+    <!-- (optional future tools) -->
+</div>
+
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
 
 <script type="module" src="js/createNews.js"></script>
+<script src="js/themeSwap.js"></script>
+
+</body>
+</html>
