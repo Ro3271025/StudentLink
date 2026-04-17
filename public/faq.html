@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/faq.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body id="documentBody">
+
+    <div id="header" style="border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+    </div><br>
+
+    <div class="questionItem"> 
+        <div class="innerFAQ">
+            <h2>What is this?</h2>
+            <p><strong>StudentLink</strong> is a student focused social platform built for universities.<br><br>
+            Its the ultimate way to stay in touch with classmates, get used supplies, and hear the latest campus news!
+            </p>
+        </div>
+    </div><br>
+    <div class="questionItem"> 
+        <div class="innerFAQ">
+            <h2>What can I do?</h2>
+            <p><strong>StudentLink</strong> allows you to make posts, buy or sell items, and connect with your campus hub!<br><br>
+            You can also add friends and protect yourself by blocking users or making your account private.
+            </p>
+        </div>
+    </div><br>
+    <div class="questionItem"> 
+        <div class="innerFAQ">
+            <h2>What data do you collect?</h2>
+            <p><strong>StudentLink</strong> only collects your email address, name, posts, listings, comments, and friends you make on the site.<br><br>
+                These, however, are not given to any 3rd parties and are collected only to support app functionality.<br><br>
+                You are free to permanently <a href="settings.html">delete your account and its data</a> at any time.
+            </p>
+        </div>
+    </div><br>
+    <div class="questionItem"> 
+        <div class="innerFAQ">
+            <h2>I came across disturbing or inappropriate content. What should I do?</h2>
+            <p><strong>StudentLink</strong> allows you to report posts to administrators who will review the post and your reason 
+                for the report.<br><br> If the report is deemed valid, the post will be removed and the offending user may receive restrictions or a ban.
+                <br><br> In the event that a report is not deemed valid,
+                it is suggested that you block further interactions with the user to give yourself the best experience.<br><br>
+                You can see your reports and blocked users in <a href="settings.html">Settings</a> at any time.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
+        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- NEW POST OVERLAY -->
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader">
+                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b>
+                <button class="themeObject" id="createPostBtn">Post</button>
+            </p>
+            <div id="newPostTXT">
+                <textarea maxlength="300" placeholder="What's happening?"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/userSearch.js"></script>
+    <script src="js/themeSwap.js" type="text/javascript"></script>
+    <script src="js/toggleVis.js" type="text/javascript"></script>
+    <script type="module">
+        import { setupSidebar } from "./js/showUser.js";
+        setupSidebar();
+    </script>
+</body>
+</html>
+
+

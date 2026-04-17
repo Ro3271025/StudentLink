@@ -1,0 +1,13 @@
+.questionItem{
+    border: 1px solid var(--border-color);
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    margin: 0 auto;
+    width: 55%;
+    border-radius: 8px;
+}
+
+.innerFAQ{
+    padding: 8px;
+}
