@@ -1,21 +1,82 @@
-<div class="newsDetailsPage">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>News | StudentLink</title>
 
-    <h1 id="newsTitle"></h1>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/news.css">
 
-    <div class="newsMeta">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-        <img id="authorPhoto" class="newsAuthorImg">
+<body id="documentBody">
 
-        <div>
-            <p id="authorName"></p>
-            <p id="newsDate"></p>
-            <p id="orgName" class="newsOrgLink"></p>
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
+
+    <div id="newsDetailsPage">
+
+        <!-- TOP SECTION -->
+        <div class="newsTop">
+
+            <h1 id="newsTitle"></h1>
+
+            <div class="newsMeta">
+
+                <img id="authorPhoto" class="newsAuthorImg">
+
+                <div>
+                    <p id="authorName"></p>
+                    <p id="newsDate"></p>
+                    <p id="orgName" class="newsOrgLink"></p>
+                </div>
+
+            </div>
+
         </div>
+
+        <!-- IMAGE -->
+        <img id="newsImage" class="newsHeroImage">
+
+        <hr>
+
+        <!-- CONTENT -->
+        <div id="newsContent" class="newsContent"></div>
 
     </div>
 
-    <img id="newsImage" class="newsHeroImage">
+</div>
 
-    <div id="newsContent" class="newsContent"></div>
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+</div>
+
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
+
+<script type="module" src="js/newsDetails.js"></script>
+<script src="js/themeSwap.js"></script>
+
+</body>
+</html>
