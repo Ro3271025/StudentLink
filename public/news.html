@@ -1,19 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Campus News</title>
+    <title>News | StudentLink</title>
+
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/news.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body>
+<body id="documentBody">
 
-<h2>Campus News</h2>
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
 
-<button id="createNewsBtnUI">+ Create News</button>
+<!-- MAIN CONTENT -->
+<div id="explorePage" class="content">
 
-<div id="newsContainer"></div>
+    <!-- TITLE -->
+    <h2 class="sectionTitle">Campus News</h2>
+
+    <!-- LAYOUT -->
+    <div class="orgLayout"> <!-- reuse same layout -->
+
+        <!-- LEFT SIDE (CREATE ONLY) -->
+        <div class="orgSidebar">
+
+            <button id="createNewsBtnUI" class="centralCard">
+                + Create News
+            </button>
+
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div id="newsContainer" class="orgList">
+            <!-- News cards go here -->
+        </div>
+
+    </div>
+
+</div>
+
+<!-- RIGHT SIDEBAR (SEARCH HERE LIKE HOME PAGE) -->
+<div class="sidebar" id="rightBar">
+
+    <input 
+        type="text" 
+        id="newsSearchInput" 
+        class="exploreSearchBar"
+        placeholder="Search news..."
+    >
+
+</div>
+
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
+
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
 
 <script type="module" src="js/news.js"></script>
+<script src="js/themeSwap.js"></script>
 
 </body>
 </html>
