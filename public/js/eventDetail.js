@@ -18,7 +18,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 
 const params = new URLSearchParams(window.location.search);
 const eventId = params.get("id");
-
 /* ELEMENTS */
 
 const titleEl = document.getElementById("eventTitle");
@@ -33,6 +32,10 @@ const relatedEl = document.getElementById("relatedEvents");
 const rsvpBtn = document.getElementById("rsvpBtn");
 const rsvpCountEl = document.getElementById("rsvpCount");
 
+const editBtn = document.getElementById("editEventBtn");
+
+/* STATE */
+
 let currentUser = null;
 let isGoing = false;
 let orgId = null;
@@ -42,33 +45,48 @@ let orgId = null;
 async function loadEvent() {
 
     const snap = await getDoc(doc(db, "events", eventId));
-    if (!snap.exists()) return;
+    if (!snap.exists()) {
+        alert("Event not found");
+        return;
+    }
 
     const data = snap.data();
 
-    titleEl.textContent = data.title;
-    dateEl.textContent = data.date;
-    locEl.textContent = data.location;
-    descEl.textContent = data.description;
+    /* EDIT BUTTON */
+    if (editBtn) {
+        editBtn.onclick = () => {
+            window.location.href = `editEvent.html?id=${eventId}`;
+        };
+    }
 
-    imgEl.src = data.imageURL || "styles/images/placeholder/DEFAULT_BANNER.svg";
+    /* TEXT */
+    titleEl.textContent = data.title || "Untitled Event";
+    dateEl.textContent = data.date || "";
+    locEl.textContent = data.location || "";
+    descEl.textContent = data.description || "";
 
+    /* IMAGE */
+    imgEl.src =
+        data.imageURL ||
+        "styles/images/placeholder/DEFAULT_BANNER.svg";
+
+    /* ORG */
     orgId = data.orgId;
 
     loadHostOrg();
     loadRelatedEvents();
 }
-
 /* HOST ORG */
 
 async function loadHostOrg() {
+
     const snap = await getDoc(doc(db, "organizations", orgId));
     if (!snap.exists()) return;
 
     const data = snap.data();
 
     orgCard.innerHTML = `
-        <img src="${data.imageURL || ''}" class="orgImage">
+        <img src="${data.mainImageURL || data.imageURL || ''}" class="orgImage">
         <div>
             <strong>${data.name}</strong>
         </div>
@@ -100,7 +118,7 @@ async function loadRelatedEvents() {
         div.className = "eventCard";
 
         div.innerHTML = `
-            <img src="${data.imageURL}">
+            <img src="${data.imageURL || ''}">
             <div class="eventInfo">
                 <div class="eventTitle">${data.title}</div>
                 <div class="eventMeta">${data.date}</div>
@@ -116,22 +134,17 @@ async function loadRelatedEvents() {
 }
 /* RSVP SYSTEM */
 
-onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-
-    if (!user) {
-        rsvpBtn.style.display = "none";
-        return;
-    }
-
-    setupRSVP();
-});
-
 function setupRSVP() {
 
-    const ref = doc(db, "events", eventId, "attendees", currentUser.uid);
+    const ref = doc(
+        db,
+        "events",
+        eventId,
+        "attendees",
+        currentUser.uid
+    );
 
-    /* REAL-TIME STATUS */
+    /* STATUS */
     onSnapshot(ref, (snap) => {
         isGoing = snap.exists();
         rsvpBtn.textContent = isGoing ? "Cancel RSVP" : "RSVP";
@@ -139,10 +152,14 @@ function setupRSVP() {
 
     /* CLICK */
     rsvpBtn.onclick = async () => {
-        if (!isGoing) {
-            await setDoc(ref, { joinedAt: new Date() });
-        } else {
-            await deleteDoc(ref);
+        try {
+            if (!isGoing) {
+                await setDoc(ref, { joinedAt: new Date() });
+            } else {
+                await deleteDoc(ref);
+            }
+        } catch (err) {
+            console.error("RSVP error:", err);
         }
     };
 
@@ -151,9 +168,40 @@ function setupRSVP() {
 
     onSnapshot(colRef, (snap) => {
         rsvpCountEl.textContent =
-            snap.size === 1 ? "1 going" : `${snap.size} going`;
+            snap.size === 1
+                ? "1 going"
+                : `${snap.size} going`;
     });
 }
+/* AUTH + EDIT CONTROL */
+
+onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+
+    if (!user) {
+        if (rsvpBtn) rsvpBtn.style.display = "none";
+        if (editBtn) editBtn.style.display = "none";
+        return;
+    }
+
+    setupRSVP();
+
+    try {
+        const userSnap = await getDoc(doc(db, "users", user.uid));
+        const role = userSnap.data()?.role;
+
+        if (editBtn) {
+            if (role === "admin" || role === "orgLeader") {
+                editBtn.style.display = "block";
+            } else {
+                editBtn.style.display = "none";
+            }
+        }
+
+    } catch (err) {
+        console.error("Auth error:", err);
+    }
+});
 
 /* INIT */
 
