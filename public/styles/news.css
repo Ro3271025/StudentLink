@@ -45,3 +45,39 @@
     min-height: 150px;
     resize: vertical;
 }
+#newsDetailsPage {
+    width: 65%;
+}
+
+.newsTop {
+    margin-bottom: 20px;
+}
+
+.newsMeta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.newsAuthorImg {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.newsHeroImage {
+    width: 100%;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.newsContent {
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+.newsOrgLink {
+    color: var(--theme-accent);
+    cursor: pointer;
+}
