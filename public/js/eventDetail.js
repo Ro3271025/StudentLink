@@ -45,6 +45,10 @@ async function loadEvent() {
     if (!snap.exists()) return;
 
     const data = snap.data();
+    const editBtn = document.getElementById("editEventBtn"); 
+    editBtn.onclick = () => { 
+        window.location.href = `editEvent.html?id=${eventId}`; 
+    };
 
     titleEl.textContent = data.title;
     dateEl.textContent = data.date;
