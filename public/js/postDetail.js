@@ -150,11 +150,12 @@ async function loadPost() {
                 if (!confirm("Are you sure you want to delete this post?")) return;
                 try {
                     await deleteDoc(doc(db, "posts", postId));
-                    alert("Post deleted.");
+                    // This alert gets annoying, maybe we don't keep it ? - P.R.
+                    //alert("Post deleted.");
                     window.location.href = "home.html";
                 } catch (err) {
                     console.error("Delete failed:", err);
-                    alert("Failed to delete post.");
+                    //alert("Failed to delete post.");
                 }
             });
         }

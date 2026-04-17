@@ -56,6 +56,7 @@ function setupNewPostComposer() {
         const title = (compactText.slice(0, 60) || "Post").trim();
 
         createBtn.disabled = true;
+        createBtn.style.marginLeft = "56%";
         createBtn.textContent = "Posting...";
 
         try {
@@ -82,6 +83,7 @@ function setupNewPostComposer() {
         } finally {
             createBtn.disabled = false;
             createBtn.textContent = "Post";
+            createBtn.style.marginLeft = "63%";
         }
     });
 }
