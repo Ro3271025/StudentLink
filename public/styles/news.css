@@ -42,7 +42,7 @@
 .newsForm {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
 
     width: 100%;
     max-width: 700px;
