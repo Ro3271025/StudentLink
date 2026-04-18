@@ -36,14 +36,72 @@
 .newsForm {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 
-    width: 60%;
+    width: 65%;
+    max-width: 800px;
+
+    padding: 20px;
+    border-radius: 12px;
+
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
 }
+/* INPUTS */
+.newsForm input,
+.newsForm textarea {
+    width: 100%;
+    padding: 12px;
 
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+
+    background: var(--bg-primary);
+    color: var(--text-fill);
+
+    font-family: var(--font-family);
+    font-size: 14px;
+}
+/* TEXTAREA */
 #newsContent {
-    min-height: 150px;
+    min-height: 180px;
     resize: vertical;
+    line-height: 1.5;
+}
+/* FOCUS EFFECT */
+.newsForm input:focus,
+.newsForm textarea:focus {
+    outline: none;
+    border-color: var(--theme-accent);
+}
+/* FILE INPUT */
+#newsImage {
+    padding: 8px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+}
+/* BUTTON */
+#createNewsBtn {
+    margin-top: 10px;
+    padding: 14px;
+
+    border-radius: 10px;
+    border: none;
+
+    background: var(--theme-accent);
+    color: white;
+
+    font-weight: bold;
+    font-size: 16px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+#createNewsBtn:hover {
+    opacity: 0.9;
+}
+#createNewsBtn:active {
+    transform: scale(0.98);
 }
 #newsDetailsPage {
     width: 65%;
