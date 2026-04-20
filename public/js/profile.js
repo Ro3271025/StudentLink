@@ -278,6 +278,24 @@ export function setupProfile() {
         }
 
         const data = userSnap.data() || {};
+
+        // ADDED PRIVACY & BLOCKING LOGIC START
+        // Check if the visitor is on this user's blocked list
+        if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
+            document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
+            return;
+        }
+
+        // Check if profile is private (and visitor is not the owner)
+        if (data.visibility === 'private' && user.uid !== uidToLoad) {
+            const postsContainer = document.getElementById('postsContainer');
+            const statusMsg = document.getElementById('profileStatusMsg');
+            
+            if (postsContainer) postsContainer.style.display = 'none';
+            if (statusMsg) statusMsg.textContent = "This account is private.";
+        }
+        // --- ADDED PRIVACY & BLOCKING LOGIC END ---
+
         const displayName = data.name || data.displayName || "";
         const username = data.username ? "@" + data.username : "";
 
@@ -368,13 +386,13 @@ export function setupProfile() {
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-        // Force token refresh to ensure auth is current
-        await user.getIdToken(true);
-const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
-        await uploadBytes(storageRef, file);
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                        // Force token refresh to ensure auth is current
+                        await user.getIdToken(true);
+                        const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
+                        await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
@@ -398,7 +416,9 @@ const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
             }
         }
 
-        setupTabs(uidToLoad);
-        await loadPosts(uidToLoad);
+        if (!(data.visibility === 'private' && user.uid !== uidToLoad)) {
+            setupTabs(uidToLoad);
+            await loadPosts(uidToLoad);
+        }
     });
 }
