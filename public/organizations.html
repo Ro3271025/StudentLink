@@ -56,30 +56,25 @@
 <!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
 
-<br>
+    <div class="orgSearchCard">
 
-<input 
-    type="text" 
-    id="orgSearchInput" 
-    class="searchBar themeObject"
-    placeholder="Search organizations..."
->
+        <input 
+            type="text" 
+            id="orgSearchInput" 
+            placeholder="Search organizations..."
+        >
+        <select id="categoryFilter">
+            <option value="">All</option>
+            <option value="academic">Academic</option>
+            <option value="sports">Sports</option>
+            <option value="cultural">Cultural</option>
+        </select>
 
-<br><br>
+        <button id="createOrgBtnUI">
+            + Create Organization
+        </button>
 
-<select id="categoryFilter" class="searchBar themeObject">
-    <option value="">All</option>
-    <option value="academic">Academic</option>
-    <option value="sports">Sports</option>
-    <option value="cultural">Cultural</option>
-</select>
-
-<br><br>
-
-<button id="createOrgBtnUI" class="themeObject">
-    + Create Organization
-</button>
-
+    </div>
 </div>
 
 <script type="module" src="js/organizations.js"></script>
