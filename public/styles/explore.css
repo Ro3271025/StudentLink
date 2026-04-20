@@ -110,8 +110,23 @@ body {
     display: flex;
     gap: 25px;
     align-items: flex-start;
+
+    margin-right: 300px; /* prevents overlap with right sidebar */
 }
-.orgSidebar {
+/* RIGHT SIDEBAR */
+#rightBar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+
+    display: flex;
+    justify-content: center;
+    padding-top: 80px;
+}
+/* CARD INSIDE SIDEBAR */
+.orgSearchCard {
     width: 100%;
     max-width: 230px;
 
@@ -119,20 +134,16 @@ body {
     flex-direction: column;
     gap: 14px;
 
-    background: var(--bg-primary); 
+    background: var(--bg-primary);
     padding: 16px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
 
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
-#createOrgBtnUI {
-    font-size: 12px;
-    padding: 8px;
-    border-radius: 8px;
-}
-.orgSidebar input,
-.orgSidebar select {
+/* INPUT + SELECT */
+.orgSearchCard input,
+.orgSearchCard select {
     width: 100%;
     padding: 6px;
     font-size: 12px;
@@ -140,8 +151,17 @@ body {
     border: 1px solid var(--border-color);
     background: transparent;
     color: var(--text-fill);
+
+    transition: 0.2s;
 }
-#createEventBtnUI {
+
+.orgSearchCard input:focus,
+.orgSearchCard select:focus {
+    border-color: var(--theme-accent);
+}
+
+/* CREATE BUTTON */
+#createOrgBtnUI {
     margin-top: 5px;
 
     padding: 10px;
@@ -158,23 +178,23 @@ body {
     cursor: pointer;
     transition: 0.25s;
 }
-
-/* HOVER MATCHES THEME */
-#createEventBtnUI:hover {
+#createOrgBtnUI:hover {
     background: var(--button-hover);
     transform: translateY(-2px);
 }
-/* OPTIONAL ACTIVE FEEDBACK */
-#createEventBtnUI:active {
+#createOrgBtnUI:active {
     transform: scale(0.98);
 }
+/* ORG LIST (CENTERED) */
 .orgList {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 15px;
     max-width: 630px;
+    margin: 0 auto; /* centers cards */
 }
+/* ORG CARD */
 .orgCard {
     display: flex;
     align-items: center;
@@ -190,26 +210,25 @@ body {
 
     overflow: hidden;
     width: 100%;
-    max-width: 630px;
 }
 .orgCard:hover {
     transform: translateY(-2px);
     border-color: var(--theme-accent);
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+/* IMAGE */
 .orgImage {
     width: 55px;
     height: 55px;
     border-radius: 50%;
     object-fit: cover;
-
     flex-shrink: 0;
 }
+/* TEXT */
 .orgInfo {
     display: flex;
     flex-direction: column;
     gap: 4px;
-
     min-width: 0;
 }
 .orgName {
@@ -228,13 +247,12 @@ body {
     font-size: 11px;
     opacity: 0.6;
 }
-/* TOP RIGHT EDIT BUTTON */
+/* EDIT BUTTON */
 .orgCardTop {
     display: flex;
     justify-content: flex-end;
     padding: 5px;
 }
-
 .editBtn {
     background: var(--theme-accent);
     color: white;
@@ -245,7 +263,6 @@ body {
     cursor: pointer;
     z-index: 2;
 }
-
 .editBtn:hover {
     opacity: 0.85;
 }
