@@ -19,14 +19,13 @@ import {
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 /* ELEMENTS */
-const displayNameEl = document.getElementById("displayName");
-const usernameEl    = document.getElementById("username");
-const profilePic    = document.getElementById("profilePic");
+const displayNameEl    = document.getElementById("displayName");
+const usernameEl       = document.getElementById("username");
+const profilePic       = document.getElementById("profilePic");
 
-const feed      = document.getElementById("exploreFeed");
-const filter    = document.getElementById("filterSelection");
-const searchBar = document.getElementById("exploreSearchBar");
-
+const feed             = document.getElementById("exploreFeed");
+const filter           = document.getElementById("filterSelection");
+const searchBar        = document.getElementById("exploreSearchBar");
 const latestListingsEl = document.getElementById("latestListingsSection");
 
 const storage = getStorage();
@@ -68,25 +67,29 @@ async function loadExplore() {
     try {
         /* FETCH IN PARALLEL */
         const [postsSnap, listingsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
-            getDocs(query(collection(db, "posts"),    orderBy("timestamp", "desc"))),
-            getDocs(query(collection(db, "listings"), orderBy("timestamp", "desc"))),
-            getDocs(query(collection(db, "listings"), orderBy("timestamp", "desc"), limit(6))),
-            getDocs(query(collection(db, "news"),     orderBy("timestamp", "desc"), limit(5))),
-            getDocs(query(collection(db, "events"),   orderBy("timestamp", "desc"), limit(5)))
+            getDocs(query(collection(db, "posts"),    orderBy("timestamp",  "desc"))),
+            getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"))),
+            getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"), limit(6))),
+            getDocs(query(collection(db, "news"),     orderBy("timestamp",  "desc"), limit(5))),
+            getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(5)))
         ]);
 
         allItems = [];
 
-        postsSnap.forEach(d => allItems.push({ id: d.id, type: "post",    ...d.data() }));
+        postsSnap.forEach(d    => allItems.push({ id: d.id, type: "post",    ...d.data() }));
         listingsSnap.forEach(d => allItems.push({ id: d.id, type: "listing", ...d.data() }));
 
         /* SORT MERGED FEED */
-        allItems.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+        allItems.sort((a, b) => {
+            const aTime = (a.timestamp?.seconds || a.created_at?.seconds || 0);
+            const bTime = (b.timestamp?.seconds || b.created_at?.seconds || 0);
+            return bTime - aTime;
+        });
 
         /* SECTIONS */
         const latestListings = latestListingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const latestNews     = newsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const latestEvents   = eventsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const latestNews     = newsSnap.docs.map(d           => ({ id: d.id, ...d.data() }));
+        const latestEvents   = eventsSnap.docs.map(d         => ({ id: d.id, ...d.data() }));
 
         renderLatestListings(latestListings);
         renderSideSections(latestNews, latestEvents);
@@ -164,7 +167,7 @@ function renderFeed(items) {
                 ${(item.imageURL || item.image)
                     ? `<img class="feedImage" src="${item.imageURL || item.image}">`
                     : ""}
-                <div class="feedMeta">${formatTime(item.timestamp)}</div>
+                <div class="feedMeta">${formatTime(item.created_at || item.timestamp)}</div>
             `;
             div.onclick = () => window.location.href = `listingDetail.html?id=${item.id}`;
         }
@@ -177,33 +180,22 @@ function renderFeed(items) {
 function renderLatestListings(listings) {
     if (!latestListingsEl) return;
 
-    latestListingsEl.innerHTML = "";
-
     if (!listings.length) {
         latestListingsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No listings yet.</p>";
         return;
     }
 
-    listings.forEach(item => {
-        const div = document.createElement("div");
-        div.className = "feedItem";
-        div.innerHTML = `
-            <div class="feedHeader">
-                <span class="feedUser">@${item.username || "user"}</span>
-                <span class="feedType">Listing</span>
-            </div>
-            <div class="feedContent">
-                <strong>${item.title || item.name || ""}</strong>
-                <p class="price">$${item.price || ""}</p>
-            </div>
-            ${(item.imageURL || item.image)
-                ? `<img class="feedImage" src="${item.imageURL || item.image}">`
-                : ""}
-            <div class="feedMeta">${formatTime(item.timestamp)}</div>
-        `;
-        div.onclick = () => window.location.href = `listingDetail.html?id=${item.id}`;
-        latestListingsEl.appendChild(div);
-    });
+    latestListingsEl.innerHTML = listings.map(item => `
+        <div class="listingCard" onclick="window.location.href='listingDetail.html?id=${item.id}'">
+            ${item.imageURL
+                ? `<img class="listingThumb" src="${item.imageURL}">`
+                : `<img class="listingThumb" src="styles/images/placeholder/textbooks.png">`
+            }
+            <h3 class="listingTitle">${item.title || item.name || ""}</h3>
+            <p class="listingPrice">$${item.price || ""}</p>
+            <p class="listingUser">@${item.username || "user"}</p>
+        </div>
+    `).join("");
 }
 
 /* RENDER NEWS & EVENTS */
@@ -272,8 +264,8 @@ function formatTime(timestamp) {
     const now  = new Date();
     const diff = Math.floor((now - date) / 1000);
 
-    if (diff < 60)   return "Just now";
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 60)    return "Just now";
+    if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
     if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
 
     return date.toLocaleDateString();
@@ -291,7 +283,7 @@ searchBar?.addEventListener("input", () => {
     renderFeed(getFilteredItems());
 });
 
-/* NAV CARDS*/
+/* NAV CARDS */
 document.addEventListener("DOMContentLoaded", () => {
     const orgCard   = document.getElementById("orgCard");
     const eventCard = document.getElementById("eventCard");
@@ -302,5 +294,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (newsCard)  newsCard.onclick  = () => window.location.href = "news.html";
 });
 
-/*INIT*/
+/* INIT */
 loadExplore();
