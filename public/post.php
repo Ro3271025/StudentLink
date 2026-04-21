@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Post | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" type="image/png" href="styles/images/ICON.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">

@@ -154,6 +154,7 @@ a:hover{
 }
 
 
+/* TODO: START SPLITTING THIS FILE */
 
 /* may want to consider splitting css files at some point 
 ** to make it easier to manage and reduce load times if this
@@ -207,12 +208,12 @@ a:hover{
 }
 
 
-#username, #sideUsername{
+#username, #sideUsername, #profileUsername{
     font-size: 14pt;
     color: var(--username-color);
 }
 
-#displayName{
+#displayName, #profileDisplayName{
     font-size: 16pt;
     font-weight: bold;
 }
@@ -268,7 +269,7 @@ a:hover{
     margin-top: 3.5%;
 }
 
-#profileInfo #displayName, #profileInfo #username, #profileInfo #userStats{
+#profileInfo #displayName, #profileInfo #username, #profileInfo #userStats, #profileDisplayName, #profileUsername{
     margin-left: 3.5%;
 }
 
@@ -300,6 +301,10 @@ a:hover{
 
 #bioText:disabled{
     border: none;
+}
+
+#bioText:disabled:hover{
+    background-color: transparent !important;
 }
 
 #userCollege{

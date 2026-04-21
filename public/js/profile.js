@@ -282,8 +282,8 @@ export function setupProfile() {
         const username = data.username ? "@" + data.username : "";
 
         // Update profile header
-        document.getElementById("displayName").innerText = displayName;
-        document.getElementById("username").innerText = username;   
+        document.getElementById("profileDisplayName").innerText = displayName;
+        document.getElementById("profileUsername").innerText = username;   
 
         // ── Sidebar Update ──
         const sideDisplay = document.getElementById("sideDisplayName");
