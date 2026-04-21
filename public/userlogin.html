@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <title>Sign in | StudentLink</title>
-   <link rel="stylesheet" href="public/styles/style.css">
+   <link rel="stylesheet" href="styles/style.css">
    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="loginBody">
@@ -13,18 +13,18 @@
     <div id='verticalDivider'></div>
     <div id='loginRight'>
         <button id="msLoginBtn">
-            <img src="/styles/images/MS_LOGO.svg">
+            <img src="styles/images/MS_LOGO.svg">
             Sign in with Microsoft
         </button><br><br> 
         
         <button id="gLoginBtn">
-            <img src="/styles/images/GOOGLE_LOGO.svg">
+            <img src="styles/images/GOOGLE_LOGO.svg">
             Sign in with Google
         </button>
     </div>
-<script src="/js/themeSwap.js" type="text/javascript"></script>
+<script src="js/themeSwap.js" type="text/javascript"></script>
 <script type="module">
-    import { setupLogin } from "/js/auth.js";
+    import { setupLogin } from "./js/auth.js";
     setupLogin();
 </script>
 </body>
