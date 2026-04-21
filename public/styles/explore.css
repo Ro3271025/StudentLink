@@ -991,3 +991,53 @@ h3 {
     flex-direction: column;
     gap: 6px;
 }
+/* FEED ITEM FIXES */
+/* FIX: remove hardcoded dark hover color */
+.feedItem:hover {
+    background-color: var(--bg-hover, var(--bg-secondary));
+    transform: translateY(-2px);
+}
+/* FIX: cap feed images so they don't take over the card */
+.feedImage {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: block;
+}
+/* FEED HEADER */
+.feedHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.feedUser {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.85;
+}
+.feedType {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    opacity: 0.7;
+}
+/* FEED CONTENT */
+.feedContent {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.feedContent .price {
+    color: var(--theme-accent);
+    font-weight: 600;
+    margin-top: 4px;
+}
+/* FEED META (timestamp) */
+.feedMeta {
+    font-size: 11px;
+    opacity: 0.5;
+    margin-top: 8px;
+}
