@@ -27,6 +27,8 @@ const feed      = document.getElementById("exploreFeed");
 const filter    = document.getElementById("filterSelection");
 const searchBar = document.getElementById("exploreSearchBar");
 
+const latestListingsEl = document.getElementById("latestListingsSection");
+
 const storage = getStorage();
 
 /* STATE */
@@ -65,9 +67,10 @@ async function loadExplore() {
 
     try {
         /* FETCH IN PARALLEL */
-        const [postsSnap, listingsSnap, newsSnap, eventsSnap] = await Promise.all([
+        const [postsSnap, listingsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
             getDocs(query(collection(db, "posts"),    orderBy("timestamp", "desc"))),
             getDocs(query(collection(db, "listings"), orderBy("timestamp", "desc"))),
+            getDocs(query(collection(db, "listings"), orderBy("timestamp", "desc"), limit(6))),
             getDocs(query(collection(db, "news"),     orderBy("timestamp", "desc"), limit(5))),
             getDocs(query(collection(db, "events"),   orderBy("timestamp", "desc"), limit(5)))
         ]);
@@ -80,10 +83,12 @@ async function loadExplore() {
         /* SORT MERGED FEED */
         allItems.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
-        /* LATEST NEWS & EVENTS (sidebar sections) */
-        const latestNews   = newsSnap.docs.map(d   => ({ id: d.id,   ...d.data() }));
-        const latestEvents = eventsSnap.docs.map(d => ({ id: d.id,   ...d.data() }));
+        /* SECTIONS */
+        const latestListings = latestListingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const latestNews     = newsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const latestEvents   = eventsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+        renderLatestListings(latestListings);
         renderSideSections(latestNews, latestEvents);
         renderFeed(getFilteredItems());
 
@@ -168,7 +173,40 @@ function renderFeed(items) {
     });
 }
 
-/* RENDER NEWS & EVENTS  */
+/* RENDER LATEST LISTINGS */
+function renderLatestListings(listings) {
+    if (!latestListingsEl) return;
+
+    latestListingsEl.innerHTML = "";
+
+    if (!listings.length) {
+        latestListingsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No listings yet.</p>";
+        return;
+    }
+
+    listings.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "feedItem";
+        div.innerHTML = `
+            <div class="feedHeader">
+                <span class="feedUser">@${item.username || "user"}</span>
+                <span class="feedType">Listing</span>
+            </div>
+            <div class="feedContent">
+                <strong>${item.title || item.name || ""}</strong>
+                <p class="price">$${item.price || ""}</p>
+            </div>
+            ${(item.imageURL || item.image)
+                ? `<img class="feedImage" src="${item.imageURL || item.image}">`
+                : ""}
+            <div class="feedMeta">${formatTime(item.timestamp)}</div>
+        `;
+        div.onclick = () => window.location.href = `listingDetail.html?id=${item.id}`;
+        latestListingsEl.appendChild(div);
+    });
+}
+
+/* RENDER NEWS & EVENTS */
 function renderSideSections(news, events) {
 
     /* NEWS */
@@ -253,7 +291,7 @@ searchBar?.addEventListener("input", () => {
     renderFeed(getFilteredItems());
 });
 
-/* NAV CARDS */
+/* NAV CARDS*/
 document.addEventListener("DOMContentLoaded", () => {
     const orgCard   = document.getElementById("orgCard");
     const eventCard = document.getElementById("eventCard");
@@ -264,5 +302,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (newsCard)  newsCard.onclick  = () => window.location.href = "news.html";
 });
 
-/* INIT */
+/*INIT*/
 loadExplore();
