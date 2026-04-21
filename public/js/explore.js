@@ -257,7 +257,7 @@ function renderSideSections(news, events) {
                         <p style="font-size:12px;opacity:0.7;">${item.date || ""} ${item.location ? "· " + item.location : ""}</p>
                     </div>
                 `;
-                div.onclick = () => window.location.href = `eventDetails.html?id=${item.id}`;
+                div.onclick = () => window.location.href = `eventDetail.html?id=${item.id}`;
                 eventsEl.appendChild(div);
             });
         }
