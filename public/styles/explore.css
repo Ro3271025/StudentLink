@@ -5,20 +5,14 @@
 body {
     overflow-x: hidden;
 }
-
-/* =====================
-   MAIN PAGE
-   ===================== */
+/* MAIN PAGE */
 #campusCentralPage {
     margin-left: 220px;
     padding: 20px;
     max-width: 1100px;
     margin: 0 auto; /* merged from duplicate rule */
 }
-
-/* =====================
-   SEARCH
-   ===================== */
+/* SEARCH */
 .exploreSearchBar {
     width: 100%;
     padding: 12px;
@@ -41,10 +35,7 @@ body {
     border: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
-
-/* =====================
-   RECENT SEARCHES
-   ===================== */
+/* RECENT SEARCHES */
 #recentSearches {
     padding: 10px;
     border-radius: 10px;
@@ -60,10 +51,7 @@ body {
 .recentItem:hover {
     background-color: var(--border-color);
 }
-
-/* =====================
-   CAMPUS CENTRAL CARDS
-   ===================== */
+/* CAMPUS CENTRAL CARDS */
 .centralTopCards {
     display: flex;
     gap: 15px;
@@ -98,10 +86,7 @@ body {
 .centralCard:hover::after {
     opacity: 0.08;
 }
-
-/* =====================
-   FEED
-   ===================== */
+/* FEED */
 .feedItem {
     padding: 14px;
     border-radius: 12px;
@@ -115,10 +100,7 @@ body {
     background-color: var(--bg-hover, #2a3b4f); /* FIX: was hardcoded #2a3b4f */
     transform: translateY(-2px);
 }
-
-/* =====================
-   EXPLORE PAGE
-   ===================== */
+/* EXPLORE PAGE */
 #explorePage {
     margin-left: 260px;
     margin-right: 440px; /* FIX: removed conflicting padding-right: 420px */
@@ -128,10 +110,68 @@ body {
     max-width: 900px;
     margin: 0 auto;
 }
-
-/* =====================
-   ORGANIZATIONS LAYOUT
-   ===================== */
+/* LATEST LISTINGS HORIZONTAL SCROLL */
+#latestListingsSection {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 4px 14px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+#latestListingsSection::-webkit-scrollbar {
+    height: 5px;
+}
+#latestListingsSection::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+}
+#latestListingsSection .listingCard {
+    min-width: 160px;
+    max-width: 160px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: 0.2s;
+    overflow: hidden;
+}
+#latestListingsSection .listingCard:hover {
+    transform: translateY(-3px);
+    border-color: var(--theme-accent);
+}
+#latestListingsSection .listingThumb {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+}
+#latestListingsSection .listingTitle {
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 8px 2px;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#latestListingsSection .listingPrice {
+    font-size: 13px;
+    color: var(--theme-accent);
+    padding: 0 8px 2px;
+    margin: 0;
+    font-weight: 600;
+}
+#latestListingsSection .listingUser {
+    font-size: 11px;
+    opacity: 0.6;
+    padding: 0 8px 8px;
+    margin: 0;
+}
+/* ORGANIZATIONS LAYOUT */
 .orgLayout {
     display: flex;
     gap: 25px;
@@ -145,9 +185,7 @@ body {
     /* FIX: removed padding: 0 20px which conflicted with centered margin */
 }
 
-/* =====================
-   RIGHT SIDEBAR
-   ===================== */
+/* RIGHT SIDEBAR */
 #rightBar {
     position: fixed;
     top: 100px;
@@ -207,9 +245,7 @@ body {
     transform: scale(0.98);
 }
 
-/* =====================
-   ORG LIST
-   ===================== */
+/* ORG LIST */
 .orgList {
     flex: 1;
     display: flex;
@@ -221,9 +257,7 @@ body {
     box-sizing: border-box;
 }
 
-/* =====================
-   ORG CARD
-   ===================== */
+/* ORG CARD */
 .orgCard {
     display: flex;
     align-items: center;
@@ -289,9 +323,7 @@ body {
     opacity: 0.85;
 }
 
-/* =====================
-   ORG DETAIL PAGE
-   ===================== */
+/* ORG DETAIL PAGE */
 .orgHeader {
     display: flex;
     align-items: center;
@@ -412,9 +444,7 @@ body {
     font-weight: bold;
 }
 
-/* =====================
-   SHARED BUTTONS
-   ===================== */
+/* SHARED BUTTONS */
 .primaryBtn {
     background: var(--theme-accent);
     border: none;
@@ -442,9 +472,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* =====================
-   EVENTS PAGE
-   ===================== */
+/* EVENTS PAGE */
 .eventsLayout {
     display: flex;
     justify-content: center;
@@ -497,9 +525,7 @@ body {
     background: var(--button-hover);
 }
 
-/* =====================
-   EVENTS GRID
-   ===================== */
+/* EVENTS GRID */
 .eventsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -546,9 +572,7 @@ body {
     font-weight: 500;
 }
 
-/* =====================
-   EVENT DETAIL PAGE
-   ===================== */
+/* EVENT DETAIL PAGE */
 .eventTop {
     display: flex;
     gap: 20px;
@@ -628,9 +652,7 @@ body {
     margin-top: 10px;
 }
 
-/* =====================
-   RESPONSIVE
-   ===================== */
+/* RESPONSIVE */
 @media (max-width: 900px) {
     .eventTop {
         flex-direction: column;
@@ -650,9 +672,7 @@ body {
     }
 }
 
-/* =====================
-   CREATE ORG PAGE
-   ===================== */
+/* CREATE ORG PAGE */
 #createOrgForm {
     max-width: 700px;
     margin: 0 auto;
@@ -708,10 +728,7 @@ body {
     flex: 1;
 }
 
-/* =====================
-   REMOVE OFFICER BUTTON
-   (merged duplicate rules)
-   ===================== */
+/* REMOVE OFFICER BUTTON */
 .removeOfficerBtn {
     background: #c0392b;
     color: white;
@@ -747,10 +764,8 @@ body {
     }
 }
 
-/* =====================
-   EDIT ORG PAGE
-   ===================== */
-/* MAIN IMAGE BOX (merged duplicate rules) */
+/* EDIT ORG PAGE */
+/* MAIN IMAGE BOX */
 .mainImageBox {
     width: 100%;
     height: 180px;
@@ -899,9 +914,7 @@ h3 {
     margin-bottom: 5px;
 }
 
-/* =====================
-   CREATE EVENT PAGE
-   ===================== */
+/* CREATE EVENT PAGE */
 #createEventForm {
     max-width: 700px;
     margin: 0 auto;
@@ -928,10 +941,7 @@ h3 {
     border-radius: 10px;
     margin-top: 10px;
 }
-
-/* =====================
-   FORM CARD
-   ===================== */
+/* FORM CARD */
 .formCard {
     max-width: 650px;
     margin: 40px auto;
