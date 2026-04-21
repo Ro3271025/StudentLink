@@ -34,7 +34,8 @@
 <p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
-<!-- RIGHT SIDEBAR (OPTIONAL) -->
+
+<!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
     <br>
     <input class="searchBar themeObject" placeholder="Search"><br><br>
@@ -62,8 +63,36 @@
         required
     ></textarea>
 
+    <!-- CATEGORY -->
+    <label>Category</label>
+    <select class="listingInput" id="categoryInput">
+        <option value="">Select a category</option>
+        <option value="Academic">Academic</option>
+        <option value="Arts">Arts</option>
+        <option value="Athletics">Athletics</option>
+        <option value="Community Service">Community Service</option>
+        <option value="Cultural">Cultural</option>
+        <option value="Greek Life">Greek Life</option>
+        <option value="Honorary">Honorary</option>
+        <option value="Political">Political</option>
+        <option value="Professional">Professional</option>
+        <option value="Religious">Religious</option>
+        <option value="Social">Social</option>
+        <option value="Technology">Technology</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <!-- EMAIL -->
+    <label>Contact Email</label>
+    <input 
+        class="listingInput" 
+        type="email" 
+        id="emailInput" 
+        placeholder="organization@email.com"
+    >
+
     <!-- LOGO -->
-    <label>Organization Logo</label><br><br>
+    <label>Organization Logo</label>
     <input 
         class="themeObject fileInput" 
         type="file" 
@@ -71,9 +100,7 @@
         accept="image/*"
     >
     <!-- GALLERY -->
-    <br><br>
-    <label>Gallery Images</label><br><br>
-
+    <label>Gallery Images</label>
     <input 
         class="themeObject fileInput" 
         type="file" 
@@ -86,7 +113,6 @@
     <div id="galleryPreview" class="galleryPreview"></div>
 
     <!-- OFFICERS -->
-    <br><br>
     <h3>Officers</h3>
 
     <div id="officerList"></div>
@@ -98,8 +124,8 @@
     >
         + Add Officer
     </button>
+
     <!-- SUBMIT -->
-    <br><br>
     <button 
         type="button" 
         id="createOrgBtn"
@@ -109,6 +135,7 @@
     </button>
 
 </form>
+
 <!-- SCRIPTS -->
 <script type="module" src="js/createOrganization.js"></script>
 <script type="module" src="js/userSearch.js"></script>
