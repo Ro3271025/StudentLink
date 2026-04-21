@@ -22,36 +22,17 @@
     <!-- TITLE -->
     <h2 class="sectionTitle">Events</h2>
 
-    <!-- LAYOUT -->
+    <!-- MAIN LAYOUT -->
     <div class="eventsLayout">
 
-        <!-- LEFT FILTER -->
-        <div class="eventSidebar">
-
-            <input 
-                id="eventSearch" 
-                class="exploreSearchBar"
-                placeholder="Search events..."
-            >
-
-            <label>
-                <input type="checkbox" id="onlineOnly">
-                Online
-            </label>
-            <button id="createEventBtnUI" class="primaryBtn">
-                + Create Event
-            </button>
-
-        </div>
-
-        <!-- RIGHT CONTENT -->
+        <!-- EVENTS GRID (CENTER) -->
         <div id="eventsContainer" class="eventsGrid"></div>
 
     </div>
 
 </div>
 
-<!-- SIDEBAR -->
+<!-- LEFT SIDEBAR -->
 <div class="sidebar" id="leftBar">
 
 <br>
@@ -67,6 +48,29 @@
 <p class="sidebarText"><a href="chat.html">Chat</a></p>
 <p class="sidebarText"><a href="profile.html">Profile</a></p>
 <p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+
+    <div class="eventSearchCard">
+
+        <input 
+            id="eventSearch" 
+            placeholder="Search events..."
+        >
+
+        <label class="eventCheckbox">
+            <input type="checkbox" id="onlineOnly">
+            Online
+        </label>
+
+        <button id="createEventBtnUI">
+            + Create Event
+        </button>
+
+    </div>
 
 </div>
 
