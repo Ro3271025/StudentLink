@@ -1,105 +1,243 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Home | StudentLink</title>
-    <link rel="stylesheet" href="styles/style.css">
-    <link rel="icon" type="image/png" href="styles/images/ICON.png">
-    <link rel="stylesheet" href="styles/faq.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | StudentLink</title>
+    <style>
+        /* 1. Base Styles & Transitions */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #151d28;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        /* 2. FAQ Item Boxes */
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background-color: rgba(30, 39, 50, 0.8); /* Semi-transparent for all modes */
+            color: #ffffff;
+            padding: 20px;
+            text-align: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(45, 55, 70, 0.9);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(128, 128, 128, 0.2);
+        }
+
+        .faq-answer p {
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* 3. Footer & Buttons */
+        .faq-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(128, 128, 128, 0.3);
+        }
+
+        .faq-footer p {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .contact-link {
+            color: #0f73ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background-color: #006b52;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 4. Light Theme Specific Overrides */
+        body.light-theme h2 { color: #333333; }
+        body.light-theme .faq-answer p { color: #333333; }
+        body.light-theme .faq-footer p { color: #333333; }
+    </style>
 </head>
-<body id="documentBody">
+<body>
 
-    <div id="header" style="border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
-        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
-    </div><br>
+<div class="faq-container">
+    <h2>Frequently Asked Questions</h2>
 
-    <div class="questionItem"> 
-        <div class="innerFAQ">
-            <h2>What is this?</h2>
-            <p><strong>StudentLink</strong> is a student focused social platform built for universities.<br><br>
-            Its the ultimate way to stay in touch with classmates, get used supplies, and hear the latest campus news!
-            </p>
-        </div>
-    </div><br>
-    <div class="questionItem"> 
-        <div class="innerFAQ">
-            <h2>What can I do?</h2>
-            <p><strong>StudentLink</strong> allows you to make posts, buy or sell items, and connect with your campus hub!<br><br>
-            You can also add friends and protect yourself by blocking users or making your account private.
-            </p>
-        </div>
-    </div><br>
-    <div class="questionItem"> 
-        <div class="innerFAQ">
-            <h2>What data do you collect?</h2>
-            <p><strong>StudentLink</strong> only collects your email address, name, posts, listings, comments, and friends you make on the site.<br><br>
-                These, however, are not given to any 3rd parties and are collected only to support app functionality.<br><br>
-                You are free to permanently <a href="settings.html">delete your account and its data</a> at any time.
-            </p>
-        </div>
-    </div><br>
-    <div class="questionItem"> 
-        <div class="innerFAQ">
-            <h2>I came across disturbing or inappropriate content. What should I do?</h2>
-            <p><strong>StudentLink</strong> allows you to report posts to administrators who will review the post and your reason 
-                for the report.<br><br> If the report is deemed valid, the post will be removed and the offending user may receive restrictions or a ban.
-                <br><br> In the event that a report is not deemed valid,
-                it is suggested that you block further interactions with the user to give yourself the best experience.<br><br>
-                You can see your reports and blocked users in <a href="settings.html">Settings</a> at any time.
-            </p>
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            How do I change my username?
+        </button>
+        <div class="faq-answer">
+            <p>Go to <strong>Settings > Your Account</strong>. Enter your new username in the box and click <strong>Save</strong>. Your profile and header will update immediately.</p>
         </div>
     </div>
 
-
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar" id="leftBar">
-        <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html">Listings</a></p>
-        <p class="sidebarText"><a href="explore.html">Explore</a></p>
-        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p>
-        <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-    </div>
-
-    <!-- RIGHT SIDEBAR -->
-    <div class="sidebar" id="rightBar">
-        <br>
-        <input class="searchBar themeObject" placeholder="Search"><br><br>
-
-        <div id="recentSearches">
-            <table class="recentSearchesTable">
-                <tr><th id="recentHeader">Recent Searches</th></tr>
-            </table>
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            Why can't I change my email to a personal address?
+        </button>
+        <div class="faq-answer">
+            <p>To maintain a secure community, we currently only allow verified <strong>.edu</strong> email addresses for account updates.</p>
         </div>
     </div>
 
-    <!-- NEW POST OVERLAY -->
-    <div class="overlayDiv">
-        <div id="newPostContainer">
-            <p id="newPostHeader">
-                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                <b>Create New Post</b>
-                <button class="themeObject" id="createPostBtn">Post</button>
-            </p>
-            <div id="newPostTXT">
-                <textarea maxlength="300" placeholder="What's happening?"></textarea>
-            </div>
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            What happens when I report a post?
+        </button>
+        <div class="faq-answer">
+            <p>Our team reviews every report for community guideline violations. You can track your submitted reports under <strong>Settings > Support > Your Recent Reports</strong>.</p>
         </div>
     </div>
+    <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Why isn't my profile picture updating?
+    </button>
+    <div class="faq-answer">
+        <p>Profile pictures may take a few moments to sync across all pages. Try refreshing your browser or clearing your cache if the old image still appears.</p>
+    </div>
+</div>
 
-    <script type="module" src="js/userSearch.js"></script>
-    <script src="js/themeSwap.js" type="text/javascript"></script>
-    <script src="js/toggleVis.js" type="text/javascript"></script>
-    <script type="module">
-        import { setupSidebar } from "./js/showUser.js";
-        setupSidebar();
-    </script>
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Can I hide my profile from search results?
+    </button>
+    <div class="faq-answer">
+        <p>Yes. Go to <strong>Settings > Privacy</strong> and toggle your <strong>Profile Visibility</strong> to "Private." This will hide your profile from the Explore page and search bar.</p>
+    </div>
+</div>
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        How do I block a user?
+    </button>
+    <div class="faq-answer">
+        <p>You can block users by visiting their profile and selecting "Block," or by manually entering their username under <strong>Settings > Privacy > Blocked Users</strong>.</p>
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Is my data encrypted?
+    </button>
+    <div class="faq-answer">
+        <p>We use Firebase's secure environment to ensure that all personal data and communications are encrypted and only accessible by authorized users.</p>
+    </div>
+</div>
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Why isn't my theme saving?
+    </button>
+    <div class="faq-answer">
+        <p>Ensure that you have cookies enabled in your browser. The site uses local storage to remember your <strong>Appearance</strong> preferences across sessions.</p>
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        I found a bug. Where do I send it?
+    </button>
+    <div class="faq-answer">
+        <p>Please use the <strong>Create a New Report</strong> form under <strong>Settings > Support</strong>. Be as descriptive as possible so our developers can fix it quickly!</p>
+    </div>
+</div>
+<div class="faq-footer">
+    <p>Still have questions? <a href="mailto:support@studentlink.edu" class="contact-link">Contact Support</a></p>
+    <button class="back-btn" onclick="window.location.href='settings.html'">Back to Settings</button>
+</div>
+</div>
+
+<script>
+    // Toggle Accordion
+    function toggleFAQ(element) {
+        const answer = element.nextElementSibling;
+        const isOpen = answer.style.display === "block";
+        answer.style.display = isOpen ? "none" : "block";
+    }
+
+    // Theme & Dynamic Colors
+    document.addEventListener("DOMContentLoaded", () => {
+        const bgColor = localStorage.getItem("storedBG") || "#151d28";
+        const accentColor = localStorage.getItem("storedAccent") || "#0f73ff";
+
+        // Apply Background
+        document.body.style.backgroundColor = bgColor;
+
+        // Apply Accent Color to UI elements
+        const backBtn = document.querySelector('.back-btn');
+        const contactLink = document.querySelector('.contact-link');
+        if (backBtn) backBtn.style.backgroundColor = accentColor;
+        if (contactLink) contactLink.style.color = accentColor;
+
+        // Detect Light Background
+        if (bgColor === "#F2F2EB" || bgColor.toLowerCase() === "#ffffff") {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+    });
+</script>
+
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
