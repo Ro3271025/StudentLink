@@ -1,7 +1,7 @@
 // Settings
 import { auth, db } from "./firebaseInitialization.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { query, addDoc, serverTimestamp, deleteDoc, collection, arrayUnion, where, getDocs, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // LOAD USERNAME 
 onAuthStateChanged(auth, async (user) => {
@@ -23,6 +23,87 @@ onAuthStateChanged(auth, async (user) => {
         if (sidebarUsername) sidebarUsername.textContent = usernameVal;
     }
 });
+
+// SUPPORT & REPORTING LOGIC
+async function submitReport() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const title = document.getElementById('reportTitle').value.trim();
+    const description = document.getElementById('reportDesc').value.trim();
+    const targetURL = document.getElementById('reportURL').value.trim();
+
+    if (!title || !description) {
+        return alert("Please provide at least a title and description.");
+    }
+
+    try {
+        // Add to a new 'reports' collection
+        await addDoc(collection(db, "reports"), {
+            reporterUid: user.uid,
+            reporterName: user.displayName || "Anonymous",
+            title: title,
+            description: description,
+            targetURL: targetURL,
+            status: "pending",
+            timestamp: serverTimestamp()
+        });
+
+        alert("Report submitted successfully. Our team will review it.");
+        expandSupport(); // Refresh UI to clear inputs
+    } catch (e) {
+        console.error("Report failed:", e);
+        alert("Error submitting report.");
+    }
+}
+
+// Load reports from Firestore
+async function loadUserReports() {
+    const user = auth.currentUser;
+    const listDiv = document.getElementById('userReportsList');
+    if (!user || !listDiv) return;
+
+    try {
+const q = query(collection(db, "reports"), where("reporterUid", "==", user.uid));
+const querySnapshot = await getDocs(q);
+
+let html = "<p><strong>Your Recent Reports:</strong></p>";
+
+if (querySnapshot.empty) {
+    html += "<p class='smallTxt'>You haven't submitted any reports yet.</p>";
+} else {
+    querySnapshot.forEach((docSnap) => {
+        const report = docSnap.data();
+        const reportId = docSnap.id;
+        html += `
+            <div class='reportItem' id='report-${reportId}' style='border-bottom: 1px solid #333; margin-bottom: 10px; padding-bottom: 10px;'>
+                <p class='reportItemTitle'><strong>Title:</strong> ${report.title}</p>
+                <p class='smallTxt'><strong>Description:</strong> ${report.description}</p>
+                <button class='delBtn' onclick="deleteReport('${reportId}')">Delete Report</button>
+            </div>`;
+    });
+}
+listDiv.innerHTML = html;
+    } catch (e) {
+        console.error("Error loading reports:", e);
+    }
+}
+
+// Delete a specific report
+async function deleteReport(reportId) {
+    if (!confirm("Are you sure you want to delete this report?")) return;
+
+    try {
+        await deleteDoc(doc(db, "reports", reportId));
+        alert("Report deleted.");
+        loadUserReports(); // Refresh the list
+    } catch (e) {
+        console.error("Delete failed:", e);
+        alert("Failed to delete report.");
+    }
+}
+
+window.deleteReport = deleteReport;
 
 // STATE VARIABLES 
 let accOpen = false;
@@ -148,6 +229,90 @@ function confDelete() {
 }
 
 // PRIVACY OPTIONS
+// Logic for Privacy Settings
+async function saveVisibility() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const selected = document.querySelector('input[name="profileVisOpt"]:checked');
+    if (!selected) return alert("Please select a visibility option.");
+    
+    const visibility = selected.value;
+    
+    try {
+        await updateDoc(doc(db, "users", user.uid), { visibility: visibility });
+        alert("Visibility updated to " + visibility);
+    } catch (e) {
+        console.error(e);
+        alert("Failed to update visibility.");
+    }
+}
+
+async function blockUser(targetUid) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+        await updateDoc(doc(db, "users", user.uid), {
+            blockedUsers: arrayUnion(targetUid)
+        });
+        alert("User blocked.");
+    } catch (e) {
+        console.error(e);
+        alert("Failed to block user.");
+    }
+}
+// Search logic
+async function searchUsersToBlock() {
+    const queryText = document.getElementById('reportSearch').value.trim();
+    const resultsDiv = document.getElementById('blockSearchResults');
+    
+    // Don't trigger a search for very short strings to save on database reads
+    if (queryText.length < 3) {
+        resultsDiv.innerHTML = ""; 
+        return;
+    }
+
+    try {
+        // Query Firestore for an exact username match
+        const q = query(collection(db, "users"), where("username", "==", queryText));
+        const querySnapshot = await getDocs(q);
+        
+        resultsDiv.innerHTML = ""; 
+
+        if (querySnapshot.empty) {
+            resultsDiv.innerHTML = "<p class='smallTxt' style='padding: 10px;'>No users found with that username.</p>";
+            return;
+        }
+
+        querySnapshot.forEach((docSnap) => {
+            const userData = docSnap.data();
+            const userId = docSnap.id;
+
+            // Prevent blocking yourself
+            if (userId === auth.currentUser.uid) return;
+
+            resultsDiv.innerHTML += `
+                <div class='reportItem'>
+                    <p class='reportItemTitle'>
+                        <strong>User:</strong><br>
+                        ${userData.displayName || userData.name || "User"}<br>
+                        <small class='smallTxt'>@${userData.username}</small>
+                    </p>
+                    <p class='reportItemURL'>
+                        <strong>Profile URL:</strong> 
+                        <a href="profile.html?id=${userId}" target="_blank">View Profile</a>
+                    </p>
+                    <button class='delBtn' onclick="blockUser('${userId}')">Block User</button>
+                </div>
+            `;
+        });
+    } catch (e) {
+        console.error("Search error:", e);
+    }
+}
+
+// PRIVACY OPTIONS UI
 function expandPrivacy(){
     const privacyOpt = document.getElementById('privacyOption');
 
@@ -176,20 +341,14 @@ function expandPrivacy(){
                     <label for='profileVisOpt-PUBLIC'>Public</label><br>
                     <input type='radio' id='profileVisOpt-PRIVATE' value='private' name='profileVisOpt'>
                     <label for='profileVisOpt-PRIVATE'>Private</label><br><br>
-                    <button class='saveBtn'>Save</button>
+                    <button class='saveBtn' onclick="saveVisibility()">Save</button>
                 </div><br>
-
 
                 <div id='reportsContainer'>
                     <p><strong>Blocked Users:</strong></p>
-                    <input class='settingsInput' id='reportSearch' placeholder='Search Blocked Users'/>
-                    <div class='reportItem'>
-                        <!-- THIS IS A SAMPLE USER REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
-                        <p class='reportItemTitle'><strong>User:</strong><br>Derek Mendez<br><small class='smallTxt'>@mendd2</small></p>
-                        <p class='reportItemURL'><strong>Profile URL:</strong> <a href="http://localhost/StudentLink/public/profile.html?id=OqTA2B5xB2NcHgw6POxwaFf3yWY2">Go to Profile</a></p>
-                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
-                        <button class='delBtn'>Unblock User</button>
-                    </div>
+                    <input class='settingsInput' id='reportSearch' placeholder='Search user to block...' oninput='searchUsersToBlock()'/>
+                    <div id='blockSearchResults'>
+                        </div>
                 </div>
             </div>`;
             privacyOpen = true;
@@ -278,47 +437,41 @@ function expandAbout() {
 
 
 // SUPPORT OPTIONS
-function expandSupport(){
+function expandSupport() {
     const supportOpt = document.getElementById('supportOption');
 
-    if(supportOpen){
-        supportOpt.innerHTML = 
-            `<button class="openBtn optionTxt" onclick='expandSupport()'>
+    if (supportOpen) {
+        supportOpt.innerHTML = `
+            <button class="openBtn optionTxt" onclick="expandSupport()">
                 Support<br>
-                <small class="smallTxt">
-                FAQ, troubleshooting, and user reports
-                </small>
+                <small class="smallTxt">FAQ, troubleshooting, and user reports</small>
             </button>`;
-            supportOpen = false;
+        supportOpen = false;
     } else {
         supportOpt.innerHTML = `
-            <button class="openBtn optionTxt" onclick='expandSupport()'>
+            <button class="openBtn optionTxt" onclick="expandSupport()">
                 Support<br>
-                <small class="smallTxt">
-                    FAQ, troubleshooting, and user reports
-                </small>
+                <small class="smallTxt">FAQ, troubleshooting, and user reports</small>
             </button>
-            
             <div class='settingsOpt'>
-                <p>See the FAQ Page for helpful information and troubleshooting: <a href='faq.html'>FAQ</a></p>
-
-                <div id='reportsContainer'>
-                    <p><strong>User reports:</strong></p>
-                    <input class='settingsInput' id='reportSearch' placeholder='Search Reports'/>
-                    <div class='reportItem'>
-                        <!-- THIS IS A SAMPLE REPORT, YOU MUST REMOVE THIS WHEN IMPLEMENTING -->
-                        <p class='reportItemTitle'><strong>Title:</strong> Upsetting Content</p>
-                        <p class='reportItemDesc'><strong>Description:</strong> This post caused me significant distress</p>
-                        <p class='reportItemURL'><strong>Post URL:</strong> <a href="http://localhost/StudentLink/public/post.html?id=XqKSUBnOgcw665zu1iCH">Go to Post</a></p>
-                        <!-- ONLY MODS CAN SEE THIS BUTTON -->
-                        <button class='delBtn'>Delete Post</button>
-                    </div>
+                <p>See the FAQ Page for helpful information and troubleshooting: <a href="faq.html"><strong>FAQ</strong></a></p>
+                
+                <div id='reportFormContainer' style="border: 1px solid #444; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <p><strong>Create a New Report:</strong></p>
+                    <input class='settingsInput' id='reportTitle' placeholder='Report Title'/><br>
+                    <textarea class='settingsInput' id='reportDesc' placeholder='Describe the issue...' style='height:80px; resize:none;'></textarea><br>
+                    <input class='settingsInput' id='reportURL' placeholder='URL of Profile or Post'/><br>
+                    <button class='saveBtn' onclick="submitReport()">Submit Report</button>
                 </div>
+
+                <div id='userReportsList'>
+    <p class='smallTxt' style='padding: 10px;'>Fetching your reports...</p>
+</div>
             </div>`;
-            supportOpen = true;
+        supportOpen = true;
+        loadUserReports(); // Trigger the fetch immediately
     }
 }
-
 
 
 
@@ -343,3 +496,11 @@ window.handleLogout = handleLogout;
 window.confDelete = confDelete;
 window.saveUsername = saveUsername;
 window.saveEmail = saveEmail;
+window.saveVisibility = saveVisibility;
+window.blockUser = blockUser;
+window.expandPrivacy = expandPrivacy;
+window.searchUsersToBlock = searchUsersToBlock;
+window.submitReport = submitReport;
+window.expandSupport = expandSupport;
+window.loadUserReports = loadUserReports;
+window.deleteReport = deleteReport;

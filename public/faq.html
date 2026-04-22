@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | StudentLink</title>
+    <style>
+        /* 1. Base Styles & Transitions */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #151d28;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffffff;
+            transition: color 0.3s;
+        }
+
+        /* 2. FAQ Item Boxes */
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid rgba(128, 128, 128, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background-color: rgba(30, 39, 50, 0.8); /* Semi-transparent for all modes */
+            color: #ffffff;
+            padding: 20px;
+            text-align: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(45, 55, 70, 0.9);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(128, 128, 128, 0.2);
+        }
+
+        .faq-answer p {
+            color: #e0e0e0;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* 3. Footer & Buttons */
+        .faq-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(128, 128, 128, 0.3);
+        }
+
+        .faq-footer p {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .contact-link {
+            color: #0f73ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 30px;
+            background-color: #006b52;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 4. Light Theme Specific Overrides */
+        body.light-theme h2 { color: #333333; }
+        body.light-theme .faq-answer p { color: #333333; }
+        body.light-theme .faq-footer p { color: #333333; }
+    </style>
+</head>
+<body>
+
+<div class="faq-container">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            How do I change my username?
+        </button>
+        <div class="faq-answer">
+            <p>Go to <strong>Settings > Your Account</strong>. Enter your new username in the box and click <strong>Save</strong>. Your profile and header will update immediately.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            Why can't I change my email to a personal address?
+        </button>
+        <div class="faq-answer">
+            <p>To maintain a secure community, we currently only allow verified <strong>.edu</strong> email addresses for account updates.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+            What happens when I report a post?
+        </button>
+        <div class="faq-answer">
+            <p>Our team reviews every report for community guideline violations. You can track your submitted reports under <strong>Settings > Support > Your Recent Reports</strong>.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Why isn't my profile picture updating?
+    </button>
+    <div class="faq-answer">
+        <p>Profile pictures may take a few moments to sync across all pages. Try refreshing your browser or clearing your cache if the old image still appears.</p>
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Can I hide my profile from search results?
+    </button>
+    <div class="faq-answer">
+        <p>Yes. Go to <strong>Settings > Privacy</strong> and toggle your <strong>Profile Visibility</strong> to "Private." This will hide your profile from the Explore page and search bar.</p>
+    </div>
+</div>
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        How do I block a user?
+    </button>
+    <div class="faq-answer">
+        <p>You can block users by visiting their profile and selecting "Block," or by manually entering their username under <strong>Settings > Privacy > Blocked Users</strong>.</p>
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Is my data encrypted?
+    </button>
+    <div class="faq-answer">
+        <p>We use Firebase's secure environment to ensure that all personal data and communications are encrypted and only accessible by authorized users.</p>
+    </div>
+</div>
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        Why isn't my theme saving?
+    </button>
+    <div class="faq-answer">
+        <p>Ensure that you have cookies enabled in your browser. The site uses local storage to remember your <strong>Appearance</strong> preferences across sessions.</p>
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">
+        I found a bug. Where do I send it?
+    </button>
+    <div class="faq-answer">
+        <p>Please use the <strong>Create a New Report</strong> form under <strong>Settings > Support</strong>. Be as descriptive as possible so our developers can fix it quickly!</p>
+    </div>
+</div>
+<div class="faq-footer">
+    <p>Still have questions? <a href="mailto:support@studentlink.edu" class="contact-link">Contact Support</a></p>
+    <button class="back-btn" onclick="window.location.href='settings.html'">Back to Settings</button>
+</div>
+</div>
+
+<script>
+    // Toggle Accordion
+    function toggleFAQ(element) {
+        const answer = element.nextElementSibling;
+        const isOpen = answer.style.display === "block";
+        answer.style.display = isOpen ? "none" : "block";
+    }
+
+    // Theme & Dynamic Colors
+    document.addEventListener("DOMContentLoaded", () => {
+        const bgColor = localStorage.getItem("storedBG") || "#151d28";
+        const accentColor = localStorage.getItem("storedAccent") || "#0f73ff";
+
+        // Apply Background
+        document.body.style.backgroundColor = bgColor;
+
+        // Apply Accent Color to UI elements
+        const backBtn = document.querySelector('.back-btn');
+        const contactLink = document.querySelector('.contact-link');
+        if (backBtn) backBtn.style.backgroundColor = accentColor;
+        if (contactLink) contactLink.style.color = accentColor;
+
+        // Detect Light Background
+        if (bgColor === "#F2F2EB" || bgColor.toLowerCase() === "#ffffff") {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
