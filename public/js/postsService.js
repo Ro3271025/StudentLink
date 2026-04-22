@@ -1,6 +1,5 @@
 // public/js/postsService.js
 import { db } from "./firebaseInitialization.js";
-import { createNotification } from "./NotificationsService.js";
 
 import {
   collection,
@@ -151,9 +150,14 @@ export async function bumpCommentCount(postId, delta = 1) {
 
 /**
  * Toggle like on a post for a given user.
- * Sends a notification to the post author when liked.
+ * Adds userId to likedBy array and increments likes count,
+ * or removes and decrements if already liked.
+ *
+ * @param {string} postId
+ * @param {string} userId
+ * @returns {Promise<{ liked: boolean, newCount: number }>}
  */
-export async function toggleLike(postId, userId, userDisplayName = "") {
+export async function toggleLike(postId, userId) {
   if (!postId) throw new Error("toggleLike: postId is required");
   if (!userId) throw new Error("toggleLike: userId is required");
 
@@ -170,22 +174,6 @@ export async function toggleLike(postId, userId, userDisplayName = "") {
     likedBy: alreadyLiked ? arrayRemove(userId) : arrayUnion(userId),
     updatedAt: serverTimestamp()
   });
-
-  // Send notification only when liking (not unliking)
-  if (!alreadyLiked) {
-    try {
-      await createNotification({
-        toUserId: data.authorId,
-        fromUserId: userId,
-        fromUserName: userDisplayName,
-        type: "like",
-        postId,
-        postBody: data.body || data.title || ""
-      });
-    } catch (err) {
-      console.error("Failed to send like notification:", err);
-    }
-  }
 
   const newCount = (data.likes || 0) + (alreadyLiked ? -1 : 1);
   return { liked: !alreadyLiked, newCount };

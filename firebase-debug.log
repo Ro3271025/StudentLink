@@ -1,0 +1,54 @@
+[debug] [2026-04-21T17:27:45.457Z] ----------------------------------------------------------------------
+[debug] [2026-04-21T17:27:45.463Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dolft\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2026-04-21T17:27:45.463Z] CLI Version:   15.15.0
+[debug] [2026-04-21T17:27:45.464Z] Platform:      win32
+[debug] [2026-04-21T17:27:45.464Z] Node Version:  v24.15.0
+[debug] [2026-04-21T17:27:45.464Z] Time:          Tue Apr 21 2026 13:27:45 GMT-0400 (Eastern Daylight Time)
+[debug] [2026-04-21T17:27:45.464Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-04-21T17:27:48.526Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-04-21T17:27:48.527Z] > authorizing via signed-in user (dolftan@gmail.com)
+[debug] [2026-04-21T17:27:48.527Z] [iam] checking project student-platform-a5328 for permissions ["firebase.projects.get"]
+[debug] [2026-04-21T17:27:48.529Z] Checked if tokens are valid: false, expires at: 1776793167146
+[debug] [2026-04-21T17:27:48.529Z] Checked if tokens are valid: false, expires at: 1776793167146
+[debug] [2026-04-21T17:27:48.530Z] > refreshing access token with scopes: []
+[debug] [2026-04-21T17:27:48.536Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-04-21T17:27:48.536Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-21T17:27:48.658Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-04-21T17:27:48.658Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-04-21T17:27:48.673Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328:testIamPermissions [none]
+[debug] [2026-04-21T17:27:48.673Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328:testIamPermissions  x-goog-user-project=student-platform-a5328
+[debug] [2026-04-21T17:27:48.673Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-04-21T17:27:48.875Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328:testIamPermissions 200
+[debug] [2026-04-21T17:27:48.876Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2026-04-21T17:27:48.878Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:48.878Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:48.878Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/student-platform-a5328/services/cloudresourcemanager.googleapis.com [none]
+[debug] [2026-04-21T17:27:48.878Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/student-platform-a5328/services/cloudresourcemanager.googleapis.com  x-goog-user-project=student-platform-a5328
+[debug] [2026-04-21T17:27:49.274Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/student-platform-a5328/services/cloudresourcemanager.googleapis.com 200
+[debug] [2026-04-21T17:27:49.275Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/student-platform-a5328/services/cloudresourcemanager.googleapis.com [omitted]
+[debug] [2026-04-21T17:27:49.301Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:49.301Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:49.301Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328 [none]
+[debug] [2026-04-21T17:27:49.396Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328 200
+[debug] [2026-04-21T17:27:49.396Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/student-platform-a5328 {"projectNumber":"470217676616","projectId":"student-platform-a5328","lifecycleState":"ACTIVE","name":"student-platform","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-02-09T18:06:01.756869Z"}
+[info] 
+[info] === Serving from 'C:\Users\dolft\OneDrive\Desktop\StudentLinkSeniorProj\StudentLink'...
+[info] 
+[debug] [2026-04-21T17:27:49.403Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:49.403Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:49.404Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/student-platform-a5328/sites 
+[debug] [2026-04-21T17:27:50.212Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/student-platform-a5328/sites 200
+[debug] [2026-04-21T17:27:50.212Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/student-platform-a5328/sites {"sites":[{"name":"projects/student-platform-a5328/sites/student-platform-a5328","defaultUrl":"https://student-platform-a5328.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2026-04-21T17:27:50.213Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:50.213Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:50.213Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328/webApps/-/config [none]
+[debug] [2026-04-21T17:27:50.613Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328/webApps/-/config 200
+[debug] [2026-04-21T17:27:50.613Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328/webApps/-/config {"projectId":"student-platform-a5328","appId":"1:470217676616:web:991de9edd7e85acab4857d","storageBucket":"student-platform-a5328.firebasestorage.app","apiKey":"AIzaSyBDmFHPBsEUUtrsLCRrY9c1qcZE_kNx9l0","authDomain":"student-platform-a5328.firebaseapp.com","messagingSenderId":"470217676616","measurementId":"G-VYBTQ2GV5B","projectNumber":"470217676616","version":"2"}
+[debug] [2026-04-21T17:27:50.624Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:50.624Z] Checked if tokens are valid: true, expires at: 1776796067658
+[debug] [2026-04-21T17:27:50.625Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328 [none]
+[debug] [2026-04-21T17:27:50.816Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328 200
+[debug] [2026-04-21T17:27:50.816Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/student-platform-a5328 {"projectId":"student-platform-a5328","projectNumber":"470217676616","displayName":"student-platform","name":"projects/student-platform-a5328","resources":{"hostingSite":"student-platform-a5328"},"state":"ACTIVE","etag":"1_05130bf9-2cb7-4137-85d9-8e0f2b549d3c"}
+[info] i  hosting[student-platform-a5328]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[student-platform-a5328]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
