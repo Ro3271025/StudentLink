@@ -68,15 +68,25 @@ async function loadExplore() {
     feed.innerHTML = "<p style='opacity:0.6;padding:10px;'>Loading...</p>";
 
     try {
-        const [postsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
-            getDocs(query(collection(db, "posts"),    orderBy("createdAt",  "desc"))),
+        const [postsSnap, timestampPostsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
+            getDocs(query(collection(db, "posts"), orderBy("createdAt",  "desc"))),
+            getDocs(query(collection(db, "posts"), orderBy("timestamp",  "desc"))),
             getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"), limit(6))),
             getDocs(query(collection(db, "news"),     orderBy("timestamp",  "desc"), limit(5))),
             getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(5)))
         ]);
 
         allItems = [];
-        postsSnap.forEach(d    => allItems.push({ id: d.id, type: "post",    ...d.data() }));
+        const seenPostIds = new Set();
+        postsSnap.forEach(d => {
+            seenPostIds.add(d.id);
+            allItems.push({ id: d.id, type: "post", ...d.data() });
+        });
+        timestampPostsSnap.forEach(d => {
+            if (!seenPostIds.has(d.id)) {
+                allItems.push({ id: d.id, type: "post", ...d.data() });
+            }
+        });
 
         allItems.sort((a, b) => {
             const aTime = (a.createdAt?.seconds || a.timestamp?.seconds || a.created_at?.seconds || 0);
