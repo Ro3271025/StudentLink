@@ -9,71 +9,54 @@
 
 <body id="documentBody">
 
-    <!-- HEADER -->
-    <div id="header" style="border:none;">
-        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="listingsPage">
+
+    <h1>Marketplace Listings</h1>
+
+    <div id="listingsContainer" class="listingsGrid">
+        Loading listings...
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="mainContent">
-        <h1>Marketplace Listings</h1>
-        <div id="listingsContainer" class="listingsGrid">
-            Loading listings...
-        </div>
-    </div>
+</div>
 
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar" id="leftBar">
-        <br>
-        <!-- FIX: added id="profilePic", fixed broken ../public/ path -->
-        <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
 
-        <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
+    <br>
+    <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
-        <p class="sidebarText"><a href="home.html">Home</a></p>
-        <p class="sidebarText"><a href="listings.html">Listings</a></p>
-        <p class="sidebarText"><a href="explore.html">Explore</a></p>
-        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-        <p class="sidebarText"><a href="chat.html">Chat</a></p>
-        <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
 
-        <button class="themeObject" onclick="window.location.href='createListing.html'">
-            New Listing
-        </button>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText"><a href="explore.html">Explore</a></p>
+    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p><br>
 
-        <!-- NEW POST OVERLAY -->
-        <div class="overlayDiv">
-            <div id="newPostContainer">
-                <p id="newPostHeader">
-                    <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                    <b>Create New Post</b>
-                    <!-- FIX: removed onclick that just closed overlay without posting -->
-                    <button class="themeObject" id="createPostBtn">Post</button>
-                </p>
-                <div id="newPostTXT">
-                    <textarea id="postTextarea" maxlength="300" placeholder="What's happening?"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
+    <button class="themeObject" onclick="window.location.href='createListing.html'">
+        New Listing
+    </button>
 
-    <!-- RIGHT SIDEBAR -->
-    <div class="sidebar" id="rightBar">
-        <br>
-        <input class="searchBar themeObject" placeholder="Search"><br><br>
-    </div>
+</div>
 
-    <!-- SCRIPTS -->
-    <script type="module">
-        import { setupSidebar } from "./js/showUser.js";
-        setupSidebar();
-    </script>
-    <script type="module" src="js/listings.js"></script>
-    <script type="module" src="js/userSearch.js"></script>
-    <script src="js/toggleVis.js"></script>
-    <script src="js/themeSwap.js"></script>
+<!-- SCRIPTS -->
+<script type="module" src="js/listings.js"></script>
+<script type="module" src="js/userSearch.js"></script>
+<script type="module">
+    import { setupSidebar } from "./js/showUser.js";
+    setupSidebar();
+</script>
+<script src="js/themeSwap.js"></script>
+<script src="js/toggleVis.js"></script>
 
 </body>
 </html>

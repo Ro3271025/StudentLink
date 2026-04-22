@@ -1,82 +1,200 @@
-/*  LISTING STYLES */
-/* LEGACY CARD (kept for any pages still using .listing-card) */
-.listing-card {
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 10px;
+/*  LISTINGS PAGE LAYOUT */
+#listingsPage {
+    margin-left: 260px;
+    margin-right: 260px;
+    padding: 20px;
+}
+
+/* LISTING INPUT */
+.listingInput {
+    display: inline;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 16pt;
+    font-family: var(--font-family);
+    margin-bottom: 20px;
+    transition: 0.125s;
+}
+
+/* =====================
+   FILE INPUT
+   ===================== */
+.fileInput {
+    line-height: 2vh;
+    padding: 0.625rem;
+    border: none;
+    border-radius: 0.625rem;
+    background-color: var(--theme-accent);
+    color: white;
+    font-weight: bold;
+    font-size: 12pt;
+    vertical-align: middle;
+    word-wrap: break-word;
+    transition: 0.125s;
     cursor: pointer;
+}
+
+/* =====================
+   LISTING CONTAINER
+   ===================== */
+.listingContainer {
+    width: 45%;
+    margin: 0 auto;
+    padding-top: 40px;
+}
+
+/* =====================
+   IMAGE PREVIEW
+   ===================== */
+.imagePreviewBox {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+}
+.imagePreviewBox img {
+    max-width: 250px;
+    border-radius: 8px;
+    display: none;
+}
+
+/* =====================
+   IMAGE GALLERY
+   ===================== */
+.imageGallery {
+    display: flex;
+    gap: 12px;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    align-items: center;
+    min-height: 120px;
+    overflow-x: auto;
+}
+.imageItem {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+}
+.imageItem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid transparent;
     transition: 0.2s;
 }
-.listing-card:hover {
-    transform: scale(1.02);
-}
-.listing-thumb {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-.listing-image {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.imageItem img:hover {
+    border-color: var(--theme-accent);
+    transform: scale(1.03);
 }
 
-/* LISTING DETAIL BUTTONS */
-#editListingBtn {
-    padding: 8px 16px;
-    margin-right: 10px;
+/* =====================
+   REMOVE IMAGE BUTTON
+   ===================== */
+.removeImgBtn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff3b3b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    transition: 0.15s ease;
 }
-#deleteListingBtn {
-    padding: 8px 16px;
+.removeImgBtn span {
+    transform: translateY(-1px);
 }
-#currentImage {
-    border-radius: 8px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+.removeImgBtn:hover {
+    background: #d62828;
+    transform: scale(1.1);
 }
 
-/* MARKETPLACE GRID */
-/* FIX: removed duplicate from listings.css — single definition here */
+/* =====================
+   UPLOAD BUTTON
+   ===================== */
+.uploadBtn {
+    display: inline-block;
+    padding: 10px 16px;
+    border: 1px solid var(--theme-accent);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-fill);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.uploadBtn:hover {
+    background: var(--theme-accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.uploadBtn:active {
+    transform: scale(0.97);
+}
+
+/* =====================
+   LISTINGS GRID
+   ===================== */
 .listingsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    max-width: 1100px;
-    margin: 0 auto;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+    padding: 20px 0;
 }
 
-/* LISTING CARD */
-/* FIX: removed duplicate from listings.css — single definition here */
+/* =====================
+   LISTING CARD
+   ===================== */
 .listingCard {
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    background: var(--bg-secondary);  /* FIX: removed !important, use theme var */
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: 0.2s;
-    text-align: center;
 }
 .listingCard:hover {
     transform: translateY(-4px);
     border-color: var(--theme-accent);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-/* LISTING THUMBNAIL */
+/* =====================
+   LISTING THUMBNAIL
+   ===================== */
 .listingThumb {
     width: 100%;
-    height: 150px;
+    height: 160px;
     object-fit: cover;
-    border-radius: 0; /* FIX: no radius needed since card clips with overflow:hidden */
     display: block;
 }
 
-/* LISTING TEXT */
+/* =====================
+   LISTING INFO
+   ===================== */
 .listingTitle {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     padding: 10px 10px 4px;
     margin: 0;
@@ -85,53 +203,104 @@
     text-overflow: ellipsis;
 }
 .listingPrice {
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 600;
     color: var(--theme-accent);
     padding: 0 10px 4px;
     margin: 0;
 }
 .listingUser {
-    font-size: 13px;
-    color: #777;
+    font-size: 12px;
+    opacity: 0.6;
     padding: 0 10px 10px;
     margin: 0;
 }
 
-/* MAIN CONTENT LAYOUT */
-.mainContent {
-    margin-left: 240px;
-    margin-right: 240px;
-    padding: 20px;
+/* =====================
+   LISTING DETAIL PAGE
+   ===================== */
+.listingDetailContainer {
+    display: grid;
+    grid-template-columns: 300px 1fr 220px;
+    gap: 30px;
+    max-width: 1050px;
+    margin: 40px auto;
 }
-
-/* LISTING DETAIL IMAGE */
+.listingImageSection {
+    width: 100%;
+}
 .listingDetailImage {
-    max-width: 100%;
-    border-radius: 10px;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
 }
-
-/* IMAGE GALLERY */
-#imageGallery {
-    margin-top: 12px;
-    padding: 10px;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    background-color: var(--bg-secondary);
+.listingMiddleSection {
+    text-align: left;
+}
+.listingMiddleSection h1 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+.listingSeller {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 12px;
+}
+.listingSeller a {
+    color: var(--theme-accent);
+    text-decoration: none;
+}
+.listingDescription {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+.listingMeta p {
+    font-size: 14px;
+    margin: 4px 0;
+}
+.listingRightSection {
+    position: sticky;
+    top: 100px;
+}
+.priceBox {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
-#imageGallery img {
-    width: 65px;
-    height: 65px;
-    object-fit: cover;
-    border-radius: 6px;
+.priceText {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--theme-accent);
+}
+#messageSellerBtn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    background: var(--theme-accent);
+    color: white;
+    border: none;
     cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
-#imageGallery img:hover {
-    transform: scale(1.05);
-    border-color: var(--theme-accent);
+#messageSellerBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.ownerControls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+#editListingBtn,
+#deleteListingBtn {
+    font-size: 14px;
+    padding: 10px 16px;
 }
