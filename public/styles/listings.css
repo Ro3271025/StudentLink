@@ -1,3 +1,9 @@
+/* LISTINGS PAGE LAYOUT — matches #explorePage in explore.css */
+#listingsPage {
+    margin-left: 260px;
+    margin-right: 260px;
+    padding: 20px;
+}
 /* LISTING INPUT */
 .listingInput {
     display: inline;
@@ -199,13 +205,4 @@
     opacity: 0.6;
     padding: 0 10px 10px;
     margin: 0;
-}
-#leftBar {
-    overflow-y: auto;
-    overflow-x: hidden;
-}
- 
-/* FIX: hide scrollbar visually but keep it functional */
-#leftBar::-webkit-scrollbar {
-    width: 0px;
 }
