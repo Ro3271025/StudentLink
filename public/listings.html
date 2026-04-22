@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <title>Marketplace | StudentLink</title>
+
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/listings.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -14,37 +16,49 @@
     <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
 </div>
 
-<!-- MAIN CONTENT -->
-<div id="listingsPage">
+<!-- MAIN LAYOUT -->
+<div class="mainLayout">
 
-    <h1>Marketplace Listings</h1>
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
 
-    <div id="listingsContainer" class="listingsGrid">
-        Loading listings...
+        <br>
+        <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+
+        <p id="displayName">Display Name</p>
+        <p id="username">@Username</p><br>
+
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html">Profile</a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p><br>
+
+        <button class="themeObject" onclick="window.location.href='createListing.html'">
+            New Listing
+        </button>
+
     </div>
 
-</div>
+    <!-- MAIN CONTENT -->
+    <div id="listingsPage">
 
-<!-- LEFT SIDEBAR -->
-<div class="sidebar" id="leftBar">
+        <h1 class="sectionTitle">Marketplace Listings</h1>
 
-    <br>
-    <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <div id="listingsContainer" class="listingsGrid">
+            Loading listings...
+        </div>
 
-    <p id="displayName">Display Name</p>
-    <p id="username">@Username</p><br>
+    </div>
 
-    <p class="sidebarText"><a href="home.html">Home</a></p>
-    <p class="sidebarText"><a href="listings.html">Listings</a></p>
-    <p class="sidebarText"><a href="explore.html">Explore</a></p>
-    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-    <p class="sidebarText"><a href="chat.html">Chat</a></p>
-    <p class="sidebarText"><a href="profile.html">Profile</a></p>
-    <p class="sidebarText"><a href="settings.html">Settings</a></p><br>
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
 
-    <button class="themeObject" onclick="window.location.href='createListing.html'">
-        New Listing
-    </button>
+        <input class="searchBar themeObject" placeholder="Search listings...">
+
+    </div>
 
 </div>
 

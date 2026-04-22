@@ -1,13 +1,63 @@
-/*  LISTINGS PAGE LAYOUT */
+/* =====================
+   LISTINGS PAGE LAYOUT
+   ===================== */
 #listingsPage {
-    margin-left: 260px;
-    margin-right: 260px;
+    margin-left: 360px;
+    margin-right: 440px;
     padding: 20px;
 }
 
-/* LISTING INPUT */
+#listingsPage h1 {
+    text-align: center;
+    width: 100%;
+}
+
+#listingsContainer {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* =====================
+   LISTINGS GRID
+   ===================== */
+.listingsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 20px 0;
+}
+
+/* =====================
+   LISTING CARD
+   ===================== */
+.listingCard {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.listingCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--theme-accent);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* =====================
+   LISTING THUMBNAIL
+   ===================== */
+.listingThumb {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    display: block;
+}
+
+/* =====================
+   LISTING INPUT
+   ===================== */
 .listingInput {
-    display: inline;
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -15,7 +65,7 @@
     outline: none;
     background: var(--bg-secondary);
     color: var(--text-fill);
-    font-size: 16pt;
+    font-size: 16px;
     font-family: var(--font-family);
     margin-bottom: 20px;
     transition: 0.125s;
@@ -25,18 +75,14 @@
    FILE INPUT
    ===================== */
 .fileInput {
-    line-height: 2vh;
-    padding: 0.625rem;
+    padding: 10px 14px;
+    border-radius: 8px;
     border: none;
-    border-radius: 0.625rem;
     background-color: var(--theme-accent);
     color: white;
     font-weight: bold;
-    font-size: 12pt;
-    vertical-align: middle;
-    word-wrap: break-word;
-    transition: 0.125s;
     cursor: pointer;
+    transition: 0.125s;
 }
 
 /* =====================
@@ -158,8 +204,8 @@
    ===================== */
 .listingsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
     padding: 20px 0;
 }
 
@@ -169,15 +215,15 @@
 .listingCard {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.25s;
 }
 .listingCard:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     border-color: var(--theme-accent);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
 }
 
 /* =====================
@@ -185,7 +231,7 @@
    ===================== */
 .listingThumb {
     width: 100%;
-    height: 160px;
+    height: 180px;
     object-fit: cover;
     display: block;
 }
@@ -194,26 +240,23 @@
    LISTING INFO
    ===================== */
 .listingTitle {
-    font-size: 14px;
-    font-weight: bold;
-    padding: 10px 10px 4px;
-    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .listingPrice {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: bold;
     color: var(--theme-accent);
-    padding: 0 10px 4px;
-    margin: 0;
+    padding: 0 10px 6px;
 }
 .listingUser {
     font-size: 12px;
     opacity: 0.6;
-    padding: 0 10px 10px;
-    margin: 0;
+    padding: 0 10px 12px;
 }
 
 /* =====================
@@ -221,9 +264,9 @@
    ===================== */
 .listingDetailContainer {
     display: grid;
-    grid-template-columns: 300px 1fr 220px;
+    grid-template-columns: 320px 1fr 260px;
     gap: 30px;
-    max-width: 1050px;
+    max-width: 1100px;
     margin: 40px auto;
 }
 .listingImageSection {
@@ -282,11 +325,10 @@
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
+    border: none;
     background: var(--theme-accent);
     color: white;
-    border: none;
+    font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
 }
