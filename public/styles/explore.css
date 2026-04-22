@@ -1041,3 +1041,71 @@ h3 {
     opacity: 0.5;
     margin-top: 8px;
 }
+/* PEOPLE TO FOLLOW */
+
+.peopleGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    padding: 4px 0 16px;
+}
+
+.personCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 10px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    text-align: center;
+}
+
+.personCard:hover {
+    transform: translateY(-3px);
+    border-color: var(--theme-accent);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.personAvatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.personInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.personName {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-fill);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.personUsername {
+    font-size: 12px;
+    color: var(--username-color, #586373);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.personCollege {
+    font-size: 11px;
+    opacity: 0.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
