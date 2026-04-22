@@ -3,6 +3,8 @@
 <head>
     <title>Settings | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" type="image/png" href="styles/images/ICON.png">
+    <link rel="stylesheet" href="styles/settings.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -12,7 +14,7 @@
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
-    <div class="content">
+    <div class="content" id="settingsContainer">
         <br>
         <p class="settingsHeader">
             Settings<br>
@@ -23,13 +25,13 @@
             <button class="openBtn optionTxt" onclick="expandAcc()">
                 Your Account<br>
                 <small class="smallTxt">
-                    See information about your account and update details
+                    See information about your account, update details, or sign out
                 </small>
             </button>
         </p>
 
-        <p>
-            <button class="openBtn optionTxt">
+        <p id="privacyOption">
+            <button class="openBtn optionTxt" onclick="expandPrivacy()">
                 Privacy<br>
                 <small class="smallTxt">
                     Manage your account's security and interactions with other users
@@ -46,8 +48,8 @@
             </button>
         </p>
 
-        <p>
-            <button class="openBtn optionTxt">
+        <p id="supportOption">
+            <button class="openBtn optionTxt" onclick="expandSupport()">
                 Support<br>
                 <small class="smallTxt">
                     FAQ, troubleshooting, and user reports

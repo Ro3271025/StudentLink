@@ -1,17 +1,24 @@
 import { auth, db } from "./firebaseInitialization.js";
 
 import {
-doc,
-getDoc,
-updateDoc
+    doc,
+    getDoc,
+    updateDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+import {
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+/* ================= SETUP ================= */
 
 const storage = getStorage();
 
@@ -19,86 +26,192 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 const form = document.getElementById("editListingForm");
+const submitBtn = form.querySelector("button");
+
+const gallery = document.getElementById("imageGallery");
+const imageInput = document.getElementById("listingImage");
+
+let listing = null;
+let currentUser = null;
+
+/* ================= TOAST ================= */
+
+function showToast(msg){
+    const toast = document.createElement("div");
+    toast.innerText = msg;
+    toast.style.position = "fixed";
+    toast.style.bottom = "20px";
+    toast.style.left = "50%";
+    toast.style.transform = "translateX(-50%)";
+    toast.style.background = "#333";
+    toast.style.color = "#fff";
+    toast.style.padding = "10px 20px";
+    toast.style.borderRadius = "6px";
+    toast.style.zIndex = "9999";
+
+    document.body.appendChild(toast);
+
+    setTimeout(()=>toast.remove(),2000);
+}
+
+/* ================= AUTH ================= */
+
+onAuthStateChanged(auth, async(user)=>{
+    if(!user){
+        window.location.href = "login.php";
+        return;
+    }
+
+    currentUser = user;
+
+    if(!id){
+        window.location.href = "listings.html";
+        return;
+    }
+
+    await loadListing();
+});
+
+/* ================= LOAD ================= */
 
 async function loadListing(){
 
-const ref = doc(db,"listings",id);
-const snap = await getDoc(ref);
+    const snap = await getDoc(doc(db,"listings",id));
 
-if(!snap.exists()){
-alert("Listing not found.");
-return;
+    if(!snap.exists()){
+        alert("Listing not found.");
+        return;
+    }
+
+    listing = snap.data();
+
+    if(currentUser.uid !== listing.userID){
+        alert("Unauthorized.");
+        window.location.href="listings.html";
+        return;
+    }
+
+    /* FILL FORM */
+    document.getElementById("title").value = listing.title || "";
+    document.getElementById("description").value = listing.description || "";
+    document.getElementById("price").value = listing.price || "";
+    document.getElementById("category").value = listing.category || "";
+
+    /* LOAD IMAGES */
+    if(!listing.imageURLs && listing.imageURL){
+        listing.imageURLs = [listing.imageURL];
+    }
+
+    renderImages();
 }
 
-const listing = snap.data();
+/* ================= RENDER IMAGES ================= */
 
-/* SECURITY CHECK */
+function renderImages(){
 
-if(auth.currentUser.uid !== listing.userID){
-alert("You cannot edit this listing.");
-window.location.href="listings.html";
-return;
+    gallery.innerHTML = "";
+
+    listing.imageURLs = listing.imageURLs || [];
+
+    listing.imageURLs.forEach((url, index)=>{
+
+        const div = document.createElement("div");
+        div.className = "imageItem";
+
+        div.innerHTML = `
+            <img src="${url}">
+            <button class="removeImgBtn" data-index="${index}">
+                <span>×</span>
+            </button>
+        `;
+
+        gallery.appendChild(div);
+    });
+
+    /* REMOVE IMAGE */
+    document.querySelectorAll(".removeImgBtn").forEach(btn=>{
+        btn.addEventListener("click",(e)=>{
+            const index = e.target.dataset.index;
+            listing.imageURLs.splice(index,1);
+            renderImages();
+        });
+    });
 }
 
-/* FILL FORM */
+/* ================= ADD NEW IMAGES ================= */
 
-document.getElementById("title").value = listing.title;
-document.getElementById("description").value = listing.description;
-document.getElementById("price").value = listing.price;
+imageInput.addEventListener("change", ()=>{
 
-/* SHOW IMAGE */
+    const files = Array.from(imageInput.files);
 
-if(listing.imageURL){
-const img = document.getElementById("currentImage");
-img.src = listing.imageURL;
-img.style.display = "block";
-}
+    files.forEach(file=>{
+        const url = URL.createObjectURL(file);
 
-}
+        listing.imageURLs.push(url); // temp preview
+    });
+
+    renderImages();
+});
+
+/* ================= SUBMIT ================= */
 
 form.addEventListener("submit", async(e)=>{
 
-e.preventDefault();
+    e.preventDefault();
 
-const title = document.getElementById("title").value;
-const description = document.getElementById("description").value;
-const price = Number(document.getElementById("price").value);
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Saving...";
 
-const imageFile = document.getElementById("listingImage").files[0];
+    try{
 
-let imageURL = null;
+        const title = document.getElementById("title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const price = Number(document.getElementById("price").value);
+        const category = document.getElementById("category").value;
 
-/* upload new image if selected */
+        if(!title || !description || !price || !category){
+            showToast("Fill all fields");
+            throw new Error("Validation failed");
+        }
 
-if(imageFile){
+        /* UPLOAD ONLY NEW FILES */
+        const files = Array.from(imageInput.files);
+        let uploadedURLs = [];
 
-const storageRef = ref(storage,
-`listings/${auth.currentUser.uid}/${Date.now()}_${imageFile.name}`);
+        for(const file of files){
+            const storageRef = ref(storage,
+                `listings/${currentUser.uid}/${Date.now()}_${file.name}`);
 
-await uploadBytes(storageRef,imageFile);
+            await uploadBytes(storageRef,file);
+            const url = await getDownloadURL(storageRef);
+            uploadedURLs.push(url);
+        }
 
-imageURL = await getDownloadURL(storageRef);
+        /* KEEP OLD + ADD NEW */
+        let finalImages = listing.imageURLs.filter(url => url.startsWith("http"));
+        finalImages = [...finalImages, ...uploadedURLs];
 
-}
+        /* UPDATE */
+        await updateDoc(doc(db,"listings",id),{
+            title,
+            description,
+            price,
+            category,
+            imageURLs: finalImages,
+            updatedAt: serverTimestamp()
+        });
 
-/* build update object */
+        showToast("Saved!");
 
-const updateData = {
-title,
-description,
-price
-};
+        setTimeout(()=>{
+            window.location.href = `listingDetail.html?id=${id}`;
+        },1000);
 
-if(imageURL){
-updateData.imageURL = imageURL;
-}
+    } catch(err){
+        console.error(err);
+        showToast("Error saving");
+    }
 
-/* update listing */
-
-await updateDoc(doc(db,"listings",id),updateData);
-
-window.location.href = `listingDetail.html?id=${id}`;
-
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Save Changes";
 });
-
-loadListing();

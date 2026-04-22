@@ -1,0 +1,93 @@
+/* Settings Page */
+
+button{
+    font-size:12pt ;
+}
+
+.settingsHeader{
+    margin: 0 auto;
+    padding-left:1%;
+    padding-bottom: 1%;
+    font-size: 16pt;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#settingsContainer{
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.optionTxt{
+    color: var(--text-fill) !important;
+}
+
+.settingsInput{
+    border-radius: 10px;
+    background-color: var(--theme-accent);
+    border-color: var(--theme-accent);
+    color:var(--text-fill);
+    font-size: 12pt;
+    padding: 5%;
+    transition: 0.125s;
+    font-family: var(--font-family);
+    display: inline;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background:var(--bg-secondary);
+    outline:none;
+}
+
+.logoutBtn{
+    font-size:12pt;
+    padding:5px;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.logoutBtn:hover{
+    background-color: var(--border-color);
+}
+
+.delBtn{
+    font-size:12pt; 
+    padding:5px; 
+    background-color: #A11010;
+    border-color:transparent;
+}
+
+.separator{
+    border-bottom:1px solid var(--border-color);
+}
+
+.settingsOpt{
+    margin-left:3.5%;
+}
+
+.settingsOpt input{
+    transition: 0.125s;
+}
+
+#reportsContainer{
+    border: 1px solid var(--border-color);
+    margin-right: 3.5%;
+    padding-left: 8px;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+#reportsContainer .reportItem{
+    padding-left: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-right: 1%;
+    margin-bottom: 1%;
+}
+
+.reportItem{
+    padding-bottom: 8px;
+}

@@ -56,15 +56,21 @@ function setupNewPostComposer() {
         const title = (compactText.slice(0, 60) || "Post").trim();
 
         createBtn.disabled = true;
+        createBtn.style.marginLeft = "56%";
         createBtn.textContent = "Posting...";
 
         try {
             const authorUsername = await getCurrentUserUsername(user);
 
+            // Fetch user's profile photo from Firestore
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            const userData = userSnap.exists() ? userSnap.data() : {};
+
             await createPost({
                 authorId: user.uid,
                 authorName: getCurrentUserName(),
                 authorUsername,
+                authorPhotoURL: userData.photoURL || "",
                 title,
                 body
             });
@@ -82,6 +88,7 @@ function setupNewPostComposer() {
         } finally {
             createBtn.disabled = false;
             createBtn.textContent = "Post";
+            createBtn.style.marginLeft = "63%";
         }
     });
 }
@@ -444,6 +451,7 @@ async function loadComments(postId) {
 
         list.innerHTML = comments.map(c => {
             const isOwner = userId && c.authorId === userId;
+            const commentPhoto = c.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
 
             const ownerActions = isOwner ? `
                 <div style="display:flex; gap:8px; margin-top:4px;">
@@ -468,7 +476,7 @@ async function loadComments(postId) {
             return `
                 <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; padding:5px">
                     <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
-                         style="width:28px; height:28px; border-radius:50%; flex-shrink:0;">
+                         style="width:28px; height:28px; border-radius:4px; flex-shrink:0;">
                     <div style="flex:1;">
                         <span style="font-size:13px; font-weight:600; color:var(--text-fill);">
                             ${escapeHtml(c.authorName || 'Anonymous')}

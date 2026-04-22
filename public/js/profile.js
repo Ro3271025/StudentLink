@@ -92,7 +92,7 @@ async function loadPosts(uidToLoad) {
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
                 <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(post.authorUsername || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
                 <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}
@@ -278,12 +278,30 @@ export function setupProfile() {
         }
 
         const data = userSnap.data() || {};
+
+        // ADDED PRIVACY & BLOCKING LOGIC START
+        // Check if the visitor is on this user's blocked list
+        if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
+            document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
+            return;
+        }
+
+        // Check if profile is private (and visitor is not the owner)
+        if (data.visibility === 'private' && user.uid !== uidToLoad) {
+            const postsContainer = document.getElementById('postsContainer');
+            const statusMsg = document.getElementById('profileStatusMsg');
+            
+            if (postsContainer) postsContainer.style.display = 'none';
+            if (statusMsg) statusMsg.textContent = "This account is private.";
+        }
+        // --- ADDED PRIVACY & BLOCKING LOGIC END ---
+
         const displayName = data.name || data.displayName || "";
         const username = data.username ? "@" + data.username : "";
 
         // Update profile header
-        document.getElementById("displayName").innerText = displayName;
-        document.getElementById("username").innerText = username;   
+        document.getElementById("profileDisplayName").innerText = displayName;
+        document.getElementById("profileUsername").innerText = username;   
 
         // ── Sidebar Update ──
         const sideDisplay = document.getElementById("sideDisplayName");
@@ -333,6 +351,7 @@ export function setupProfile() {
                     if (!isEditing) {
                         isEditing = true;
                         editBtn.innerText = "Save Bio";
+                        editBtn.style.marginLeft = "75%"
                         bioText.disabled = false;
                         bioText.focus();
                     } else {
@@ -341,6 +360,7 @@ export function setupProfile() {
                             await updateDoc(userRef, { bio: bioText.value });
                             isEditing = false;
                             editBtn.innerText = "Edit Profile";
+                            editBtn.style.marginLeft = "70%"
                             bioText.disabled = true;
                         } catch (err) {
                             console.error("Save failed", err);
@@ -362,17 +382,17 @@ export function setupProfile() {
                 }
 
                 profileImg.style.cursor = "pointer";
-                profileImg.title = "Click to change profile picture";
+                profileImg.title = "Click to change profile picture (400 x 400px)";
                 profileImg.onclick = () => fileInput.click();
 
                 fileInput.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-        // Force token refresh to ensure auth is current
-        await user.getIdToken(true);
-const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
-        await uploadBytes(storageRef, file);
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    try {
+                        // Force token refresh to ensure auth is current
+                        await user.getIdToken(true);
+                        const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
+                        await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
@@ -396,7 +416,9 @@ const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
             }
         }
 
-        setupTabs(uidToLoad);
-        await loadPosts(uidToLoad);
+        if (!(data.visibility === 'private' && user.uid !== uidToLoad)) {
+            setupTabs(uidToLoad);
+            await loadPosts(uidToLoad);
+        }
     });
 }
