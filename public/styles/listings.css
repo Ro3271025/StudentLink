@@ -1,50 +1,31 @@
 /* =========================
-   MAIN LAYOUT
+   LISTINGS PAGE
+   Matches home/chat layout pattern:
+   fixed sidebars + centered content with margins
    ========================= */
-.mainLayout {
-    display: grid;
-    grid-template-columns: 240px 1fr 280px;
-    gap: 20px;
-    padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    align-items: start;
-}
 
-/* =========================
-   SIDEBARS
-   ========================= */
-.sidebar {
-    position: sticky;
-    top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    min-width: 0; /* prevents blowout */
-}
-
-/* =========================
-   LISTINGS PAGE (center column)
-   ========================= */
 #listingsPage {
-    width: 100%;
-    min-width: 0; /* critical: prevents grid blowout */
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-top: 20px;
+    text-align: center;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    min-height: 100vh;
 }
 
 #listingsPage .sectionTitle {
-    text-align: center;
     margin-bottom: 20px;
 }
 
 /* =========================
-   GRID (3 columns)
+   GRID
    ========================= */
 .listingsGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
-    width: 100%;
+    padding: 0 16px 24px;
 }
 
 /* =========================
@@ -57,14 +38,14 @@
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-    width: 100%;
+    text-align: left;
     min-width: 0;
 }
 
 .listingCard:hover {
     transform: translateY(-4px);
     border-color: var(--theme-accent);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
 }
 
 /* =========================
@@ -103,7 +84,7 @@
 }
 
 /* =========================
-   INPUTS
+   FORM / CREATE LISTING
    ========================= */
 .listingInput {
     width: 100%;
@@ -117,9 +98,6 @@
     box-sizing: border-box;
 }
 
-/* =========================
-   FILE INPUT
-   ========================= */
 .fileInput {
     padding: 10px 14px;
     border-radius: 8px;
@@ -130,9 +108,6 @@
     cursor: pointer;
 }
 
-/* =========================
-   FORM CONTAINER
-   ========================= */
 .listingContainer {
     width: 45%;
     margin: 0 auto;
@@ -140,7 +115,7 @@
 }
 
 /* =========================
-   IMAGE PREVIEW
+   IMAGE PREVIEW / GALLERY
    ========================= */
 .imagePreviewBox {
     display: inline-block;
@@ -156,9 +131,6 @@
     display: none;
 }
 
-/* =========================
-   IMAGE GALLERY
-   ========================= */
 .imageGallery {
     display: flex;
     gap: 10px;
@@ -258,28 +230,12 @@
 }
 
 /* =========================
-   RESPONSIVE
+   RIGHT SIDEBAR FIX
+   style.css pushes #rightBar with margin-left: 80%
+   which works for narrow right content but clips the
+   search bar — nudge it back in
    ========================= */
-@media (max-width: 900px) {
-    .mainLayout {
-        grid-template-columns: 1fr;
-    }
-
-    #leftBar {
-        display: none;
-    }
-
-    #rightBar {
-        display: none;
-    }
-
-    .listingsGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 500px) {
-    .listingsGrid {
-        grid-template-columns: 1fr;
-    }
+#rightBar .searchBar {
+    width: 80%;
+    box-sizing: border-box;
 }
