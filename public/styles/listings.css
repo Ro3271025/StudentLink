@@ -200,3 +200,12 @@
     padding: 0 10px 10px;
     margin: 0;
 }
+#leftBar {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+ 
+/* FIX: hide scrollbar visually but keep it functional */
+#leftBar::-webkit-scrollbar {
+    width: 0px;
+}
