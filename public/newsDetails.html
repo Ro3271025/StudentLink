@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Events | StudentLink</title>
+    <title>News | StudentLink</title>
 
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="icon" type="image/png" href="styles/images/ICON.png">
-    <link rel="stylesheet" href="styles/explore.css">
+    <link rel="stylesheet" href="styles/news.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -20,17 +19,41 @@
 <!-- MAIN CONTENT -->
 <div id="explorePage" class="content">
 
-    <!-- TITLE -->
-    <h2 class="sectionTitle">Events</h2>
+    <div id="newsDetailsPage">
 
-    <!-- MAIN LAYOUT -->
-    <div class="eventsLayout">
+        <!-- TOP SECTION -->
+        <div class="newsTop">
 
-        <!-- EVENTS GRID (CENTER) -->
-        <div id="eventsContainer" class="eventsGrid"></div>
+            <h1 id="newsTitle"></h1>
+
+            <div class="newsMeta">
+
+                <img id="authorPhoto" class="newsAuthorImg">
+
+                <div>
+                    <p id="authorName"></p>
+                    <p id="newsDate"></p>
+                    <p id="orgName" class="newsOrgLink"></p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- IMAGE -->
+        <img id="newsImage" class="newsHeroImage">
+
+        <hr>
+
+        <!-- CONTENT -->
+        <div id="newsContent" class="newsContent"></div>
 
     </div>
 
+</div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
 </div>
 
 <!-- LEFT SIDEBAR -->
@@ -52,30 +75,7 @@
 
 </div>
 
-<!-- RIGHT SIDEBAR -->
-<div class="sidebar" id="rightBar">
-
-    <div class="eventSearchCard">
-
-        <input 
-            id="eventSearch" 
-            placeholder="Search events..."
-        >
-
-        <label class="eventCheckbox">
-            <input type="checkbox" id="onlineOnly">
-            Online
-        </label>
-
-        <button id="createEventBtnUI">
-            + Create Event
-        </button>
-
-    </div>
-
-</div>
-
-<script type="module" src="js/events.js"></script>
+<script type="module" src="js/newsDetails.js"></script>
 <script src="js/themeSwap.js"></script>
 
 </body>

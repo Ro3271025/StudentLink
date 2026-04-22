@@ -1,19 +1,151 @@
-<h2>Create Organization</h2>
-<h3>Officers</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Organization | StudentLink</title>
 
-<div id="officerList"></div>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/explore.css">
 
-<div id="officerList"></div>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
-<button type="button" id="addOfficerBtn">
-    + Add Officer
-</button>
+<body id="documentBody">
 
-<input id="orgName" placeholder="Organization Name">
-<textarea id="orgDesc" placeholder="Description"></textarea>
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
 
-<input type="file" id="orgImage" accept="image/*">
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
 
-<button id="createOrgBtn">Create</button>
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
+
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
+
+</div>
+
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+    <br>
+    <input class="searchBar themeObject" placeholder="Search"><br><br>
+</div>
+
+<!-- MAIN FORM -->
+<form id="createOrgForm" class="content">
+
+    <h2 class="sectionTitle">Create Organization</h2>
+
+    <!-- NAME -->
+    <input 
+        class="listingInput" 
+        type="text" 
+        id="orgName" 
+        placeholder="Organization Name" 
+        required
+    >
+
+    <!-- DESCRIPTION -->
+    <textarea 
+        id="orgDesc" 
+        class="listingInput" 
+        placeholder="Description"
+        required
+    ></textarea>
+
+    <!-- CATEGORY -->
+    <label>Category</label>
+    <select class="listingInput" id="categoryInput">
+        <option value="">Select a category</option>
+        <option value="Academic">Academic</option>
+        <option value="Arts">Arts</option>
+        <option value="Athletics">Athletics</option>
+        <option value="Community Service">Community Service</option>
+        <option value="Cultural">Cultural</option>
+        <option value="Greek Life">Greek Life</option>
+        <option value="Honorary">Honorary</option>
+        <option value="Political">Political</option>
+        <option value="Professional">Professional</option>
+        <option value="Religious">Religious</option>
+        <option value="Social">Social</option>
+        <option value="Technology">Technology</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <!-- EMAIL -->
+    <label>Contact Email</label>
+    <input 
+        class="listingInput" 
+        type="email" 
+        id="emailInput" 
+        placeholder="organization@email.com"
+    >
+
+    <!-- LOGO -->
+    <label>Organization Logo</label>
+    <input 
+        class="themeObject fileInput" 
+        type="file" 
+        id="orgImage" 
+        accept="image/*"
+    >
+    <!-- GALLERY -->
+    <label>Gallery Images</label>
+    <input 
+        class="themeObject fileInput" 
+        type="file" 
+        id="orgGalleryImages" 
+        accept="image/*"
+        multiple
+    >
+
+    <!-- PREVIEW -->
+    <div id="galleryPreview" class="galleryPreview"></div>
+
+    <!-- OFFICERS -->
+    <h3>Officers</h3>
+
+    <div id="officerList"></div>
+
+    <button 
+        type="button" 
+        id="addOfficerBtn" 
+        class="primaryBtn"
+    >
+        + Add Officer
+    </button>
+
+    <!-- SUBMIT -->
+    <button 
+        type="button" 
+        id="createOrgBtn"
+        class="primaryBtn"
+    >
+        Create Organization
+    </button>
+
+</form>
+
+<!-- SCRIPTS -->
 <script type="module" src="js/createOrganization.js"></script>
+<script type="module" src="js/userSearch.js"></script>
+
+<script type="module">
+    import { setupSidebar } from "./js/showUser.js";
+    setupSidebar();
+</script>
+
+<script src="js/themeSwap.js"></script>
+
+</body>
+</html>

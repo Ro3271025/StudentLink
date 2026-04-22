@@ -25,11 +25,29 @@ import {
 const btn = document.getElementById("createEventBtn");
 const orgSelect = document.getElementById("eventOrg");
 
+const imageInput = document.getElementById("eventImage");
+const preview = document.getElementById("eventPreview");
+
 const storage = getStorage();
 
 let currentUser = null;
 let userRole = null;
 let allowedOrgIds = [];
+
+/* IMAGE PREVIEW */
+
+imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+
+    if (!file) {
+        preview.style.display = "none";
+        preview.src = "";
+        return;
+    }
+
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+});
 
 /* AUTH */
 
@@ -46,7 +64,6 @@ onAuthStateChanged(auth, async (user) => {
 
     await loadUserOrganizations();
 });
-
 /* LOAD ORGS USER CAN POST TO */
 
 async function loadUserOrganizations() {
@@ -54,6 +71,7 @@ async function loadUserOrganizations() {
     const orgSnap = await getDocs(collection(db, "organizations"));
 
     orgSelect.innerHTML = "";
+    allowedOrgIds = []; // reset
 
     for (const docSnap of orgSnap.docs) {
         const data = docSnap.data();
@@ -87,16 +105,15 @@ async function loadUserOrganizations() {
         alert("You are not allowed to create events for any organization.");
     }
 }
-
 /* CREATE EVENT */
 
 btn.addEventListener("click", async () => {
 
-    const title = document.getElementById("eventTitle").value;
-    const desc = document.getElementById("eventDesc").value;
+    const title = document.getElementById("eventTitle").value.trim();
+    const desc = document.getElementById("eventDesc").value.trim();
     const date = document.getElementById("eventDate").value;
-    const location = document.getElementById("eventLocation").value;
-    const file = document.getElementById("eventImage").files[0];
+    const location = document.getElementById("eventLocation").value.trim();
+    const file = imageInput.files[0];
     const orgId = orgSelect.value;
 
     if (!title || !date || !orgId) {
