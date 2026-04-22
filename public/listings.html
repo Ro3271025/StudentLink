@@ -5,6 +5,7 @@
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="stylesheet" href="styles/listings.css">
+    <link rel="stylesheet" href="styles/listings-overrides.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -22,11 +23,10 @@
     <!-- LEFT SIDEBAR -->
     <div class="sidebar" id="leftBar">
 
-        <br>
-        <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG">
 
         <p id="displayName">Display Name</p>
-        <p id="username">@Username</p><br>
+        <p id="username">@Username</p>
 
         <p class="sidebarText"><a href="home.html">Home</a></p>
         <p class="sidebarText"><a href="listings.html">Listings</a></p>
@@ -34,7 +34,7 @@
         <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
         <p class="sidebarText"><a href="chat.html">Chat</a></p>
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
-        <p class="sidebarText"><a href="settings.html">Settings</a></p><br>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p>
 
         <button class="themeObject" onclick="window.location.href='createListing.html'">
             New Listing
@@ -48,16 +48,14 @@
         <h1 class="sectionTitle">Marketplace Listings</h1>
 
         <div id="listingsContainer" class="listingsGrid">
-            Loading listings...
+            <!-- cards will load here -->
         </div>
 
     </div>
 
     <!-- RIGHT SIDEBAR -->
     <div class="sidebar" id="rightBar">
-
         <input class="searchBar themeObject" placeholder="Search listings...">
-
     </div>
 
 </div>

@@ -1,0 +1,70 @@
+/* ==============================================
+   listings-overrides.css
+   Apply AFTER style.css and listings.css
+   Fixes position:fixed sidebar conflict on listings page
+   ============================================== */
+
+/* Reset fixed positioning so grid controls layout */
+.sidebar {
+    position: static !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    word-wrap: break-word;
+    align-self: start;
+}
+
+/* Kill the margin-based positioning on right bar */
+#rightBar {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100%;
+}
+
+/* Kill the margin-based positioning on left bar */
+#leftBar {
+    margin-left: 0 !important;
+    width: 100%;
+}
+
+/* Fix header — remove the 55% width so it spans full page */
+#header {
+    width: 100% !important;
+    box-sizing: border-box;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Search bar full width in right sidebar */
+.searchBar {
+    width: 100% !important;
+    box-sizing: border-box;
+    display: block !important;
+}
+
+/* Sidebar profile icon sizing */
+.sideProfileIcon {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+/* Nav link spacing */
+.sidebarText {
+    margin: 2px 0;
+    font-size: 15px;
+}
+
+/* New Listing button — don't inherit giant button font */
+#leftBar button {
+    font-size: 14px;
+    margin-top: 16px;
+    width: 100%;
+    line-height: normal;
+}
