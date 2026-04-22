@@ -3,6 +3,7 @@
 <head>
     <title>Marketplace | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/listings.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -13,20 +14,23 @@
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
-   <div class="mainContent">
+    <!-- MAIN CONTENT -->
+    <div class="mainContent">
         <h1>Marketplace Listings</h1>
-
         <div id="listingsContainer" class="listingsGrid">
             Loading listings...
         </div>
     </div>
 
     <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br>
+        <!-- FIX: added id="profilePic", fixed broken ../public/ path -->
+        <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
-    <div class="sidebar" id="leftBar"> <!-- Left Sidebar -->
-        <br><img class="sideProfileIcon" src="../public/styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>
+
         <p class="sidebarText"><a href="home.html">Home</a></p>
         <p class="sidebarText"><a href="listings.html">Listings</a></p>
         <p class="sidebarText"><a href="explore.html">Explore</a></p>
@@ -34,43 +38,43 @@
         <p class="sidebarText"><a href="chat.html">Chat</a></p>
         <p class="sidebarText"><a href="profile.html">Profile</a></p>
         <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+
         <button class="themeObject" id="newPostBtn" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
 
         <button class="themeObject" onclick="window.location.href='createListing.html'">
             New Listing
         </button>
 
+        <!-- NEW POST OVERLAY -->
         <div class="overlayDiv">
             <div id="newPostContainer">
-                <p id="newPostHeader"><button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button> <!-- Close Button -->
-                <b>Create New Post</b><button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button></p>
-                <div id="newPostTXT"><textarea  maxlength="300" placeholder="What's happening?"></textarea></div>
+                <p id="newPostHeader">
+                    <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                    <b>Create New Post</b>
+                    <!-- FIX: removed onclick that just closed overlay without posting -->
+                    <button class="themeObject" id="createPostBtn">Post</button>
+                </p>
+                <div id="newPostTXT">
+                    <textarea id="postTextarea" maxlength="300" placeholder="What's happening?"></textarea>
+                </div>
             </div>
         </div>
-
     </div>
 
-    
-
-        
-
-        <br><br>
-
-    <!-- RIGHT SIDEBAR (Optional but consistent) -->
+    <!-- RIGHT SIDEBAR -->
     <div class="sidebar" id="rightBar">
         <br>
         <input class="searchBar themeObject" placeholder="Search"><br><br>
     </div>
 
-    <!-- Scripts -->
+    <!-- SCRIPTS -->
     <script type="module">
-        import { setupSidebar } from "../public/js/showUser.js";
-    
+        import { setupSidebar } from "./js/showUser.js";
         setupSidebar();
     </script>
     <script type="module" src="js/listings.js"></script>
     <script type="module" src="js/userSearch.js"></script>
-    <script src="../public/js/toggleVis.js" type="text/javascript"></script>
+    <script src="js/toggleVis.js"></script>
     <script src="js/themeSwap.js"></script>
 
 </body>
