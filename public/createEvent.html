@@ -1,39 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Create Event</title>
+    <title>Create Event | StudentLink</title>
 
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" type="image/png" href="styles/images/ICON.png">
     <link rel="stylesheet" href="styles/explore.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body id="documentBody">
 
-<div id="campusCentralPage">
+<!-- HEADER -->
+<div id="header">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+</div>
 
-    <h2>Create Event</h2>
+<!-- LEFT SIDEBAR -->
+<div class="sidebar" id="leftBar">
 
-    <input id="eventTitle" placeholder="Event Title">
+<br>
+<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
-    <textarea id="eventDesc" placeholder="Description"></textarea>
+<p id="displayName">Display Name</p>
+<p id="username">@Username</p><br>
 
-    <input id="eventDate" type="datetime-local">
-
-    <input id="eventLocation" placeholder="Location">
-
-    <input id="eventImage" type="file">
-
-    <!-- SELECT ORG -->
-    <select id="eventOrg"></select>
-
-    <button id="createEventBtn" class="themeObject">
-        Create Event
-    </button>
+<p class="sidebarText"><a href="home.html">Home</a></p>
+<p class="sidebarText"><a href="listings.html">Listings</a></p>
+<p class="sidebarText"><a href="explore.html">Explore</a></p>
+<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+<p class="sidebarText"><a href="chat.html">Chat</a></p>
+<p class="sidebarText"><a href="profile.html">Profile</a></p>
+<p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
 
+<!-- RIGHT SIDEBAR -->
+<div class="sidebar" id="rightBar">
+    <br>
+    <input class="searchBar themeObject" placeholder="Search"><br><br>
+</div>
+<!-- MAIN FORM -->
+<form id="createEventForm" class="content">
+
+    <div class="formCard">
+
+        <h2 class="sectionTitle">Create Event</h2>
+
+        <!-- TITLE -->
+        <div class="formGroup">
+            <input 
+                id="eventTitle" 
+                class="listingInput"
+                placeholder="Event Title" 
+                required
+            >
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="formGroup">
+            <textarea 
+                id="eventDesc" 
+                class="listingInput"
+                placeholder="Description"
+                required
+            ></textarea>
+        </div>
+
+        <!-- DATE -->
+        <div class="formGroup">
+            <label>Date & Time</label>
+            <input 
+                id="eventDate" 
+                type="datetime-local"
+                class="listingInput"
+                required
+            >
+        </div>
+
+        <!-- LOCATION -->
+        <div class="formGroup">
+            <input 
+                id="eventLocation" 
+                class="listingInput"
+                placeholder="Location or 'Online'"
+                required
+            >
+        </div>
+
+        <!-- IMAGE -->
+        <div class="formGroup">
+            <label>Event Image</label>
+            <input 
+                id="eventImage" 
+                type="file" 
+                class="themeObject fileInput"
+                accept="image/*"
+            >
+
+            <img id="eventPreview" class="eventPreview">
+        </div>
+
+        <!-- ORG SELECT -->
+        <div class="formGroup">
+            <label>Select Organization</label>
+            <select id="eventOrg" class="listingInput" required></select>
+        </div>
+
+        <!-- SUBMIT -->
+        <button 
+            type="button"
+            id="createEventBtn" 
+            class="primaryBtn"
+        >
+            Create Event
+        </button>
+
+    </div>
+
+</form>
+
+<!-- SCRIPTS -->
 <script type="module" src="js/createEvent.js"></script>
+
+<script type="module">
+    import { setupSidebar } from "./js/showUser.js";
+    setupSidebar();
+</script>
+
+<script src="js/themeSwap.js"></script>
 
 </body>
 </html>
