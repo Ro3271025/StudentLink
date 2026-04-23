@@ -206,8 +206,10 @@ function renderPosts(posts) {
         card.dataset.postId = post.id;
         card.style.cursor = 'pointer';
 
+        // have to get the user's CURRENT display name and username
         const displayName = post.authorName || 'Display Name';
         const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
+
         const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
         const postText = post.body || post.description || '';
         const likeCount = post.likes || 0;
