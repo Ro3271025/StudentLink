@@ -65,7 +65,7 @@ async function loadPosts(uidToLoad) {
         }
 
         container.innerHTML = '';
-        snap.docs.forEach(d => {
+        snap.docs.forEach(async d => {
             const post = { id: d.id, ...d.data() };
             const likes = post.likes || 0;
             const comments = post.commentCount || 0;
@@ -85,14 +85,18 @@ async function loadPosts(uidToLoad) {
                         dateString = dateObj.toLocaleString();
                     }
                 }
+            
+            // get poster's CURRENT display name and username 
+            const userRef = doc(db, "users", post.authorId);
+            const userSnap = await getDoc(userRef);
 
             const card = document.createElement('div');
             card.className = 'content';
             card.style.cursor = 'pointer';
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
-                <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <a class="postLink postDisplayName" href="#">${escapeHtml(userSnap.get('displayName') || 'Display Name')}</a>
+                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(userSnap.get('username') || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
                 <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}

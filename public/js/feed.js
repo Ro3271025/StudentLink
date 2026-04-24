@@ -200,15 +200,19 @@ function renderPosts(posts) {
     if (!container) return;
     container.innerHTML = '';
 
-    posts.forEach(post => {
+    posts.forEach(async post => {
         const card = document.createElement('div');
         card.className = 'content';
         card.dataset.postId = post.id;
         card.style.cursor = 'pointer';
 
-        // have to get the user's CURRENT display name and username
-        const displayName = post.authorName || 'Display Name';
-        const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
+        // get poster's CURRENT display name and username 
+        const userRef = doc(db, "users", post.authorId);
+        const userSnap = await getDoc(userRef);
+
+        // have to set the user's CURRENT display name and username
+        const displayName = userSnap.get('displayName') || 'Display Name';
+        const username = post.authorUsername ? `@${userSnap.get('username')}` : '@Username';
 
         const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
         const postText = post.body || post.description || '';
