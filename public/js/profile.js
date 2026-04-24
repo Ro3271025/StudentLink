@@ -21,24 +21,24 @@ const storage = getStorage(app);
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
+// ── FIXED: use setDoc with merge:true to avoid reading a non-existent doc ──
 async function getOrCreateConversation(currentUserId, otherUserId) {
-
     const conversationID =
         [currentUserId, otherUserId]
         .sort()
         .join("_");
 
     const convoRef = doc(db, "conversations", conversationID);
-    const convoSnap = await getDoc(convoRef);
 
-    if (!convoSnap.exists()) {
-        await setDoc(convoRef, {
-            users: [currentUserId, otherUserId],
-            createdAt: new Date(),
-            lastMessage: "",
-            lastTimestamp: new Date()
-        });
-    }
+    // merge:true creates the doc if missing, no-ops on existing fields if it exists.
+    // This avoids the getDoc read that fails when the document doesn't exist yet
+    // (resource.data is null for non-existent docs, causing a permissions error).
+    await setDoc(convoRef, {
+        users: [currentUserId, otherUserId],
+        createdAt: new Date(),
+        lastMessage: "",
+        lastTimestamp: new Date()
+    }, { merge: true });
 
     return conversationID;
 }
@@ -74,17 +74,17 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
-                // Format timestamp
-                let dateString = 'Unknown date';
-                if (post.createdAt) {
-                    let dateObj = post.createdAt;
-                    if (typeof dateObj.toDate === 'function') {
-                        dateObj = dateObj.toDate();
-                    }
-                    if (dateObj instanceof Date) {
-                        dateString = dateObj.toLocaleString();
-                    }
+            // Format timestamp
+            let dateString = 'Unknown date';
+            if (post.createdAt) {
+                let dateObj = post.createdAt;
+                if (typeof dateObj.toDate === 'function') {
+                    dateObj = dateObj.toDate();
                 }
+                if (dateObj instanceof Date) {
+                    dateString = dateObj.toLocaleString();
+                }
+            }
 
             const card = document.createElement('div');
             card.className = 'content';
@@ -151,10 +151,9 @@ async function loadComments(uidToLoad) {
             card.className = 'content';
             card.style.cursor = 'pointer';
             card.innerHTML = `
-            
                 <img class="profileImgMini" src="${commenterImg}" 
-             style="object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
-             onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
+                    style="object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
+                    onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
                 <p class="postTitle" style="display:inline-block;margin-left:3.5%">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
                 <p class="commentText" style="margin-top:8px;margin-left:3.5%">${escapeHtml(comment.text || '')}</p>
             `;
@@ -183,7 +182,7 @@ async function loadListings(uidToLoad) {
         );
         const snap = await getDocs(q);
         updateCounter('listingCountLink', snap.size);
-        
+
         if (snap.empty) {
             container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">No listings yet.</p>';
             return;
@@ -253,14 +252,10 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-
 function updateCounter(counterId, count) {
     const el = document.getElementById(counterId);
     if (el) el.textContent = String(count);
 }
-
-
-
 
 export function setupProfile() {
     onAuthStateChanged(auth, async (user) => {
@@ -290,7 +285,7 @@ export function setupProfile() {
         if (data.visibility === 'private' && user.uid !== uidToLoad) {
             const postsContainer = document.getElementById('postsContainer');
             const statusMsg = document.getElementById('profileStatusMsg');
-            
+
             if (postsContainer) postsContainer.style.display = 'none';
             if (statusMsg) statusMsg.textContent = "This account is private.";
         }
@@ -301,12 +296,12 @@ export function setupProfile() {
 
         // Update profile header
         document.getElementById("profileDisplayName").innerText = displayName;
-        document.getElementById("profileUsername").innerText = username;   
+        document.getElementById("profileUsername").innerText = username;
 
         // ── Sidebar Update ──
         const sideDisplay = document.getElementById("sideDisplayName");
         const sideUser = document.getElementById("sideUsername");
-        const sidebarProfileImg = document.getElementById("sidebarProfileImg"); // Added ID for sidebar photo
+        const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
         if (sideDisplay) sideDisplay.innerText = displayName;
         if (sideUser) sideUser.innerText = username;
@@ -340,7 +335,7 @@ export function setupProfile() {
         // Load profile photo for EVERYONE (Main and Sidebar)
         if (data.photoURL) {
             if (profileImg) profileImg.src = data.photoURL;
-            if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL; // Sync sidebar photo
+            if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL;
         }
 
         if (user.uid === uidToLoad) {
@@ -351,7 +346,7 @@ export function setupProfile() {
                     if (!isEditing) {
                         isEditing = true;
                         editBtn.innerText = "Save Bio";
-                        editBtn.style.marginLeft = "75%"
+                        editBtn.style.marginLeft = "75%";
                         bioText.disabled = false;
                         bioText.focus();
                     } else {
@@ -360,7 +355,7 @@ export function setupProfile() {
                             await updateDoc(userRef, { bio: bioText.value });
                             isEditing = false;
                             editBtn.innerText = "Edit Profile";
-                            editBtn.style.marginLeft = "70%"
+                            editBtn.style.marginLeft = "70%";
                             bioText.disabled = true;
                         } catch (err) {
                             console.error("Save failed", err);
@@ -396,10 +391,10 @@ export function setupProfile() {
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
-                        
+
                         // Update both images instantly after upload
                         profileImg.src = url;
-                        if (sidebarProfileImg) sidebarProfileImg.src = url; 
+                        if (sidebarProfileImg) sidebarProfileImg.src = url;
                     } catch (err) {
                         console.error("Upload failed", err);
                         alert("Failed to upload photo.");
