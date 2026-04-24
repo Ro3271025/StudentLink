@@ -21,26 +21,34 @@ const storage = getStorage(app);
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
-// ── FIXED: use setDoc with merge:true to avoid reading a non-existent doc ──
+// ── FIXED: Query for existing conversation by users array, create if missing ──
 async function getOrCreateConversation(currentUserId, otherUserId) {
-    const conversationID =
-        [currentUserId, otherUserId]
-        .sort()
-        .join("_");
+    // Search for an existing conversation containing the current user
+    const q = query(
+        collection(db, "conversations"),
+        where("users", "array-contains", currentUserId)
+    );
 
-    const convoRef = doc(db, "conversations", conversationID);
+    const snap = await getDocs(q);
 
-    // merge:true creates the doc if missing, no-ops on existing fields if it exists.
-    // This avoids the getDoc read that fails when the document doesn't exist yet
-    // (resource.data is null for non-existent docs, causing a permissions error).
+    // Find one that also contains the other user
+    const existing = snap.docs.find(d =>
+        d.data().users.includes(otherUserId)
+    );
+
+    if (existing) return existing.id; // Returns the real Firestore auto-generated ID
+
+    // None found — create a new one with a Firestore auto-generated ID
+    // (consistent with how existing conversations were created)
+    const convoRef = doc(collection(db, "conversations"));
     await setDoc(convoRef, {
         users: [currentUserId, otherUserId],
         createdAt: new Date(),
         lastMessage: "",
         lastTimestamp: new Date()
-    }, { merge: true });
+    });
 
-    return conversationID;
+    return convoRef.id;
 }
 
 // ── Render user's posts ──
