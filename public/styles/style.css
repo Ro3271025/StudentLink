@@ -152,8 +152,6 @@ a:hover{
     font-weight: bold;
     font-size: 48pt;
 }
-
-
 /* TODO: START SPLITTING THIS FILE */
 
 /* may want to consider splitting css files at some point 
@@ -1021,4 +1019,56 @@ a:hover{
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+/* PROFILE LISTINGS GRID (MATCHES LISTINGS PAGE) */
+#tab-listings .listingsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+/* CARD */
+.listingCard {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.listingCard:hover {
+    transform: translateY(-4px);
+    border-color: var(--theme-accent);
+}
+
+/* IMAGE */
+.listingThumb {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+/* INFO */
+.listingInfo {
+    padding: 10px;
+}
+
+.listingTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-fill);
+}
+
+.listingPrice {
+    font-size: 14px;
+    color: var(--theme-accent);
+    margin-top: 4px;
+}
+
+.listingCondition {
+    font-size: 12px;
+    color: var(--username-color);
+    margin-top: 2px;
 }
