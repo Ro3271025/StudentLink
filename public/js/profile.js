@@ -180,7 +180,12 @@ async function loadComments(uidToLoad) {
 // ── Render user's listings ──
 async function loadListings(uidToLoad) {
     const container = document.getElementById('tab-listings');
-    container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Loading listings...</p>';
+
+    container.innerHTML = `
+        <div class="listingsGrid">
+            <p style="text-align:center;color:#aaa;padding:20px;width:100%;">Loading listings...</p>
+        </div>
+    `;
 
     try {
         const q = query(
@@ -188,40 +193,55 @@ async function loadListings(uidToLoad) {
             where("userID", "==", uidToLoad),
             orderBy("created_at", "desc")
         );
+
         const snap = await getDocs(q);
         updateCounter('listingCountLink', snap.size);
 
+        const grid = container.querySelector('.listingsGrid');
+
         if (snap.empty) {
-            container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">No listings yet.</p>';
+            grid.innerHTML = `<p style="text-align:center;color:#aaa;padding:20px;width:100%;">No listings yet.</p>`;
             return;
         }
 
-        container.innerHTML = '<div class="listingsGrid" style="width:55%;margin:0 auto;padding:16px 0;"></div>';
-        const grid = container.querySelector('.listingsGrid');
+        grid.innerHTML = '';
 
         snap.docs.forEach(d => {
             const listing = { id: d.id, ...d.data() };
-            const card = document.createElement('div');
-            card.className = 'listingCard';
 
             const imgSrc = listing.imageURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
             const price = listing.price != null ? `$${listing.price}` : 'N/A';
             const condition = listing.condition || '';
+            const title = listing.title || listing.itemCategory || 'Listing';
+
+            const card = document.createElement('div');
+            card.className = 'listingCard';
 
             card.innerHTML = `
-                <img class="listingThumb" src="${imgSrc}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
-                <p class="listingTitle">${escapeHtml(listing.title || listing.itemCategory || 'Listing')}</p>
-                <p class="listingPrice">${price}</p>
-                <p class="listingUser">${escapeHtml(condition)}</p>
+                <img class="listingThumb" src="${imgSrc}" 
+                     onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
+
+                <div class="listingInfo">
+                    <p class="listingTitle">${escapeHtml(title)}</p>
+                    <p class="listingPrice">${price}</p>
+                    <p class="listingCondition">${escapeHtml(condition)}</p>
+                </div>
             `;
-            card.addEventListener('click', () => {
+
+            card.onclick = () => {
                 window.location.href = `listingDetail.html?id=${listing.id}`;
-            });
+            };
+
             grid.appendChild(card);
         });
+
     } catch (err) {
         console.error("Failed to load listings:", err);
-        container.innerHTML = '<p style="text-align:center;color:#e55;padding:20px;">Failed to load listings.</p>';
+        container.innerHTML = `
+            <p style="text-align:center;color:#e55;padding:20px;">
+                Failed to load listings.
+            </p>
+        `;
     }
 }
 
