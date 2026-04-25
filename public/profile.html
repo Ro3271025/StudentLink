@@ -66,8 +66,8 @@
         <!-- LEFT SIDEBAR -->
         <div class="sidebar" id="leftBar">
             <br><img class="sideProfileIcon" id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-            <p id="displayName">Display Name</p>
-            <p id="username">@Username</p><br>
+            <p id="sideDisplayName">Display Name</p>
+            <p id="sideUsername">@Username</p><br>
             <p class="sidebarText"><a href="home.html">Home</a></p>
             <p class="sidebarText"><a href="listings.html">Listings</a></p>
             <p class="sidebarText"><a href="explore.html">Explore</a></p>
@@ -130,9 +130,9 @@
             text-decoration: none;
         }
         #profileImage:hover {
-        outline: 2px solid #008000;
-        box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
-        cursor: pointer;
+            outline: 2px solid #008000;
+            box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
+            cursor: pointer;
         }
         .commentCard {
             border-left: 1px solid var(--border-color);
@@ -153,9 +153,9 @@
             color: var(--text-fill);
         }
         .sideProfileIcon {
-            width: 85px;          
-            height: 85px;         
-            object-fit: cover;    
+            width: 85px;
+            height: 85px;
+            object-fit: cover;
             border-radius: 4px;
         }
         .profileImgMini {
@@ -167,13 +167,11 @@
         }
     </style>
 
-<script type="module">
-    import { setupProfile } from "./js/profile.js?v=5";
-        setupProfile();
-        setupSidebar();
-    </script>
+    <!-- FIXED: all module imports combined into one script block -->
     <script type="module">
+        import { setupProfile } from "./js/profile.js?v=6";
         import { setupSidebar } from "./js/showUser.js";
+        setupProfile();
         setupSidebar();
     </script>
     <script type="module" src="js/userSearch.js"></script>

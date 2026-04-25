@@ -204,7 +204,7 @@ async function loadListings(uidToLoad) {
             const card = document.createElement('div');
             card.className = 'listingCard';
 
-            const imgSrc = listing.imageUrl || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+            const imgSrc = listing.imageURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
             const price = listing.price != null ? `$${listing.price}` : 'N/A';
             const condition = listing.condition || '';
 
