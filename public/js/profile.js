@@ -182,10 +182,10 @@ async function loadListings(uidToLoad) {
     const container = document.getElementById('tab-listings');
 
     container.innerHTML = `
-        <div class="listingsGrid">
-            <p style="text-align:center;color:#aaa;padding:20px;width:100%;">Loading listings...</p>
-        </div>
-    `;
+    <div class="profileContentWrapper">
+        <div class="listingsGrid"></div>
+    </div>
+`;
 
     try {
         const q = query(
