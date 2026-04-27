@@ -168,3 +168,47 @@
     color: var(--theme-accent);
     cursor: pointer;
 }
+/* NEWS FEED ITEMS */
+.feedItem {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    width: 100%;
+    max-width: 700px;
+}
+.feedItem:hover {
+    transform: translateY(-2px);
+    border-color: var(--theme-accent);
+}
+.feedHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.feedUser {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-fill);
+}
+.feedType {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+    opacity: 0.7;
+}
+.feedContent {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: var(--text-fill);
+}
+.feedMeta {
+    font-size: 12px;
+    opacity: 0.5;
+}
