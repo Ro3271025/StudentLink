@@ -1072,3 +1072,14 @@ a:hover{
     color: var(--username-color);
     margin-top: 2px;
 }
+/* MATCH PROFILE CONTENT WIDTH */
+.profileContentWrapper {
+    max-width: 900px;   /* SAME as your profile section */
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* optional: keep spacing clean */
+#tab-listings {
+    padding-top: 10px;
+}
