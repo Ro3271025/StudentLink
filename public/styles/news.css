@@ -212,3 +212,23 @@
     font-size: 12px;
     opacity: 0.5;
 }
+/* CREATE NEWS BUTTON */
+#createNewsBtnUI {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: var(--theme-accent);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+#createNewsBtnUI:hover {
+    opacity: 0.9;
+}
+#createNewsBtnUI:active {
+    transform: scale(0.98);
+}
