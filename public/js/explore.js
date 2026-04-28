@@ -342,7 +342,10 @@ function renderFeed(items) {
         return;
     }
     items.forEach(item => {
-        if (item.type === "post") feed.appendChild(buildPostCard(item));
+        if (item.type === "post") {
+            const card = buildPostCard(item);
+            feed.appendChild(card);
+        }
     });
     attachPostEventListeners();
 }
