@@ -265,7 +265,7 @@ function renderFeed(items) {
 
 function buildPostCard(post) {
     const card = document.createElement("div");
-    card.className   = "content";
+    card.className   = "postCard";
     card.dataset.postId = post.id;
     card.style.cursor   = "pointer";
 
