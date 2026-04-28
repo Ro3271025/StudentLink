@@ -1109,3 +1109,15 @@ h3 {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.postCard {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    text-align: left;
+    margin-bottom: 14px;
+    width: 100%;
+    background: var(--bg-secondary);
+    padding: 10px 0;
+}
+.postCard:hover {
+    border-color: var(--theme-accent);
+}
