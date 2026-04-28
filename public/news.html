@@ -18,36 +18,22 @@
 
 <!-- MAIN CONTENT -->
 <div id="explorePage" class="content">
-
-    <!-- TITLE + CREATE BUTTON -->
-    <div style="display:flex; align-items:center; justify-content:space-between; width:100%; max-width:700px; margin-bottom:16px;">
-        <h2 class="sectionTitle" style="margin:0;">Campus News</h2>
-        <button id="createNewsBtnUI" style="
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            background: var(--theme-accent);
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.2s;
-        ">+ Create News</button>
-    </div>
-
-    <!-- NEWS LIST -->
+    <h2 class="sectionTitle">Campus News</h2>
     <div id="newsContainer"></div>
-
 </div>
 
 <!-- RIGHT SIDEBAR -->
 <div class="sidebar" id="rightBar">
+
     <input 
         type="text" 
         id="newsSearchInput" 
         class="exploreSearchBar"
         placeholder="Search news..."
     >
+
+    <button id="createNewsBtnUI">+ Create News</button>
+
 </div>
 
 <!-- LEFT SIDEBAR -->
