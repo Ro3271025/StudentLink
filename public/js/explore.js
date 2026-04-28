@@ -352,9 +352,18 @@ function renderFeed(items) {
 
 function buildPostCard(post) {
     const card = document.createElement("div");
-    card.className  = "content";
     card.dataset.postId = post.id;
-    card.style.cursor   = "pointer";
+    card.style.cssText = `
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-secondary);
+        text-align: left;
+        margin-bottom: 14px;
+        padding: 10px 0;
+        cursor: pointer;
+        width: 100%;
+        display: block;
+    `;
 
     const displayName  = post.authorName || "Display Name";
     const username     = post.authorUsername ? `@${post.authorUsername}` : "@Username";
