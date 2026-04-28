@@ -139,7 +139,8 @@
 
 /* News Details Page */
 #newsDetailsPage {
-    width: 65%;
+    width: 100%;
+    max-width: 700px;
 }
 .newsTop {
     margin-bottom: 20px;
