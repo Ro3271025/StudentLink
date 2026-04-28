@@ -61,26 +61,40 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-/* LOAD ALL DATA */
+/*LOAD ALL DATA*/
 async function loadExplore() {
     feed.innerHTML = "<p style='opacity:0.6;padding:10px;'>Loading...</p>";
 
     try {
-        const [postsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
-            getDocs(query(collection(db, "posts"), orderBy("createdAt", "desc"))),
+        const [postsSnap, timestampPostsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
+            getDocs(query(collection(db, "posts"), orderBy("createdAt",  "desc"))),
+            getDocs(query(collection(db, "posts"), orderBy("timestamp",  "desc"))),
             getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"), limit(6))),
-            getDocs(query(collection(db, "news"),     orderBy("timestamp", "desc"), limit(5))),
-            getDocs(query(collection(db, "events"),   orderBy("timestamp", "desc"), limit(5)))
+            getDocs(query(collection(db, "news"),     orderBy("timestamp",  "desc"), limit(5))),
+            getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(5)))
         ]);
 
         allItems = [];
+        const seenPostIds = new Set();
         postsSnap.forEach(d => {
+            seenPostIds.add(d.id);
             allItems.push({ id: d.id, type: "post", ...d.data() });
+        });
+        timestampPostsSnap.forEach(d => {
+            if (!seenPostIds.has(d.id)) {
+                allItems.push({ id: d.id, type: "post", ...d.data() });
+            }
+        });
+
+        allItems.sort((a, b) => {
+            const aTime = (a.createdAt?.seconds || a.timestamp?.seconds || a.created_at?.seconds || 0);
+            const bTime = (b.createdAt?.seconds || b.timestamp?.seconds || b.created_at?.seconds || 0);
+            return bTime - aTime;
         });
 
         const latestListings = latestListingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const latestNews     = newsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const latestEvents   = eventsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const latestNews     = newsSnap.docs.map(d           => ({ id: d.id, ...d.data() }));
+        const latestEvents   = eventsSnap.docs.map(d         => ({ id: d.id, ...d.data() }));
 
         renderLatestListings(latestListings);
         renderSideSections(latestNews, latestEvents);
@@ -93,109 +107,7 @@ async function loadExplore() {
     }
 }
 
-/* RENDER FEED */
-function renderFeed(items) {
-    feed.innerHTML = "";
-    if (!items.length) {
-        feed.innerHTML = "<p style='opacity:0.6;padding:10px;'>No results found.</p>";
-        return;
-    }
-    items.forEach(item => {
-        if (item.type === "post") {
-            const card = buildPostCard(item);
-            feed.appendChild(card);
-        }
-    });
-    attachPostEventListeners();
-}
-
-function buildPostCard(post) {
-    const card = document.createElement("div");
-    card.dataset.postId = post.id;
-    card.style.cssText = `
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        background: var(--bg-secondary);
-        text-align: left;
-        margin-bottom: 14px;
-        padding: 10px 0;
-        cursor: pointer;
-        width: 100%;
-        display: block;
-    `;
-
-    const displayName  = post.authorName || "Display Name";
-    const username     = post.authorUsername ? `@${post.authorUsername}` : "@Username";
-    const profileImg   = post.authorPhotoURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG";
-    const postText     = post.body || post.description || post.text || "";
-    const likeCount    = post.likes || 0;
-    const commentCount = post.commentCount || 0;
-    const imageUrl     = post.imageUrl || "";
-    const likedBy      = post.likedBy || [];
-    const hasLiked     = currentUserId && likedBy.includes(currentUserId);
-
-    let imageSection = "";
-    if (imageUrl) imageSection = `<div class="imageContainer"><img src="${imageUrl}"></div>`;
-
-    let dateString = "Unknown date";
-    if (post.createdAt) {
-        let d = post.createdAt;
-        if (typeof d.toDate === "function") d = d.toDate();
-        if (d instanceof Date) dateString = d.toLocaleString();
-    }
-
-    card.innerHTML = `
-        <img class="profileImgMini" src="${profileImg}">
-        <span class="postHeader">
-            <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">${displayName}</a>
-            <small style="margin-left:6px;color:#aaa;">${username}</small>
-            <span style="color:#888;font-size:10pt;margin-left:10px;">${dateString}</span>
-        </span><br>
-        <p class="postContentText">${postText}</p>
-        ${imageSection}
-        <br>
-        <footer style="padding-bottom:5px;">
-            <a class="postLink postMetrics likeBtn${hasLiked ? " liked" : ""}" href="#"
-               data-post-id="${post.id}" data-like-count="${likeCount}"
-               style="${hasLiked ? "color:var(--theme-color,#E6557C);font-weight:600;" : ""}">
-               ${likeCount} Like${likeCount !== 1 ? "s" : ""}
-            </a>
-            <a class="postLink postMetrics commentToggleBtn" href="#" data-post-id="${post.id}">
-               ${commentCount} Comment${commentCount !== 1 ? "s" : ""}
-            </a>
-            <a href="reportform.html?postId=${post.id}" class="postLink postMetrics reportBtn"
-               data-post-id="${post.id}" style="text-align:right;">Report</a>
-        </footer>
-        <div class="commentSection" id="comments-${post.id}" style="display:none;margin-top:10px;border-top:1px solid #333;padding-top:10px;">
-            <div class="commentsList" id="commentsList-${post.id}">
-                <p style="color:#aaa;font-size:13px;">Loading comments...</p>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:10px;align-items:center;padding:5px;">
-                <input class="commentInput themeObject" id="commentInput-${post.id}" type="text"
-                    placeholder="Write a comment..."
-                    style="flex:1;padding:7px 12px;border-radius:20px;border:1px solid #444;background:var(--bg-secondary);color:var(--text-fill);font-size:14px;"
-                    maxlength="300"/>
-                <button class="themeObject submitCommentBtn" data-post-id="${post.id}"
-                    style="padding:7px 16px;border-radius:20px;font-size:14px;cursor:pointer;">Post</button>
-            </div>
-        </div>`;
-
-    card.addEventListener("click", (e) => {
-        if (!e.target.classList.contains("postMetrics") &&
-            !e.target.classList.contains("likeBtn") &&
-            !e.target.classList.contains("commentToggleBtn") &&
-            !e.target.classList.contains("submitCommentBtn") &&
-            !e.target.classList.contains("reportBtn") &&
-            !e.target.classList.contains("postDisplayName") &&
-            !e.target.closest(".commentSection") &&
-            !e.target.closest("footer")) {
-            window.location.href = `post.html?id=${post.id}`;
-        }
-    });
-    return card;
-}
-
-/* PEOPLE TO FOLLOW */
+/*PEOPLE TO FOLLOW*/
 async function loadPeopleToFollow() {
     const el = document.getElementById("peopleToFollowSection");
     if (!el) return;
@@ -209,6 +121,7 @@ async function loadPeopleToFollow() {
             .map(d => ({ uid: d.id, ...d.data() }))
             .filter(u => u.uid !== currentUserId);
 
+        // Shuffle
         for (let i = users.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [users[i], users[j]] = [users[j], users[i]];
@@ -221,6 +134,7 @@ async function loadPeopleToFollow() {
             return;
         }
 
+        // Load current user's following list
         let following = [];
         if (currentUserId) {
             try {
@@ -260,6 +174,7 @@ async function loadPeopleToFollow() {
                 </button>
             `;
 
+            // Profile click — whole card except the button
             card.addEventListener("click", (e) => {
                 if (!e.target.classList.contains("followBtn")) {
                     window.location.href = `profile.html?id=${user.uid}`;
@@ -303,10 +218,10 @@ function attachFollowListeners() {
 
                 await updateDoc(userRef, { following });
 
-                const nowFollowing    = !isFollowing;
-                btn.dataset.following = String(nowFollowing);
-                btn.textContent       = nowFollowing ? "Following" : "Follow";
-                btn.style.background  = nowFollowing ? "var(--button-hover)" : "";
+                const nowFollowing      = !isFollowing;
+                btn.dataset.following   = String(nowFollowing);
+                btn.textContent         = nowFollowing ? "Following" : "Follow";
+                btn.style.background    = nowFollowing ? "var(--button-hover)" : "";
             } catch (err) {
                 console.error("Follow failed:", err);
                 btn.textContent = isFollowing ? "Following" : "Follow";
@@ -317,10 +232,11 @@ function attachFollowListeners() {
     });
 }
 
-/* FILTER + SEARCH */
+/*FILTER + SEARCH*/
 function getFilteredItems() {
     return allItems.filter(item => {
-        if (activeFilter === "posts" && item.type !== "post") return false;
+        if (activeFilter === "posts"    && item.type !== "post")    return false;
+
 
         if (searchQuery) {
             const haystack = [
@@ -334,7 +250,7 @@ function getFilteredItems() {
     });
 }
 
-/* RENDER FEED */
+/*RENDER FEED*/
 function renderFeed(items) {
     feed.innerHTML = "";
     if (!items.length) {
@@ -342,30 +258,18 @@ function renderFeed(items) {
         return;
     }
     items.forEach(item => {
-        if (item.type === "post") {
-            const card = buildPostCard(item);
-            feed.appendChild(card);
-        }
+        if (item.type === "post")    feed.appendChild(buildPostCard(item));
     });
     attachPostEventListeners();
 }
 
 function buildPostCard(post) {
     const card = document.createElement("div");
+    card.className   = "postCard";
     card.dataset.postId = post.id;
-    card.style.cssText = `
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        background: var(--bg-secondary);
-        text-align: left;
-        margin-bottom: 14px;
-        padding: 10px 0;
-        cursor: pointer;
-        width: 100%;
-        display: block;
-    `;
+    card.style.cursor   = "pointer";
 
-    const displayName  = post.authorName || "Display Name";
+    const displayName  = post.authorName     || "Display Name";
     const username     = post.authorUsername ? `@${post.authorUsername}` : "@Username";
     const profileImg   = post.authorPhotoURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG";
     const postText     = post.body || post.description || post.text || "";
@@ -436,7 +340,8 @@ function buildPostCard(post) {
     return card;
 }
 
-/* POST EVENT LISTENERS */
+
+/* POST EVENT LISTENERS*/
 function attachPostEventListeners() {
     document.querySelectorAll(".likeBtn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
@@ -514,7 +419,7 @@ async function loadComments(postId) {
         }
 
         list.innerHTML = comments.map(c => {
-            const isOwner = currentUserId && c.authorId === currentUserId;
+            const isOwner     = currentUserId && c.authorId === currentUserId;
             const ownerActions = isOwner ? `
                 <div style="display:flex;gap:8px;margin-top:4px;">
                     <button class="editCommentBtn themeObject" data-post-id="${postId}" data-comment-id="${c.id}"
@@ -560,8 +465,8 @@ async function loadComments(postId) {
                     <button style="font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;background:#0f73ff;border:none;color:#fff;">Save</button>
                     <button style="font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;background:none;border:1px solid #666;color:#aaa;">Cancel</button>`;
 
-                const editInput            = editRow.querySelector("input");
-                const [saveBtn, cancelBtn] = editRow.querySelectorAll("button");
+                const editInput              = editRow.querySelector("input");
+                const [saveBtn, cancelBtn]   = editRow.querySelectorAll("button");
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
 
@@ -652,7 +557,7 @@ function escapeAttr(str) {
     return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 
-/* EVENTS */
+/* EVENTS*/
 filter?.addEventListener("change", () => { activeFilter = filter.value; renderFeed(getFilteredItems()); });
 searchBar?.addEventListener("input", () => { searchQuery = searchBar.value.toLowerCase().trim(); renderFeed(getFilteredItems()); });
 
