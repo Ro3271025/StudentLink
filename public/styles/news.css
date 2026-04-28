@@ -155,10 +155,15 @@
     border-radius: 50%;
     object-fit: cover;
 }
+/* News Details Page */
 .newsHeroImage {
     width: 100%;
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: cover;
     border-radius: 10px;
     margin: 20px 0;
+    display: block;
 }
 .newsContent {
     line-height: 1.6;
