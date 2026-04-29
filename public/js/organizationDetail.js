@@ -95,6 +95,16 @@ function loadGallery(images) {
     });
 }
 
+/* CHECK IF EVENT IS IN THE PAST */
+
+function isPast(dateStr) {
+    if (!dateStr) return false;
+    const eventDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return eventDate < today;
+}
+
 /* EVENTS */
 
 async function loadEvents() {
@@ -113,11 +123,13 @@ async function loadEvents() {
 
         snap.forEach(docSnap => {
             const data = docSnap.data();
+            const past = isPast(data.date);
 
             const div = document.createElement("div");
-            div.className = "eventCard";
+            div.className = `eventCard${past ? " eventPast" : ""}`;
 
             div.innerHTML = `
+                ${past ? `<div class="eventStatusBadge">Past Event</div>` : ""}
                 <img src="${data.imageURL || 'styles/images/placeholder/DEFAULT_EVENT.jpg'}">
                 <div class="eventInfo">
                     <h4>${data.title || "Untitled Event"}</h4>
@@ -165,6 +177,7 @@ function loadOfficers(data) {
         officersEl.appendChild(div);
     });
 }
+
 /* JOIN SYSTEM */
 
 let currentUser = null;
@@ -202,6 +215,7 @@ function setupJoinSystem() {
 
     loadMemberCountRealtime();
 }
+
 /* MEMBER COUNT */
 
 function loadMemberCountRealtime() {
@@ -214,6 +228,7 @@ function loadMemberCountRealtime() {
                 : `${snap.size} members`;
     });
 }
+
 /* AUTH + EDIT BUTTON */
 
 onAuthStateChanged(auth, async (user) => {
@@ -247,6 +262,7 @@ onAuthStateChanged(auth, async (user) => {
         console.error("Auth error:", err);
     }
 });
+
 /* INIT */
 
 loadOrg();
