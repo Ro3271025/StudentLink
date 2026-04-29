@@ -1087,3 +1087,59 @@ a:hover{
     font-size: 12px;
     padding: 3px 6px;
 }
+.followingGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 16px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.followingCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.followingCard:hover {
+    border-color: var(--theme-accent);
+}
+
+.followingCard img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.followingCard .followingName {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.followingCard .followingUsername {
+    font-size: 12px;
+    opacity: 0.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#tab-following {
+    width: 55%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
