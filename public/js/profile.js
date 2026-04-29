@@ -370,9 +370,19 @@ export function setupProfile() {
         const sideUser         = document.getElementById("sideUsername");
         const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
-        if (sideDisplay) sideDisplay.innerText = displayName;
-        if (sideUser)    sideUser.innerText    = username;
-
+        // Always load sidebar from the logged-in user, not the viewed profile
+        if (user.uid !== uidToLoad) {
+            const mySnap = await getDoc(doc(db, "users", user.uid));
+            if (mySnap.exists()) {
+                const myData = mySnap.data();
+                if (sideDisplay) sideDisplay.innerText = myData.displayName || myData.name || "";
+                if (sideUser)    sideUser.innerText    = myData.username ? "@" + myData.username : "";
+                if (sidebarProfileImg && myData.photoURL) sidebarProfileImg.src = myData.photoURL;
+            }
+        } else {
+            if (sideDisplay) sideDisplay.innerText = displayName;
+            if (sideUser)    sideUser.innerText    = username;
+        }
         // ── Message button ──
         const messageBtn = document.getElementById("messageStudentBtn");
         if (messageBtn) {
