@@ -62,14 +62,22 @@ async function loadEvents() {
             date: data.date,
             location: data.location,
             image: data.imageURL || "styles/images/placeholder/DEFAULT_BANNER.svg",
-
-            // 🔥 USE STORED VALUES (NO EXTRA QUERY)
             orgName: data.orgName || "Unknown Org",
             orgImage: data.orgImage || ""
         });
     }
 
     renderEvents(allEvents);
+}
+
+/* CHECK IF EVENT IS IN THE PAST */
+
+function isPast(dateStr) {
+    if (!dateStr) return false;
+    const eventDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return eventDate < today;
 }
 
 /* RENDER */
@@ -83,17 +91,18 @@ function renderEvents(events) {
     }
 
     events.forEach(ev => {
+        const past = isPast(ev.date);
+
         const div = document.createElement("div");
-        div.className = "eventCard";
+        div.className = `eventCard${past ? " eventPast" : ""}`;
 
         div.innerHTML = `
+            ${past ? `<div class="eventStatusBadge">Past Event</div>` : ""}
             <img src="${ev.image}">
-
             <div class="eventInfo">
                 <div class="eventTitle">${ev.title}</div>
                 <div class="eventMeta">${ev.date}</div>
                 <div class="eventMeta">${ev.location || ""}</div>
-
                 <div class="eventMeta">
                     ${ev.orgImage ? `<img src="${ev.orgImage}" style="width:16px;height:16px;border-radius:50%;margin-right:5px;">` : ""}
                     ${ev.orgName}
