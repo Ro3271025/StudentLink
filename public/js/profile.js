@@ -451,7 +451,10 @@ export function setupProfile() {
 
         if (data.photoURL) {
             if (profileImg)      profileImg.src      = data.photoURL;
-            if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL;
+            // Only update sidebar photo if viewing your own profile
+            if (sidebarProfileImg && user.uid === uidToLoad) {
+                sidebarProfileImg.src = data.photoURL;
+            }
         }
 
         if (user.uid === uidToLoad) {
