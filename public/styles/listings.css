@@ -228,14 +228,39 @@
     font-weight: bold;
     color: var(--theme-accent);
 }
-
-/* =========================
-   RIGHT SIDEBAR FIX
-   style.css pushes #rightBar with margin-left: 80%
-   which works for narrow right content but clips the
-   search bar — nudge it back in
-   ========================= */
 #rightBar .searchBar {
     width: 80%;
     box-sizing: border-box;
+}
+.listingCard {
+    position: relative;
+}
+
+.listingUnavailable {
+    opacity: 0.45;
+    filter: grayscale(60%);
+    pointer-events: none;
+}
+
+.listingStatusBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.listingStatusBadge.sold {
+    background: #c0392b;
+    color: white;
+}
+
+.listingStatusBadge.rented {
+    background: #2980b9;
+    color: white;
 }
