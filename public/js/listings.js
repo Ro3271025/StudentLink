@@ -1,72 +1,69 @@
 import { auth, db } from "./firebaseInitialization.js";
 
 import {
-collection,
-getDocs
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
-onAuthStateChanged
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const container = document.getElementById("listingsContainer");
 
 function renderListing(listing) {
 
-return `
+    const isSold   = listing.status === "sold";
+    const isRented = listing.status === "rented";
+    const isUnavailable = isSold || isRented;
 
-<div class="listingCard" onclick="openListing('${listing.id}')">
+    const badgeHTML = isSold
+        ? `<div class="listingStatusBadge sold">Sold</div>`
+        : isRented
+        ? `<div class="listingStatusBadge rented">Rented</div>`
+        : "";
 
-${listing.imageURL
-? `<img class="listingThumb" src="${listing.imageURL}">`
-: `<img class="listingThumb" src="styles/images/placeholder/textbooks.png">`
+    return `
+        <div class="listingCard ${isUnavailable ? "listingUnavailable" : ""}" onclick="openListing('${listing.id}')">
+            ${badgeHTML}
+            ${listing.imageURL
+                ? `<img class="listingThumb" src="${listing.imageURL}">`
+                : `<img class="listingThumb" src="styles/images/placeholder/textbooks.png">`
+            }
+            <h3 class="listingTitle">${listing.title}</h3>
+            <p class="listingPrice">$${listing.price}</p>
+            <p class="listingUser">@${listing.username || "user"}</p>
+        </div>
+    `;
 }
 
-<h3 class="listingTitle">${listing.title}</h3>
-
-<p class="listingPrice">$${listing.price}</p>
-
-<p class="listingUser">@${listing.username || "user"}</p>
-
-</div>
-
-`;
-
-}
-
-window.openListing=function(id){
-
-window.location.href=`listingDetail.html?id=${id}`;
-
+window.openListing = function(id) {
+    window.location.href = `listingDetail.html?id=${id}`;
 };
 
-async function loadListings(){
+async function loadListings() {
 
-const snapshot = await getDocs(collection(db,"listings"));
+    const snapshot = await getDocs(collection(db, "listings"));
 
-if(snapshot.empty){
+    if (snapshot.empty) {
+        container.innerHTML = "No listings available.";
+        return;
+    }
 
-container.innerHTML="No listings available.";
-return;
+    const listings = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
 
+    container.innerHTML = listings.map(renderListing).join("");
 }
 
-const listings = snapshot.docs.map(doc=>({
-id:doc.id,
-...doc.data()
-}));
+onAuthStateChanged(auth, (user) => {
 
-container.innerHTML=listings.map(renderListing).join("");
+    if (!user) {
+        window.location.href = "login.php";
+        return;
+    }
 
-}
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-window.location.href="login.php";
-return;
-}
-
-loadListings();
-
+    loadListings();
 });
