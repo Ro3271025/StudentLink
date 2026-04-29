@@ -61,14 +61,14 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-/*LOAD ALL DATA*/
+/* LOAD ALL DATA */
 async function loadExplore() {
     feed.innerHTML = "<p style='opacity:0.6;padding:10px;'>Loading...</p>";
 
     try {
         const [postsSnap, timestampPostsSnap, latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
-            getDocs(query(collection(db, "posts"), orderBy("createdAt",  "desc"))),
-            getDocs(query(collection(db, "posts"), orderBy("timestamp",  "desc"))),
+            getDocs(query(collection(db, "posts"),    orderBy("createdAt",  "desc"))),
+            getDocs(query(collection(db, "posts"),    orderBy("timestamp",  "desc"))),
             getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"), limit(6))),
             getDocs(query(collection(db, "news"),     orderBy("timestamp",  "desc"), limit(5))),
             getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(5)))
@@ -107,7 +107,7 @@ async function loadExplore() {
     }
 }
 
-/*PEOPLE TO FOLLOW*/
+/* PEOPLE TO FOLLOW */
 async function loadPeopleToFollow() {
     const el = document.getElementById("peopleToFollowSection");
     if (!el) return;
@@ -121,7 +121,6 @@ async function loadPeopleToFollow() {
             .map(d => ({ uid: d.id, ...d.data() }))
             .filter(u => u.uid !== currentUserId);
 
-        // Shuffle
         for (let i = users.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [users[i], users[j]] = [users[j], users[i]];
@@ -134,7 +133,6 @@ async function loadPeopleToFollow() {
             return;
         }
 
-        // Load current user's following list
         let following = [];
         if (currentUserId) {
             try {
@@ -174,7 +172,6 @@ async function loadPeopleToFollow() {
                 </button>
             `;
 
-            // Profile click — whole card except the button
             card.addEventListener("click", (e) => {
                 if (!e.target.classList.contains("followBtn")) {
                     window.location.href = `profile.html?id=${user.uid}`;
@@ -232,11 +229,10 @@ function attachFollowListeners() {
     });
 }
 
-/*FILTER + SEARCH*/
+/* FILTER + SEARCH */
 function getFilteredItems() {
     return allItems.filter(item => {
-        if (activeFilter === "posts"    && item.type !== "post")    return false;
-
+        if (activeFilter === "posts" && item.type !== "post") return false;
 
         if (searchQuery) {
             const haystack = [
@@ -250,7 +246,7 @@ function getFilteredItems() {
     });
 }
 
-/*RENDER FEED*/
+/* RENDER FEED */
 function renderFeed(items) {
     feed.innerHTML = "";
     if (!items.length) {
@@ -258,14 +254,14 @@ function renderFeed(items) {
         return;
     }
     items.forEach(item => {
-        if (item.type === "post")    feed.appendChild(buildPostCard(item));
+        if (item.type === "post") feed.appendChild(buildPostCard(item));
     });
     attachPostEventListeners();
 }
 
 function buildPostCard(post) {
     const card = document.createElement("div");
-    card.className   = "postCard";
+    card.className      = "postCard";
     card.dataset.postId = post.id;
     card.style.cursor   = "pointer";
 
@@ -340,8 +336,7 @@ function buildPostCard(post) {
     return card;
 }
 
-
-/* POST EVENT LISTENERS*/
+/* POST EVENT LISTENERS */
 function attachPostEventListeners() {
     document.querySelectorAll(".likeBtn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
@@ -419,7 +414,7 @@ async function loadComments(postId) {
         }
 
         list.innerHTML = comments.map(c => {
-            const isOwner     = currentUserId && c.authorId === currentUserId;
+            const isOwner      = currentUserId && c.authorId === currentUserId;
             const ownerActions = isOwner ? `
                 <div style="display:flex;gap:8px;margin-top:4px;">
                     <button class="editCommentBtn themeObject" data-post-id="${postId}" data-comment-id="${c.id}"
@@ -465,8 +460,8 @@ async function loadComments(postId) {
                     <button style="font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;background:#0f73ff;border:none;color:#fff;">Save</button>
                     <button style="font-size:12px;padding:3px 10px;border-radius:12px;cursor:pointer;background:none;border:1px solid #666;color:#aaa;">Cancel</button>`;
 
-                const editInput              = editRow.querySelector("input");
-                const [saveBtn, cancelBtn]   = editRow.querySelectorAll("button");
+                const editInput            = editRow.querySelector("input");
+                const [saveBtn, cancelBtn] = editRow.querySelectorAll("button");
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
 
@@ -488,17 +483,59 @@ async function loadComments(postId) {
     }
 }
 
+/* HELPERS */
+function isPast(dateStr) {
+    if (!dateStr) return false;
+    const eventDate = new Date(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return eventDate < today;
+}
+
+function formatTime(timestamp) {
+    if (!timestamp?.seconds) return "";
+    const date = new Date(timestamp.seconds * 1000);
+    const diff = Math.floor((new Date() - date) / 1000);
+    if (diff < 60)    return "Just now";
+    if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return date.toLocaleDateString();
+}
+
+function escapeHtml(str) {
+    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function escapeAttr(str) {
+    return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+
 /* RENDER LATEST LISTINGS */
 function renderLatestListings(listings) {
     if (!latestListingsEl) return;
     if (!listings.length) { latestListingsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No listings yet.</p>"; return; }
-    latestListingsEl.innerHTML = listings.map(item => `
-        <div class="listingCard" onclick="window.location.href='listingDetail.html?id=${item.id}'">
-            <img class="listingThumb" src="${item.imageURL || "styles/images/placeholder/textbooks.png"}">
-            <h3 class="listingTitle">${item.title || item.name || ""}</h3>
-            <p class="listingPrice">$${item.price || ""}</p>
-            <p class="listingUser">@${item.username || "user"}</p>
-        </div>`).join("");
+
+    latestListingsEl.innerHTML = listings.map(item => {
+        const isSold        = item.status === "sold";
+        const isRented      = item.status === "rented";
+        const isUnavailable = isSold || isRented;
+
+        const badgeHTML = isSold
+            ? `<div class="listingStatusBadge sold">Sold</div>`
+            : isRented
+            ? `<div class="listingStatusBadge rented">Rented</div>`
+            : "";
+
+        return `
+            <div class="listingCard${isUnavailable ? " listingUnavailable" : ""}"
+                 onclick="window.location.href='listingDetail.html?id=${item.id}'">
+                ${badgeHTML}
+                <img class="listingThumb" src="${item.imageURL || "styles/images/placeholder/textbooks.png"}">
+                <h3 class="listingTitle">${item.title || item.name || ""}</h3>
+                <p class="listingPrice">$${item.price || ""}</p>
+                <p class="listingUser">@${item.username || "user"}</p>
+            </div>`;
+    }).join("");
 }
 
 /* RENDER NEWS & EVENTS */
@@ -524,9 +561,12 @@ function renderSideSections(news, events) {
         eventsEl.innerHTML = "";
         if (!events.length) { eventsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No upcoming events.</p>"; }
         else events.forEach(item => {
-            const div = document.createElement("div");
-            div.className = "feedItem";
+            const past = isPast(item.date);
+            const div  = document.createElement("div");
+            div.className      = `feedItem${past ? " eventPast" : ""}`;
+            div.style.position = "relative";
             div.innerHTML = `
+                ${past ? `<div class="eventStatusBadge">Past Event</div>` : ""}
                 <div class="feedHeader"><span class="feedUser">${item.orgName || "Event"}</span><span class="feedType">Event</span></div>
                 <div class="feedContent">
                     <strong>${item.title || item.name || ""}</strong>
@@ -538,28 +578,9 @@ function renderSideSections(news, events) {
     }
 }
 
-/* HELPERS */
-function formatTime(timestamp) {
-    if (!timestamp?.seconds) return "";
-    const date = new Date(timestamp.seconds * 1000);
-    const diff = Math.floor((new Date() - date) / 1000);
-    if (diff < 60)    return "Just now";
-    if (diff < 3600)  return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    return date.toLocaleDateString();
-}
-
-function escapeHtml(str) {
-    return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function escapeAttr(str) {
-    return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-}
-
-/* EVENTS*/
-filter?.addEventListener("change", () => { activeFilter = filter.value; renderFeed(getFilteredItems()); });
-searchBar?.addEventListener("input", () => { searchQuery = searchBar.value.toLowerCase().trim(); renderFeed(getFilteredItems()); });
+/* EVENTS */
+filter?.addEventListener("change",   () => { activeFilter = filter.value; renderFeed(getFilteredItems()); });
+searchBar?.addEventListener("input", () => { searchQuery  = searchBar.value.toLowerCase().trim(); renderFeed(getFilteredItems()); });
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("orgCard")?.addEventListener("click",   () => window.location.href = "organizations.html");
