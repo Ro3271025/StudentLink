@@ -3,7 +3,7 @@ import { auth, db } from "./firebaseInitialization.js";
 import {
     doc,
     getDoc,
-    setDoc, // ✅ ADDED
+    setDoc, //
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
