@@ -21,9 +21,7 @@ const storage = getStorage(app);
 const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
-// ── FIXED: Query for existing conversation by users array, create if missing ──
 async function getOrCreateConversation(currentUserId, otherUserId) {
-    // Search for an existing conversation containing the current user
     const q = query(
         collection(db, "conversations"),
         where("users", "array-contains", currentUserId)
@@ -31,15 +29,12 @@ async function getOrCreateConversation(currentUserId, otherUserId) {
 
     const snap = await getDocs(q);
 
-    // Find one that also contains the other user
     const existing = snap.docs.find(d =>
         d.data().users.includes(otherUserId)
     );
 
-    if (existing) return existing.id; // Returns the real Firestore auto-generated ID
+    if (existing) return existing.id;
 
-    // None found — create a new one with a Firestore auto-generated ID
-    // (consistent with how existing conversations were created)
     const convoRef = doc(collection(db, "conversations"));
     await setDoc(convoRef, {
         users: [currentUserId, otherUserId],
@@ -82,16 +77,11 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
-            // Format timestamp
             let dateString = 'Unknown date';
             if (post.createdAt) {
                 let dateObj = post.createdAt;
-                if (typeof dateObj.toDate === 'function') {
-                    dateObj = dateObj.toDate();
-                }
-                if (dateObj instanceof Date) {
-                    dateString = dateObj.toLocaleString();
-                }
+                if (typeof dateObj.toDate === 'function') dateObj = dateObj.toDate();
+                if (dateObj instanceof Date) dateString = dateObj.toLocaleString();
             }
 
             const card = document.createElement('div');
@@ -144,7 +134,6 @@ async function loadComments(uidToLoad) {
             const comment = { id: d.id, ...d.data() };
             const commenterImg = comment.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
 
-            // Get the parent post title
             const postId = d.ref.parent.parent.id;
             let postTitle = 'a post';
             try {
@@ -159,7 +148,7 @@ async function loadComments(uidToLoad) {
             card.className = 'content';
             card.style.cursor = 'pointer';
             card.innerHTML = `
-                <img class="profileImgMini" src="${commenterImg}" 
+                <img class="profileImgMini" src="${commenterImg}"
                     style="object-fit:cover; border-radius:4px; vertical-align:middle; margin-right:8px;"
                     onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
                 <p class="postTitle" style="display:inline-block;margin-left:3.5%">In reply to: <span style="color:var(--theme-accent);">${escapeHtml(postTitle)}</span></p>
@@ -182,10 +171,10 @@ async function loadListings(uidToLoad) {
     const container = document.getElementById('tab-listings');
 
     container.innerHTML = `
-    <div class="profileContentWrapper">
-        <div class="listingsGrid"></div>
-    </div>
-`;
+        <div class="profileContentWrapper">
+            <div class="listingsGrid"></div>
+        </div>
+    `;
 
     try {
         const q = query(
@@ -209,18 +198,28 @@ async function loadListings(uidToLoad) {
         snap.docs.forEach(d => {
             const listing = { id: d.id, ...d.data() };
 
-            const imgSrc = listing.imageURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
-            const price = listing.price != null ? `$${listing.price}` : 'N/A';
+            const imgSrc    = listing.imageURL  || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+            const price     = listing.price != null ? `$${listing.price}` : 'N/A';
             const condition = listing.condition || '';
-            const title = listing.title || listing.itemCategory || 'Listing';
+            const title     = listing.title || listing.itemCategory || 'Listing';
+
+            const isSold        = listing.status === "sold";
+            const isRented      = listing.status === "rented";
+            const isUnavailable = isSold || isRented;
+
+            const badgeHTML = isSold
+                ? `<div class="listingStatusBadge sold">Sold</div>`
+                : isRented
+                ? `<div class="listingStatusBadge rented">Rented</div>`
+                : "";
 
             const card = document.createElement('div');
-            card.className = 'listingCard';
+            card.className = `listingCard${isUnavailable ? " listingUnavailable" : ""}`;
 
             card.innerHTML = `
-                <img class="listingThumb" src="${imgSrc}" 
+                ${badgeHTML}
+                <img class="listingThumb" src="${imgSrc}"
                      onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
-
                 <div class="listingInfo">
                     <p class="listingTitle">${escapeHtml(title)}</p>
                     <p class="listingPrice">${price}</p>
@@ -237,11 +236,60 @@ async function loadListings(uidToLoad) {
 
     } catch (err) {
         console.error("Failed to load listings:", err);
-        container.innerHTML = `
-            <p style="text-align:center;color:#e55;padding:20px;">
-                Failed to load listings.
-            </p>
-        `;
+        container.innerHTML = `<p style="text-align:center;color:#e55;padding:20px;">Failed to load listings.</p>`;
+    }
+}
+
+// ── Render following list ──
+async function loadFollowing(uidToLoad) {
+    const container = document.getElementById('tab-following');
+    container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Loading...</p>';
+
+    try {
+        const userSnap = await getDoc(doc(db, "users", uidToLoad));
+        const following = userSnap.exists() ? (userSnap.data().following || []) : [];
+
+        if (!following.length) {
+            container.innerHTML = '<p style="text-align:center;color:#aaa;padding:20px;">Not following anyone yet.</p>';
+            return;
+        }
+
+        const grid = document.createElement('div');
+        grid.className = 'followingGrid';
+
+        for (const uid of following) {
+            try {
+                const snap = await getDoc(doc(db, "users", uid));
+                if (!snap.exists()) continue;
+
+                const data        = snap.data();
+                const displayName = data.displayName || data.name || "Student";
+                const username    = data.username ? `@${data.username}` : "";
+                const photo       = data.photoURL  || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG";
+
+                const card = document.createElement('div');
+                card.className = 'followingCard';
+                card.innerHTML = `
+                    <img src="${photo}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
+                    <div>
+                        <div class="followingName">${escapeHtml(displayName)}</div>
+                        <div class="followingUsername">${escapeHtml(username)}</div>
+                    </div>
+                `;
+                card.onclick = () => {
+                    window.location.href = `profile.html?id=${uid}`;
+                };
+
+                grid.appendChild(card);
+            } catch (e) { /* skip users that fail */ }
+        }
+
+        container.innerHTML = '';
+        container.appendChild(grid);
+
+    } catch (err) {
+        console.error("Failed to load following:", err);
+        container.innerHTML = '<p style="text-align:center;color:#e55;padding:20px;">Failed to load following.</p>';
     }
 }
 
@@ -251,23 +299,21 @@ function setupTabs(uidToLoad) {
         tab.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            // Update active tab style
             document.querySelectorAll('.profileTab').forEach(t => t.classList.remove('activeTab'));
             tab.classList.add('activeTab');
 
-            // Hide all tab content
-            document.getElementById('tab-posts').style.display = 'none';
-            document.getElementById('tab-comments').style.display = 'none';
-            document.getElementById('tab-listings').style.display = 'none';
+            document.getElementById('tab-posts').style.display     = 'none';
+            document.getElementById('tab-comments').style.display  = 'none';
+            document.getElementById('tab-listings').style.display  = 'none';
+            document.getElementById('tab-following').style.display = 'none';
 
             const tabName = tab.dataset.tab;
-            const tabEl = document.getElementById(`tab-${tabName}`);
-            tabEl.style.display = 'block';
+            document.getElementById(`tab-${tabName}`).style.display = 'block';
 
-            // Load data for the tab
-            if (tabName === 'posts') await loadPosts(uidToLoad);
-            if (tabName === 'comments') await loadComments(uidToLoad);
-            if (tabName === 'listings') await loadListings(uidToLoad);
+            if (tabName === 'posts')     await loadPosts(uidToLoad);
+            if (tabName === 'comments')  await loadComments(uidToLoad);
+            if (tabName === 'listings')  await loadListings(uidToLoad);
+            if (tabName === 'following') await loadFollowing(uidToLoad);
         });
     });
 }
@@ -302,39 +348,32 @@ export function setupProfile() {
 
         const data = userSnap.data() || {};
 
-        // ADDED PRIVACY & BLOCKING LOGIC START
-        // Check if the visitor is on this user's blocked list
         if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
             document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
             return;
         }
 
-        // Check if profile is private (and visitor is not the owner)
         if (data.visibility === 'private' && user.uid !== uidToLoad) {
             const postsContainer = document.getElementById('postsContainer');
-            const statusMsg = document.getElementById('profileStatusMsg');
-
+            const statusMsg      = document.getElementById('profileStatusMsg');
             if (postsContainer) postsContainer.style.display = 'none';
             if (statusMsg) statusMsg.textContent = "This account is private.";
         }
-        // --- ADDED PRIVACY & BLOCKING LOGIC END ---
 
         const displayName = data.name || data.displayName || "";
-        const username = data.username ? "@" + data.username : "";
+        const username    = data.username ? "@" + data.username : "";
 
-        // Update profile header
         document.getElementById("profileDisplayName").innerText = displayName;
-        document.getElementById("profileUsername").innerText = username;
+        document.getElementById("profileUsername").innerText    = username;
 
-        // ── Sidebar Update ──
-        const sideDisplay = document.getElementById("sideDisplayName");
-        const sideUser = document.getElementById("sideUsername");
+        const sideDisplay      = document.getElementById("sideDisplayName");
+        const sideUser         = document.getElementById("sideUsername");
         const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
         if (sideDisplay) sideDisplay.innerText = displayName;
-        if (sideUser) sideUser.innerText = username;
+        if (sideUser)    sideUser.innerText    = username;
 
-        // Message button logic
+        // ── Message button ──
         const messageBtn = document.getElementById("messageStudentBtn");
         if (messageBtn) {
             if (user.uid === uidToLoad) {
@@ -353,21 +392,59 @@ export function setupProfile() {
             }
         }
 
+        // ── Follow button ──
+        const followBtn = document.getElementById("followBtn");
+        if (followBtn) {
+            if (user.uid === uidToLoad) {
+                followBtn.style.display = "none";
+            } else {
+                followBtn.style.display = "block";
+
+                // Check if already following
+                const currentUserSnap = await getDoc(doc(db, "users", user.uid));
+                const currentUserData = currentUserSnap.exists() ? currentUserSnap.data() : {};
+                let following = currentUserData.following || [];
+                const isFollowing = following.includes(uidToLoad);
+
+                followBtn.textContent = isFollowing ? "Following" : "Follow";
+
+                followBtn.onclick = async () => {
+                    try {
+                        const userRef     = doc(db, "users", user.uid);
+                        const snap        = await getDoc(userRef);
+                        let followingList = snap.exists() ? (snap.data().following || []) : [];
+                        const nowFollowing = !followingList.includes(uidToLoad);
+
+                        if (nowFollowing) {
+                            if (!followingList.includes(uidToLoad)) followingList.push(uidToLoad);
+                        } else {
+                            followingList = followingList.filter(uid => uid !== uidToLoad);
+                        }
+
+                        await updateDoc(userRef, { following: followingList });
+                        followBtn.textContent = nowFollowing ? "Following" : "Follow";
+
+                    } catch (err) {
+                        console.error("Follow failed:", err);
+                        alert("Failed to update follow.");
+                    }
+                };
+            }
+        }
+
         // ── Bio + Photo Logic ──
-        const bioText = document.getElementById("bioText");
-        const editBtn = document.getElementById("edit");
+        const bioText  = document.getElementById("bioText");
+        const editBtn  = document.getElementById("edit");
         const profileImg = document.getElementById("profileImage");
 
         if (bioText) bioText.value = data.bio || "";
 
-        // Load profile photo for EVERYONE (Main and Sidebar)
         if (data.photoURL) {
-            if (profileImg) profileImg.src = data.photoURL;
+            if (profileImg)      profileImg.src      = data.photoURL;
             if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL;
         }
 
         if (user.uid === uidToLoad) {
-            // OWNER LOGIC
             let isEditing = false;
             if (editBtn && bioText) {
                 editBtn.addEventListener("click", async () => {
@@ -412,15 +489,12 @@ export function setupProfile() {
                     const file = e.target.files[0];
                     if (!file) return;
                     try {
-                        // Force token refresh to ensure auth is current
                         await user.getIdToken(true);
                         const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
                         await uploadBytes(storageRef, file);
                         const url = await getDownloadURL(storageRef);
                         const userRef = doc(db, "users", user.uid);
                         await updateDoc(userRef, { photoURL: url });
-
-                        // Update both images instantly after upload
                         profileImg.src = url;
                         if (sidebarProfileImg) sidebarProfileImg.src = url;
                     } catch (err) {
@@ -430,12 +504,11 @@ export function setupProfile() {
                 };
             }
         } else {
-            // VISITOR LOGIC
-            if (editBtn) editBtn.style.display = "none";
+            if (editBtn)   editBtn.style.display = "none";
             if (profileImg) {
                 profileImg.style.cursor = "default";
                 profileImg.onclick = null;
-                profileImg.title = "";
+                profileImg.title   = "";
             }
         }
 
