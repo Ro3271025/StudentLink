@@ -16,11 +16,12 @@
             <input type="file" id="fileInput" accept="image/*" style="display:none;">
             <p id="profileDisplayName">Display Name</p>
 
-            <!-- USERNAME ROW with college tag and message button -->
+            <!-- USERNAME ROW with college tag, message button, and follow button -->
             <div class="userMetaRow" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
                 <span id="profileUsername">@Username</span>
                 <button id="userCollege" class="themeObject">SUNY Farmingdale</button>
                 <button id="messageStudentBtn" class="themeObject" style="display:none;">Message User</button>
+                <button id="followBtn" class="themeObject" style="display:none;">Follow</button>
             </div>
 
             <p id="userStats">
@@ -41,6 +42,7 @@
                     <th><a href="#" class="profileTab activeTab" data-tab="posts">Posts</a></th>
                     <th><a href="#" class="profileTab" data-tab="comments">Comments</a></th>
                     <th><a href="#" class="profileTab" data-tab="listings">Listings</a></th>
+                    <th><a href="#" class="profileTab" data-tab="following">Following</a></th>
                 </tr>
             </table>
         </div>
@@ -58,6 +60,11 @@
         <!-- LISTINGS TAB -->
         <div id="tab-listings" style="display:none;">
             <p style="text-align:center; color:#aaa; padding:20px;" id="listingsEmpty" style="display:none;">No listings yet.</p>
+        </div>
+
+        <!-- FOLLOWING TAB -->
+        <div id="tab-following" style="display:none;">
+            <p style="text-align:center; color:#aaa; padding:20px;" id="followingEmpty" style="display:none;">Not following anyone yet.</p>
         </div>
 
         <br>
@@ -165,11 +172,44 @@
             border-radius: 4px;
             vertical-align: middle;
         }
+        .followingGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+        .followingCard {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .followingCard:hover {
+            border-color: var(--theme-accent);
+        }
+        .followingCard img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .followingCard .followingName {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .followingCard .followingUsername {
+            font-size: 12px;
+            opacity: 0.6;
+        }
     </style>
 
-    <!-- FIXED: all module imports combined into one script block -->
     <script type="module">
-        import { setupProfile } from "./js/profile.js?v=6";
+        import { setupProfile } from "./js/profile.js?v=7";
         import { setupSidebar } from "./js/showUser.js";
         setupProfile();
         setupSidebar();
