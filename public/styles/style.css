@@ -1083,3 +1083,7 @@ a:hover{
 #tab-listings {
     padding-top: 10px;
 }
+#followBtn {
+    font-size: 12px;
+    padding: 3px 6px;
+}
