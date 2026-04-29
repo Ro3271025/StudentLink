@@ -1088,11 +1088,11 @@ a:hover{
     padding: 3px 6px;
 }
 .followingGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     padding: 16px;
-    max-width: 100%;
+    justify-content: center;
     box-sizing: border-box;
 }
 
@@ -1106,7 +1106,7 @@ a:hover{
     border-radius: 10px;
     cursor: pointer;
     transition: border-color 0.2s;
-    min-width: 0;
+    width: 200px;
     box-sizing: border-box;
 }
 
