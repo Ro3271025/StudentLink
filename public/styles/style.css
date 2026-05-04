@@ -1163,4 +1163,13 @@ a:hover{
     max-height: 90vh;
     border-radius: 10px;
     object-fit: contain;
+}#lightboxClose {
+    position: fixed;
+    top: 20px;
+    right: 28px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 10000;
+    line-height: 1;
 }
