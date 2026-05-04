@@ -34,8 +34,13 @@ const imageInput = document.getElementById("listingImage");
 let listing = null;
 let currentUser = null;
 
-// FIX: Track newly added files separately instead of mixing blob URLs into listing.imageURLs
 let pendingFiles = [];
+
+/* ================= BACK BUTTON ================= */
+
+if (id) {
+    document.getElementById("backArrow").href = `listingDetail.html?id=${id}`;
+}
 
 /* ================= TOAST ================= */
 
@@ -132,7 +137,6 @@ function renderImages() {
         gallery.appendChild(div);
     });
 
-    // FIX: use btn directly (not e.target) to avoid hitting the inner <span>
     document.querySelectorAll(".removeImgBtn").forEach(btn => {
         btn.addEventListener("click", () => {
             const index = Number(btn.dataset.index);
@@ -174,10 +178,8 @@ imageInput.addEventListener("change", () => {
 
     const files = Array.from(imageInput.files);
 
-    // FIX: accumulate into pendingFiles, never push blob URLs into listing.imageURLs
     pendingFiles = [...pendingFiles, ...files];
 
-    // Reset input so the same file can be re-selected if needed
     imageInput.value = "";
 
     renderImages();
@@ -204,7 +206,6 @@ form.addEventListener("submit", async (e) => {
             throw new Error("Validation failed");
         }
 
-        // FIX: upload from pendingFiles (not imageInput.files, which was reset)
         let uploadedURLs = [];
 
         for (const file of pendingFiles) {
@@ -216,8 +217,6 @@ form.addEventListener("submit", async (e) => {
             uploadedURLs.push(url);
         }
 
-        // FIX: listing.imageURLs already contains only real http URLs (blob URLs never added)
-        // just merge with newly uploaded URLs
         const finalImages = [...listing.imageURLs, ...uploadedURLs];
 
         /* UPDATE FIRESTORE */
@@ -227,7 +226,7 @@ form.addEventListener("submit", async (e) => {
             price,
             category,
             imageURLs: finalImages,
-            imageURL: finalImages[0] || null, // keep imageURL in sync
+            imageURL: finalImages[0] || null,
             updatedAt: serverTimestamp()
         });
 
