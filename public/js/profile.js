@@ -23,7 +23,6 @@ const profileId = params.get("id");
 
 // ── FIXED: Query for existing conversation by users array, create if missing ──
 async function getOrCreateConversation(currentUserId, otherUserId) {
-    // Search for an existing conversation containing the current user
     const q = query(
         collection(db, "conversations"),
         where("users", "array-contains", currentUserId)
@@ -31,15 +30,12 @@ async function getOrCreateConversation(currentUserId, otherUserId) {
 
     const snap = await getDocs(q);
 
-    // Find one that also contains the other user
     const existing = snap.docs.find(d =>
         d.data().users.includes(otherUserId)
     );
 
-    if (existing) return existing.id; // Returns the real Firestore auto-generated ID
+    if (existing) return existing.id;
 
-    // None found — create a new one with a Firestore auto-generated ID
-    // (consistent with how existing conversations were created)
     const convoRef = doc(collection(db, "conversations"));
     await setDoc(convoRef, {
         users: [currentUserId, otherUserId],
@@ -82,7 +78,6 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
-            // Format timestamp
             let dateString = 'Unknown date';
             if (post.createdAt) {
                 let dateObj = post.createdAt;
@@ -144,7 +139,6 @@ async function loadComments(uidToLoad) {
             const comment = { id: d.id, ...d.data() };
             const commenterImg = comment.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
 
-            // Get the parent post title
             const postId = d.ref.parent.parent.id;
             let postTitle = 'a post';
             try {
@@ -251,11 +245,9 @@ function setupTabs(uidToLoad) {
         tab.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            // Update active tab style
             document.querySelectorAll('.profileTab').forEach(t => t.classList.remove('activeTab'));
             tab.classList.add('activeTab');
 
-            // Hide all tab content
             document.getElementById('tab-posts').style.display = 'none';
             document.getElementById('tab-comments').style.display = 'none';
             document.getElementById('tab-listings').style.display = 'none';
@@ -264,7 +256,6 @@ function setupTabs(uidToLoad) {
             const tabEl = document.getElementById(`tab-${tabName}`);
             tabEl.style.display = 'block';
 
-            // Load data for the tab
             if (tabName === 'posts') await loadPosts(uidToLoad);
             if (tabName === 'comments') await loadComments(uidToLoad);
             if (tabName === 'listings') await loadListings(uidToLoad);
@@ -294,45 +285,47 @@ export function setupProfile() {
 
         const uidToLoad = profileId || user.uid;
 
+        // Fetch the VIEWED profile's data
         const userSnap = await getDoc(doc(db, "users", uidToLoad));
         if (!userSnap.exists()) {
             console.log("User not found");
             return;
         }
-
         const data = userSnap.data() || {};
 
-        // ADDED PRIVACY & BLOCKING LOGIC START
-        // Check if the visitor is on this user's blocked list
+        // ── ALWAYS fetch LOGGED-IN user's own data for the sidebar ──
+        const loggedInSnap = await getDoc(doc(db, "users", user.uid));
+        const loggedInData = loggedInSnap.data() || {};
+        const loggedInDisplayName = loggedInData.name || loggedInData.displayName || "";
+        const loggedInUsername = loggedInData.username ? "@" + loggedInData.username : "";
+
+        // Privacy & blocking checks
         if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
             document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
             return;
         }
 
-        // Check if profile is private (and visitor is not the owner)
         if (data.visibility === 'private' && user.uid !== uidToLoad) {
             const postsContainer = document.getElementById('postsContainer');
             const statusMsg = document.getElementById('profileStatusMsg');
-
             if (postsContainer) postsContainer.style.display = 'none';
             if (statusMsg) statusMsg.textContent = "This account is private.";
         }
-        // --- ADDED PRIVACY & BLOCKING LOGIC END ---
 
         const displayName = data.name || data.displayName || "";
         const username = data.username ? "@" + data.username : "";
 
-        // Update profile header
+        // Update PROFILE HEADER with the VIEWED user's info
         document.getElementById("profileDisplayName").innerText = displayName;
         document.getElementById("profileUsername").innerText = username;
 
-        // ── Sidebar Update ──
+        // ── Sidebar — always use LOGGED-IN user's data ──
         const sideDisplay = document.getElementById("sideDisplayName");
         const sideUser = document.getElementById("sideUsername");
         const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
-        if (sideDisplay) sideDisplay.innerText = displayName;
-        if (sideUser) sideUser.innerText = username;
+        if (sideDisplay) sideDisplay.innerText = loggedInDisplayName;
+        if (sideUser) sideUser.innerText = loggedInUsername;
 
         // Message button logic
         const messageBtn = document.getElementById("messageStudentBtn");
@@ -360,10 +353,14 @@ export function setupProfile() {
 
         if (bioText) bioText.value = data.bio || "";
 
-        // Load profile photo for EVERYONE (Main and Sidebar)
+        // Load VIEWED user's photo into main profile image
         if (data.photoURL) {
             if (profileImg) profileImg.src = data.photoURL;
-            if (sidebarProfileImg) sidebarProfileImg.src = data.photoURL;
+        }
+
+        // Load LOGGED-IN user's photo into sidebar
+        if (loggedInData.photoURL && sidebarProfileImg) {
+            sidebarProfileImg.src = loggedInData.photoURL;
         }
 
         if (user.uid === uidToLoad) {
@@ -412,7 +409,6 @@ export function setupProfile() {
                     const file = e.target.files[0];
                     if (!file) return;
                     try {
-                        // Force token refresh to ensure auth is current
                         await user.getIdToken(true);
                         const storageRef = ref(storage, "userPhotos/" + user.uid + "/profile.jpg");
                         await uploadBytes(storageRef, file);
