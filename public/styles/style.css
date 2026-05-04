@@ -406,18 +406,17 @@ a:hover{
 
 /* Home Page Values */
 
-#header{
+#header {
     border: 1px solid var(--border-color);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     margin: 0 auto;
     width: 55%;
-    height:5vh;
-    position: -webkit-sticky;
+    height: 5vh;
+    display: flex;
     align-items: center;
-    vertical-align: middle;
-    text-align: center;
-    /*Can't have padding because it screws with the div alignment*/
+    justify-content: center;
+    position: relative;
 }
 
 #header img{
@@ -427,6 +426,20 @@ a:hover{
     width: 75%;
     height: 75%;
     
+}
+#header #backArrow {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#header img#logo {
+    max-width: 75%;
+    max-height: 75%;
+    width: auto;
+    height: 75%;
+    margin-top: 0;
 }
 
 #loadMore{
@@ -1172,4 +1185,10 @@ a:hover{
     cursor: pointer;
     z-index: 10000;
     line-height: 1;
+}
+#backArrowImg {
+    width: 24px;
+    height: 24px;
+    max-width: unset;
+    max-height: unset;
 }
