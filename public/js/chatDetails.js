@@ -130,6 +130,13 @@ async function loadRecipientInfo(currentUserId) {
 
     chatTargetUser.textContent = userData.displayName || "User";
     chatUsername.textContent = userData.username ? `@${userData.username}` : "";
+
+    // Make name + username clickable → go to their profile
+    const chatUserRow = document.querySelector(".chatUserRow");
+    chatUserRow.style.cursor = "pointer";
+    chatUserRow.addEventListener("click", () => {
+        window.location.href = `profile.html?id=${otherUserId}`;
+    });
 }
 
 function loadMessages(currentUserId) {
@@ -170,6 +177,12 @@ function loadMessages(currentUserId) {
                     img.src = url;
                     img.classList.add("chatImage");
 
+                    img.style.cursor = "pointer";
+                    img.addEventListener("click", () => {
+                        document.getElementById("lightboxImg").src = url;
+                        document.getElementById("lightboxOverlay").classList.add("active");
+                    });
+
                     img.onload = () => {
                         if (isNearBottom) {
                             messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -179,6 +192,7 @@ function loadMessages(currentUserId) {
                 });
                 bubble.appendChild(imgContainer);
             }
+
             /* TEXT UNDER IMAGE */
             if (msg.text) {
                 const text = document.createElement("div");
