@@ -1145,3 +1145,22 @@ a:hover{
     border-right: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
 }
+#lightboxOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+#lightboxOverlay.active {
+    display: flex;
+}
+#lightboxImg {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    object-fit: contain;
+}
