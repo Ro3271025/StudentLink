@@ -35,6 +35,12 @@ body {
     border: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
+.exploreBar{
+    outline: none;
+    border: transparent !important;
+    max-width: 100%;
+}
+
 /* RECENT SEARCHES */
 #recentSearches {
     padding: 10px;
@@ -107,7 +113,7 @@ body {
     padding: 20px;
 }
 #explorePage.content {
-    max-width: 900px;
+    max-width: 55%;
     margin: 0 auto;
 }
 /* LATEST LISTINGS HORIZONTAL SCROLL */

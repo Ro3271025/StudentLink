@@ -194,6 +194,14 @@ a:hover{
     transition: 0.125s;
     font-family: var(--font-family);
     display: inline;
+
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    outline:none;
 }
 
 #profileContainer{
@@ -567,6 +575,9 @@ a:hover{
     font-size: 14pt;
     margin-left: 3.5%;
 }
+
+
+
 /* CHAT / MESSAGES UI */
 .chatPage{
     align-items: center;
@@ -575,15 +586,7 @@ a:hover{
     margin: 0 auto;
     width: 45%;
 }
-.searchBar{
-    padding:12px;
-    border-radius:8px;
-    border:none;
-    margin-bottom:20px;
-    background: var(--bg-secondary);
-    color: var(--text-fill);
-    outline:none;
-}
+
 .conversationItem{
     padding:16px;
     border-radius:12px;
@@ -725,11 +728,8 @@ a:hover{
 #closeModal:hover {
     background: var(--button-hover);
 }
-/*Chat Details Page*/
-.chatDetailsPage{
-    display: flex;
-    flex-direction: column;
 
+<<<<<<< HEAD
     margin: 0 auto;
     width: 45%;
     height: 90vh;
@@ -1083,3 +1083,5 @@ a:hover{
 #tab-listings {
     padding-top: 10px;
 }
+=======
+>>>>>>> Dev-Peyton
