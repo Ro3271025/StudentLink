@@ -93,8 +93,34 @@
             return `${Math.floor(diff / 86400)}d ago`;
         }
 
-        function renderNotifications(notifications) {
+        // ── Fetch photo URLs for all unique senders ──
+        async function fetchSenderPhotos(notifications) {
+            const placeholder = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg';
+            const photoMap = {};
+
+            // Get unique sender IDs
+            const uniqueSenderIds = [...new Set(
+                notifications.map(n => n.fromUserId).filter(Boolean)
+            )];
+
+            // Fetch each sender's user doc
+            await Promise.all(uniqueSenderIds.map(async (uid) => {
+                try {
+                    const snap = await getDoc(doc(db, "users", uid));
+                    photoMap[uid] = snap.exists() && snap.data().photoURL
+                        ? snap.data().photoURL
+                        : placeholder;
+                } catch (e) {
+                    photoMap[uid] = placeholder;
+                }
+            }));
+
+            return photoMap;
+        }
+
+        async function renderNotifications(notifications) {
             const container = document.getElementById('notificationsContainer');
+            const placeholder = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg';
 
             if (notifications.length === 0) {
                 container.innerHTML = `
@@ -105,12 +131,17 @@
                 return;
             }
 
+            // Fetch all sender photos before rendering
+            const photoMap = await fetchSenderPhotos(notifications);
+
             container.innerHTML = '';
 
             notifications.forEach(notif => {
                 const iconSrc = ICON_SRC[notif.type] || 'styles/images/HEART.svg';
                 const label = LABELS[notif.type] || 'interacted with you';
-                const placeholder = 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg';
+
+                // Use the fetched photo or fall back to placeholder
+                const senderPhoto = photoMap[notif.fromUserId] || placeholder;
 
                 const card = document.createElement('div');
                 card.className = 'content';
@@ -120,9 +151,10 @@
                 card.innerHTML = `
                     <span class="notifHeader">
                         <img class="notifIconType" src="${iconSrc}">
-                        <img class="profileImgMini" src="${placeholder}">
+                        <img class="profileImgMini" src="${senderPhoto}"
+                             onerror="this.src='${placeholder}'">
                         <br><br>
-                        <a class="postLink postDisplayName" href="#" style="margin-left: 3.5%; color: #aaa;">
+                        <a class="postLink postDisplayName" href="profile.html?id=${notif.fromUserId}" style="margin-left: 3.5%; color: #aaa;">
                             ${notif.fromUserName || 'Someone'}
                         </a> ${label}
                         <span style="color:#586373; font-size:11px; margin-left:8px;">${timeAgo(notif.createdAt)}</span>
@@ -165,9 +197,9 @@
             const sideProfileIcon = document.querySelector('.sideProfileIcon');
             if (sideProfileIcon && data.photoURL) sideProfileIcon.src = data.photoURL;
 
-            // Load notifications
+            // Load and render notifications
             const notifications = await getNotifications(user.uid);
-            renderNotifications(notifications);
+            await renderNotifications(notifications);
         });
     </script>
 
