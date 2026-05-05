@@ -264,3 +264,42 @@
     background: #2980b9;
     color: white;
 }
+.ownerControls {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.listingActionBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    color: white;
+    white-space: nowrap;
+}
+
+.listingActionBtn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.listingActionBtn:active {
+    transform: scale(0.97);
+}
+
+.listingActionBtn.edit {
+    background: var(--theme-accent);
+}
+
+.listingActionBtn.delete {
+    background: #c0392b;
+}
+
+.listingActionBtn.status {
+    background: #2980b9;
+}
