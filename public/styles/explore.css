@@ -102,13 +102,25 @@ body {
 }
 /* EXPLORE PAGE */
 #explorePage {
-    margin-left: 260px;
-    margin-right: 20px; /* FIX: removed conflicting padding-right: 420px */
+    position: fixed;
+    left: 20%;
+    right: 320px;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
     padding: 20px;
 }
+
 #explorePage.content {
-    max-width: 900px;
-    margin: 0 auto;
+    position: fixed;
+    left: 20%;
+    right: 320px;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    max-width: none;
+    margin: 0;
+    padding: 20px;
 }
 /* LATEST LISTINGS HORIZONTAL SCROLL */
 #latestListingsSection {
@@ -189,9 +201,14 @@ body {
 #rightBar {
     position: fixed;
     top: 80px;
-    right: 30px;
-    width: 260px;
+    right: 20px;
+    left: auto;
+    width: 280px;
+    margin-left: 0;
+    max-width: none;
+    min-width: 280px;
     z-index: 10;
+    box-sizing: border-box;
 }
 .orgSearchCard {
     width: 100%;
@@ -234,6 +251,7 @@ body {
     cursor: pointer;
     transition: 0.2s;
     box-sizing: border-box;
+    white-space: nowrap;
 }
 #createOrgBtnUI:hover {
     background: var(--button-hover);
