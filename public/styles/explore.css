@@ -102,22 +102,22 @@ body {
 }
 /* EXPLORE PAGE */
 #explorePage {
-    position: fixed;
+    position: absolute;
     left: 20%;
-    right: 320px;
+    right: 380px;
     top: 0;
     bottom: 0;
-    overflow-y: auto;
+    overflow-y: visible;
     padding: 20px;
 }
 
 #explorePage.content {
-    position: fixed;
+    position: absolute;
     left: 20%;
-    right: 320px;
+    right: 380px;
     top: 0;
     bottom: 0;
-    overflow-y: auto;
+    overflow-y: visible;
     max-width: none;
     margin: 0;
     padding: 20px;
