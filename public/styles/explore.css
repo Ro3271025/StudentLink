@@ -1150,3 +1150,47 @@ h3 {
     border-radius: 20px;
     z-index: 1;
 }
+/* RECENT SEARCHES — scoped fixes for explore page */
+#recentSearches {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.recentSearchesTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent !important;
+    table-layout: fixed;
+}
+
+.recentSearchesTable tr {
+    background: transparent !important;
+}
+
+.recentSearchesTable th.recentSearchData {
+    font-weight: normal;
+    text-align: left;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.recentSearchesTable th.recentSearchData:hover {
+    background: var(--border-color);
+}
+
+.recentSearchesTable .tableAnchorLink {
+    text-decoration: none;
+    color: var(--text-fill);
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recentSearchesTable .tableAnchorLink:hover {
+    color: var(--theme-accent);
+}
