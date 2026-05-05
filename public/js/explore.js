@@ -59,12 +59,12 @@ async function loadExplore() {
         const [latestListingsSnap, newsSnap, eventsSnap] = await Promise.all([
             getDocs(query(collection(db, "listings"), orderBy("created_at", "desc"), limit(6))),
             getDocs(query(collection(db, "news"),     orderBy("timestamp",  "desc"), limit(5))),
-            getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(5)))
+            getDocs(query(collection(db, "events"),   orderBy("timestamp",  "desc"), limit(10)))
         ]);
 
         const latestListings = latestListingsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-        const latestNews     = newsSnap.docs.map(d           => ({ id: d.id, ...d.data() }));
-        const latestEvents   = eventsSnap.docs.map(d         => ({ id: d.id, ...d.data() }));
+        const latestNews     = newsSnap.docs.map(d       => ({ id: d.id, ...d.data() }));
+        const latestEvents   = eventsSnap.docs.map(d     => ({ id: d.id, ...d.data() }));
 
         renderLatestListings(latestListings);
         renderSideSections(latestNews, latestEvents);
@@ -263,7 +263,10 @@ function renderSideSections(news, events) {
                 const div = document.createElement("div");
                 div.className = "feedItem";
                 div.innerHTML = `
-                    <div class="feedHeader"><span class="feedUser">${item.authorName || "Staff"}</span><span class="feedType">News</span></div>
+                    <div class="feedHeader">
+                        <span class="feedUser">${item.authorName || "Staff"}</span>
+                        <span class="feedType">News</span>
+                    </div>
                     <div class="feedContent"><strong>${item.title || ""}</strong></div>
                     <div class="feedMeta">${formatTime(item.timestamp)}</div>`;
                 div.onclick = () => window.location.href = `newsDetails.html?id=${item.id}`;
@@ -273,27 +276,71 @@ function renderSideSections(news, events) {
     }
 
     const eventsEl = document.getElementById("latestEventsSection");
-    if (eventsEl) {
-        eventsEl.innerHTML = "";
-        if (!events.length) {
-            eventsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No upcoming events.</p>";
-        } else {
-            events.forEach(item => {
-                const past = isPast(item.date);
-                const div  = document.createElement("div");
-                div.className      = `feedItem${past ? " eventPast" : ""}`;
-                div.style.position = "relative";
-                div.innerHTML = `
-                    ${past ? `<div class="eventStatusBadge">Past Event</div>` : ""}
-                    <div class="feedHeader"><span class="feedUser">${item.orgName || "Event"}</span><span class="feedType">Event</span></div>
-                    <div class="feedContent">
-                        <strong>${item.title || item.name || ""}</strong>
-                        <p style="font-size:12px;opacity:0.7;">${item.date || ""} ${item.location ? "· " + item.location : ""}</p>
-                    </div>`;
-                div.onclick = () => window.location.href = `eventDetail.html?id=${item.id}`;
-                eventsEl.appendChild(div);
-            });
+    if (!eventsEl) return;
+
+    eventsEl.innerHTML = "";
+
+    const upcoming = events.filter(e => !isPast(e.date));
+    const past     = events.filter(e =>  isPast(e.date));
+
+    if (!upcoming.length && !past.length) {
+        eventsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No events yet.</p>";
+        return;
+    }
+
+    const renderEvent = (item, isPastEvent) => {
+        const div = document.createElement("div");
+        div.className      = `feedItem${isPastEvent ? " eventPast" : ""}`;
+        div.style.position = "relative";
+        div.innerHTML = `
+            ${isPastEvent ? `<div class="eventStatusBadge">Past Event</div>` : ""}
+            <div class="feedHeader">
+                <span class="feedUser">${item.orgName || "Event"}</span>
+                <span class="feedType">Event</span>
+            </div>
+            <div class="feedContent">
+                <strong>${item.title || item.name || ""}</strong>
+                <p style="font-size:12px;opacity:0.7;margin:4px 0 0;">
+                    ${item.date || ""} ${item.location ? "· " + item.location : ""}
+                </p>
+            </div>`;
+        div.onclick = () => window.location.href = `eventDetail.html?id=${item.id}`;
+        return div;
+    };
+
+    // Upcoming events first
+    if (upcoming.length) {
+        upcoming.forEach(item => eventsEl.appendChild(renderEvent(item, false)));
+    } else {
+        const none = document.createElement("p");
+        none.style.cssText = "opacity:0.5;font-size:13px;margin-bottom:10px;";
+        none.textContent   = "No upcoming events.";
+        eventsEl.appendChild(none);
+    }
+
+    // Divider + past events — only shown if both groups exist
+    if (past.length) {
+        if (upcoming.length) {
+            const divider = document.createElement("div");
+            divider.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin: 16px 0 12px;
+                opacity: 0.45;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: var(--text-fill);
+            `;
+            divider.innerHTML = `
+                <span style="flex:1;height:1px;background:var(--border-color);display:block;"></span>
+                <span>Past Events</span>
+                <span style="flex:1;height:1px;background:var(--border-color);display:block;"></span>`;
+            eventsEl.appendChild(divider);
         }
+        past.forEach(item => eventsEl.appendChild(renderEvent(item, true)));
     }
 }
 
