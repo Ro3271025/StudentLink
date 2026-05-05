@@ -23,7 +23,6 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/f
 const displayNameEl    = document.getElementById("displayName");
 const usernameEl       = document.getElementById("username");
 const profilePic       = document.getElementById("profilePic");
-const filter           = document.getElementById("filterSelection");
 const latestListingsEl = document.getElementById("latestListingsSection");
 
 const storage = getStorage();
@@ -297,11 +296,6 @@ function renderSideSections(news, events) {
         }
     }
 }
-
-/* FILTER DROPDOWN — kept for future use but no longer drives a feed on this page */
-filter?.addEventListener("change", () => {
-    // Reserved: if a filterable section is added later, wire it here.
-});
 
 /* CAMPUS CENTRAL CARDS */
 document.addEventListener("DOMContentLoaded", () => {
