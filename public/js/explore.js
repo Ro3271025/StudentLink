@@ -66,7 +66,25 @@ async function loadExplore() {
         const latestNews     = newsSnap.docs.map(d       => ({ id: d.id, ...d.data() }));
         const latestEvents   = eventsSnap.docs.map(d     => ({ id: d.id, ...d.data() }));
 
-        renderLatestListings(latestListings);
+        // Fetch current usernames for all unique listing owners in parallel
+        const uniqueUserIDs = [...new Set(latestListings.map(l => l.userID).filter(Boolean))];
+        const userSnaps     = await Promise.all(
+            uniqueUserIDs.map(uid => getDoc(doc(db, "users", uid)))
+        );
+        const usernameMap = {};
+        userSnaps.forEach(snap => {
+            if (snap.exists()) {
+                usernameMap[snap.id] = snap.data().username || "user";
+            }
+        });
+
+        // Inject current username before rendering
+        const enrichedListings = latestListings.map(l => ({
+            ...l,
+            username: usernameMap[l.userID] || l.username || "user"
+        }));
+
+        renderLatestListings(enrichedListings);
         renderSideSections(latestNews, latestEvents);
         loadPeopleToFollow();
 
