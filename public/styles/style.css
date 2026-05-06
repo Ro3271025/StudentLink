@@ -1093,3 +1093,43 @@ a:hover{
 #tab-listings {
     padding-top: 10px;
 }
+/* PROFILE PAGE FIXES */
+#profileContainer {
+    width: 55%;
+    margin: 0 auto;
+}
+
+#banner {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#profileInfo {
+    height: auto;
+    min-height: 37vh;
+    padding-bottom: 20px;
+}
+
+#userContent {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#selectedContentList {
+    width: 100%;
+    margin-left: 0;
+}
+
+#tab-posts,
+#tab-comments,
+#tab-listings,
+#tab-following {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.followingGrid {
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
