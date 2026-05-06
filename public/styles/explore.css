@@ -35,6 +35,12 @@ body {
     border: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
+.exploreBar{
+    outline: none;
+    border: transparent !important;
+    max-width: 100%;
+}
+
 /* RECENT SEARCHES */
 #recentSearches {
     padding: 10px;

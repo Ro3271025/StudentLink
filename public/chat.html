@@ -4,16 +4,46 @@
 <head>
     <title>Chats | StudentLink</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/chat.css">
+    <title>Chats | StudentLink</title>
+    <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" type="image/png" href="styles/images/ICON.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body id="documentBody">
+<style>
+    #startChatBtn{
+        line-height: inherit;
+    }
+</style>
 
-    <!-- HEADER -->
-    <div id="header">
-        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+<body>
+
+<!-- LEFT SIDEBAR -->
+
+<div class="sidebar" id="leftBar">
+    <br><img class="sideProfileIcon" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText"><a href="explore.html">Explore</a></p>
+    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p>
+    <button id="startChatBtn" class="themeObject">+ Start a Chat</button>
+</div>
+
+
+<div class="sidebar" id="rightBar">
+    <br><input class="searchBar themeObject" placeholder="Search"><br><br>
+    <div id="recentSearches">
+        <table class="recentSearchesTable">
+            <tr><th id="recentHeader">Recent Searches</th></tr>
+        </table>
     </div>
+</div>
 
     <!-- LEFT SIDEBAR -->
     <div class="sidebar" id="leftBar">

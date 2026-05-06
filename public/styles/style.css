@@ -202,6 +202,14 @@ a:hover{
     background: var(--bg-secondary);
     color: var(--text-fill);
     outline:none;
+
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    outline:none;
 }
 
 #profileContainer{

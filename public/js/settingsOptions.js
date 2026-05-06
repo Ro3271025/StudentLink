@@ -136,8 +136,14 @@ function expandAcc() {
             </button>
 
             <div class='settingsOpt'>
+                <p><strong>Choose a New Display Name</strong></p>
+                <input id='newDisplayName' class='settingsInput' placeholder='e.g, Peyton' />
+                <button class='saveBtn' onclick='saveDisplayName()'>Save</button>
+            </div>
+
+            <div class='settingsOpt'>
                 <p><strong>Choose a New Username</strong></p>
-                <p>This will display as <strong>@username</strong></p>
+                <p>This will display as <strong class='smallTxt'>@username</strong></p>
                 <input id='newUsername' class='settingsInput' placeholder='e.g., rodolfo_tan' />
                 <button class='saveBtn' onclick='saveUsername()'>Save</button>
             </div>
@@ -159,6 +165,29 @@ function expandAcc() {
             </div>
         `;
         accOpen = true;
+    }
+}
+
+// SAVE DISPLAY NAME FUNCTION
+async function saveDisplayName() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const newDisplayName = document.getElementById('newDisplayName').value.trim();
+    if (!newDisplayName) return alert("Please enter a name.");
+
+    try {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, { name : newDisplayName });
+        await updateDoc(userRef, { displayName : newDisplayName });
+
+        // Update UI immediately in both places
+        document.getElementById("displayName").textContent = newDisplayName;
+
+        alert("Display Name updated successfully!");
+    } catch (error) {
+        console.error("Error updating username:", error);
+        alert("Failed to update display name.");
     }
 }
 
@@ -495,6 +524,7 @@ window.expandAbout = expandAbout;
 window.handleLogout = handleLogout;
 window.confDelete = confDelete;
 window.saveUsername = saveUsername;
+window.saveDisplayName = saveDisplayName;
 window.saveEmail = saveEmail;
 window.saveVisibility = saveVisibility;
 window.blockUser = blockUser;

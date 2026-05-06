@@ -33,12 +33,16 @@ async function loadListing() {
 
     const listing = snap.data();
 
+    // get poster's CURRENT display name and username 
+    const userRef = doc(db, "users", listing.userID);
+    const userSnap = await getDoc(userRef);
+
     // ── Populate fields ──
     titleEl.textContent       = listing.title || "Untitled";
     priceEl.textContent       = `$${listing.price}`;
     descriptionEl.textContent = listing.description || "";
 
-    userEl.textContent = `@${listing.username || "Unknown User"}`;
+    userEl.textContent = `@${userSnap.get('username') || "Unknown User"}`;
     userEl.href        = `profile.html?id=${listing.userID}`;
 
     // ── IMAGE GALLERY ──

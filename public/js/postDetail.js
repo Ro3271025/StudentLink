@@ -85,15 +85,18 @@ async function loadPost() {
         }
 
         const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'; 
+        // get poster's CURRENT display name and username 
+        const userRef = doc(db, "users", post.authorId);
+        const userSnap = await getDoc(userRef);
 
         container.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
                 <img class="profileImgMini" src="${authorPhoto}" style="margin:0;">
                 <div>
                     <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">
-                        ${escapeHtml(post.authorName || 'Display Name')}
+                        ${escapeHtml(userSnap.get('displayName') || 'Display Name')}
                     </a>
-                    <small class="postUsername" style="margin-left:6px; color:#aaa;">@${escapeHtml(post.authorUsername || 'username')}</small>
+                    <small class="postUsername" style="margin-left:6px; color:#aaa;">@${escapeHtml(userSnap.get('username') || 'username')}</small>
                 </div>
                 ${deleteBtn}
             </div>

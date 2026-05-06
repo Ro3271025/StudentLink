@@ -68,7 +68,7 @@ async function loadPosts(uidToLoad) {
         }
 
         container.innerHTML = '';
-        snap.docs.forEach(d => {
+        snap.docs.forEach(async d => {
             const post = { id: d.id, ...d.data() };
             const likes = post.likes || 0;
             const comments = post.commentCount || 0;
@@ -77,20 +77,29 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
-            let dateString = 'Unknown date';
-            if (post.createdAt) {
-                let dateObj = post.createdAt;
-                if (typeof dateObj.toDate === 'function') dateObj = dateObj.toDate();
-                if (dateObj instanceof Date) dateString = dateObj.toLocaleString();
-            }
+                // Format timestamp
+                let dateString = 'Unknown date';
+                if (post.createdAt) {
+                    let dateObj = post.createdAt;
+                    if (typeof dateObj.toDate === 'function') {
+                        dateObj = dateObj.toDate();
+                    }
+                    if (dateObj instanceof Date) {
+                        dateString = dateObj.toLocaleString();
+                    }
+                }
+            
+            // get poster's CURRENT display name and username 
+            const userRef = doc(db, "users", post.authorId);
+            const userSnap = await getDoc(userRef);
 
             const card = document.createElement('div');
             card.className = 'content';
             card.style.cursor = 'pointer';
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
-                <a class="postLink postDisplayName" href="#">${escapeHtml(post.authorName || 'Display Name')}</a>
-                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(post.authorUsername || 'username')}</small><br>
+                <a class="postLink postDisplayName" href="#">${escapeHtml(userSnap.get('displayName') || 'Display Name')}</a>
+                <small class="postUsername" style="margin-left:6px;color:var(--username-color);">@${escapeHtml(userSnap.get('username') || 'username')}</small><br>
                 <p class="postContentText">${escapeHtml(post.body || '')}</p>
                 <p class="postTimestamp" style="color:#888;font-size:10pt;margin-left:3.5%">${dateString}</p>
                 ${imageSection}
@@ -340,14 +349,21 @@ export function setupProfile() {
 
         const uidToLoad = profileId || user.uid;
 
+        // Fetch the VIEWED profile's data
         const userSnap = await getDoc(doc(db, "users", uidToLoad));
         if (!userSnap.exists()) {
             console.log("User not found");
             return;
         }
-
         const data = userSnap.data() || {};
 
+        // ── ALWAYS fetch LOGGED-IN user's own data for the sidebar ──
+        const loggedInSnap = await getDoc(doc(db, "users", user.uid));
+        const loggedInData = loggedInSnap.data() || {};
+        const loggedInDisplayName = loggedInData.name || loggedInData.displayName || "";
+        const loggedInUsername = loggedInData.username ? "@" + loggedInData.username : "";
+
+        // Privacy & blocking checks
         if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
             document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
             return;
@@ -355,7 +371,7 @@ export function setupProfile() {
 
         if (data.visibility === 'private' && user.uid !== uidToLoad) {
             const postsContainer = document.getElementById('postsContainer');
-            const statusMsg      = document.getElementById('profileStatusMsg');
+            const statusMsg = document.getElementById('profileStatusMsg');
             if (postsContainer) postsContainer.style.display = 'none';
             if (statusMsg) statusMsg.textContent = "This account is private.";
         }
@@ -363,11 +379,13 @@ export function setupProfile() {
         const displayName = data.name || data.displayName || "";
         const username    = data.username ? "@" + data.username : "";
 
+        // Update PROFILE HEADER with the VIEWED user's info
         document.getElementById("profileDisplayName").innerText = displayName;
         document.getElementById("profileUsername").innerText    = username;
 
-        const sideDisplay      = document.getElementById("sideDisplayName");
-        const sideUser         = document.getElementById("sideUsername");
+        // ── Sidebar — always use LOGGED-IN user's data ──
+        const sideDisplay = document.getElementById("sideDisplayName");
+        const sideUser = document.getElementById("sideUsername");
         const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
         // Always load sidebar from the logged-in user, not the viewed profile
@@ -449,12 +467,14 @@ export function setupProfile() {
 
         if (bioText) bioText.value = data.bio || "";
 
+        // Load VIEWED user's photo into main profile image
         if (data.photoURL) {
-            if (profileImg)      profileImg.src      = data.photoURL;
-            // Only update sidebar photo if viewing your own profile
-            if (sidebarProfileImg && user.uid === uidToLoad) {
-                sidebarProfileImg.src = data.photoURL;
-            }
+            if (profileImg) profileImg.src = data.photoURL;
+        }
+
+        // Load LOGGED-IN user's photo into sidebar
+        if (loggedInData.photoURL && sidebarProfileImg) {
+            sidebarProfileImg.src = loggedInData.photoURL;
         }
 
         if (user.uid === uidToLoad) {
