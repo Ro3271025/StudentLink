@@ -329,15 +329,6 @@ a:hover{
     font-size:12px;
     padding:3px 6px;
 }
-
-#edit, #save{
-    margin-left: 70%;
-    margin-top: -15%;
-    margin-right: auto;
-    word-wrap: break-word !important; 
-    display: inline;
-    position: relative;
-}
 #cancel {
     margin-left: 45%;
     margin-top: -21.5%;
@@ -1227,4 +1218,12 @@ a:hover{
 .followingCard .followingUsername {
     font-size: 12px;
     opacity: 0.6;
+}
+#userCollege,
+#messageStudentBtn,
+#followBtn,
+#edit {
+    font-size: 12px;
+    padding: 4px 10px;
+    line-height: normal;
 }
