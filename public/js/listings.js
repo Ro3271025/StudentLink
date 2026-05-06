@@ -2,7 +2,9 @@ import { auth, db } from "./firebaseInitialization.js";
 
 import {
     collection,
-    getDocs
+    getDocs,
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
@@ -13,8 +15,8 @@ const container = document.getElementById("listingsContainer");
 
 function renderListing(listing) {
 
-    const isSold   = listing.status === "sold";
-    const isRented = listing.status === "rented";
+    const isSold        = listing.status === "sold";
+    const isRented      = listing.status === "rented";
     const isUnavailable = isSold || isRented;
 
     const badgeHTML = isSold
@@ -42,24 +44,45 @@ window.openListing = function(id) {
 };
 
 async function loadListings() {
+    try {
+        const snapshot = await getDocs(collection(db, "listings"));
 
-    const snapshot = await getDocs(collection(db, "listings"));
+        if (snapshot.empty) {
+            container.innerHTML = "<p style='opacity:0.5;font-size:13px;text-align:center;padding:20px;'>No listings available.</p>";
+            return;
+        }
 
-    if (snapshot.empty) {
-        container.innerHTML = "No listings available.";
-        return;
+        const listings = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // Deduplicate userIDs and fetch current usernames in parallel
+        const uniqueUserIDs = [...new Set(listings.map(l => l.userID).filter(Boolean))];
+
+        const userSnaps = await Promise.all(
+            uniqueUserIDs.map(uid => getDoc(doc(db, "users", uid)))
+        );
+
+        const usernameMap = {};
+        userSnaps.forEach(snap => {
+            if (snap.exists()) {
+                usernameMap[snap.id] = snap.data().username || "user";
+            }
+        });
+
+        // Inject current username before rendering
+        const enriched = listings.map(l => ({
+            ...l,
+            username: usernameMap[l.userID] || l.username || "user"
+        }));
+
+        container.innerHTML = enriched.map(renderListing).join("");
+
+    } catch (err) {
+        console.error("Failed to load listings:", err);
+        container.innerHTML = "<p style='opacity:0.5;font-size:13px;text-align:center;padding:20px;'>Failed to load listings.</p>";
     }
-
-    const listings = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }));
-
-    container.innerHTML = listings.map(renderListing).join("");
 }
 
 onAuthStateChanged(auth, (user) => {
-
     if (!user) {
         window.location.href = "login.php";
         return;
