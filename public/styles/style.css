@@ -194,6 +194,14 @@ a:hover{
     transition: 0.125s;
     font-family: var(--font-family);
     display: inline;
+
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    outline:none;
 }
 
 #profileContainer{
@@ -406,17 +414,18 @@ a:hover{
 
 /* Home Page Values */
 
-#header {
+#header{
     border: 1px solid var(--border-color);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     margin: 0 auto;
     width: 55%;
-    height: 5vh;
-    display: flex;
+    height:5vh;
+    position: -webkit-sticky;
     align-items: center;
-    justify-content: center;
-    position: relative;
+    vertical-align: middle;
+    text-align: center;
+    /*Can't have padding because it screws with the div alignment*/
 }
 
 #header img{
@@ -426,20 +435,6 @@ a:hover{
     width: 75%;
     height: 75%;
     
-}
-#header #backArrow {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-#header img#logo {
-    max-width: 75%;
-    max-height: 75%;
-    width: auto;
-    height: 75%;
-    margin-top: 0;
 }
 
 #loadMore{
@@ -580,6 +575,9 @@ a:hover{
     font-size: 14pt;
     margin-left: 3.5%;
 }
+
+
+
 /* CHAT / MESSAGES UI */
 .chatPage{
     align-items: center;
@@ -588,15 +586,7 @@ a:hover{
     margin: 0 auto;
     width: 45%;
 }
-.searchBar{
-    padding:12px;
-    border-radius:8px;
-    border:none;
-    margin-bottom:20px;
-    background: var(--bg-secondary);
-    color: var(--text-fill);
-    outline:none;
-}
+
 .conversationItem{
     padding:16px;
     border-radius:12px;
@@ -742,7 +732,6 @@ a:hover{
 .chatDetailsPage{
     display: flex;
     flex-direction: column;
-
     margin: 0 auto;
     width: 45%;
     height: 90vh;
@@ -1095,100 +1084,4 @@ a:hover{
 /* optional: keep spacing clean */
 #tab-listings {
     padding-top: 10px;
-}
-#followBtn {
-    font-size: 12px;
-    padding: 3px 6px;
-}
-.followingGrid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 24px;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-.followingCard {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-    width: 240px;
-    box-sizing: border-box;
-}
-
-.followingCard:hover {
-    border-color: var(--theme-accent);
-}
-
-.followingCard img {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.followingCard .followingName {
-    font-weight: 600;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.followingCard .followingUsername {
-    font-size: 12px;
-    opacity: 0.6;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-#tab-following {
-    width: 55%;
-    margin: 0 auto;
-    box-sizing: border-box;
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-}
-#lightboxOverlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-#lightboxOverlay.active {
-    display: flex;
-}
-#lightboxImg {
-    max-width: 90vw;
-    max-height: 90vh;
-    border-radius: 10px;
-    object-fit: contain;
-}#lightboxClose {
-    position: fixed;
-    top: 20px;
-    right: 28px;
-    color: white;
-    font-size: 2rem;
-    cursor: pointer;
-    z-index: 10000;
-    line-height: 1;
-}
-#backArrowImg {
-    width: 24px;
-    height: 24px;
-    max-width: unset;
-    max-height: unset;
 }
