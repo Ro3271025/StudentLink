@@ -5,103 +5,6 @@
     <link rel="stylesheet" href="styles/style.css">
     <link rel="icon" type="image/png" href="styles/images/ICON.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        .profileTab {
-            text-decoration: none;
-            color: var(--username-color);
-            font-weight: normal;
-            padding: 6px 12px;
-            display: inline-block;
-        }
-        .profileTab.activeTab {
-            color: var(--theme-accent);
-            font-weight: bold;
-            border-bottom: 2px solid var(--theme-accent);
-        }
-        .profileTab:hover {
-            color: var(--theme-accent);
-        }
-        #userStats a {
-            text-decoration: none;
-            color: inherit;
-        }
-        #userStats a:hover {
-            text-decoration: none;
-        }
-        #profileImage:hover {
-            outline: 2px solid #008000;
-            box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
-            cursor: pointer;
-        }
-        .commentCard {
-            border-left: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-            margin: 0 auto;
-            width: 55%;
-            padding: 12px 3.5%;
-        }
-        .commentCard .postTitle {
-            font-size: 12pt;
-            color: #586373;
-            margin-bottom: 4px;
-        }
-        .commentCard .commentText {
-            font-size: 14pt;
-            color: var(--text-fill);
-        }
-        .sideProfileIcon {
-            width: 85px;
-            height: 85px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .profileImgMini {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 4px;
-            vertical-align: middle;
-        }
-        .followingGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            padding: 16px;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-        .followingCard {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-        .followingCard:hover {
-            border-color: var(--theme-accent);
-        }
-        .followingCard img {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        .followingCard .followingName {
-            font-weight: 600;
-            font-size: 13px;
-        }
-        .followingCard .followingUsername {
-            font-size: 12px;
-            opacity: 0.6;
-        }
-    </style>
 </head>
 <body id="documentBody">
 
@@ -154,6 +57,7 @@
                 <button id="userCollege" class="themeObject">SUNY Farmingdale</button>
                 <button id="messageStudentBtn" class="themeObject" style="display:none;">Message User</button>
                 <button id="followBtn" class="themeObject" style="display:none;">Follow</button>
+                <button id="edit" class="themeObject" style="display:none;">Edit Profile</button>
             </div>
 
             <p id="userStats">
@@ -163,7 +67,6 @@
             </p>
 
             <div id="userBio">
-                <button id="edit" class="themeObject">Edit Profile</button>
                 <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name!</textarea>
             </div>
         </div>
