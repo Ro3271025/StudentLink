@@ -478,6 +478,7 @@ export function setupProfile() {
         }
 
         if (user.uid === uidToLoad) {
+            if (editBtn) editBtn.style.display = "block";
             let isEditing = false;
             if (editBtn && bioText) {
                 editBtn.addEventListener("click", async () => {
