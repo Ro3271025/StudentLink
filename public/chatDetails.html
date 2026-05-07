@@ -107,6 +107,19 @@
         </table>
     </div>
 </div>
+<!-- LIGHTBOX OVERLAY -->
+<div id="lightboxOverlay" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="Full image">
+</div>
+<script>
+    function closeLightbox() {
+        document.getElementById("lightboxOverlay").classList.remove("active");
+        document.getElementById("lightboxImg").src = "";
+    }
+    document.getElementById("lightboxOverlay").addEventListener("click", function(e) {
+        if (e.target === this || e.target.id === "lightboxClose") closeLightbox();
+    });
+</script>
 
 <script type="module">
     import { setupSidebar } from "./js/showUser.js";

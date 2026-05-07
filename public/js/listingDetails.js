@@ -3,7 +3,8 @@ import { auth, db } from "./firebaseInitialization.js";
 import {
     doc,
     getDoc,
-    setDoc, // ✅ ADDED
+    setDoc,
+    updateDoc,
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -93,7 +94,7 @@ async function loadListing() {
     // ── Auth UI ──
     auth.onAuthStateChanged(async (user) => {
 
-        // MESSAGE BUTTON FIXED
+        // MESSAGE BUTTON
         if (messageBtn) {
 
             if (user && user.uid === listing.userID) {
@@ -109,7 +110,6 @@ async function loadListing() {
                     }
 
                     try {
-                        // ✅ SAME ID SYSTEM AS PROFILE
                         const conversationID =
                             [user.uid, listing.userID]
                             .sort()
@@ -118,7 +118,6 @@ async function loadListing() {
                         const convoRef = doc(db, "conversations", conversationID);
                         const convoSnap = await getDoc(convoRef);
 
-                        // ✅ CREATE ONLY IF DOESN'T EXIST
                         if (!convoSnap.exists()) {
                             await setDoc(convoRef, {
                                 users: [user.uid, listing.userID],
@@ -143,8 +142,9 @@ async function loadListing() {
 
             if (ownerControls) ownerControls.style.display = "flex";
 
-            const editBtn = document.getElementById("editListingBtn");
-            const deleteBtn = document.getElementById("deleteListingBtn");
+            const editBtn      = document.getElementById("editListingBtn");
+            const deleteBtn    = document.getElementById("deleteListingBtn");
+            const markStatusBtn = document.getElementById("markStatusBtn");
 
             if (editBtn) {
                 editBtn.onclick = () => {
@@ -154,6 +154,32 @@ async function loadListing() {
 
             if (deleteBtn) {
                 deleteBtn.onclick = deleteListing;
+            }
+
+            if (markStatusBtn) {
+                const currentStatus = listing.status || "active";
+
+                if (currentStatus === "sold") {
+                    markStatusBtn.textContent = "✓ Sold";
+                } else if (currentStatus === "rented") {
+                    markStatusBtn.textContent = "✓ Rented";
+                } else {
+                    markStatusBtn.textContent = listing.listingType === "rent" ? "Mark as Rented" : "Mark as Sold";
+                }
+
+                markStatusBtn.onclick = async () => {
+                    const newStatus = listing.listingType === "rent" ? "rented" : "sold";
+                    if (!confirm(`Mark this listing as ${newStatus}?`)) return;
+
+                    try {
+                        await updateDoc(doc(db, "listings", id), { status: newStatus });
+                        markStatusBtn.textContent = newStatus === "sold" ? "✓ Sold" : "✓ Rented";
+                        alert(`Listing marked as ${newStatus}.`);
+                    } catch (err) {
+                        console.error("Status update failed:", err);
+                        alert("Failed to update listing status.");
+                    }
+                };
             }
         }
     });

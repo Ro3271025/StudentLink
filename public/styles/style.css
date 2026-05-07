@@ -202,6 +202,14 @@ a:hover{
     background: var(--bg-secondary);
     color: var(--text-fill);
     outline:none;
+
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    margin-bottom:20px;
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    outline:none;
 }
 
 #profileContainer{
@@ -320,15 +328,6 @@ a:hover{
 #messageStudentBtn{
     font-size:12px;
     padding:3px 6px;
-}
-
-#edit, #save{
-    margin-left: 70%;
-    margin-top: -15%;
-    margin-right: auto;
-    word-wrap: break-word !important; 
-    display: inline;
-    position: relative;
 }
 #cancel {
     margin-left: 45%;
@@ -728,8 +727,10 @@ a:hover{
 #closeModal:hover {
     background: var(--button-hover);
 }
-
-<<<<<<< HEAD
+/*Chat Details Page*/
+.chatDetailsPage{
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
     width: 45%;
     height: 90vh;
@@ -1083,5 +1084,146 @@ a:hover{
 #tab-listings {
     padding-top: 10px;
 }
-=======
->>>>>>> Dev-Peyton
+/* PROFILE PAGE FIXES */
+#profileContainer {
+    width: 55%;
+    margin: 0 auto;
+}
+
+#banner {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#profileInfo {
+    height: auto;
+    min-height: 37vh;
+    padding-bottom: 20px;
+}
+
+#userContent {
+    width: 100%;
+    margin: 0 auto;
+}
+
+#selectedContentList {
+    width: 100%;
+    margin-left: 0;
+}
+
+#tab-posts,
+#tab-comments,
+#tab-listings,
+#tab-following {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.followingGrid {
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.profileTab {
+    text-decoration: none;
+    color: var(--username-color);
+    font-weight: normal;
+    padding: 6px 12px;
+    display: inline-block;
+}
+.profileTab.activeTab {
+    color: var(--theme-accent);
+    font-weight: bold;
+    border-bottom: 2px solid var(--theme-accent);
+}
+.profileTab:hover {
+    color: var(--theme-accent);
+}
+#userStats a {
+    text-decoration: none;
+    color: inherit;
+}
+#userStats a:hover {
+    text-decoration: none;
+}
+#profileImage:hover {
+    outline: 2px solid #008000;
+    box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
+    cursor: pointer;
+}
+.commentCard {
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    text-align: left;
+    margin: 0 auto;
+    width: 55%;
+    padding: 12px 3.5%;
+}
+.commentCard .postTitle {
+    font-size: 12pt;
+    color: #586373;
+    margin-bottom: 4px;
+}
+.commentCard .commentText {
+    font-size: 14pt;
+    color: var(--text-fill);
+}
+.sideProfileIcon {
+    width: 85px;
+    height: 85px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.profileImgMini {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+.followingGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.followingCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.followingCard:hover {
+    border-color: var(--theme-accent);
+}
+.followingCard img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.followingCard .followingName {
+    font-weight: 600;
+    font-size: 13px;
+}
+.followingCard .followingUsername {
+    font-size: 12px;
+    opacity: 0.6;
+}
+#userCollege,
+#messageStudentBtn,
+#followBtn,
+#edit {
+    font-size: 12px;
+    padding: 4px 10px;
+    line-height: normal;
+}

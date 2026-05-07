@@ -7,20 +7,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body id="documentBody">
-    <div id="profileContainer">
+
+    <!-- HEADER -->
+    <div id="header">
+        <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+    </div>
+
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar" id="leftBar">
+        <br>
+        <img class="sideProfileIcon" id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+        <p id="sideDisplayName">Display Name</p>
+        <p id="sideUsername">@Username</p><br>
+        <p class="sidebarText"><a href="home.html">Home</a></p>
+        <p class="sidebarText"><a href="listings.html">Listings</a></p>
+        <p class="sidebarText"><a href="explore.html">Explore</a></p>
+        <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+        <p class="sidebarText"><a href="chat.html">Chat</a></p>
+        <p class="sidebarText"><a href="profile.html"><strong>Profile</strong></a></p>
+        <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
+        <button class="themeObject" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar" id="rightBar">
+        <br>
+        <input class="searchBar themeObject" placeholder="Search"><br><br>
+        <div id="recentSearches">
+            <table class="recentSearchesTable">
+                <tr><th id="recentHeader">Recent Searches</th></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- PROFILE CONTENT -->
+    <div id="profileContainer" class="content">
+
         <div id="banner"><img src="styles/images/placeholder/DEFAULT_BANNER.svg"></div>
 
-        <div id="profileInfo" class="content">
+        <div id="profileInfo">
             <img id="profileImage" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
                  style="cursor:pointer; border-radius:8px; width:150px; height:150px; object-fit:cover;">
             <input type="file" id="fileInput" accept="image/*" style="display:none;">
             <p id="profileDisplayName">Display Name</p>
 
-            <!-- USERNAME ROW with college tag and message button -->
+            <!-- USERNAME ROW -->
             <div class="userMetaRow" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">
                 <span id="profileUsername">@Username</span>
                 <button id="userCollege" class="themeObject">SUNY Farmingdale</button>
                 <button id="messageStudentBtn" class="themeObject" style="display:none;">Message User</button>
+                <button id="followBtn" class="themeObject" style="display:none;">Follow</button>
+                <button id="edit" class="themeObject" style="display:none;">Edit Profile</button>
             </div>
 
             <p id="userStats">
@@ -28,8 +65,8 @@
                 <span aria-hidden="true"> | </span>
                 Listings: <a href="#" id="listingCountLink">0</a>
             </p>
+
             <div id="userBio">
-                <button id="edit" class="themeObject">Edit Profile</button>
                 <textarea id="bioText" maxlength="500" rows="5" cols="50" disabled>Hi my name is Display Name!</textarea>
             </div>
         </div>
@@ -41,6 +78,7 @@
                     <th><a href="#" class="profileTab activeTab" data-tab="posts">Posts</a></th>
                     <th><a href="#" class="profileTab" data-tab="comments">Comments</a></th>
                     <th><a href="#" class="profileTab" data-tab="listings">Listings</a></th>
+                    <th><a href="#" class="profileTab" data-tab="following">Following</a></th>
                 </tr>
             </table>
         </div>
@@ -60,116 +98,31 @@
             <p style="text-align:center; color:#aaa; padding:20px;" id="listingsEmpty" style="display:none;">No listings yet.</p>
         </div>
 
+        <!-- FOLLOWING TAB -->
+        <div id="tab-following" style="display:none;">
+            <p style="text-align:center; color:#aaa; padding:20px;" id="followingEmpty" style="display:none;">Not following anyone yet.</p>
+        </div>
+
         <br>
         <button id="loadMore" class="themeObject" style="display:none;">Load More</button>
 
-        <!-- LEFT SIDEBAR -->
-        <div class="sidebar" id="leftBar">
-            <br><img class="sideProfileIcon" id="sidebarProfileImg" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
-            <p id="sideDisplayName">Display Name</p>
-            <p id="sideUsername">@Username</p><br>
-            <p class="sidebarText"><a href="home.html">Home</a></p>
-            <p class="sidebarText"><a href="listings.html">Listings</a></p>
-            <p class="sidebarText"><a href="explore.html">Explore</a></p>
-            <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-            <p class="sidebarText"><a href="chat.html">Chat</a></p>
-            <p class="sidebarText"><a href="profile.html">Profile</a></p>
-            <p class="sidebarText"><a href="settings.html">Settings</a></p><br><br>
-            <button class="themeObject" onclick="toggleOverlay('newPostContainer')">New Post</button><br><br>
-        </div>
+    </div>
 
-        <!-- NEW POST OVERLAY -->
-        <div class="overlayDiv">
-            <div id="newPostContainer">
-                <p id="newPostHeader">
-                    <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
-                    <b>Create New Post</b>
-                    <button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button>
-                </p>
-                <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
-            </div>
-        </div>
-
-        <!-- RIGHT SIDEBAR -->
-        <div class="sidebar" id="rightBar">
-            <br><input class="searchBar themeObject" placeholder="Search"><br><br>
-            <div id="recentSearches">
-                <table class="recentSearchesTable">
-                    <tr><th id="recentHeader">Recent Searches</th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">game club</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">textbooks</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">class canceled</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">senior project</a></th></tr>
-                    <tr><th class="recentSearchData"><a class="tableAnchorLink" href="">used calculator</a></th></tr>
-                </table>
-            </div>
+    <!-- NEW POST OVERLAY -->
+    <div class="overlayDiv">
+        <div id="newPostContainer">
+            <p id="newPostHeader">
+                <button class="themeObject" id="closeNewPostBtn" onclick="toggleOverlay('newPostContainer')">X</button>
+                <b>Create New Post</b>
+                <button class="themeObject" id="createPostBtn" onclick="toggleOverlay('newPostContainer')">Post</button>
+            </p>
+            <div id="newPostTXT"><textarea maxlength="300" placeholder="What's happening?"></textarea></div>
         </div>
     </div>
 
-    <style>
-        .profileTab {
-            text-decoration: none;
-            color: var(--username-color);
-            font-weight: normal;
-            padding: 6px 12px;
-            display: inline-block;
-        }
-        .profileTab.activeTab {
-            color: var(--theme-accent);
-            font-weight: bold;
-            border-bottom: 2px solid var(--theme-accent);
-        }
-        .profileTab:hover {
-            color: var(--theme-accent);
-        }
-        #userStats a {
-            text-decoration: none;
-            color: inherit;
-        }
-        #userStats a:hover {
-            text-decoration: none;
-        }
-        #profileImage:hover {
-            outline: 2px solid #008000;
-            box-shadow: 0 0 12px rgba(0, 128, 0, 0.6);
-            cursor: pointer;
-        }
-        .commentCard {
-            border-left: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-            margin: 0 auto;
-            width: 55%;
-            padding: 12px 3.5%;
-        }
-        .commentCard .postTitle {
-            font-size: 12pt;
-            color: #586373;
-            margin-bottom: 4px;
-        }
-        .commentCard .commentText {
-            font-size: 14pt;
-            color: var(--text-fill);
-        }
-        .sideProfileIcon {
-            width: 85px;
-            height: 85px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-        .profileImgMini {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 4px;
-            vertical-align: middle;
-        }
-    </style>
-
-    <!-- FIXED: all module imports combined into one script block -->
+    <!-- SCRIPTS -->
     <script type="module">
-        import { setupProfile } from "./js/profile.js?v=6";
+        import { setupProfile } from "./js/profile.js?v=7";
         import { setupSidebar } from "./js/showUser.js";
         setupProfile();
         setupSidebar();
@@ -177,5 +130,6 @@
     <script type="module" src="js/userSearch.js"></script>
     <script src="js/themeSwap.js" type="text/javascript"></script>
     <script src="js/toggleVis.js" type="text/javascript"></script>
+
 </body>
 </html>

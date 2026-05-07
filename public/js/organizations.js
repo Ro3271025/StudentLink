@@ -40,7 +40,7 @@ async function loadOrgs() {
             name: data.name || "No Name",
             description: data.description || "",
             category: data.category || "",
-            image: data.imageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg",
+            image: data.imageURL || data.mainImageURL || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.svg",
             createdBy: data.createdBy || null // important for edit permission
         });
     });
