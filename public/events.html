@@ -13,15 +13,18 @@
 <body id="documentBody">
 
 <!-- HEADER -->
-<div id="header">
-    <a href="explore.html" id="backArrow">
-        <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
-    </a>
+<div id="header" style="white-space:nowrap;">
     <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+    
 </div>
+
+
 
 <!-- MAIN CONTENT -->
 <div id="explorePage" class="content">
+    <a href="explore.html" id="backArrow" style="margin-top:16px; scale:1.5; margin-left: 12px;">
+        <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
+    </a>
 
     <!-- TITLE -->
     <h2 class="sectionTitle">Events</h2>
@@ -65,10 +68,8 @@
             placeholder="Search events..."
         >
 
-        <label class="eventCheckbox">
-            <input type="checkbox" id="onlineOnly">
-            Online
-        </label>
+        <label for="onlineOnly" style="text-align:center">Online Only</label><input type="checkbox" id="onlineOnly" >
+        
 
         <button id="createEventBtnUI">
             + Create Event

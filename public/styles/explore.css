@@ -119,11 +119,11 @@ body {
     position: relative;
     left: auto;
     right: auto;
-    margin-left: 300px;   /* space for left sidebar */
-    margin-right: 300px;  /* space for right sidebar */
     padding: 20px 28px;
-    max-width: none;
+    max-width: 55%;
+    margin:0 auto;
     width: auto;
+
 }
 /* LATEST LISTINGS HORIZONTAL SCROLL */
 #latestListingsSection {
@@ -210,7 +210,6 @@ body {
     box-sizing: border-box;
 }
 .orgSearchCard {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -220,6 +219,8 @@ body {
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     box-sizing: border-box;
+    margin-left:-35%;
+    width: 150%;
 }
 .orgSearchCard input,
 .orgSearchCard select {
@@ -499,7 +500,6 @@ body {
     width: 100%;
 }
 .eventSearchCard {
-    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -508,6 +508,8 @@ body {
     border-radius: 18px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-left:-35%;
+    width: 150%;
 }
 .eventSearchCard input, 
 .eventSearchCard select {
@@ -554,7 +556,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 18px;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 .eventCard {
