@@ -198,8 +198,12 @@ async function loadComments() {
         }
 
         container.innerHTML = '';
-        snap.docs.forEach(d => {
+        snap.docs.forEach(async d => {
             const c = { id: d.id, ...d.data() };
+            // Had to make async to allow the retrevial of current usernames
+            const userRef = doc(db, "users", c.authorId);
+            const userSnap = await getDoc(userRef);
+            
             const isOwner = currentUser && c.authorId === currentUser.uid;
 
             const ownerActions = isOwner ? `
@@ -222,10 +226,10 @@ async function loadComments() {
             el.id = `comment-${c.id}`;
             el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;padding-left:8px';
             el.innerHTML = `
-                <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
+                <img src=${escapeHtml(userSnap.get('photoURL') || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG")}
                      style="width:32px; height:32px; border-radius:4px; flex-shrink:0;">
                 <div style="flex:1;">
-                    <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(c.authorName || 'Anonymous')}</span>
+                    <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(userSnap.get('username') || 'Anonymous')}</span>
                     <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:3px 0 0;">${escapeHtml(c.text)}</p>
                     ${ownerActions}
                 </div>
