@@ -61,9 +61,7 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-/* ================================================
-   LOAD ALL DATA
-   ================================================ */
+/*LOAD ALL DATA*/
 async function loadExplore() {
     feed.innerHTML = "<p style='opacity:0.6;padding:10px;'>Loading...</p>";
 
@@ -109,9 +107,7 @@ async function loadExplore() {
     }
 }
 
-/* ================================================
-   PEOPLE TO FOLLOW
-   ================================================ */
+/*PEOPLE TO FOLLOW*/
 async function loadPeopleToFollow() {
     const el = document.getElementById("peopleToFollowSection");
     if (!el) return;
@@ -236,9 +232,7 @@ function attachFollowListeners() {
     });
 }
 
-/* ================================================
-   FILTER + SEARCH
-   ================================================ */
+/*FILTER + SEARCH*/
 function getFilteredItems() {
     return allItems.filter(item => {
         if (activeFilter === "posts"    && item.type !== "post")    return false;
@@ -256,9 +250,7 @@ function getFilteredItems() {
     });
 }
 
-/* ================================================
-   RENDER FEED
-   ================================================ */
+/*RENDER FEED*/
 function renderFeed(items) {
     feed.innerHTML = "";
     if (!items.length) {
@@ -273,7 +265,7 @@ function renderFeed(items) {
 
 function buildPostCard(post) {
     const card = document.createElement("div");
-    card.className   = "content";
+    card.className   = "postCard";
     card.dataset.postId = post.id;
     card.style.cursor   = "pointer";
 
@@ -349,9 +341,7 @@ function buildPostCard(post) {
 }
 
 
-/* ================================================
-   POST EVENT LISTENERS
-   ================================================ */
+/* POST EVENT LISTENERS*/
 function attachPostEventListeners() {
     document.querySelectorAll(".likeBtn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
@@ -413,9 +403,7 @@ function attachPostEventListeners() {
     });
 }
 
-/* ================================================
-   LOAD COMMENTS
-   ================================================ */
+/* LOAD COMMENTS */
 async function loadComments(postId) {
     const list = document.getElementById(`commentsList-${postId}`);
     if (!list) return;
@@ -500,9 +488,7 @@ async function loadComments(postId) {
     }
 }
 
-/* ================================================
-   RENDER LATEST LISTINGS
-   ================================================ */
+/* RENDER LATEST LISTINGS */
 function renderLatestListings(listings) {
     if (!latestListingsEl) return;
     if (!listings.length) { latestListingsEl.innerHTML = "<p style='opacity:0.5;font-size:13px;'>No listings yet.</p>"; return; }
@@ -515,9 +501,7 @@ function renderLatestListings(listings) {
         </div>`).join("");
 }
 
-/* ================================================
-   RENDER NEWS & EVENTS
-   ================================================ */
+/* RENDER NEWS & EVENTS */
 function renderSideSections(news, events) {
     const newsEl = document.getElementById("latestNewsSection");
     if (newsEl) {
@@ -554,9 +538,7 @@ function renderSideSections(news, events) {
     }
 }
 
-/* ================================================
-   HELPERS
-   ================================================ */
+/* HELPERS */
 function formatTime(timestamp) {
     if (!timestamp?.seconds) return "";
     const date = new Date(timestamp.seconds * 1000);
@@ -575,9 +557,7 @@ function escapeAttr(str) {
     return String(str).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
 
-/* ================================================
-   EVENTS
-   ================================================ */
+/* EVENTS*/
 filter?.addEventListener("change", () => { activeFilter = filter.value; renderFeed(getFilteredItems()); });
 searchBar?.addEventListener("input", () => { searchQuery = searchBar.value.toLowerCase().trim(); renderFeed(getFilteredItems()); });
 

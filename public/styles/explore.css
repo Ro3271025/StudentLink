@@ -109,7 +109,7 @@ body {
 /* EXPLORE PAGE */
 #explorePage {
     margin-left: 260px;
-    margin-right: 440px; /* FIX: removed conflicting padding-right: 420px */
+    margin-right: 20px; /* FIX: removed conflicting padding-right: 420px */
     padding: 20px;
 }
 #explorePage.content {
