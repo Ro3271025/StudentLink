@@ -5,7 +5,11 @@ import {
     getDoc,
     setDoc,
     updateDoc,
-    deleteDoc
+    deleteDoc,
+    collection,
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const params = new URLSearchParams(window.location.search);
@@ -21,6 +25,36 @@ const messageBtn    = document.getElementById("messageSellerBtn");
 const ownerControls = document.getElementById("ownerControls");
 const gallery       = document.getElementById("imageGallery");
 
+async function getOrCreateConversation(currentUserId, otherUserId) {
+
+    // Search for existing conversation the same way chat.js does
+    const q = query(
+        collection(db, "conversations"),
+        where("users", "array-contains", currentUserId)
+    );
+
+    const snap = await getDocs(q);
+
+    const existing = snap.docs.find(d =>
+        d.data().users.includes(otherUserId)
+    );
+
+    if (existing) return existing.id;
+
+    // No existing chat found — create one with deterministic ID
+    const conversationID = [currentUserId, otherUserId].sort().join("_");
+    const convoRef = doc(db, "conversations", conversationID);
+
+    await setDoc(convoRef, {
+        users: [currentUserId, otherUserId],
+        createdAt: new Date(),
+        lastMessage: "",
+        lastTimestamp: new Date()
+    });
+
+    return conversationID;
+}
+
 async function loadListing() {
 
     const ref  = doc(db, "listings", id);
@@ -33,11 +67,9 @@ async function loadListing() {
 
     const listing = snap.data();
 
-    // get poster's CURRENT display name and username 
-    const userRef = doc(db, "users", listing.userID);
+    const userRef  = doc(db, "users", listing.userID);
     const userSnap = await getDoc(userRef);
 
-    // ── Populate fields ──
     titleEl.textContent       = listing.title || "Untitled";
     priceEl.textContent       = `$${listing.price}`;
     descriptionEl.textContent = listing.description || "";
@@ -50,7 +82,6 @@ async function loadListing() {
     const images = listing.imageURLs || (listing.imageURL ? [listing.imageURL] : []);
 
     if (images.length > 0) {
-
         imageEl.src = images[currentIndex];
         imageEl.style.cursor = "pointer";
 
@@ -61,25 +92,20 @@ async function loadListing() {
 
         if (gallery) {
             gallery.innerHTML = "";
-
             images.forEach((imgURL, index) => {
                 const thumb = document.createElement("img");
                 thumb.src = imgURL;
-
                 thumb.style.width = "60px";
                 thumb.style.margin = "5px";
                 thumb.style.cursor = "pointer";
                 thumb.style.borderRadius = "6px";
-
                 thumb.onclick = () => {
                     currentIndex = index;
                     imageEl.src = images[currentIndex];
                 };
-
                 gallery.appendChild(thumb);
             });
         }
-
     } else {
         imageEl.style.display = "none";
     }
@@ -94,41 +120,22 @@ async function loadListing() {
     // ── Auth UI ──
     auth.onAuthStateChanged(async (user) => {
 
-        // MESSAGE BUTTON
         if (messageBtn) {
-
             if (user && user.uid === listing.userID) {
                 messageBtn.style.display = "none";
             } else {
                 messageBtn.style.display = "block";
 
                 messageBtn.onclick = async () => {
-
-                    if (!user) {
+                    const currentUser = auth.currentUser;
+                    if (!currentUser) {
                         alert("You must be logged in.");
                         return;
                     }
 
                     try {
-                        const conversationID =
-                            [user.uid, listing.userID]
-                            .sort()
-                            .join("_");
-
-                        const convoRef = doc(db, "conversations", conversationID);
-                        const convoSnap = await getDoc(convoRef);
-
-                        if (!convoSnap.exists()) {
-                            await setDoc(convoRef, {
-                                users: [user.uid, listing.userID],
-                                createdAt: new Date(),
-                                lastMessage: "",
-                                lastTimestamp: new Date()
-                            });
-                        }
-
-                        window.location.href = `chatDetails.html?id=${conversationID}`;
-
+                        const convoId = await getOrCreateConversation(currentUser.uid, listing.userID);
+                        window.location.href = `chatDetails.html?id=${convoId}`;
                     } catch (err) {
                         console.error("Chat error:", err);
                         alert("Could not start chat.");
@@ -139,38 +146,24 @@ async function loadListing() {
 
         // ── Owner controls ──
         if (user && user.uid === listing.userID) {
-
             if (ownerControls) ownerControls.style.display = "flex";
 
-            const editBtn      = document.getElementById("editListingBtn");
-            const deleteBtn    = document.getElementById("deleteListingBtn");
+            const editBtn       = document.getElementById("editListingBtn");
+            const deleteBtn     = document.getElementById("deleteListingBtn");
             const markStatusBtn = document.getElementById("markStatusBtn");
 
-            if (editBtn) {
-                editBtn.onclick = () => {
-                    window.location.href = `editListing.html?id=${id}`;
-                };
-            }
-
-            if (deleteBtn) {
-                deleteBtn.onclick = deleteListing;
-            }
+            if (editBtn) editBtn.onclick = () => { window.location.href = `editListing.html?id=${id}`; };
+            if (deleteBtn) deleteBtn.onclick = deleteListing;
 
             if (markStatusBtn) {
                 const currentStatus = listing.status || "active";
-
-                if (currentStatus === "sold") {
-                    markStatusBtn.textContent = "✓ Sold";
-                } else if (currentStatus === "rented") {
-                    markStatusBtn.textContent = "✓ Rented";
-                } else {
-                    markStatusBtn.textContent = listing.listingType === "rent" ? "Mark as Rented" : "Mark as Sold";
-                }
+                if (currentStatus === "sold")        markStatusBtn.textContent = "✓ Sold";
+                else if (currentStatus === "rented") markStatusBtn.textContent = "✓ Rented";
+                else markStatusBtn.textContent = listing.listingType === "rent" ? "Mark as Rented" : "Mark as Sold";
 
                 markStatusBtn.onclick = async () => {
                     const newStatus = listing.listingType === "rent" ? "rented" : "sold";
                     if (!confirm(`Mark this listing as ${newStatus}?`)) return;
-
                     try {
                         await updateDoc(doc(db, "listings", id), { status: newStatus });
                         markStatusBtn.textContent = newStatus === "sold" ? "✓ Sold" : "✓ Rented";
@@ -187,7 +180,6 @@ async function loadListing() {
 
 async function deleteListing() {
     if (!confirm("Are you sure you want to delete this listing?")) return;
-
     try {
         await deleteDoc(doc(db, "listings", id));
         alert("Listing deleted.");

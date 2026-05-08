@@ -22,6 +22,8 @@ const params = new URLSearchParams(window.location.search);
 const profileId = params.get("id");
 
 async function getOrCreateConversation(currentUserId, otherUserId) {
+
+    // Search for existing conversation the same way chat.js does
     const q = query(
         collection(db, "conversations"),
         where("users", "array-contains", currentUserId)
@@ -35,7 +37,10 @@ async function getOrCreateConversation(currentUserId, otherUserId) {
 
     if (existing) return existing.id;
 
-    const convoRef = doc(collection(db, "conversations"));
+    // No existing chat found — create one with deterministic ID
+    const conversationID = [currentUserId, otherUserId].sort().join("_");
+    const convoRef = doc(db, "conversations", conversationID);
+
     await setDoc(convoRef, {
         users: [currentUserId, otherUserId],
         createdAt: new Date(),
@@ -43,7 +48,7 @@ async function getOrCreateConversation(currentUserId, otherUserId) {
         lastTimestamp: new Date()
     });
 
-    return convoRef.id;
+    return conversationID;
 }
 
 // ── Render user's posts ──
@@ -77,19 +82,17 @@ async function loadPosts(uidToLoad) {
                 ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
                 : '';
 
-                // Format timestamp
-                let dateString = 'Unknown date';
-                if (post.createdAt) {
-                    let dateObj = post.createdAt;
-                    if (typeof dateObj.toDate === 'function') {
-                        dateObj = dateObj.toDate();
-                    }
-                    if (dateObj instanceof Date) {
-                        dateString = dateObj.toLocaleString();
-                    }
+            let dateString = 'Unknown date';
+            if (post.createdAt) {
+                let dateObj = post.createdAt;
+                if (typeof dateObj.toDate === 'function') {
+                    dateObj = dateObj.toDate();
                 }
-            
-            // get poster's CURRENT display name and username 
+                if (dateObj instanceof Date) {
+                    dateString = dateObj.toLocaleString();
+                }
+            }
+
             const userRef = doc(db, "users", post.authorId);
             const userSnap = await getDoc(userRef);
 
@@ -349,7 +352,6 @@ export function setupProfile() {
 
         const uidToLoad = profileId || user.uid;
 
-        // Fetch the VIEWED profile's data
         const userSnap = await getDoc(doc(db, "users", uidToLoad));
         if (!userSnap.exists()) {
             console.log("User not found");
@@ -357,13 +359,9 @@ export function setupProfile() {
         }
         const data = userSnap.data() || {};
 
-        // ── ALWAYS fetch LOGGED-IN user's own data for the sidebar ──
         const loggedInSnap = await getDoc(doc(db, "users", user.uid));
         const loggedInData = loggedInSnap.data() || {};
-        const loggedInDisplayName = loggedInData.name || loggedInData.displayName || "";
-        const loggedInUsername = loggedInData.username ? "@" + loggedInData.username : "";
 
-        // Privacy & blocking checks
         if (data.blockedUsers && data.blockedUsers.includes(user.uid)) {
             document.body.innerHTML = "<h1 style='color:white; text-align:center; margin-top:50px;'>You do not have permission to view this content.</h1>";
             return;
@@ -379,16 +377,13 @@ export function setupProfile() {
         const displayName = data.name || data.displayName || "";
         const username    = data.username ? "@" + data.username : "";
 
-        // Update PROFILE HEADER with the VIEWED user's info
         document.getElementById("profileDisplayName").innerText = displayName;
         document.getElementById("profileUsername").innerText    = username;
 
-        // ── Sidebar — always use LOGGED-IN user's data ──
-        const sideDisplay = document.getElementById("sideDisplayName");
-        const sideUser = document.getElementById("sideUsername");
+        const sideDisplay       = document.getElementById("sideDisplayName");
+        const sideUser          = document.getElementById("sideUsername");
         const sidebarProfileImg = document.getElementById("sidebarProfileImg");
 
-        // Always load sidebar from the logged-in user, not the viewed profile
         if (user.uid !== uidToLoad) {
             const mySnap = await getDoc(doc(db, "users", user.uid));
             if (mySnap.exists()) {
@@ -401,6 +396,7 @@ export function setupProfile() {
             if (sideDisplay) sideDisplay.innerText = displayName;
             if (sideUser)    sideUser.innerText    = username;
         }
+
         // ── Message button ──
         const messageBtn = document.getElementById("messageStudentBtn");
         if (messageBtn) {
@@ -428,7 +424,6 @@ export function setupProfile() {
             } else {
                 followBtn.style.display = "block";
 
-                // Check if already following
                 const currentUserSnap = await getDoc(doc(db, "users", user.uid));
                 const currentUserData = currentUserSnap.exists() ? currentUserSnap.data() : {};
                 let following = currentUserData.following || [];
@@ -461,18 +456,16 @@ export function setupProfile() {
         }
 
         // ── Bio + Photo Logic ──
-        const bioText  = document.getElementById("bioText");
-        const editBtn  = document.getElementById("edit");
+        const bioText    = document.getElementById("bioText");
+        const editBtn    = document.getElementById("edit");
         const profileImg = document.getElementById("profileImage");
 
         if (bioText) bioText.value = data.bio || "";
 
-        // Load VIEWED user's photo into main profile image
         if (data.photoURL) {
             if (profileImg) profileImg.src = data.photoURL;
         }
 
-        // Load LOGGED-IN user's photo into sidebar
         if (loggedInData.photoURL && sidebarProfileImg) {
             sidebarProfileImg.src = loggedInData.photoURL;
         }
@@ -536,7 +529,7 @@ export function setupProfile() {
                 };
             }
         } else {
-            if (editBtn)   editBtn.style.display = "none";
+            if (editBtn) editBtn.style.display = "none";
             if (profileImg) {
                 profileImg.style.cursor = "default";
                 profileImg.onclick = null;
