@@ -12,16 +12,16 @@
 <body id="documentBody">
 
 <!-- HEADER -->
-<div id="header">
-    <a href="explore.html" id="backArrow">
+<div id="header" style="white-space:nowrap;">
+    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
+    <a href="explore.html" id="backArrow" style="margin-top:16px; scale:1.5; margin-left: 12px;text-align: left;">
         <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
     </a>
-    <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
 </div>
 
 <!-- MAIN CONTENT -->
 <div id="explorePage" class="content">
-    <h2 class="sectionTitle">Campus News</h2>
+    <h2 class="sectionTitle" style="text-align: center;">Campus News</h2>
     <div id="newsContainer"></div>
 </div>
 
@@ -33,6 +33,7 @@
         id="newsSearchInput" 
         class="exploreSearchBar"
         placeholder="Search news..."
+        style="margin-top: 24px;"
     >
 
     <button id="createNewsBtnUI">+ Create News</button>
