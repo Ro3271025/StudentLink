@@ -293,3 +293,24 @@
     justify-content: center;
     cursor: pointer;
 }
+#lightboxOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#lightboxOverlay.active {
+    display: flex;
+}
+
+#lightboxImg {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    object-fit: contain;
+}
