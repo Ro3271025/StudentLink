@@ -268,9 +268,15 @@ a:hover{
 }
 
 
+.profileContentCard{
+    width:100%
+}
+
 #profileInfo{
     position: static;
     height:37vh;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
 }
 
 
@@ -1088,6 +1094,7 @@ a:hover{
 #profileContainer {
     width: 55%;
     margin: 0 auto;
+    text-align: left;
 }
 
 #banner {
@@ -1099,6 +1106,7 @@ a:hover{
     height: auto;
     min-height: 37vh;
     padding-bottom: 20px;
+    width: 100%;
 }
 
 #userContent {

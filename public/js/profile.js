@@ -97,7 +97,7 @@ async function loadPosts(uidToLoad) {
             const userSnap = await getDoc(userRef);
 
             const card = document.createElement('div');
-            card.className = 'content';
+            card.className = 'content profileContentCard';
             card.style.cursor = 'pointer';
             card.innerHTML = `
                 <img class="profileImgMini" src="${authorImg}" onerror="this.src='styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'">
