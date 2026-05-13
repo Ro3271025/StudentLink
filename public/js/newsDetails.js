@@ -8,27 +8,47 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 async function loadNews() {
-
-    const snap = await getDoc(doc(db, "news", id));
-    const news = snap.data();
-
-    document.getElementById("newsTitle").textContent = news.title;
-
-    document.getElementById("authorName").textContent = news.authorName;
-    document.getElementById("newsDate").textContent =
-        news.createdAt?.toDate().toLocaleDateString();
-
-    document.getElementById("orgName").textContent =
-        news.organizationName || "";
-
-    document.getElementById("authorPhoto").src =
-        news.authorPhoto || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG";
-
-    if (news.imageURL) {
-        document.getElementById("newsImage").src = news.imageURL;
+    if (!id) {
+        document.getElementById("newsTitle").textContent = "News not found.";
+        return;
     }
 
-    document.getElementById("newsContent").textContent = news.content;
+    try {
+        const snap = await getDoc(doc(db, "news", id));
+
+        if (!snap.exists()) {
+            document.getElementById("newsTitle").textContent = "News not found.";
+            return;
+        }
+
+        const news = snap.data();
+
+        document.getElementById("newsTitle").textContent = news.title || "";
+        document.getElementById("authorName").textContent = news.authorName || "Staff";
+
+        // Try timestamp first, fall back to createdAt
+        const date = news.timestamp || news.createdAt;
+        document.getElementById("newsDate").textContent =
+            date?.toDate().toLocaleDateString() || "";
+
+        document.getElementById("orgName").textContent =
+            news.organizationName || "";
+
+        document.getElementById("authorPhoto").src =
+            news.authorPhoto || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG";
+
+        if (news.imageURL) {
+            document.getElementById("newsImage").src = news.imageURL;
+        } else {
+            document.getElementById("newsImage").style.display = "none";
+        }
+
+        document.getElementById("newsContent").textContent = news.content || "";
+
+    } catch (err) {
+        console.error("Failed to load news:", err);
+        document.getElementById("newsTitle").textContent = "Failed to load news.";
+    }
 }
 
 loadNews();

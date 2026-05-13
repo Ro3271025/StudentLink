@@ -34,9 +34,17 @@ const imageInput = document.getElementById("listingImage");
 let listing = null;
 let currentUser = null;
 
+let pendingFiles = [];
+
+/* ================= BACK BUTTON ================= */
+
+if (id) {
+    document.getElementById("backArrow").href = `listingDetail.html?id=${id}`;
+}
+
 /* ================= TOAST ================= */
 
-function showToast(msg){
+function showToast(msg) {
     const toast = document.createElement("div");
     toast.innerText = msg;
     toast.style.position = "fixed";
@@ -51,20 +59,20 @@ function showToast(msg){
 
     document.body.appendChild(toast);
 
-    setTimeout(()=>toast.remove(),2000);
+    setTimeout(() => toast.remove(), 2000);
 }
 
 /* ================= AUTH ================= */
 
-onAuthStateChanged(auth, async(user)=>{
-    if(!user){
+onAuthStateChanged(auth, async (user) => {
+    if (!user) {
         window.location.href = "login.php";
         return;
     }
 
     currentUser = user;
 
-    if(!id){
+    if (!id) {
         window.location.href = "listings.html";
         return;
     }
@@ -74,20 +82,20 @@ onAuthStateChanged(auth, async(user)=>{
 
 /* ================= LOAD ================= */
 
-async function loadListing(){
+async function loadListing() {
 
-    const snap = await getDoc(doc(db,"listings",id));
+    const snap = await getDoc(doc(db, "listings", id));
 
-    if(!snap.exists()){
+    if (!snap.exists()) {
         alert("Listing not found.");
         return;
     }
 
     listing = snap.data();
 
-    if(currentUser.uid !== listing.userID){
+    if (currentUser.uid !== listing.userID) {
         alert("Unauthorized.");
-        window.location.href="listings.html";
+        window.location.href = "listings.html";
         return;
     }
 
@@ -97,23 +105,24 @@ async function loadListing(){
     document.getElementById("price").value = listing.price || "";
     document.getElementById("category").value = listing.category || "";
 
-    /* LOAD IMAGES */
-    if(!listing.imageURLs && listing.imageURL){
+    /* NORMALIZE IMAGES */
+    if (!listing.imageURLs && listing.imageURL) {
         listing.imageURLs = [listing.imageURL];
     }
+
+    listing.imageURLs = listing.imageURLs || [];
 
     renderImages();
 }
 
 /* ================= RENDER IMAGES ================= */
 
-function renderImages(){
+function renderImages() {
 
     gallery.innerHTML = "";
 
-    listing.imageURLs = listing.imageURLs || [];
-
-    listing.imageURLs.forEach((url, index)=>{
+    // Render existing saved images
+    listing.imageURLs.forEach((url, index) => {
 
         const div = document.createElement("div");
         div.className = "imageItem";
@@ -128,11 +137,36 @@ function renderImages(){
         gallery.appendChild(div);
     });
 
-    /* REMOVE IMAGE */
-    document.querySelectorAll(".removeImgBtn").forEach(btn=>{
-        btn.addEventListener("click",(e)=>{
-            const index = e.target.dataset.index;
-            listing.imageURLs.splice(index,1);
+    document.querySelectorAll(".removeImgBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const index = Number(btn.dataset.index);
+            listing.imageURLs.splice(index, 1);
+            renderImages();
+        });
+    });
+
+    // Render pending (not yet uploaded) new images
+    pendingFiles.forEach((file, index) => {
+
+        const url = URL.createObjectURL(file);
+
+        const div = document.createElement("div");
+        div.className = "imageItem";
+
+        div.innerHTML = `
+            <img src="${url}">
+            <button class="removePendingBtn" data-index="${index}">
+                <span>×</span>
+            </button>
+        `;
+
+        gallery.appendChild(div);
+    });
+
+    document.querySelectorAll(".removePendingBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const index = Number(btn.dataset.index);
+            pendingFiles.splice(index, 1);
             renderImages();
         });
     });
@@ -140,74 +174,69 @@ function renderImages(){
 
 /* ================= ADD NEW IMAGES ================= */
 
-imageInput.addEventListener("change", ()=>{
+imageInput.addEventListener("change", () => {
 
     const files = Array.from(imageInput.files);
 
-    files.forEach(file=>{
-        const url = URL.createObjectURL(file);
+    pendingFiles = [...pendingFiles, ...files];
 
-        listing.imageURLs.push(url); // temp preview
-    });
+    imageInput.value = "";
 
     renderImages();
 });
 
 /* ================= SUBMIT ================= */
 
-form.addEventListener("submit", async(e)=>{
+form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
     submitBtn.disabled = true;
     submitBtn.innerText = "Saving...";
 
-    try{
+    try {
 
         const title = document.getElementById("title").value.trim();
         const description = document.getElementById("description").value.trim();
         const price = Number(document.getElementById("price").value);
         const category = document.getElementById("category").value;
 
-        if(!title || !description || !price || !category){
+        if (!title || !description || !price || !category) {
             showToast("Fill all fields");
             throw new Error("Validation failed");
         }
 
-        /* UPLOAD ONLY NEW FILES */
-        const files = Array.from(imageInput.files);
         let uploadedURLs = [];
 
-        for(const file of files){
+        for (const file of pendingFiles) {
             const storageRef = ref(storage,
                 `listings/${currentUser.uid}/${Date.now()}_${file.name}`);
 
-            await uploadBytes(storageRef,file);
+            await uploadBytes(storageRef, file);
             const url = await getDownloadURL(storageRef);
             uploadedURLs.push(url);
         }
 
-        /* KEEP OLD + ADD NEW */
-        let finalImages = listing.imageURLs.filter(url => url.startsWith("http"));
-        finalImages = [...finalImages, ...uploadedURLs];
+        const finalImages = [...listing.imageURLs, ...uploadedURLs];
 
-        /* UPDATE */
-        await updateDoc(doc(db,"listings",id),{
+        /* UPDATE FIRESTORE */
+        await updateDoc(doc(db, "listings", id), {
             title,
             description,
             price,
             category,
             imageURLs: finalImages,
+            imageURL: finalImages[0] || null,
             updatedAt: serverTimestamp()
         });
 
         showToast("Saved!");
 
-        setTimeout(()=>{
+        setTimeout(() => {
             window.location.href = `listingDetail.html?id=${id}`;
-        },1000);
+        }, 1000);
 
-    } catch(err){
+    } catch (err) {
         console.error(err);
         showToast("Error saving");
     }

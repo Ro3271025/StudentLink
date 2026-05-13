@@ -10,6 +10,9 @@
 
     <!-- HEADER -->
     <div id="header">
+        <a href="listings.html" id="backArrow">
+            <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
+        </a>
         <img id="logo" src="styles/images/STUDENT_LINK_LOGO.svg">
     </div>
 
@@ -33,8 +36,9 @@
             </div>
             <div class="listingMeta" id="listingMeta"></div>
             <div class="ownerControls" id="ownerControls" style="display:none;">
-                <button id="editListingBtn" class="themeObject">Edit Listing</button>
-                <button id="deleteListingBtn" class="delBtn">Delete Listing</button>
+                <button id="editListingBtn"   class="listingActionBtn edit">Edit Listing</button>
+                <button id="deleteListingBtn" class="listingActionBtn delete">Delete Listing</button>
+                <button id="markStatusBtn"    class="listingActionBtn status">Mark as Sold</button>
             </div>
         </div>
 
@@ -51,7 +55,6 @@
     <!-- LEFT SIDEBAR -->
     <div class="sidebar" id="leftBar">
         <br>
-        <!-- FIX: added id="profilePic" -->
         <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
         <p id="displayName">Display Name</p>
         <p id="username">@Username</p><br>

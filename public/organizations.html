@@ -19,6 +19,9 @@
 
 <!-- MAIN CONTENT -->
 <div id="explorePage" class="content">
+    <a href="explore.html" id="backArrow" style="margin-top:16px; scale:1.5; margin-left: 12px;">
+        <img id="backArrowImg" src="styles/images/BACK_ARROW.svg">
+    </a>
 
     <!-- TITLE -->
     <h2 class="sectionTitle">Organizations</h2>
@@ -26,7 +29,7 @@
     <!-- MAIN LAYOUT -->
     <div class="orgLayout">
 
-        <!-- ORG LIST (MAIN CONTENT NOW FULL WIDTH CENTER) -->
+        <!-- ORG LIST -->
         <div id="orgContainer" class="orgList">
             <!-- Org cards rendered here -->
         </div>
@@ -38,19 +41,19 @@
 <!-- LEFT SIDEBAR -->
 <div class="sidebar" id="leftBar">
 
-<br>
-<img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
+    <br>
+    <img class="sideProfileIcon" id="profilePic" src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"><br>
 
-<p id="displayName">Display Name</p>
-<p id="username">@Username</p><br>
+    <p id="displayName">Display Name</p>
+    <p id="username">@Username</p><br>
 
-<p class="sidebarText"><a href="home.html">Home</a></p>
-<p class="sidebarText"><a href="listings.html">Listings</a></p>
-<p class="sidebarText"><a href="explore.html">Explore</a></p>
-<p class="sidebarText"><a href="notifications.html">Notifications</a></p>
-<p class="sidebarText"><a href="chat.html">Chat</a></p>
-<p class="sidebarText"><a href="profile.html">Profile</a></p>
-<p class="sidebarText"><a href="settings.html">Settings</a></p>
+    <p class="sidebarText"><a href="home.html">Home</a></p>
+    <p class="sidebarText"><a href="listings.html">Listings</a></p>
+    <p class="sidebarText"><a href="explore.html">Explore</a></p>
+    <p class="sidebarText"><a href="notifications.html">Notifications</a></p>
+    <p class="sidebarText"><a href="chat.html">Chat</a></p>
+    <p class="sidebarText"><a href="profile.html">Profile</a></p>
+    <p class="sidebarText"><a href="settings.html">Settings</a></p>
 
 </div>
 
@@ -78,8 +81,13 @@
     </div>
 </div>
 
+<!-- SCRIPTS -->
 <script type="module" src="js/organizations.js"></script>
 <script src="js/themeSwap.js"></script>
+<script type="module">
+    import { setupSidebar } from "./js/showUser.js";
+    setupSidebar();
+</script>
 
 </body>
 </html>

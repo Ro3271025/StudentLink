@@ -47,6 +47,8 @@ function renderOfficers() {
                 <option value="Treasurer" ${officer.role === "Treasurer" ? "selected" : ""}>Treasurer</option>
                 <option value="Secretary" ${officer.role === "Secretary" ? "selected" : ""}>Secretary</option>
                 <option value="Officer" ${officer.role === "Officer" ? "selected" : ""}>Officer</option>
+                <option value="Faculty/Staff Advisor" ${officer.role === "Faculty/Staff Advisor" ? "selected" : ""}>Faculty/Staff Advisor</option>
+                <option value="Other" ${officer.role === "Other" ? "selected" : ""}>Other</option>
             </select>
 
             <input type="text" placeholder="Email (optional)" class="officerEmail" value="${officer.email || ""}">

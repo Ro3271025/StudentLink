@@ -62,7 +62,6 @@ function setupNewPostComposer() {
         try {
             const authorUsername = await getCurrentUserUsername(user);
 
-            // Fetch user's profile photo from Firestore
             const userSnap = await getDoc(doc(db, "users", user.uid));
             const userData = userSnap.exists() ? userSnap.data() : {};
 
@@ -143,7 +142,7 @@ async function loadMorePosts(options = {}) {
         }
         hasMorePosts = hasNextPage;
 
-        renderPosts(loadedPosts);
+        await renderPosts(loadedPosts); // FIX 1: await renderPosts so listeners attach after all cards are in DOM
     } catch (err) {
         console.error('Failed to load posts:', err);
         alert('Failed to load posts. Please try again.');
@@ -195,20 +194,27 @@ function getCurrentUserName() {
     return user.displayName || user.email || "Anonymous";
 }
 
-function renderPosts(posts) {
+// FIX 1: renderPosts is now async and awaits all card builds before attaching listeners
+async function renderPosts(posts) {
     const container = document.getElementById('feedContainer');
     if (!container) return;
     container.innerHTML = '';
 
-    posts.forEach(post => {
+    await Promise.all(posts.map(async post => {
         const card = document.createElement('div');
         card.className = 'content';
         card.dataset.postId = post.id;
         card.style.cursor = 'pointer';
 
-        const displayName = post.authorName || 'Display Name';
-        const username = post.authorUsername ? `@${post.authorUsername}` : '@Username';
-        const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+        const userRef = doc(db, "users", post.authorId);
+        const userSnap = await getDoc(userRef);
+
+        const displayName = userSnap.exists() ? (userSnap.get('displayName') || 'Display Name') : 'Display Name';
+        const username = userSnap.exists() ? (userSnap.get('username') ? `@${userSnap.get('username')}` : '@Username') : '@Username';
+
+        const profileImg = (userSnap.exists() && userSnap.get('photoURL'))
+            ? userSnap.get('photoURL')
+            : (post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG');
         const postText = post.body || post.description || '';
         const likeCount = post.likes || 0;
         const commentCount = post.commentCount || 0;
@@ -223,7 +229,6 @@ function renderPosts(posts) {
             imageSection = `<div class="imageContainer"><img src="${imageUrl}"></div>`;
         }
 
-        // Format timestamp
         let dateString = 'Unknown date';
         if (post.createdAt) {
             let dateObj = post.createdAt;
@@ -287,7 +292,6 @@ function renderPosts(posts) {
             </div>
         `;
 
-        // Navigate to post page on card click (but not on interactive elements)
         card.addEventListener('click', (e) => {
             if (!e.target.classList.contains('postMetrics') &&
                 !e.target.classList.contains('likeBtn') &&
@@ -302,8 +306,9 @@ function renderPosts(posts) {
         });
 
         container.appendChild(card);
-    });
+    }));
 
+    // FIX 1: listeners attach only after ALL cards are in the DOM
     attachEventListeners();
 }
 
@@ -434,7 +439,6 @@ async function loadComments(postId) {
     try {
         const comments = await getComments(postId, { pageSize: 50 });
 
-        // Sync comment count display to real count
         const card = document.querySelector(`.content[data-post-id="${postId}"]`);
         if (card) {
             const toggleBtn = card.querySelector('.commentToggleBtn');
@@ -449,9 +453,17 @@ async function loadComments(postId) {
             return;
         }
 
+        // FIX 3: store comment text on a data attribute using a Map instead of HTML attribute
+        // to avoid escaping issues that broke the edit flow
+        const commentTexts = new Map();
+
         list.innerHTML = comments.map(c => {
-            const isOwner = userId && c.authorId === userId;
+            // FIX 2: use c.authorPhotoURL instead of hardcoded placeholder
             const commentPhoto = c.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+            const isOwner = userId && c.authorId === userId;
+
+            // Store original text in map keyed by comment id (avoids HTML attribute escaping issues)
+            commentTexts.set(c.id, c.text);
 
             const ownerActions = isOwner ? `
                 <div style="display:flex; gap:8px; margin-top:4px;">
@@ -459,7 +471,6 @@ async function loadComments(postId) {
                         class="editCommentBtn themeObject"
                         data-post-id="${postId}"
                         data-comment-id="${c.id}"
-                        data-comment-text="${escapeAttr(c.text)}"
                         style="font-size:12px; padding:2px 10px; border-radius:12px; cursor:pointer;">
                         Edit
                     </button>
@@ -475,8 +486,8 @@ async function loadComments(postId) {
 
             return `
                 <div id="comment-${c.id}" style="display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; padding:5px">
-                    <img src="styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG"
-                         style="width:28px; height:28px; border-radius:4px; flex-shrink:0;">
+                    <img src="${commentPhoto}"
+                         style="width:28px; height:28px; border-radius:4px; flex-shrink:0; object-fit:cover;">
                     <div style="flex:1;">
                         <span style="font-size:13px; font-weight:600; color:var(--text-fill);">
                             ${escapeHtml(c.authorName || 'Anonymous')}
@@ -508,6 +519,7 @@ async function loadComments(postId) {
         });
 
         // ── Edit comment ──
+        // FIX 3: read original text from the Map, not from a data attribute
         list.querySelectorAll('.editCommentBtn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -515,27 +527,32 @@ async function loadComments(postId) {
                 const textEl = list.querySelector(`.commentText-${commentId}`);
                 if (!textEl) return;
 
-                const originalText = textEl.textContent.trim();
+                // Get original text safely from the Map
+                const originalText = commentTexts.get(commentId) || textEl.textContent.trim();
+
                 textEl.style.display = 'none';
                 btn.style.display = 'none';
 
                 const editRow = document.createElement('div');
                 editRow.style = 'display:flex; gap:6px; margin-top:4px; align-items:center;';
-                editRow.innerHTML = `
-                    <input
-                        type="text"
-                        value="${escapeAttr(originalText)}"
-                        maxlength="300"
-                        style="flex:1; padding:5px 10px; border-radius:14px; border:1px solid #444; background:#222; color:#fff; font-size:13px;"
-                    />
-                    <button style="font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:#0f73ff; border:none; color:#fff;">Save</button>
-                    <button style="font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #666; color:#aaa;">Cancel</button>
-                `;
 
-                const editInput = editRow.querySelector('input');
-                const saveBtn = editRow.querySelectorAll('button')[0];
-                const cancelBtn = editRow.querySelectorAll('button')[1];
+                const editInput = document.createElement('input');
+                editInput.type = 'text';
+                editInput.value = originalText; // FIX 3: set value directly, no escaping needed
+                editInput.maxLength = 300;
+                editInput.style = 'flex:1; padding:5px 10px; border-radius:14px; border:1px solid #444; background:#222; color:#fff; font-size:13px;';
 
+                const saveBtn = document.createElement('button');
+                saveBtn.textContent = 'Save';
+                saveBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:#0f73ff; border:none; color:#fff;';
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #666; color:#aaa;';
+
+                editRow.appendChild(editInput);
+                editRow.appendChild(saveBtn);
+                editRow.appendChild(cancelBtn);
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
                 editInput.setSelectionRange(editInput.value.length, editInput.value.length);

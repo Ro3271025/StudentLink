@@ -5,13 +5,16 @@
    ========================= */
 
 #listingsPage {
-    margin-left: 20%;
-    margin-right: 20%;
+    width:55%;
     padding-top: 20px;
     text-align: center;
     border-left: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     min-height: 100vh;
+    margin: 0 auto;
 }
 
 #listingsPage .sectionTitle {
@@ -228,14 +231,77 @@
     font-weight: bold;
     color: var(--theme-accent);
 }
-
-/* =========================
-   RIGHT SIDEBAR FIX
-   style.css pushes #rightBar with margin-left: 80%
-   which works for narrow right content but clips the
-   search bar — nudge it back in
-   ========================= */
 #rightBar .searchBar {
-    width: 80%;
     box-sizing: border-box;
+}
+.listingCard {
+    position: relative;
+}
+
+.listingUnavailable {
+    opacity: 0.45;
+    filter: grayscale(60%);
+    pointer-events: none;
+}
+
+.listingStatusBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    z-index: 1;
+}
+
+.listingStatusBadge.sold {
+    background: #c0392b;
+    color: white;
+}
+
+.listingStatusBadge.rented {
+    background: #2980b9;
+    color: white;
+}
+.ownerControls {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.listingActionBtn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    color: white;
+    white-space: nowrap;
+}
+
+.listingActionBtn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.listingActionBtn:active {
+    transform: scale(0.97);
+}
+
+.listingActionBtn.edit {
+    background: var(--theme-accent);
+}
+
+.listingActionBtn.delete {
+    background: #c0392b;
+}
+
+.listingActionBtn.status {
+    background: #2980b9;
 }

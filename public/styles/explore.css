@@ -35,6 +35,12 @@ body {
     border: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
+.exploreBar{
+    outline: none;
+    border: transparent !important;
+    max-width: 100%;
+}
+
 /* RECENT SEARCHES */
 #recentSearches {
     padding: 10px;
@@ -102,13 +108,22 @@ body {
 }
 /* EXPLORE PAGE */
 #explorePage {
-    margin-left: 260px;
-    margin-right: 440px; /* FIX: removed conflicting padding-right: 420px */
+    position: absolute;
+    left: 22%;
+    right: 360px;
     padding: 20px;
 }
+/* MAIN EXPLORE AREA */
+#explorePage,
 #explorePage.content {
-    max-width: 900px;
-    margin: 0 auto;
+    position: relative;
+    left: auto;
+    right: auto;
+    padding: 20px 28px;
+    max-width: 55%;
+    margin:0 auto;
+    width: auto;
+
 }
 /* LATEST LISTINGS HORIZONTAL SCROLL */
 #latestListingsSection {
@@ -173,12 +188,12 @@ body {
 }
 /* ORGANIZATIONS LAYOUT */
 .orgLayout {
-    display: flex;
+    display: block;
     gap: 25px;
     align-items: flex-start;
     justify-content: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     position: relative;
     box-sizing: border-box;
@@ -188,28 +203,29 @@ body {
 /* RIGHT SIDEBAR */
 #rightBar {
     position: fixed;
-    top: 100px;
-    right: 20px;
-    width: 400px;
+    top: 120px;
+    right: 32px;
+    width: 220px;
     z-index: 10;
+    box-sizing: border-box;
 }
 .orgSearchCard {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     background: var(--bg-secondary);
     padding: 20px;
-    border-radius: 14px;
+    border-radius: 18px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     box-sizing: border-box;
+    margin-left:-35%;
+    width: 150%;
 }
 .orgSearchCard input,
 .orgSearchCard select {
     width: 100%;
-    min-width: 0;
-    padding: 12px 16px;
+    padding: 14px 16px;
     font-size: 15px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
@@ -224,18 +240,21 @@ body {
     outline: none;
 }
 #createOrgBtnUI {
-    padding: 14px 16px;
+    padding: 14px 12px;
     border-radius: 10px;
     width: 100%;
-    min-width: 0;
     border: none;
     background: var(--theme-accent);
     color: white;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
     box-sizing: border-box;
+    white-space: normal;
+    display: block;
+    overflow-wrap: break-word;
+    text-align: center;
 }
 #createOrgBtnUI:hover {
     background: var(--button-hover);
@@ -261,9 +280,9 @@ body {
 .orgCard {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
     background: var(--bg-secondary);
-    padding: 15px;
+    padding: 18px 20px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
     transition: 0.2s;
@@ -288,17 +307,19 @@ body {
     flex-direction: column;
     gap: 4px;
     min-width: 0;
+    flex: 1;
 }
 .orgName {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
 }
 .orgDesc {
-    font-size: 13px;
+    font-size: 14px;
     opacity: 0.8;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 1.35;
 }
 .orgCategory {
     font-size: 11px;
@@ -479,24 +500,28 @@ body {
     width: 100%;
 }
 .eventSearchCard {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
     background: var(--bg-secondary);
-    padding: 24px;
-    border-radius: 16px;
+    padding: 20px;
+    border-radius: 18px;
     border: 1px solid var(--border-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-left:-35%;
+    width: 150%;
 }
-.eventSearchCard input {
+.eventSearchCard input, 
+.eventSearchCard select {
     width: 100%;
     padding: 14px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
     color: var(--text-fill);
-    font-size: 14px;
+    font-size: 15px;
+    box-sizing: border-box;
+    padding: 14px 16px;
 }
 .eventCheckbox {
     display: flex;
@@ -509,16 +534,17 @@ body {
 }
 #createEventBtnUI {
     width: 100%;
-    padding: 14px;
+    padding: 14px 12px;
     border-radius: 12px;
     border: none;
     background: var(--theme-accent);
     color: white;
-    font-weight: bold;
-    font-size: 15px;
+    font-weight: 700;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.2s;
     white-space: nowrap;
+    overflow-wrap: break-word;
 }
 #createEventBtnUI:hover {
     transform: translateY(-2px);
@@ -528,9 +554,9 @@ body {
 /* EVENTS GRID */
 .eventsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 18px;
-    max-width: 900px;
+    max-width: 100%;
     margin: 0 auto;
 }
 .eventCard {
@@ -550,14 +576,14 @@ body {
 }
 .eventCard img {
     width: 100%;
-    height: 160px;
+    height: 130px;
     object-fit: cover;
 }
 .eventInfo {
-    padding: 12px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 .eventTitle {
     font-weight: bold;
@@ -1108,4 +1134,71 @@ h3 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.eventCard {
+    position: relative;
+}
+
+.eventPast {
+    opacity: 0.45;
+    filter: grayscale(60%);
+}
+
+.eventStatusBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #555;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    z-index: 1;
+}
+/* RECENT SEARCHES — scoped fixes for explore page */
+#recentSearches {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.recentSearchesTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent !important;
+    table-layout: fixed;
+}
+
+.recentSearchesTable tr {
+    background: transparent !important;
+}
+
+.recentSearchesTable th.recentSearchData {
+    font-weight: normal;
+    text-align: left;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.recentSearchesTable th.recentSearchData:hover {
+    background: var(--border-color);
+}
+
+.recentSearchesTable .tableAnchorLink {
+    text-decoration: none;
+    color: var(--text-fill);
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recentSearchesTable .tableAnchorLink:hover {
+    color: var(--theme-accent);
 }
