@@ -1235,3 +1235,192 @@ a:hover{
     padding: 4px 10px;
     line-height: normal;
 }
+
+/* ── Comment Section ── */
+
+.commentSection {
+    display: none;
+    margin-top: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+}
+
+.commentInputRow {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: center;
+    padding: 5px;
+}
+
+.commentInput {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 14px;
+    font-family: var(--font-family);
+    outline: none;
+}
+
+.commentItem {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    padding: 5px;
+}
+
+.commentItemImg {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.commentBody {
+    flex: 1;
+}
+
+.commentAuthor {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-fill);
+}
+
+.commentBodyText {
+    font-size: 14px;
+    color: var(--text-fill);
+    margin: 2px 0 0;
+}
+
+.commentActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.editCommentBtn {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.deleteCommentBtn {
+    font-size: 12px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: none;
+    border: 1px solid #e55;
+    color: #e55;
+}
+
+.deleteCommentBtn:hover {
+    background: #e55;
+    color: var(--text-fill);
+}
+
+.editRow {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+    align-items: center;
+}
+
+.editInput {
+    flex: 1;
+    padding: 5px 10px;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-fill);
+    font-size: 13px;
+    font-family: var(--font-family);
+    outline: none;
+}
+
+.saveCommentBtn {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: var(--theme-accent);
+    border: none;
+    color: var(--text-fill);
+}
+
+.cancelCommentBtn {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-fill);
+}
+
+/* ── Feed Card ── */
+
+.feedCard {
+    cursor: pointer;
+}
+
+.postFooter {
+    padding-bottom: 5px;
+}
+
+.postTimestamp {
+    font-size: 10pt;
+    margin-left: 10px;
+    color: var(--border-color);
+}
+
+.postUsernameInline {
+    margin-left: 6px;
+    color: var(--border-color);
+}
+
+.postAuthorHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.postAuthorHeaderImg {
+    margin: 0;
+}
+
+.postAuthorUsername {
+    margin-left: 6px;
+}
+
+.commentCountLink {
+    margin-left: 12px;
+}
+
+.deletePostBtn {
+    font-size: 12pt;
+    padding: 4px 14px;
+    border-radius: 12px;
+    background: none;
+    border: 1px solid #e55;
+    color: #e55;
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+.deletePostBtn:hover {
+    background: #e55;
+    color: var(--text-fill);
+}
+
+.likedBtn {
+    color: var(--theme-accent);
+    font-weight: 600;
+}

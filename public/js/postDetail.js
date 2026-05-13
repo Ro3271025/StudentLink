@@ -2,17 +2,8 @@
 import { db, auth } from './firebaseInitialization.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-    doc,
-    getDoc,
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    updateDoc,
-    query,
-    orderBy,
-    serverTimestamp,
-    increment
+    doc, getDoc, collection, addDoc, getDocs, deleteDoc, updateDoc,
+    query, orderBy, serverTimestamp, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -21,25 +12,19 @@ const postId = urlParams.get('id');
 let currentUser = null;
 
 onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        window.location.href = "userlogin.html";
-        return;
-    }
+    if (!user) { window.location.href = "userlogin.html"; return; }
     currentUser = user;
 
-    // Update sidebar
     const userSnap = await getDoc(doc(db, "users", user.uid));
     const data = userSnap.exists() ? userSnap.data() : {};
+
     const displayEl = document.getElementById("displayName");
     const usernameEl = document.getElementById("username");
     if (displayEl) displayEl.innerText = data.displayName || user.displayName || "";
     if (usernameEl) usernameEl.innerText = data.username ? "@" + data.username : "";
 
-    // Update sidebar profile photo
     const sideProfileIcon = document.querySelector('.sideProfileIcon');
-    if (sideProfileIcon && data.photoURL) {
-        sideProfileIcon.src = data.photoURL;
-    }
+    if (sideProfileIcon && data.photoURL) sideProfileIcon.src = data.photoURL;
 
     if (!postId) {
         document.getElementById('postDetailContainer').innerHTML =
@@ -51,7 +36,6 @@ onAuthStateChanged(auth, async (user) => {
     await loadComments();
 
     document.getElementById('commentsSection').style.display = 'block';
-
     document.getElementById('addCommentBtn').addEventListener('click', submitComment);
     document.getElementById('commentInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') submitComment();
@@ -74,34 +58,31 @@ async function loadPost() {
         const likedBy = post.likedBy || [];
         const hasLiked = currentUser && likedBy.includes(currentUser.uid);
         const imageSection = post.imageUrl
-            ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>`
-            : '';
+            ? `<div class="imageContainer"><img src="${post.imageUrl}"></div>` : '';
 
         const deleteBtn = isOwner
-            ? `<button id="deletePostBtn" style="font-size:12pt; padding:4px 14px; border-radius:12px; background:none; border:1px solid #e55; color:#e55; cursor:pointer; margin-left:12px;">Delete Post</button>`
+            ? `<button id="deletePostBtn" class="deletePostBtn">Delete Post</button>`
             : '';
 
-        // Get actual comment count from subcollection
         const commentsSnap = await getDocs(collection(db, "posts", postId, "comments"));
         const actualCount = commentsSnap.size;
-
-        // Fix stored count if it's wrong
         if ((post.commentCount || 0) !== actualCount && currentUser) {
             await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
         }
 
-        const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
-        const userRef = doc(db, "users", post.authorId);
-        const userSnap = await getDoc(userRef);
+        const userSnap = await getDoc(doc(db, "users", post.authorId));
+        const authorPhoto = (userSnap.exists() && userSnap.get('photoURL'))
+            ? userSnap.get('photoURL')
+            : (post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG');
 
         container.innerHTML = `
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-                <img class="profileImgMini" src="${authorPhoto}" style="margin:0;">
+            <div class="postAuthorHeader">
+                <img class="profileImgMini postAuthorHeaderImg" src="${authorPhoto}">
                 <div>
                     <a class="postLink postDisplayName" href="profile.html?id=${post.authorId}">
                         ${escapeHtml(userSnap.get('displayName') || 'Display Name')}
                     </a>
-                    <small class="postUsername" style="margin-left:6px; color:#aaa;">@${escapeHtml(userSnap.get('username') || 'username')}</small>
+                    <small class="smallTxt postAuthorUsername">@${escapeHtml(userSnap.get('username') || 'username')}</small>
                 </div>
                 ${deleteBtn}
             </div>
@@ -109,40 +90,34 @@ async function loadPost() {
             ${imageSection}
             <br>
             <footer id="postFooter">
-                <a class="postLink postMetrics likeBtn${hasLiked ? ' liked' : ''}"
+                <a class="postLink postMetrics likeBtn${hasLiked ? ' likedBtn' : ''}"
                    href="#"
-                   data-post-id="${post.id}"
-                   style="${hasLiked ? 'color: #E6557C; font-weight:600;' : ''}">
+                   data-post-id="${post.id}">
                    ${likes} Like${likes !== 1 ? 's' : ''}
                 </a>
-                <a class="postLink postMetrics" id="commentCountDisplay" href="#" style="margin-left:12px;">
+                <a class="postLink postMetrics commentCountLink" id="commentCountDisplay" href="#">
                     ${actualCount} Comment${actualCount !== 1 ? 's' : ''}
                 </a>
             </footer>
         `;
 
         const postTitle = document.getElementById("postTitle");
-        const titleSubStr = `${post.title}`.substring(0, 15);
-        postTitle.innerHTML = titleSubStr + ` - ` + `${post.authorName}` + ` | StudentLink`;
+        postTitle.innerHTML = `${post.title}`.substring(0, 15) + ` - ${post.authorName} | StudentLink`;
 
-        // Like button
         const likeBtn = container.querySelector('.likeBtn');
         if (likeBtn) {
             likeBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 if (!currentUser) return;
-
                 likeBtn.style.pointerEvents = 'none';
                 try {
                     const { toggleLike } = await import('./postsService.js');
                     const { liked, newCount } = await toggleLike(post.id, currentUser.uid);
                     likeBtn.textContent = `${newCount} Like${newCount !== 1 ? 's' : ''}`;
                     if (liked) {
-                        likeBtn.style.color = 'var(--theme-accent)';
-                        likeBtn.style.fontWeight = '600';
+                        likeBtn.classList.add('likedBtn');
                     } else {
-                        likeBtn.style.color = '';
-                        likeBtn.style.fontWeight = '';
+                        likeBtn.classList.remove('likedBtn');
                     }
                 } catch (err) {
                     console.error("Like failed:", err);
@@ -152,16 +127,13 @@ async function loadPost() {
             });
         }
 
-        // Delete post button
         if (isOwner) {
             document.getElementById('deletePostBtn').addEventListener('click', async () => {
                 if (!confirm("Are you sure you want to delete this post?")) return;
                 try {
                     await deleteDoc(doc(db, "posts", postId));
                     window.location.href = "home.html";
-                } catch (err) {
-                    console.error("Delete failed:", err);
-                }
+                } catch (err) { console.error("Delete failed:", err); }
             });
         }
 
@@ -173,76 +145,88 @@ async function loadPost() {
 
 async function loadComments() {
     const container = document.getElementById('commentsContainer');
-    container.innerHTML = '<p id="loading" style="color:#aaa; font-size:13px;">Loading comments...</p>';
+    container.innerHTML = '<p id="loading">Loading comments...</p>';
 
     try {
-        const q = query(
-            collection(db, "posts", postId, "comments"),
-            orderBy("createdAt", "asc")
-        );
+        const q = query(collection(db, "posts", postId, "comments"), orderBy("createdAt", "asc"));
         const snap = await getDocs(q);
 
-        // Sync stored commentCount to real count
         const realCount = snap.size;
-        if (currentUser) {
-            await updateDoc(doc(db, "posts", postId), { commentCount: realCount });
-        }
+        if (currentUser) await updateDoc(doc(db, "posts", postId), { commentCount: realCount });
 
         const countDisplay = document.getElementById('commentCountDisplay');
-        if (countDisplay) {
-            countDisplay.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
-        }
+        if (countDisplay) countDisplay.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
 
         if (snap.empty) {
-            container.innerHTML = '<p id="loading" style="color:#aaa; text-align:center; font-size:13px; margin:8px 0;">No comments yet. Be the first!</p>';
+            container.innerHTML = '<p id="loading">No comments yet. Be the first!</p>';
             return;
         }
 
         container.innerHTML = '';
-
-        // FIX: store comment texts in a Map to avoid HTML attribute escaping issues
         const commentTexts = new Map();
 
-        // FIX: use Promise.all so all comment elements are in the DOM before attaching listeners
         await Promise.all(snap.docs.map(async d => {
             const c = { id: d.id, ...d.data() };
-
-            const userRef = doc(db, "users", c.authorId);
-            const userSnap = await getDoc(userRef);
-
+            const userSnap = await getDoc(doc(db, "users", c.authorId));
             const isOwner = currentUser && c.authorId === currentUser.uid;
 
-            // Store text in Map keyed by comment id — no escaping needed
             commentTexts.set(c.id, c.text);
 
-            const ownerActions = isOwner ? `
-                <div style="display:flex; gap:8px; margin-top:4px;">
-                    <button class="editCommentBtn themeObject"
-                        data-comment-id="${c.id}"
-                        style="font-size:12px; padding:2px 10px; border-radius:12px; cursor:pointer;">
-                        Edit
-                    </button>
-                    <button class="deleteCommentBtn"
-                        data-comment-id="${c.id}"
-                        style="font-size:12px; padding:2px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #e55; color:#e55;">
-                        Delete
-                    </button>
-                </div>
-            ` : '';
+            const commentPhoto = (userSnap.exists() && userSnap.get('photoURL'))
+                ? userSnap.get('photoURL')
+                : 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
 
-            const el = document.createElement('div');
-            el.id = `comment-${c.id}`;
-            el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px; padding-left:8px';
-            el.innerHTML = `
-                <img src="${escapeHtml(userSnap.get('photoURL') || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG')}"
-                     style="width:32px; height:32px; border-radius:4px; flex-shrink:0; object-fit:cover;">
-                <div style="flex:1;">
-                    <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(userSnap.get('username') || 'Anonymous')}</span>
-                    <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:3px 0 0;">${escapeHtml(c.text)}</p>
-                    ${ownerActions}
-                </div>
-            `;
-            container.appendChild(el);
+            // FIX: always show displayName, fall back to username then stored authorName
+            const authorDisplayName = (userSnap.exists() && userSnap.get('displayName'))
+                ? userSnap.get('displayName')
+                : (userSnap.exists() && userSnap.get('username'))
+                    ? userSnap.get('username')
+                    : c.authorName || 'Anonymous';
+
+            const item = document.createElement('div');
+            item.id = `comment-${c.id}`;
+            item.className = 'commentItem';
+
+            const img = document.createElement('img');
+            img.src = commentPhoto;
+            img.className = 'commentItemImg';
+
+            const body = document.createElement('div');
+            body.className = 'commentBody';
+
+            const author = document.createElement('span');
+            author.className = 'commentAuthor';
+            author.textContent = authorDisplayName;
+
+            const text = document.createElement('p');
+            text.className = `commentBodyText commentText-${c.id}`;
+            text.textContent = c.text;
+
+            body.appendChild(author);
+            body.appendChild(text);
+
+            if (isOwner) {
+                const actions = document.createElement('div');
+                actions.className = 'commentActions';
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'editCommentBtn themeObject';
+                editBtn.dataset.commentId = c.id;
+                editBtn.textContent = 'Edit';
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'deleteCommentBtn';
+                deleteBtn.dataset.commentId = c.id;
+                deleteBtn.textContent = 'Delete';
+
+                actions.appendChild(editBtn);
+                actions.appendChild(deleteBtn);
+                body.appendChild(actions);
+            }
+
+            item.appendChild(img);
+            item.appendChild(body);
+            container.appendChild(item);
         }));
 
         // ── Delete comment ──
@@ -261,36 +245,32 @@ async function loadComments() {
         });
 
         // ── Edit comment ──
-        // FIX: read text from Map, build input with createElement (no innerHTML escaping issues)
         container.querySelectorAll('.editCommentBtn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const commentId = btn.dataset.commentId;
                 const textEl = container.querySelector(`.commentText-${commentId}`);
                 if (!textEl) return;
 
-                // Get original text safely from Map
                 const originalText = commentTexts.get(commentId) || textEl.textContent.trim();
-
                 textEl.style.display = 'none';
                 btn.style.display = 'none';
 
                 const editRow = document.createElement('div');
-                editRow.style = 'display:flex; gap:6px; margin-top:4px; align-items:center;';
+                editRow.className = 'editRow';
 
-                // FIX: create input with createElement and set .value directly — no escaping needed
                 const editInput = document.createElement('input');
                 editInput.type = 'text';
                 editInput.value = originalText;
                 editInput.maxLength = 300;
-                editInput.style = 'flex:1; padding:5px 10px; border-radius:14px; border:1px solid #444; background:#222; color:#fff; font-size:13px;';
+                editInput.className = 'editInput';
 
                 const saveBtn = document.createElement('button');
                 saveBtn.textContent = 'Save';
-                saveBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:#0f73ff; border:none; color:#fff;';
+                saveBtn.className = 'saveCommentBtn';
 
                 const cancelBtn = document.createElement('button');
                 cancelBtn.textContent = 'Cancel';
-                cancelBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #666; color:#aaa;';
+                cancelBtn.className = 'cancelCommentBtn';
 
                 editRow.appendChild(editInput);
                 editRow.appendChild(saveBtn);
@@ -337,10 +317,7 @@ async function loadComments() {
 }
 
 async function submitComment() {
-    if (!currentUser) {
-        alert("Please log in to comment.");
-        return;
-    }
+    if (!currentUser) { alert("Please log in to comment."); return; }
 
     const input = document.getElementById('commentInput');
     const text = input.value.trim();
@@ -351,14 +328,18 @@ async function submitComment() {
     btn.textContent = 'Posting...';
 
     try {
+        // FIX: fetch display name from Firestore so it's always current
+        const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+        const userData = userSnap.exists() ? userSnap.data() : {};
+        const authorName = userData.displayName || currentUser.displayName || currentUser.email || "Anonymous";
+
         await addDoc(collection(db, "posts", postId, "comments"), {
             authorId: currentUser.uid,
-            authorName: currentUser.displayName || currentUser.email || "Anonymous",
+            authorName,
             text,
             createdAt: serverTimestamp()
         });
 
-        // Send notification to post author
         try {
             const { createNotification } = await import('./NotificationsService.js');
             const postSnap = await getDoc(doc(db, "posts", postId));
@@ -367,7 +348,7 @@ async function submitComment() {
                 await createNotification({
                     toUserId: postData.authorId,
                     fromUserId: currentUser.uid,
-                    fromUserName: currentUser.displayName || currentUser.email || "Anonymous",
+                    fromUserName: authorName,
                     type: "comment",
                     postId,
                     postBody: postData.body || postData.title || "",
@@ -395,11 +376,4 @@ function escapeHtml(str) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
-}
-
-function escapeAttr(str) {
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
 }
