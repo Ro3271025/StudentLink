@@ -35,6 +35,12 @@ onAuthStateChanged(auth, async (user) => {
     if (displayEl) displayEl.innerText = data.displayName || user.displayName || "";
     if (usernameEl) usernameEl.innerText = data.username ? "@" + data.username : "";
 
+    // Update sidebar profile photo
+    const sideProfileIcon = document.querySelector('.sideProfileIcon');
+    if (sideProfileIcon && data.photoURL) {
+        sideProfileIcon.src = data.photoURL;
+    }
+
     if (!postId) {
         document.getElementById('postDetailContainer').innerHTML =
             '<p style="color:#e55; text-align:center; padding:20px;">No post ID provided.</p>';
@@ -84,8 +90,7 @@ async function loadPost() {
             await updateDoc(doc(db, "posts", postId), { commentCount: actualCount });
         }
 
-        const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG'; 
-        // get poster's CURRENT display name and username 
+        const authorPhoto = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
         const userRef = doc(db, "users", post.authorId);
         const userSnap = await getDoc(userRef);
 
@@ -114,7 +119,7 @@ async function loadPost() {
                     ${actualCount} Comment${actualCount !== 1 ? 's' : ''}
                 </a>
             </footer>
-        `; // The post title in here is not supposed to be there, but I won't remove it yet to avoid conflicts
+        `;
 
         const postTitle = document.getElementById("postTitle");
         const titleSubStr = `${post.title}`.substring(0, 15);
@@ -153,12 +158,9 @@ async function loadPost() {
                 if (!confirm("Are you sure you want to delete this post?")) return;
                 try {
                     await deleteDoc(doc(db, "posts", postId));
-                    // This alert gets annoying, maybe we don't keep it ? - P.R.
-                    //alert("Post deleted.");
                     window.location.href = "home.html";
                 } catch (err) {
                     console.error("Delete failed:", err);
-                    //alert("Failed to delete post.");
                 }
             });
         }
@@ -180,13 +182,12 @@ async function loadComments() {
         );
         const snap = await getDocs(q);
 
-        // Always sync the stored commentCount to the real count
+        // Sync stored commentCount to real count
         const realCount = snap.size;
         if (currentUser) {
             await updateDoc(doc(db, "posts", postId), { commentCount: realCount });
         }
 
-        // Update the count display on the page
         const countDisplay = document.getElementById('commentCountDisplay');
         if (countDisplay) {
             countDisplay.textContent = `${realCount} Comment${realCount !== 1 ? 's' : ''}`;
@@ -198,19 +199,26 @@ async function loadComments() {
         }
 
         container.innerHTML = '';
-        snap.docs.forEach(async d => {
+
+        // FIX: store comment texts in a Map to avoid HTML attribute escaping issues
+        const commentTexts = new Map();
+
+        // FIX: use Promise.all so all comment elements are in the DOM before attaching listeners
+        await Promise.all(snap.docs.map(async d => {
             const c = { id: d.id, ...d.data() };
-            // Had to make async to allow the retrevial of current usernames
+
             const userRef = doc(db, "users", c.authorId);
             const userSnap = await getDoc(userRef);
-            
+
             const isOwner = currentUser && c.authorId === currentUser.uid;
+
+            // Store text in Map keyed by comment id — no escaping needed
+            commentTexts.set(c.id, c.text);
 
             const ownerActions = isOwner ? `
                 <div style="display:flex; gap:8px; margin-top:4px;">
                     <button class="editCommentBtn themeObject"
                         data-comment-id="${c.id}"
-                        data-comment-text="${escapeAttr(c.text)}"
                         style="font-size:12px; padding:2px 10px; border-radius:12px; cursor:pointer;">
                         Edit
                     </button>
@@ -224,10 +232,10 @@ async function loadComments() {
 
             const el = document.createElement('div');
             el.id = `comment-${c.id}`;
-            el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px;padding-left:8px';
+            el.style = 'display:flex; gap:8px; margin-bottom:12px; align-items:flex-start; border-bottom:1px solid #333; padding-bottom:10px; padding-left:8px';
             el.innerHTML = `
-                <img src=${escapeHtml(userSnap.get('photoURL') || "styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG")}
-                     style="width:32px; height:32px; border-radius:4px; flex-shrink:0;">
+                <img src="${escapeHtml(userSnap.get('photoURL') || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG')}"
+                     style="width:32px; height:32px; border-radius:4px; flex-shrink:0; object-fit:cover;">
                 <div style="flex:1;">
                     <span style="font-size:13px; font-weight:600; color:#fff;">${escapeHtml(userSnap.get('username') || 'Anonymous')}</span>
                     <p class="commentText-${c.id}" style="font-size:14px; color:#ccc; margin:3px 0 0;">${escapeHtml(c.text)}</p>
@@ -235,9 +243,9 @@ async function loadComments() {
                 </div>
             `;
             container.appendChild(el);
-        });
+        }));
 
-        // Delete comment
+        // ── Delete comment ──
         container.querySelectorAll('.deleteCommentBtn').forEach(btn => {
             btn.addEventListener('click', async () => {
                 if (!confirm("Delete this comment?")) return;
@@ -252,32 +260,44 @@ async function loadComments() {
             });
         });
 
-        // Edit comment
+        // ── Edit comment ──
+        // FIX: read text from Map, build input with createElement (no innerHTML escaping issues)
         container.querySelectorAll('.editCommentBtn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const commentId = btn.dataset.commentId;
                 const textEl = container.querySelector(`.commentText-${commentId}`);
                 if (!textEl) return;
 
-                const originalText = textEl.textContent.trim();
+                // Get original text safely from Map
+                const originalText = commentTexts.get(commentId) || textEl.textContent.trim();
+
                 textEl.style.display = 'none';
                 btn.style.display = 'none';
 
                 const editRow = document.createElement('div');
                 editRow.style = 'display:flex; gap:6px; margin-top:4px; align-items:center;';
-                editRow.innerHTML = `
-                    <input type="text" value="${escapeAttr(originalText)}" maxlength="300"
-                        style="flex:1; padding:5px 10px; border-radius:14px; border:1px solid #444; background:#222; color:#fff; font-size:13px;" />
-                    <button style="font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:#0f73ff; border:none; color:#fff;">Save</button>
-                    <button style="font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #666; color:#aaa;">Cancel</button>
-                `;
 
-                const editInput = editRow.querySelector('input');
-                const saveBtn = editRow.querySelectorAll('button')[0];
-                const cancelBtn = editRow.querySelectorAll('button')[1];
+                // FIX: create input with createElement and set .value directly — no escaping needed
+                const editInput = document.createElement('input');
+                editInput.type = 'text';
+                editInput.value = originalText;
+                editInput.maxLength = 300;
+                editInput.style = 'flex:1; padding:5px 10px; border-radius:14px; border:1px solid #444; background:#222; color:#fff; font-size:13px;';
 
+                const saveBtn = document.createElement('button');
+                saveBtn.textContent = 'Save';
+                saveBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:#0f73ff; border:none; color:#fff;';
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.style = 'font-size:12px; padding:3px 10px; border-radius:12px; cursor:pointer; background:none; border:1px solid #666; color:#aaa;';
+
+                editRow.appendChild(editInput);
+                editRow.appendChild(saveBtn);
+                editRow.appendChild(cancelBtn);
                 textEl.parentNode.insertBefore(editRow, textEl.nextSibling);
                 editInput.focus();
+                editInput.setSelectionRange(editInput.value.length, editInput.value.length);
 
                 cancelBtn.addEventListener('click', () => {
                     editRow.remove();
