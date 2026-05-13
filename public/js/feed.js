@@ -212,7 +212,9 @@ async function renderPosts(posts) {
         const displayName = userSnap.exists() ? (userSnap.get('displayName') || 'Display Name') : 'Display Name';
         const username = userSnap.exists() ? (userSnap.get('username') ? `@${userSnap.get('username')}` : '@Username') : '@Username';
 
-        const profileImg = post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG';
+        const profileImg = (userSnap.exists() && userSnap.get('photoURL'))
+            ? userSnap.get('photoURL')
+            : (post.authorPhotoURL || 'styles/images/placeholder/PROFILE_DEFAULT_IMAGE.SVG');
         const postText = post.body || post.description || '';
         const likeCount = post.likes || 0;
         const commentCount = post.commentCount || 0;
