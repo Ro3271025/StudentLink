@@ -419,27 +419,30 @@ a:hover{
 
 /* Home Page Values */
 
-#header{
+#header {
     border: 1px solid var(--border-color);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     margin: 0 auto;
     width: 55%;
-    height:5vh;
-    position: -webkit-sticky;
+    height: 5vh;
+    position: relative;        /* changed from -webkit-sticky */
+    display: flex;
     align-items: center;
-    vertical-align: middle;
-    text-align: center;
-    /*Can't have padding because it screws with the div alignment*/
+    justify-content: center;   /* centers the logo */
 }
 
-#header img{
-    margin-top: .75%;
+#backArrow {
+    position: absolute;        /* doesn't affect logo centering */
+    left: 12px;
+    display: flex;
+    align-items: center;
+}
+
+#header img {
+    max-height: 80%;
+    width: auto;               /* let it scale naturally */
     max-width: 75%;
-    max-height: 75%;
-    width: 75%;
-    height: 75%;
-    
 }
 
 #loadMore{
